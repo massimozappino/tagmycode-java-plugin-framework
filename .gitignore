@@ -1,0 +1,6 @@
+target
+out
+.idea/workspace*
+pom.xml.releaseBackup
+release.properties
+pom.xml.versionsBackup

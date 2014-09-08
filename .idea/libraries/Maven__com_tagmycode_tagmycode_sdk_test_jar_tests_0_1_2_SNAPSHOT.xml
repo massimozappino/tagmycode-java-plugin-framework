@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.tagmycode:tagmycode-sdk:test-jar:tests:0.1.2-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/tagmycode/tagmycode-sdk/0.1.2-SNAPSHOT/tagmycode-sdk-0.1.2-SNAPSHOT-tests.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/tagmycode/tagmycode-sdk/0.1.2-SNAPSHOT/tagmycode-sdk-0.1.2-SNAPSHOT-test-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/tagmycode/tagmycode-sdk/0.1.2-SNAPSHOT/tagmycode-sdk-0.1.2-SNAPSHOT-test-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
