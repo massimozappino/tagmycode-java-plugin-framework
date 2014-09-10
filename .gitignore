@@ -1,6 +1,6 @@
 target
 out
-.idea/workspace*
+.idea
 pom.xml.releaseBackup
 release.properties
 pom.xml.versionsBackup
