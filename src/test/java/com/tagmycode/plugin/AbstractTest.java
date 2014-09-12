@@ -30,7 +30,7 @@ public class AbstractTest {
         preferences.setPrivateSnippet(true);
 
         FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), preferences, new FakeMessageManager(), new FakeTaskFactory(), null);
-        return new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, "testclient", "testpass");
+        return new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret());
     }
 
     protected Framework createSpyFramework() {

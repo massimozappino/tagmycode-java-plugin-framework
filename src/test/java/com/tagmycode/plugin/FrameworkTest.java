@@ -9,6 +9,7 @@ import com.tagmycode.sdk.model.User;
 import org.junit.Before;
 import org.junit.Test;
 import support.FakePreferences;
+import support.FakeSecret;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -83,7 +84,7 @@ public class FrameworkTest extends AbstractTest {
         framework.getWallet().saveOauthToken(newOauthToken);
 
         FrameworkConfig frameworkConfig = new FrameworkConfig(framework.getWallet().getPasswordManager(), framework.getPreferences(), framework.getMessageManager(), framework.getTaskFactory(), framework.getMainFrame());
-        Framework reloadedFramework = new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, "123", "345");
+        Framework reloadedFramework = new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret());
 
         assertEquals(newOauthToken, reloadedFramework.getClient().getOauthToken());
         assertEquals("fakeUsername", reloadedFramework.getAccount().getUsername());

@@ -35,9 +35,9 @@ public class Framework {
     private final AbstractTaskFactory taskFactory;
     private SearchSnippetDialog searchSnippetDialog;
 
-    public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, String consumerKey, String consumerSecret) {
+    public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
         wallet = new Wallet(frameworkConfig.getPasswordManager());
-        client = new Client(tagMyCodeApi, consumerKey, consumerSecret);
+        client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret());
         tagMyCode = new TagMyCode(client);
         this.preferences = frameworkConfig.getPreferences();
         this.messageManager = frameworkConfig.getMessageManager();
