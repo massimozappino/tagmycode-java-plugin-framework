@@ -22,9 +22,7 @@ public class FetchOauthTokenOperation extends TagMyCodeAsynchronousOperation {
     protected Object performOperation() throws Exception {
         try {
             abstractDialog.getFramework().getClient().fetchOauthToken(verificationCode);
-
             abstractDialog.getFramework().initialize(callbacks);
-
         } catch (TagMyCodeConnectionException e) {
             throw new TagMyCodeGuiException("Unable to authenticate");
         }

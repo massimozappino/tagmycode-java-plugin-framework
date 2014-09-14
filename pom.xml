@@ -7,7 +7,6 @@
     <groupId>com.tagmycode</groupId>
     <artifactId>tagmycode-plugin-framework</artifactId>
     <version>0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
     <name>TagMyCode IDE Plugin Framework for Java</name>
     <description>A framework to develop Java IDE plugins for TagMyCode</description>
     <url>http://tagmycode.com</url>

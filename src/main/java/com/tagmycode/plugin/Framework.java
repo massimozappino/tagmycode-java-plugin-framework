@@ -237,6 +237,7 @@ public class Framework {
             public void run() {
                 try {
                     fetchAndStoreAllData();
+                    console.log(String.format("User authenticated as <strong>%s</strong>", account.getEmail()));
                 } catch (TagMyCodeException ex) {
                     manageTagMyCodeExceptions(ex);
                     logout();

@@ -31,7 +31,7 @@ public class CreateSnippetOperation extends TagMyCodeAsynchronousOperation<Strin
     @Override
     protected void onSuccess(String result) {
         String url = obtainedSnippet.getUrl();
-        snippetDialog.getFramework().getConsole().log(obtainedSnippet.getTitle() + " " + getHtmlLink(url));
+        snippetDialog.getFramework().getConsole().log(String.format("<strong>%s</strong>", obtainedSnippet.getTitle()) + " " + getHtmlLink(url));
         snippetDialog.closeDialog();
     }
 

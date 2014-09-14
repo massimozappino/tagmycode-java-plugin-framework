@@ -36,6 +36,7 @@ public class SettingsForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 framework.logout();
+                framework.getConsole().log("User log out");
                 refreshPanelInGuiThread();
             }
         });
@@ -49,7 +50,6 @@ public class SettingsForm {
                 doRefreshPanel();
             }
         });
-
     }
 
     private void doRefreshPanel() {

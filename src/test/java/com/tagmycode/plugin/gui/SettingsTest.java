@@ -4,6 +4,7 @@ import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.ICallback;
 import org.junit.Test;
+import support.FakeConsole;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
@@ -51,6 +52,8 @@ public class SettingsTest extends AbstractTest {
     public void logoutCallLogoutMethodAndRefreshPanel() throws Exception {
         Framework framework = mock(Framework.class);
         when(framework.getAccount()).thenReturn(resourceGenerate.anUser());
+        when(framework.getConsole()).thenReturn(new FakeConsole());
+
         SettingsForm settingsForm = new SettingsForm(framework);
 
         when(framework.isInitialized()).thenReturn(false);
