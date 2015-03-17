@@ -6,7 +6,7 @@
 
     <groupId>com.tagmycode</groupId>
     <artifactId>tagmycode-plugin-framework</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.3</version>
     <name>TagMyCode IDE Plugin Framework for Java</name>
     <description>A framework to develop Java IDE plugins for TagMyCode</description>
     <url>http://tagmycode.com</url>
@@ -77,17 +77,6 @@
                     <fork>true</fork>
                     <debug>true</debug>
                     <failOnError>true</failOnError>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.2</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
         </plugins>
