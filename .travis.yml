@@ -9,3 +9,8 @@ install: mvn install
 notifications:
   email:
     on_success: never
+
+# whitelist
+branches:
+  only:
+    - master
