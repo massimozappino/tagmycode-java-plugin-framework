@@ -3,6 +3,7 @@ package com.tagmycode.plugin;
 
 import com.tagmycode.sdk.authentication.OauthToken;
 import com.tagmycode.sdk.authentication.TagMyCodeApiDevelopment;
+import com.tagmycode.sdk.authentication.VoidOauthToken;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.User;
@@ -178,7 +179,7 @@ public class FrameworkTest extends AbstractTest {
         setDataForWalletAndPreferences();
         setAccessToken();
         framework.logout();
-        assertAccessTokenIs(null);
+        assertTrue(framework.getClient().getOauthToken() instanceof VoidOauthToken);
         assertEquals(null, framework.getWallet().loadOauthToken());
         assertPreferencesAreCleared(framework.getPreferences());
     }

@@ -106,8 +106,8 @@ public class Framework {
     }
 
     public void fetchAllData() throws TagMyCodeException {
-        account = tagMyCode.getAccount();
-        languageCollection = tagMyCode.getLanguages();
+        account = tagMyCode.fetchAccount();
+        languageCollection = tagMyCode.fetchLanguages();
     }
 
     public void fetchAndStoreAllData() throws TagMyCodeException {

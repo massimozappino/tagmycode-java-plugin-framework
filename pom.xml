@@ -45,6 +45,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <skipTests>false</skipTests>
+        <tagmycode-sdk.version>0.1.2-SNAPSHOT</tagmycode-sdk.version>
     </properties>
 
     <build>
@@ -154,12 +155,12 @@
         <dependency>
             <groupId>com.tagmycode</groupId>
             <artifactId>tagmycode-sdk</artifactId>
-            <version>0.1.1</version>
+            <version>${tagmycode-sdk.version}</version>
         </dependency>
         <dependency>
             <groupId>com.tagmycode</groupId>
             <artifactId>tagmycode-sdk</artifactId>
-            <version>0.1.1</version>
+            <version>${tagmycode-sdk.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
