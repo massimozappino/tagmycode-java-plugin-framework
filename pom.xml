@@ -6,7 +6,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <tagmycode-sdk.version>0.1.2</tagmycode-sdk.version>
+        <tagmycode-sdk.version>0.1.2-SNAPSHOT</tagmycode-sdk.version>
     </properties>
 
     <licenses>
@@ -46,12 +46,6 @@
             <timezone>+2</timezone>
         </developer>
     </developers>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <skipTests>false</skipTests>
-        <tagmycode-sdk.version>0.1.2-SNAPSHOT</tagmycode-sdk.version>
-    </properties>
 
     <build>
         <defaultGoal>package</defaultGoal>
