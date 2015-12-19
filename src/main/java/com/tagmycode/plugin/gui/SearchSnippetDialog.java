@@ -62,7 +62,11 @@ public class SearchSnippetDialog extends AbstractDialog {
                 }
             }
         });
-        refreshResultsFoundLabel();
+        setResultsFoundLabelEmpty();
+    }
+
+    private void setResultsFoundLabelEmpty() {
+        getResultsFoundLabel().setText("");
     }
 
     public Snippet getSelectedSnippet() {
@@ -86,22 +90,19 @@ public class SearchSnippetDialog extends AbstractDialog {
 
     @Override
     protected void initWindow() {
-        getRootPane().setDefaultButton(null);
-        searchTextField.addActionListener(new ActionListener() {
+        ActionListener searchActionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 search();
             }
-        });
+        };
+
+        getRootPane().setDefaultButton(null);
+        searchTextField.addActionListener(searchActionListener);
         setSize(800, 400);
         setResizable(true);
         setTitle("Search snippets");
-        buttonOk.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                search();
-            }
-        });
+        buttonOk.addActionListener(searchActionListener);
         insertButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -141,6 +142,7 @@ public class SearchSnippetDialog extends AbstractDialog {
     }
 
     private void clearResults() {
+        setResultsFoundLabelEmpty();
         model.removeAllElements();
         snippetEditorPane.clear();
     }

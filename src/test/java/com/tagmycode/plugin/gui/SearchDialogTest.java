@@ -30,32 +30,17 @@ public class SearchDialogTest extends AbstractTest {
         SearchSnippetDialog searchSnippetDialog = createSearchSnippetDialog();
         JList resultList = searchSnippetDialog.getResultList();
 
-        makeASearchWithoutResults(searchSnippetDialog);
+        makeASearchWithoutResultsAndWait(searchSnippetDialog);
 
         assertSelectedFirstElementIs(resultList, null);
         assertResultSizeIs(resultList, 1);
         assertEquals("No results found", resultList.getModel().getElementAt(0));
+        assertResultsLabelIs(searchSnippetDialog, "0 snippets found");
 
-        makeASearchWithResults(searchSnippetDialog);
+        makeASearchWithResultsAndWait(searchSnippetDialog);
 
         assertResultSizeIs(resultList, 2);
         assertSelectedFirstElementIs(resultList, resourceGenerate.aSnippetCollection().get(0));
-    }
-
-    @Test
-    public void countResultsLabelPrintsCorrectText() throws Exception {
-        mockClientSearchJavaGetsResults(framework);
-        SearchSnippetDialog searchSnippetDialog = createSearchSnippetDialog();
-
-        assertEquals("0 snippets found", searchSnippetDialog.getResultsFoundLabel().getText());
-
-        makeASearchWithoutResults(searchSnippetDialog);
-        assertEquals("0 snippets found", searchSnippetDialog.getResultsFoundLabel().getText());
-
-        makeASearchWithResults(searchSnippetDialog);
-        Thread.sleep(1000);
-
-        assertEquals("2 snippets found", searchSnippetDialog.getResultsFoundLabel().getText());
     }
 
     @Test
@@ -71,21 +56,44 @@ public class SearchDialogTest extends AbstractTest {
 
         assertInsertButtonIsDisabled(searchSnippetDialog);
 
-        makeASearchWithResults(searchSnippetDialog);
+        makeASearchWithResultsAndWait(searchSnippetDialog);
         searchSnippetDialog.getResultList().setSelectedIndex(0);
 
         assertInsertButtonIsEnabled(searchSnippetDialog);
 
-        makeASearchWithResults(searchSnippetDialog);
+        makeASearchWithResultsAndWait(searchSnippetDialog);
         assertInsertButtonIsDisabled(searchSnippetDialog);
 
-        makeASearchWithoutResults(searchSnippetDialog);
+        makeASearchWithoutResultsAndWait(searchSnippetDialog);
         searchSnippetDialog.getResultList().setSelectedIndex(0);
         assertInsertButtonIsDisabled(searchSnippetDialog);
     }
 
-    private void makeASearchWithoutResults(SearchSnippetDialog searchSnippetDialog) throws InterruptedException {
-        makeASearch(searchSnippetDialog, "none");
+    @Test
+    public void whileSearchingActionLabelIsEmpty() throws Exception {
+        mockClientSearchJavaGetsResults(framework);
+
+        SearchSnippetDialog searchSnippetDialog = createSearchSnippetDialog();
+        assertResultsLabelIs(searchSnippetDialog, "");
+
+        makeASearchWithResults(searchSnippetDialog);
+        assertResultsLabelIs(searchSnippetDialog, "");
+
+        Thread.sleep(1000);
+
+        assertResultsLabelIs(searchSnippetDialog, "2 snippets found");
+    }
+
+    private void assertResultsLabelIs(SearchSnippetDialog searchSnippetDialog, String expected) {
+        assertEquals(expected, searchSnippetDialog.getResultsFoundLabel().getText());
+    }
+
+    private void makeASearchWithoutResultsAndWait(SearchSnippetDialog searchSnippetDialog) throws InterruptedException {
+        makeASearchAndWait(searchSnippetDialog, "none");
+    }
+
+    private void makeASearchWithResultsAndWait(SearchSnippetDialog searchSnippetDialog) throws InterruptedException {
+        makeASearchAndWait(searchSnippetDialog, "java");
     }
 
     private void makeASearchWithResults(SearchSnippetDialog searchSnippetDialog) throws InterruptedException {
@@ -114,11 +122,15 @@ public class SearchDialogTest extends AbstractTest {
         assertEquals(expected, resultList.getSelectedValue());
     }
 
-    private void makeASearch(SearchSnippetDialog searchSnippetDialog, String query) throws InterruptedException {
-        searchSnippetDialog.getSearchTextBox().setText(query);
-        searchSnippetDialog.getSearchButton().doClick();
+    private void makeASearchAndWait(SearchSnippetDialog searchSnippetDialog, String query) throws InterruptedException {
+        makeASearch(searchSnippetDialog, query);
         // TODO transform to wait for condition
         Thread.sleep(200);
+    }
+
+    private void makeASearch(SearchSnippetDialog searchSnippetDialog, String query) {
+        searchSnippetDialog.getSearchTextBox().setText(query);
+        searchSnippetDialog.getSearchButton().doClick();
     }
 
     protected void mockClientSearchJavaGetsResults(Framework framework) throws Exception {
