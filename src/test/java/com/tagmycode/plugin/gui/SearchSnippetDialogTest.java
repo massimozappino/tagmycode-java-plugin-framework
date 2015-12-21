@@ -11,11 +11,12 @@ import support.FakeDocumentInsertText;
 
 import javax.swing.*;
 
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.when;
 
-public class SearchDialogTest extends AbstractTest {
+public class SearchSnippetDialogTest extends AbstractTest {
 
     private Framework framework;
 
@@ -28,19 +29,18 @@ public class SearchDialogTest extends AbstractTest {
     public void noResultsFound() throws Exception {
         mockClientSearchJavaGetsResults(framework);
         SearchSnippetDialog searchSnippetDialog = createSearchSnippetDialog();
-        JList resultList = searchSnippetDialog.getResultList();
-
+        SnippetsJList snippetsList = searchSnippetDialog.getSnippetsList();
         makeASearchWithoutResultsAndWait(searchSnippetDialog);
 
-        assertSelectedFirstElementIs(resultList, null);
-        assertResultSizeIs(resultList, 1);
-        assertEquals("No results found", resultList.getModel().getElementAt(0));
+        assertSelectedFirstElementIs(snippetsList, null);
+        assertResultSizeIs(snippetsList, 1);
+        assertTrue(snippetsList.getModel().getElementAt(0) instanceof NoResultsFoundSnippetItem);
         assertResultsLabelIs(searchSnippetDialog, "0 snippets found");
 
         makeASearchWithResultsAndWait(searchSnippetDialog);
 
-        assertResultSizeIs(resultList, 2);
-        assertSelectedFirstElementIs(resultList, resourceGenerate.aSnippetCollection().get(0));
+        assertResultSizeIs(snippetsList, 2);
+        assertSelectedFirstElementIs(snippetsList, resourceGenerate.aSnippetCollection().get(0));
     }
 
     @Test
@@ -57,15 +57,14 @@ public class SearchDialogTest extends AbstractTest {
         assertInsertButtonIsDisabled(searchSnippetDialog);
 
         makeASearchWithResultsAndWait(searchSnippetDialog);
-        searchSnippetDialog.getResultList().setSelectedIndex(0);
-
+        searchSnippetDialog.getSnippetsList().setSelectedIndex(0);
         assertInsertButtonIsEnabled(searchSnippetDialog);
 
         makeASearchWithResultsAndWait(searchSnippetDialog);
         assertInsertButtonIsDisabled(searchSnippetDialog);
 
         makeASearchWithoutResultsAndWait(searchSnippetDialog);
-        searchSnippetDialog.getResultList().setSelectedIndex(0);
+        searchSnippetDialog.getSnippetsList().setSelectedIndex(0);
         assertInsertButtonIsDisabled(searchSnippetDialog);
     }
 

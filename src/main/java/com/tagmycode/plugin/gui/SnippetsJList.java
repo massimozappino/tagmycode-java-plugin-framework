@@ -1,0 +1,62 @@
+package com.tagmycode.plugin.gui;
+
+import com.tagmycode.sdk.model.ModelCollection;
+import com.tagmycode.sdk.model.Snippet;
+
+import javax.swing.*;
+
+public class SnippetsJList extends JList<Snippet> {
+    private DisabledItemSelectionModel disabledItemSelectionModel;
+    private DefaultListSelectionModel defaultListSelectionModel;
+    private SnippetRenderer snippetRenderer;
+    private final SnippetsListModel snippetsListModel;
+
+    public SnippetsJList() {
+        disabledItemSelectionModel = new DisabledItemSelectionModel();
+        defaultListSelectionModel = new DefaultListSelectionModel();
+        snippetRenderer = new SnippetRenderer();
+        snippetsListModel = new SnippetsListModel();
+        setCellRenderer(snippetRenderer);
+        setModel(snippetsListModel);
+    }
+
+    public void updateWithSnippets(ModelCollection<Snippet> snippets) {
+        if (snippets.size() == 0) {
+            setSelectionModel(disabledItemSelectionModel);
+            snippetsListModel.addElement(new NoResultsFoundSnippetItem());
+        } else {
+            setSelectionModel(defaultListSelectionModel);
+
+            for (Snippet snippet : snippets) {
+                snippetsListModel.addElement(snippet);
+            }
+        }
+    }
+
+    public Snippet getSelectedSnippet() {
+        Snippet selectedSnippet = null;
+        if (!isSelectionEmpty()) {
+            selectedSnippet = snippetsListModel.getElementAt(getSelectedIndex());
+        }
+
+        return selectedSnippet;
+    }
+
+    public SnippetsListModel getSnippetsModel() {
+        return snippetsListModel;
+    }
+
+    public void clearAll() {
+        snippetsListModel.removeAllElements();
+    }
+
+    public int getSnippetsSize() {
+        int size;
+        if (getSelectionModel() == disabledItemSelectionModel) {
+            size = 0;
+        } else {
+            size = snippetsListModel.getSize();
+        }
+        return size;
+    }
+}

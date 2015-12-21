@@ -113,7 +113,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="854c8" class="javax.swing.JList" binding="resultList" default-binding="true">
+                      <component id="88638" class="com.tagmycode.plugin.gui.SnippetsJList" binding="snippetsList" custom-create="true">
                         <constraints/>
                         <properties/>
                       </component>

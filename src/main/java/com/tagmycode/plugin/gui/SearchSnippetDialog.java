@@ -3,6 +3,7 @@ package com.tagmycode.plugin.gui;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.GuiThread;
 import com.tagmycode.plugin.gui.operation.SearchSnippetOperation;
+import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.ModelCollection;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -19,15 +20,11 @@ public class SearchSnippetDialog extends AbstractDialog {
     private JButton buttonCancel;
     private JTextField searchTextField;
     private SnippetEditorPane snippetEditorPane;
-    private JList resultList;
     private JButton insertButton;
     private JLabel resultsFoundLabel;
-    private DefaultListModel model;
+    private SnippetsJList snippetsList;
+    private JScrollPane listPane;
     private IDocumentInsertText documentUpdate;
-    private DefaultListCellRenderer defaultListCellRenderer;
-    private DisabledItemSelectionModel disabledItemSelectionModel;
-    private SnippetRenderer snippetRenderer;
-    private DefaultListSelectionModel defaultListSelectionModel;
 
     public SearchSnippetDialog(IDocumentInsertText documentInsertText, final Framework framework, Frame parent) {
         super(framework, parent);
@@ -42,17 +39,11 @@ public class SearchSnippetDialog extends AbstractDialog {
     }
 
     private void initResultList() {
-        defaultListCellRenderer = new DefaultListCellRenderer();
-        disabledItemSelectionModel = new DisabledItemSelectionModel();
-        snippetRenderer = new SnippetRenderer();
-        defaultListSelectionModel = new DefaultListSelectionModel();
-        model = new DefaultListModel();
-        resultList.setModel(model);
-        resultList.addListSelectionListener(new ListSelectionListener() {
+        snippetsList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
-                    Snippet snippet = getSelectedSnippet();
+                    Snippet snippet = snippetsList.getSelectedSnippet();
                     if (snippet != null) {
                         snippetEditorPane.setTextWithSnippet(snippet);
                         insertButton.setEnabled(true);
@@ -69,17 +60,8 @@ public class SearchSnippetDialog extends AbstractDialog {
         getResultsFoundLabel().setText("");
     }
 
-    public Snippet getSelectedSnippet() {
-        Snippet selectedSnippet = null;
-        if (!resultList.isSelectionEmpty()) {
-            selectedSnippet = (Snippet) model.getElementAt(resultList.getSelectedIndex());
-        }
-
-        return selectedSnippet;
-    }
-
     private void insertText() {
-        Snippet selectedSnippet = getSelectedSnippet();
+        Snippet selectedSnippet = snippetsList.getSelectedSnippet();
 
         if (selectedSnippet != null) {
             String code = selectedSnippet.getCode();
@@ -115,17 +97,12 @@ public class SearchSnippetDialog extends AbstractDialog {
     }
 
     private void refreshResultsFoundLabel() {
-        int size;
-        if (resultList.getSelectionModel() == disabledItemSelectionModel) {
-            size = 0;
-        } else {
-            size = model.getSize();
-        }
+        int size = snippetsList.getSnippetsSize();
         resultsFoundLabel.setText(String.format("%d snippets found", size));
     }
 
     public DefaultListModel getModel() {
-        return model;
+        return snippetsList.getSnippetsModel();
     }
 
     @Override
@@ -143,7 +120,7 @@ public class SearchSnippetDialog extends AbstractDialog {
 
     private void clearResults() {
         setResultsFoundLabelEmpty();
-        model.removeAllElements();
+        snippetsList.clearAll();
         snippetEditorPane.clear();
     }
 
@@ -176,18 +153,7 @@ public class SearchSnippetDialog extends AbstractDialog {
             @Override
             public void run() {
                 clearResults();
-                if (snippets.size() == 0) {
-                    resultList.setCellRenderer(defaultListCellRenderer);
-                    resultList.setSelectionModel(disabledItemSelectionModel);
-                    model.addElement("No results found");
-                } else {
-                    resultList.setCellRenderer(snippetRenderer);
-                    resultList.setSelectionModel(defaultListSelectionModel);
-
-                    for (Snippet snippet : snippets) {
-                        model.addElement(snippet);
-                    }
-                }
+                snippetsList.updateWithSnippets(snippets);
                 refreshResultsFoundLabel();
             }
         });
@@ -212,12 +178,16 @@ public class SearchSnippetDialog extends AbstractDialog {
         return insertButton;
     }
 
-    public JList getResultList() {
-        return resultList;
+    public SnippetsJList getSnippetsList() {
+        return snippetsList;
     }
 
     public JLabel getResultsFoundLabel() {
         return resultsFoundLabel;
+    }
+
+    private void createUIComponents() {
+        snippetsList = new SnippetsJList();
     }
 }
 
