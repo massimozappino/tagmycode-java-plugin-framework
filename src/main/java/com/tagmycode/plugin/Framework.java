@@ -29,7 +29,7 @@ public class Framework {
     private final Client client;
     private final TagMyCode tagMyCode;
     private final AbstractPreferences preferences;
-    private final Frame mainFrame;
+    private final Frame parentFrame;
     private final IMessageManager messageManager;
     private final IConsole console;
     private final AbstractTaskFactory taskFactory;
@@ -41,7 +41,7 @@ public class Framework {
         tagMyCode = new TagMyCode(client);
         this.preferences = frameworkConfig.getPreferences();
         this.messageManager = frameworkConfig.getMessageManager();
-        this.mainFrame = frameworkConfig.getMainFrame();
+        this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
         this.mainWindow = new MainWindow(this);
         this.console = mainWindow.getConsole();
@@ -158,18 +158,18 @@ public class Framework {
     }
 
     public void showAuthenticateDialog(ICallback... iCallback) {
-        new AuthorizationDialog(this, iCallback, getMainFrame()).showAtCenter();
+        new AuthorizationDialog(this, iCallback, getParentFrame()).showAtCenter();
     }
 
     public void showSnippetDialog(Snippet snippet, String mimeType) {
-        SnippetDialog snippetDialog = new SnippetDialog(this, mimeType, getMainFrame());
+        SnippetDialog snippetDialog = new SnippetDialog(this, mimeType, getParentFrame());
         snippetDialog.populateWithSnippet(snippet);
         snippetDialog.showAtCenter();
     }
 
     public void showSearchDialog(IDocumentInsertText documentUpdate) {
         if (searchSnippetDialog == null) {
-            searchSnippetDialog = new SearchSnippetDialog(documentUpdate, this, getMainFrame());
+            searchSnippetDialog = new SearchSnippetDialog(documentUpdate, this, getParentFrame());
         }
         new GuiThread().execute(new Runnable() {
             @Override
@@ -179,8 +179,8 @@ public class Framework {
         });
     }
 
-    public Frame getMainFrame() {
-        return mainFrame;
+    public Frame getParentFrame() {
+        return parentFrame;
     }
 
     public void error(final String message) {

@@ -6,15 +6,15 @@ public class FrameworkConfig {
     private final IPasswordKeyChain passwordManager;
     private final AbstractPreferences preferences;
     private final IMessageManager messageManager;
-    private final Frame mainFrame;
+    private final Frame parentFrame;
     private AbstractTaskFactory task;
 
-    public FrameworkConfig(IPasswordKeyChain passwordManager, AbstractPreferences preferences, IMessageManager messageManager, AbstractTaskFactory task, Frame mainFrame) {
+    public FrameworkConfig(IPasswordKeyChain passwordManager, AbstractPreferences preferences, IMessageManager messageManager, AbstractTaskFactory task, Frame parentFrame) {
         this.passwordManager = passwordManager;
         this.preferences = preferences;
         this.messageManager = messageManager;
         this.task = task;
-        this.mainFrame = mainFrame;
+        this.parentFrame = parentFrame;
     }
 
     public IPasswordKeyChain getPasswordManager() {
@@ -29,8 +29,8 @@ public class FrameworkConfig {
         return messageManager;
     }
 
-    public Frame getMainFrame() {
-        return mainFrame;
+    public Frame getParentFrame() {
+        return parentFrame;
     }
 
     public AbstractTaskFactory getTask() {
