@@ -21,8 +21,8 @@ public class FetchOauthTokenOperation extends TagMyCodeAsynchronousOperation {
     @Override
     protected Object performOperation() throws Exception {
         try {
-            abstractDialog.getFramework().getClient().fetchOauthToken(verificationCode);
-            abstractDialog.getFramework().initialize(callbacks);
+            authorizationDialog.getFramework().getClient().fetchOauthToken(verificationCode);
+            authorizationDialog.getFramework().initialize(callbacks);
         } catch (TagMyCodeConnectionException e) {
             throw new TagMyCodeGuiException("Unable to authenticate");
         }
@@ -36,6 +36,6 @@ public class FetchOauthTokenOperation extends TagMyCodeAsynchronousOperation {
 
     @Override
     protected void onSuccess(Object result) {
-        abstractDialog.dispose();
+        authorizationDialog.dispose();
     }
 }

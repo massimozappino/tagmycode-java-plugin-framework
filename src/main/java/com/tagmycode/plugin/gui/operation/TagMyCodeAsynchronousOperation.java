@@ -1,15 +1,15 @@
 package com.tagmycode.plugin.gui.operation;
 
 import com.tagmycode.plugin.AbstractTaskFactory;
-import com.tagmycode.plugin.gui.AbstractDialog;
+import com.tagmycode.plugin.gui.IonErrorCallback;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 
 import javax.swing.*;
 
 public abstract class TagMyCodeAsynchronousOperation<T> {
-    protected AbstractDialog abstractDialog;
+    protected IonErrorCallback abstractDialog;
 
-    public TagMyCodeAsynchronousOperation(AbstractDialog abstractDialog) {
+    public TagMyCodeAsynchronousOperation(IonErrorCallback abstractDialog) {
         this.abstractDialog = abstractDialog;
     }
 

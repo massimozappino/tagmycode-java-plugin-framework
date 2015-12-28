@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public abstract class AbstractDialog extends JDialog {
+public abstract class AbstractDialog extends JDialog implements IonErrorCallback {
     protected final Framework framework;
     private final Frame parentFrame;
 

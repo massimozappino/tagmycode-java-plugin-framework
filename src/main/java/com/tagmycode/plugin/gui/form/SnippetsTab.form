@@ -33,7 +33,7 @@
                   <text value="Add Snippet..."/>
                 </properties>
               </component>
-              <component id="a458a" class="javax.swing.JButton" default-binding="true">
+              <component id="a458a" class="javax.swing.JButton" binding="refreshButton">
                 <constraints/>
                 <properties>
                   <text value="Refresh"/>
