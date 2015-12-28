@@ -8,15 +8,15 @@ import javax.swing.*;
 public class SnippetsJList extends JList<Snippet> {
     private DisabledItemSelectionModel disabledItemSelectionModel;
     private DefaultListSelectionModel defaultListSelectionModel;
-    private SnippetRenderer snippetRenderer;
+    private SnippetRowRenderer snippetRowRenderer;
     private final SnippetsListModel snippetsListModel;
 
     public SnippetsJList() {
         disabledItemSelectionModel = new DisabledItemSelectionModel();
         defaultListSelectionModel = new DefaultListSelectionModel();
-        snippetRenderer = new SnippetRenderer();
+        snippetRowRenderer = new SnippetRowRenderer();
         snippetsListModel = new SnippetsListModel();
-        setCellRenderer(snippetRenderer);
+        setCellRenderer(snippetRowRenderer);
         setModel(snippetsListModel);
     }
 

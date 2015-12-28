@@ -3,7 +3,7 @@ package com.tagmycode.plugin.gui.operation;
 
 import com.tagmycode.plugin.ICallback;
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
-import com.tagmycode.plugin.gui.AuthorizationDialog;
+import com.tagmycode.plugin.gui.form.AuthorizationDialog;
 import com.tagmycode.sdk.exception.TagMyCodeConnectionException;
 
 public class FetchOauthTokenOperation extends TagMyCodeAsynchronousOperation {

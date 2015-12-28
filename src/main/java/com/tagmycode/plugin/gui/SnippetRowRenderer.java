@@ -5,8 +5,8 @@ import com.tagmycode.sdk.model.Snippet;
 import javax.swing.*;
 import java.awt.*;
 
-public class SnippetRenderer extends JLabel implements ListCellRenderer {
-    public SnippetRenderer() {
+public class SnippetRowRenderer extends JLabel implements ListCellRenderer {
+    public SnippetRowRenderer() {
         setOpaque(true);
     }
 

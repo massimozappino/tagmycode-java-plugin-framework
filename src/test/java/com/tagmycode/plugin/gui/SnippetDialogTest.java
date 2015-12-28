@@ -2,6 +2,7 @@ package com.tagmycode.plugin.gui;
 
 import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
+import com.tagmycode.plugin.gui.form.SnippetDialog;
 import org.junit.Ignore;
 import org.junit.Test;
 

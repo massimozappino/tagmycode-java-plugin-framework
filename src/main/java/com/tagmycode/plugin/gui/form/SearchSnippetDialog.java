@@ -1,9 +1,12 @@
-package com.tagmycode.plugin.gui;
+package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.GuiThread;
+import com.tagmycode.plugin.gui.AbstractDialog;
+import com.tagmycode.plugin.gui.IDocumentInsertText;
+import com.tagmycode.plugin.gui.SnippetEditorPane;
+import com.tagmycode.plugin.gui.SnippetsJList;
 import com.tagmycode.plugin.gui.operation.SearchSnippetOperation;
-import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.ModelCollection;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -93,7 +96,6 @@ public class SearchSnippetDialog extends AbstractDialog {
         });
         snippetEditorPane.setEditable(false);
         insertButton.setEnabled(false);
-
     }
 
     private void refreshResultsFoundLabel() {
@@ -191,10 +193,3 @@ public class SearchSnippetDialog extends AbstractDialog {
     }
 }
 
-class DisabledItemSelectionModel extends DefaultListSelectionModel {
-
-    @Override
-    public void setSelectionInterval(int index0, int index1) {
-        super.setSelectionInterval(-1, -1);
-    }
-}

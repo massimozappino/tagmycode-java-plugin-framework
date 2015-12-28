@@ -1,6 +1,6 @@
 package com.tagmycode.plugin.gui.operation;
 
-import com.tagmycode.plugin.gui.SearchSnippetDialog;
+import com.tagmycode.plugin.gui.form.SearchSnippetDialog;
 import com.tagmycode.sdk.model.ModelCollection;
 import com.tagmycode.sdk.model.Snippet;
 

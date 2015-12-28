@@ -2,7 +2,11 @@ package com.tagmycode.plugin;
 
 
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
-import com.tagmycode.plugin.gui.*;
+import com.tagmycode.plugin.gui.IDocumentInsertText;
+import com.tagmycode.plugin.gui.form.AuthorizationDialog;
+import com.tagmycode.plugin.gui.form.MainWindow;
+import com.tagmycode.plugin.gui.form.SearchSnippetDialog;
+import com.tagmycode.plugin.gui.form.SnippetDialog;
 import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.OauthToken;
@@ -44,7 +48,7 @@ public class Framework {
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
         this.mainWindow = new MainWindow(this);
-        this.console = mainWindow.getConsole();
+        this.console = mainWindow.getConsoleTab().getConsole();
         restoreData();
         getConsole().log("TagMyCode started");
     }

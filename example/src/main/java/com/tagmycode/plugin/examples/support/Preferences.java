@@ -1,9 +1,6 @@
-package com.tagmycode.plugin.example;
+package com.tagmycode.plugin.examples.support;
 
 import com.tagmycode.plugin.AbstractPreferences;
-import com.tagmycode.plugin.IPasswordKeyChain;
-import com.tagmycode.plugin.exception.TagMyCodeGuiException;
-
 
 public class Preferences extends AbstractPreferences {
 

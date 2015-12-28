@@ -1,13 +1,10 @@
-package com.tagmycode.plugin.example;
+package com.tagmycode.plugin.examples.support;
 
 import com.tagmycode.plugin.IMessageManager;
 
-/**
- * Created by max on 20/12/15.
- */
 public class MessageManager implements IMessageManager {
     @Override
     public void error(String message) {
-
+        System.err.println(message);
     }
 }

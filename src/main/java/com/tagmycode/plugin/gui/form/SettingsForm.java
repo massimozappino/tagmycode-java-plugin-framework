@@ -1,14 +1,15 @@
-package com.tagmycode.plugin.gui;
+package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.GuiThread;
 import com.tagmycode.plugin.ICallback;
+import com.tagmycode.plugin.gui.AbstractForm;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SettingsForm {
+public class SettingsForm extends AbstractForm {
     private JPanel mainPanel;
     private JPanel loginPanel;
     private JPanel logoutPanel;
@@ -63,6 +64,7 @@ public class SettingsForm {
         }
     }
 
+    @Override
     public JPanel getMainPanel() {
         return mainPanel;
     }

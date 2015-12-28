@@ -1,6 +1,6 @@
 package com.tagmycode.plugin.gui.operation;
 
-import com.tagmycode.plugin.gui.SnippetDialog;
+import com.tagmycode.plugin.gui.form.SnippetDialog;
 import com.tagmycode.sdk.model.Snippet;
 
 public class CreateSnippetOperation extends TagMyCodeAsynchronousOperation<String> {

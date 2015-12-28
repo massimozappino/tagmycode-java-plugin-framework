@@ -3,6 +3,7 @@ package com.tagmycode.plugin.gui;
 import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.ICallback;
+import com.tagmycode.plugin.gui.form.SettingsForm;
 import org.junit.Test;
 import support.FakeConsole;
 

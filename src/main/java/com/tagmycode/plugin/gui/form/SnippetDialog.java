@@ -1,8 +1,10 @@
-package com.tagmycode.plugin.gui;
+package com.tagmycode.plugin.gui.form;
 
 
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.GuiThread;
+import com.tagmycode.plugin.gui.AbstractDialog;
+import com.tagmycode.plugin.gui.SnippetEditorPane;
 import com.tagmycode.plugin.gui.operation.CreateSnippetOperation;
 import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.Snippet;
