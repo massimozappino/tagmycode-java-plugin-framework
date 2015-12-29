@@ -45,7 +45,7 @@ public class SnippetsTab extends AbstractForm implements IonErrorCallback {
         addSnippetButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String mimeType = "text/plain";
+                String mimeType = "text/java";
                 framework.showSnippetDialog(new Snippet(), mimeType);
             }
         });

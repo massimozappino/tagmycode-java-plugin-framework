@@ -23,7 +23,6 @@ public class MainAppExample {
         JFrame frame = new JFrame("TagMyCode Plugin Example");
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setBounds(200, 200, 600, 200);
-        frame.setTitle("Status bar simulator");
         Container contentPane = frame.getContentPane();
         contentPane.setLayout(new BorderLayout());
 

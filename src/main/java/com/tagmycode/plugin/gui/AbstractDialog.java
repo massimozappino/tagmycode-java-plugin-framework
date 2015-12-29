@@ -59,6 +59,7 @@ public abstract class AbstractDialog extends JDialog implements IonErrorCallback
         initPopupMenuForJTextComponents();
     }
 
+    // TODO uniform with AbstractForm
     private void initPopupMenuForJTextComponents() {
         ArrayList<Component> components = getAllComponents(this);
 

@@ -145,16 +145,16 @@
             <version>${tagmycode-sdk.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.intellij</groupId>
+            <artifactId>forms_rt</artifactId>
+            <version>5.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.tagmycode</groupId>
             <artifactId>tagmycode-sdk</artifactId>
             <version>${tagmycode-sdk.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.intellij</groupId>
-            <artifactId>forms_rt</artifactId>
-            <version>5.0</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
