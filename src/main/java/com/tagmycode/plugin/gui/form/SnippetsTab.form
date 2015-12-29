@@ -39,10 +39,6 @@
                   <text value="Refresh"/>
                 </properties>
               </component>
-              <component id="14bda" class="javax.swing.JTextField" binding="textField1" default-binding="true">
-                <constraints/>
-                <properties/>
-              </component>
             </children>
           </toolbar>
           <splitpane id="47a68">

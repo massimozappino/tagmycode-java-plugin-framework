@@ -6,7 +6,7 @@ public class Preferences extends AbstractPreferences {
 
     @Override
     protected String read(String key) {
-        return null;
+        return "";
     }
 
     @Override

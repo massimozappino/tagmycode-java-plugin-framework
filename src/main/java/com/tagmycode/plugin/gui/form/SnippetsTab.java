@@ -18,7 +18,6 @@ public class SnippetsTab extends AbstractForm implements IonErrorCallback {
     private JPanel snippetViewFormPanel;
     private JButton addSnippetButton;
     private JPanel mainPanel;
-    private JTextField textField1;
     private JButton refreshButton;
     private Framework framework;
 

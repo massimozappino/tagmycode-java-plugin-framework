@@ -9,6 +9,7 @@ import com.tagmycode.sdk.model.Snippet;
 import support.ResourceGenerate;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class MainAppExample {
     public static void main(String args[]) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
@@ -21,6 +22,15 @@ public class MainAppExample {
 
         JFrame frame = new JFrame("TagMyCode Plugin Example");
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame.setBounds(200, 200, 600, 200);
+        frame.setTitle("Status bar simulator");
+        Container contentPane = frame.getContentPane();
+        contentPane.setLayout(new BorderLayout());
+
+//        StatusBar statusBar = new StatusBar();
+//        contentPane.add(statusBar, BorderLayout.SOUTH);
+
+
         FrameworkConfig frameworkConfig = new FrameworkConfig(
                 new PasswordKeyChain(),
                 new Preferences(),
@@ -29,7 +39,7 @@ public class MainAppExample {
                 frame);
         Framework framework = new Framework(new TagMyCodeApiProduction(), frameworkConfig, new Secret());
 
-        frame.add(framework.getMainWindow().getMainPanel());
+        contentPane.add(framework.getMainWindow().getMainPanel(), BorderLayout.CENTER);
 
         try {
             ModelCollection<Snippet> snippets = new ResourceGenerate().aSnippetCollection();

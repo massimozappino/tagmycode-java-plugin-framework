@@ -21,12 +21,12 @@ public class SnippetsJList extends JList<Snippet> {
     }
 
     public void updateWithSnippets(ModelCollection<Snippet> snippets) {
+        snippetsListModel.clear();
         if (snippets.size() == 0) {
             setSelectionModel(disabledItemSelectionModel);
             snippetsListModel.addElement(new NoResultsFoundSnippetItem());
         } else {
             setSelectionModel(defaultListSelectionModel);
-
             for (Snippet snippet : snippets) {
                 snippetsListModel.addElement(snippet);
             }
@@ -47,7 +47,7 @@ public class SnippetsJList extends JList<Snippet> {
     }
 
     public void clearAll() {
-        snippetsListModel.removeAllElements();
+        snippetsListModel.clear();
     }
 
     public int getSnippetsSize() {

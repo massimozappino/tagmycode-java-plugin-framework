@@ -9,6 +9,7 @@ import com.tagmycode.plugin.gui.form.SearchSnippetDialog;
 import com.tagmycode.plugin.gui.form.SnippetDialog;
 import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.TagMyCode;
+import com.tagmycode.sdk.VoidWallet;
 import com.tagmycode.sdk.authentication.OauthToken;
 import com.tagmycode.sdk.authentication.TagMyCodeApi;
 import com.tagmycode.sdk.exception.TagMyCodeException;
@@ -41,7 +42,7 @@ public class Framework {
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
         wallet = new Wallet(frameworkConfig.getPasswordManager());
-        client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret());
+        client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), new VoidWallet());
         tagMyCode = new TagMyCode(client);
         this.preferences = frameworkConfig.getPreferences();
         this.messageManager = frameworkConfig.getMessageManager();
