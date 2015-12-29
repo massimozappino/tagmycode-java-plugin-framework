@@ -84,7 +84,7 @@ public class FrameworkTest extends AbstractTest {
         OauthToken newOauthToken = new OauthToken("newToken", "newToken");
         framework.getWallet().saveOauthToken(newOauthToken);
 
-        FrameworkConfig frameworkConfig = new FrameworkConfig(framework.getWallet().getPasswordManager(), framework.getPreferences(), framework.getMessageManager(), framework.getTaskFactory(), framework.getParentFrame());
+        FrameworkConfig frameworkConfig = new FrameworkConfig(framework.getWallet().getPasswordKeyChain(), framework.getPreferences(), framework.getMessageManager(), framework.getTaskFactory(), framework.getParentFrame());
         Framework reloadedFramework = new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret());
 
         assertEquals(newOauthToken, reloadedFramework.getClient().getOauthToken());

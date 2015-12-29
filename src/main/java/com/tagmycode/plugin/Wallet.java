@@ -1,26 +1,28 @@
 package com.tagmycode.plugin;
 
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
+import com.tagmycode.sdk.IOauthWallet;
+import com.tagmycode.sdk.IWallet;
 import com.tagmycode.sdk.authentication.OauthToken;
 
-public class Wallet {
+public class Wallet implements IOauthWallet {
 
     public static final String ACCESS_TOKEN = "access_token";
     public static final String REFRESH_TOKEN = "refresh_token";
-    private IPasswordKeyChain passwordManager;
+    private IPasswordKeyChain passwordKeyChain;
 
-    public IPasswordKeyChain getPasswordManager() {
-        return passwordManager;
+    public IPasswordKeyChain getPasswordKeyChain() {
+        return passwordKeyChain;
     }
 
-    public Wallet(IPasswordKeyChain passwordManager) {
+    public Wallet(IPasswordKeyChain passwordKeyChain) {
 
-        this.passwordManager = passwordManager;
+        this.passwordKeyChain = passwordKeyChain;
     }
 
     public OauthToken loadOauthToken() throws TagMyCodeGuiException {
-        String accessTokenString = passwordManager.loadValue(ACCESS_TOKEN);
-        String refreshTokenString = passwordManager.loadValue(REFRESH_TOKEN);
+        String accessTokenString = passwordKeyChain.loadValue(ACCESS_TOKEN);
+        String refreshTokenString = passwordKeyChain.loadValue(REFRESH_TOKEN);
 
         OauthToken oauthToken = null;
         if (accessTokenString != null && refreshTokenString != null) {
@@ -30,13 +32,16 @@ public class Wallet {
         return oauthToken;
     }
 
-    public void saveOauthToken(OauthToken accessToken) throws TagMyCodeGuiException {
-        passwordManager.saveValue(ACCESS_TOKEN, accessToken.getAccessToken().getToken());
-        passwordManager.saveValue(REFRESH_TOKEN, accessToken.getRefreshToken().getToken());
+    @Override
+    public boolean saveOauthToken(OauthToken accessToken) {
+
+        passwordKeyChain.saveValue(ACCESS_TOKEN, accessToken.getAccessToken().getToken());
+        passwordKeyChain.saveValue(REFRESH_TOKEN, accessToken.getRefreshToken().getToken());
+        return true;
     }
 
     public void deleteAccessToken() throws TagMyCodeGuiException {
-        passwordManager.deleteValue(ACCESS_TOKEN);
-        passwordManager.deleteValue(REFRESH_TOKEN);
+        passwordKeyChain.deleteValue(ACCESS_TOKEN);
+        passwordKeyChain.deleteValue(REFRESH_TOKEN);
     }
 }

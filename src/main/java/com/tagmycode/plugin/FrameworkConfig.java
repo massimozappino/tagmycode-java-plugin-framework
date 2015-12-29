@@ -17,7 +17,7 @@ public class FrameworkConfig {
         this.parentFrame = parentFrame;
     }
 
-    public IPasswordKeyChain getPasswordManager() {
+    public IPasswordKeyChain getPasswordKeyChain() {
         return passwordManager;
     }
 
