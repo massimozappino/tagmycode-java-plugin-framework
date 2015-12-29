@@ -1,8 +1,9 @@
-package com.tagmycode.plugin.gui;
+package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
-import com.tagmycode.plugin.gui.form.SearchSnippetDialog;
+import com.tagmycode.plugin.gui.NoResultsFoundSnippetItem;
+import com.tagmycode.plugin.gui.SnippetsJList;
 import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.model.ModelCollection;
 import com.tagmycode.sdk.model.Snippet;

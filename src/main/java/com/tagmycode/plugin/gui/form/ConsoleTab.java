@@ -2,14 +2,13 @@ package com.tagmycode.plugin.gui.form;
 
 
 import com.tagmycode.plugin.Console;
-import com.tagmycode.plugin.gui.AbstractForm;
+import com.tagmycode.plugin.gui.AbstractGui;
 
 import javax.swing.*;
 
 import static javax.swing.BorderFactory.createEmptyBorder;
 
-public class ConsoleTab extends AbstractForm {
-
+public class ConsoleTab extends AbstractGui {
     private final Console console;
     private JPanel mainPanel;
     private JScrollPane consoleScrollPane;
@@ -20,6 +19,7 @@ public class ConsoleTab extends AbstractForm {
         consoleEditorPane.setBorder(createEmptyBorder());
         consoleEditorPane.setEditable(false);
         console = new Console(consoleEditorPane);
+        initPopupMenuForJTextComponents(getMainPanel());
     }
 
     @Override

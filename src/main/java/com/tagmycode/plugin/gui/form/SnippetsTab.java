@@ -1,7 +1,7 @@
 package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Framework;
-import com.tagmycode.plugin.gui.AbstractForm;
+import com.tagmycode.plugin.gui.AbstractGui;
 import com.tagmycode.plugin.gui.IonErrorCallback;
 import com.tagmycode.plugin.gui.SnippetsJList;
 import com.tagmycode.plugin.gui.operation.RefreshSnippetOperation;
@@ -13,7 +13,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 
-public class SnippetsTab extends AbstractForm implements IonErrorCallback {
+public class SnippetsTab extends AbstractGui implements IonErrorCallback {
     private SnippetsJList snippetsJList;
     private JPanel snippetViewFormPanel;
     private JButton addSnippetButton;
@@ -56,6 +56,8 @@ public class SnippetsTab extends AbstractForm implements IonErrorCallback {
                 refreshSnippets();
             }
         });
+
+        initPopupMenuForJTextComponents(getMainPanel());
     }
 
     private void refreshSnippets() {

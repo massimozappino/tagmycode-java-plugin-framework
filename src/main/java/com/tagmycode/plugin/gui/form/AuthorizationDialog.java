@@ -48,9 +48,9 @@ public class AuthorizationDialog extends AbstractDialog {
         authorizationUrl.setForeground(SystemColor.inactiveCaption);
         authorizationUrl.setText(framework.getClient().getAuthorizationUrl());
 
-        setSize(380, 350);
-        setResizable(false);
-        setTitle("TagMyCode authorization");
+        getDialog().setSize(380, 350);
+        getDialog().setResizable(false);
+        getDialog().setTitle("TagMyCode authorization");
 
         authorizationUrl.addMouseListener(new MouseListener() {
             @Override
@@ -94,7 +94,7 @@ public class AuthorizationDialog extends AbstractDialog {
     }
 
     @Override
-    protected JPanel getContentPanePanel() {
+    public JPanel getMainPanel() {
         return contentPane;
     }
 
@@ -138,5 +138,4 @@ public class AuthorizationDialog extends AbstractDialog {
     public JButton getButtonOK() {
         return buttonOK;
     }
-
 }

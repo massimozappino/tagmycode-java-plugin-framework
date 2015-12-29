@@ -5,17 +5,16 @@ import com.tagmycode.plugin.GuiThread;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
-public abstract class AbstractDialog extends JDialog implements IonErrorCallback {
+public abstract class AbstractDialog extends AbstractGui implements IonErrorCallback {
     protected final Framework framework;
     private final Frame parentFrame;
+    private final JDialog dialog;
 
     public AbstractDialog(Framework framework, Frame parent) {
-        super(parent, true);
+        dialog = new JDialog(parent, true);
         parentFrame = parent;
         this.framework = framework;
     }
@@ -23,8 +22,8 @@ public abstract class AbstractDialog extends JDialog implements IonErrorCallback
     protected abstract void initWindow();
 
     protected void defaultInitWindow() {
-        setContentPane(getContentPanePanel());
-        getRootPane().setDefaultButton(getButtonOk());
+        dialog.setContentPane(getMainPanel());
+        dialog.getRootPane().setDefaultButton(getButtonOk());
 
         getButtonOk().addActionListener(new ActionListener() {
             @Override
@@ -41,8 +40,8 @@ public abstract class AbstractDialog extends JDialog implements IonErrorCallback
         });
 
         // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
+        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        dialog.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 onCancel();
@@ -50,36 +49,13 @@ public abstract class AbstractDialog extends JDialog implements IonErrorCallback
         });
 
         // call onCancel() on ESCAPE
-        getContentPanePanel().registerKeyboardAction(new ActionListener() {
+        getMainPanel().registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-        initPopupMenuForJTextComponents();
-    }
-
-    // TODO uniform with AbstractForm
-    private void initPopupMenuForJTextComponents() {
-        ArrayList<Component> components = getAllComponents(this);
-
-        for (Component component : components) {
-            if (component instanceof JTextComponent) {
-                new CutCopyPastePopup((JTextComponent) component);
-            }
-        }
-    }
-
-    private ArrayList<Component> getAllComponents(final Container container) {
-        Component[] components = container.getComponents();
-        ArrayList<Component> compList = new ArrayList<Component>();
-        for (Component component : components) {
-            compList.add(component);
-            if (component instanceof Container) {
-                compList.addAll(getAllComponents((Container) component));
-            }
-        }
-        return compList;
+        initPopupMenuForJTextComponents(dialog);
     }
 
     protected abstract void onOK();
@@ -88,33 +64,36 @@ public abstract class AbstractDialog extends JDialog implements IonErrorCallback
 
     protected abstract JButton getButtonCancel();
 
-    protected abstract JPanel getContentPanePanel();
-
     private void onCancel() {
         closeDialog();
     }
 
     public void closeDialog() {
-        dispose();
+        dialog.dispose();
     }
 
     public void showAtCenter() {
         new GuiThread().execute(new Runnable() {
             @Override
             public void run() {
-                CenterLocation location = new CenterLocation(parentFrame, AbstractDialog.this);
-                setLocation(location.getX(), location.getY());
-                setVisible(true);
+                CenterLocation location = new CenterLocation(parentFrame, dialog);
+                dialog.setLocation(location.getX(), location.getY());
+                dialog.setVisible(true);
             }
         });
 
     }
 
+    @Override
     public void onError(TagMyCodeException exception) {
         framework.manageTagMyCodeExceptions(exception);
     }
 
     public Framework getFramework() {
         return framework;
+    }
+
+    public JDialog getDialog() {
+        return dialog;
     }
 }

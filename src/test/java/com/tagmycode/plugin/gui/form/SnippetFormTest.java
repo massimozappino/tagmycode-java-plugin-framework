@@ -1,6 +1,5 @@
-package com.tagmycode.plugin.gui;
+package com.tagmycode.plugin.gui.form;
 
-import com.tagmycode.plugin.gui.form.SnippetForm;
 import com.tagmycode.sdk.model.Snippet;
 import org.junit.Test;
 import support.ResourceGenerate;

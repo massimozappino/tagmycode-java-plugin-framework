@@ -44,9 +44,9 @@ public class SnippetDialog extends AbstractDialog {
     @Override
     protected void initWindow() {
         descriptionTextField.requestFocus();
-        setSize(650, 450);
-        setTitle("Create snippet");
-        setResizable(true);
+        getDialog().setSize(650, 450);
+        getDialog().setTitle("Create snippet");
+        getDialog().setResizable(true);
 
         new GuiThread().execute(new Runnable() {
             @Override
@@ -74,7 +74,7 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     @Override
-    protected JPanel getContentPanePanel() {
+    public JPanel getMainPanel() {
         return contentPane;
     }
 

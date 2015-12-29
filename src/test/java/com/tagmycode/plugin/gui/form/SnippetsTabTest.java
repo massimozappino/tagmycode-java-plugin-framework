@@ -1,15 +1,28 @@
-package com.tagmycode.plugin.gui;
+package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.AbstractTest;
-import com.tagmycode.plugin.gui.form.SnippetsTab;
+import com.tagmycode.plugin.gui.SnippetsJList;
 import org.junit.Test;
 import support.ResourceGenerate;
 
 import javax.swing.*;
+import java.awt.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class SnippetsTabTest extends AbstractTest {
+    private boolean actual;
+
+    @Test
+    public void testConstructor() throws Exception {
+        new SnippetsTab(createFramework()) {
+            public void initPopupMenuForJTextComponents(Container container) {
+                actual = true;
+            }
+        };
+        assertTrue(actual);
+    }
 
     @Test
     public void testSelection() throws Exception {

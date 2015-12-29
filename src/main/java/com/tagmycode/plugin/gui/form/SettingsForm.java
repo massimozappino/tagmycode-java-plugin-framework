@@ -3,13 +3,13 @@ package com.tagmycode.plugin.gui.form;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.GuiThread;
 import com.tagmycode.plugin.ICallback;
-import com.tagmycode.plugin.gui.AbstractForm;
+import com.tagmycode.plugin.gui.IAbstractGUI;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SettingsForm extends AbstractForm {
+public class SettingsForm implements IAbstractGUI {
     private JPanel mainPanel;
     private JPanel loginPanel;
     private JPanel logoutPanel;

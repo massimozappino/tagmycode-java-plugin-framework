@@ -82,11 +82,11 @@ public class SearchSnippetDialog extends AbstractDialog {
             }
         };
 
-        getRootPane().setDefaultButton(null);
+        getDialog().getRootPane().setDefaultButton(null);
         searchTextField.addActionListener(searchActionListener);
-        setSize(800, 400);
-        setResizable(true);
-        setTitle("Search snippets");
+        getDialog().setSize(800, 400);
+        getDialog().setResizable(true);
+        getDialog().setTitle("Search snippets");
         buttonOk.addActionListener(searchActionListener);
         insertButton.addActionListener(new ActionListener() {
             @Override
@@ -128,7 +128,7 @@ public class SearchSnippetDialog extends AbstractDialog {
 
     @Override
     public void closeDialog() {
-        setVisible(false);
+        getDialog().setVisible(false);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class SearchSnippetDialog extends AbstractDialog {
     }
 
     @Override
-    protected JPanel getContentPanePanel() {
+    public JPanel getMainPanel() {
         return contentPane;
     }
 

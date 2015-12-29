@@ -1,8 +1,7 @@
-package com.tagmycode.plugin.gui;
+package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
-import com.tagmycode.plugin.gui.form.SnippetDialog;
 import org.junit.Ignore;
 import org.junit.Test;
 

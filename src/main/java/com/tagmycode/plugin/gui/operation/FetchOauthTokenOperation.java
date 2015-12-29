@@ -36,6 +36,6 @@ public class FetchOauthTokenOperation extends TagMyCodeAsynchronousOperation {
 
     @Override
     protected void onSuccess(Object result) {
-        authorizationDialog.dispose();
+        authorizationDialog.getDialog().dispose();
     }
 }
