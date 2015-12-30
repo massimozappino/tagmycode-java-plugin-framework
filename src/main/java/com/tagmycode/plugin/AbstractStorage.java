@@ -1,19 +1,21 @@
 package com.tagmycode.plugin;
 
 
-import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
+import com.tagmycode.sdk.model.LanguageCollection;
+import com.tagmycode.sdk.model.SnippetCollection;
 import com.tagmycode.sdk.model.User;
 import org.json.JSONException;
 
 import java.util.Date;
 
-public abstract class AbstractPreferences {
-    private final String LANGUAGES = "languages";
-    private final String PRIVATE_SNIPPET = "private_snippet";
-    private final String LAST_LANGUAGE = "last_language";
-    private final String ACCOUNT = "account";
-    private final String LAST_UPDATE = "last_update";
+public abstract class AbstractStorage {
+    private static final String SNIPPETS = "snippets";
+    private static final String LANGUAGES = "languages";
+    private static final String PRIVATE_SNIPPET = "private_snippet";
+    private static final String LAST_LANGUAGE = "last_language";
+    private static final String ACCOUNT = "account";
+    private static final String LAST_UPDATE = "last_update";
 
     protected abstract String read(String key);
 
@@ -85,6 +87,7 @@ public abstract class AbstractPreferences {
         unset(LAST_LANGUAGE);
         unset(ACCOUNT);
         unset(LAST_UPDATE);
+        unset(SNIPPETS);
     }
 
     protected boolean stringToBoolean(String s) {
@@ -95,4 +98,16 @@ public abstract class AbstractPreferences {
         return b ? "1" : "0";
     }
 
+    public SnippetCollection getSnippets() throws TagMyCodeJsonException {
+        String jsonSnippets = read(SNIPPETS);
+        if (jsonSnippets == null) {
+            throw new TagMyCodeJsonException();
+        }
+
+        return new SnippetCollection(jsonSnippets);
+    }
+
+    public void setSnippets(SnippetCollection snippetCollection) throws JSONException {
+        write(SNIPPETS, snippetCollection.toJson());
+    }
 }

@@ -2,7 +2,6 @@ package com.tagmycode.plugin;
 
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.sdk.IOauthWallet;
-import com.tagmycode.sdk.IWallet;
 import com.tagmycode.sdk.authentication.OauthToken;
 
 public class Wallet implements IOauthWallet {
@@ -11,13 +10,13 @@ public class Wallet implements IOauthWallet {
     public static final String REFRESH_TOKEN = "refresh_token";
     private IPasswordKeyChain passwordKeyChain;
 
-    public IPasswordKeyChain getPasswordKeyChain() {
-        return passwordKeyChain;
-    }
-
     public Wallet(IPasswordKeyChain passwordKeyChain) {
 
         this.passwordKeyChain = passwordKeyChain;
+    }
+
+    public IPasswordKeyChain getPasswordKeyChain() {
+        return passwordKeyChain;
     }
 
     public OauthToken loadOauthToken() throws TagMyCodeGuiException {
@@ -33,11 +32,9 @@ public class Wallet implements IOauthWallet {
     }
 
     @Override
-    public boolean saveOauthToken(OauthToken accessToken) {
-
+    public void saveOauthToken(OauthToken accessToken) throws TagMyCodeGuiException {
         passwordKeyChain.saveValue(ACCESS_TOKEN, accessToken.getAccessToken().getToken());
         passwordKeyChain.saveValue(REFRESH_TOKEN, accessToken.getRefreshToken().getToken());
-        return true;
     }
 
     public void deleteAccessToken() throws TagMyCodeGuiException {

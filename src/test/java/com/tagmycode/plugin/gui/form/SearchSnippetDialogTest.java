@@ -2,11 +2,10 @@ package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
-import com.tagmycode.plugin.gui.NoResultsFoundSnippetItem;
+import com.tagmycode.plugin.gui.CustomTextSnippetItem;
 import com.tagmycode.plugin.gui.SnippetsJList;
 import com.tagmycode.sdk.TagMyCode;
-import com.tagmycode.sdk.model.ModelCollection;
-import com.tagmycode.sdk.model.Snippet;
+import com.tagmycode.sdk.model.SnippetCollection;
 import org.junit.Before;
 import org.junit.Test;
 import support.FakeDocumentInsertText;
@@ -36,7 +35,7 @@ public class SearchSnippetDialogTest extends AbstractTest {
 
         assertSelectedFirstElementIs(snippetsList, null);
         assertResultSizeIs(snippetsList, 1);
-        assertTrue(snippetsList.getModel().getElementAt(0) instanceof NoResultsFoundSnippetItem);
+        assertTrue(snippetsList.getModel().getElementAt(0) instanceof CustomTextSnippetItem);
         assertResultsLabelIs(searchSnippetDialog, "0 snippets found");
 
         makeASearchWithResultsAndWait(searchSnippetDialog);
@@ -138,7 +137,7 @@ public class SearchSnippetDialogTest extends AbstractTest {
         TagMyCode mockedTagMyCode = getMockedTagMyCode(framework);
 
         when(mockedTagMyCode.searchSnippets("java")).thenReturn(resourceGenerate.aSnippetCollection());
-        when(mockedTagMyCode.searchSnippets("none")).thenReturn(new ModelCollection<Snippet>());
+        when(mockedTagMyCode.searchSnippets("none")).thenReturn(new SnippetCollection());
     }
 
 }

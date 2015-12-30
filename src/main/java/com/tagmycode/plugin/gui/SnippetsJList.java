@@ -6,10 +6,10 @@ import com.tagmycode.sdk.model.Snippet;
 import javax.swing.*;
 
 public class SnippetsJList extends JList<Snippet> {
+    private final SnippetsListModel snippetsListModel;
     private DisabledItemSelectionModel disabledItemSelectionModel;
     private DefaultListSelectionModel defaultListSelectionModel;
     private SnippetRowRenderer snippetRowRenderer;
-    private final SnippetsListModel snippetsListModel;
 
     public SnippetsJList() {
         disabledItemSelectionModel = new DisabledItemSelectionModel();
@@ -24,7 +24,7 @@ public class SnippetsJList extends JList<Snippet> {
         snippetsListModel.clear();
         if (snippets.size() == 0) {
             setSelectionModel(disabledItemSelectionModel);
-            snippetsListModel.addElement(new NoResultsFoundSnippetItem());
+            snippetsListModel.addElement(new CustomTextSnippetItem("No snippets"));
         } else {
             setSelectionModel(defaultListSelectionModel);
             for (Snippet snippet : snippets) {

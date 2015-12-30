@@ -1,14 +1,14 @@
 package support;
 
 
-import com.tagmycode.plugin.AbstractPreferences;
+import com.tagmycode.plugin.AbstractStorage;
 
 import java.util.HashMap;
 
-public class FakePreferences extends AbstractPreferences {
+public class FakeStorage extends AbstractStorage {
     private HashMap<String, String> resource;
 
-    public FakePreferences() {
+    public FakeStorage() {
         resource = new HashMap<String, String>();
     }
 

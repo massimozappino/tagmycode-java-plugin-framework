@@ -4,7 +4,8 @@ import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.AbstractGui;
 import com.tagmycode.plugin.gui.IonErrorCallback;
 import com.tagmycode.plugin.gui.SnippetsJList;
-import com.tagmycode.plugin.gui.operation.RefreshSnippetOperation;
+import com.tagmycode.plugin.gui.operation.LoadSnippetsOperation;
+import com.tagmycode.plugin.gui.operation.RefreshSnippetsOperation;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -58,10 +59,15 @@ public class SnippetsTab extends AbstractGui implements IonErrorCallback {
         });
 
         initPopupMenuForJTextComponents(getMainPanel());
+        loadSnippets();
+    }
+
+    private void loadSnippets() {
+        new LoadSnippetsOperation(this).runWithTask(framework.getTaskFactory(), "Loading snippets");
     }
 
     private void refreshSnippets() {
-        new RefreshSnippetOperation(this).runWithTask(framework.getTaskFactory(), "Refreshing snippets");
+        new RefreshSnippetsOperation(this).runWithTask(framework.getTaskFactory(), "Refreshing snippets");
     }
 
     public SnippetsJList getSnippetsJList() {

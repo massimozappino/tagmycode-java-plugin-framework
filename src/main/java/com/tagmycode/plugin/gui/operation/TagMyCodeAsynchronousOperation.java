@@ -7,10 +7,10 @@ import com.tagmycode.sdk.exception.TagMyCodeException;
 import javax.swing.*;
 
 public abstract class TagMyCodeAsynchronousOperation<T> {
-    protected IonErrorCallback abstractDialog;
+    protected IonErrorCallback ionErrorCallback;
 
-    public TagMyCodeAsynchronousOperation(IonErrorCallback abstractDialog) {
-        this.abstractDialog = abstractDialog;
+    public TagMyCodeAsynchronousOperation(IonErrorCallback ionErrorCallback) {
+        this.ionErrorCallback = ionErrorCallback;
     }
 
     public final void run() {
@@ -40,8 +40,7 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
                         }
                     });
                 } catch (InterruptedException e) {
-                    // Task stopped by user
-                    e.printStackTrace();
+                    onInterrupted();
                 } catch (final Throwable e) {
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
@@ -53,6 +52,10 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
                 }
             }
         };
+    }
+
+    protected void onInterrupted() {
+
     }
 
     protected void beforePerformOperation() {
@@ -71,9 +74,9 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
 
     protected void onFailure(Throwable e) {
         if (e instanceof TagMyCodeException) {
-            abstractDialog.onError((TagMyCodeException) e);
+            ionErrorCallback.onError((TagMyCodeException) e);
         } else {
-            abstractDialog.onError(new TagMyCodeException());
+            ionErrorCallback.onError(new TagMyCodeException());
         }
     }
 }

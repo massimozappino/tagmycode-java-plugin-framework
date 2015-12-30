@@ -26,7 +26,7 @@ public class AbstractTest {
     }
 
     public Framework createFramework() {
-        FakePreferences preferences = new FakePreferences();
+        FakeStorage preferences = new FakeStorage();
         preferences.setPrivateSnippet(true);
 
         FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), preferences, new FakeMessageManager(), new FakeTaskFactory(), null);
@@ -70,7 +70,7 @@ public class AbstractTest {
         return mockedClient;
     }
 
-    protected void assertPreferencesAreCleared(AbstractPreferences preferences) throws IOException, TagMyCodeJsonException {
+    protected void assertPreferencesAreCleared(AbstractStorage preferences) throws IOException, TagMyCodeJsonException {
         try {
             preferences.getAccount();
             fail("Excepted exception");

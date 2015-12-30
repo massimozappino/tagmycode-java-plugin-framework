@@ -27,23 +27,23 @@ import java.util.Date;
 public class Framework {
     public static final int DAYS_BEFORE_RELOAD = 5;
     private final MainWindow mainWindow;
-    private User account;
-    private LanguageCollection languageCollection;
     private final Wallet wallet;
     private final Client client;
     private final TagMyCode tagMyCode;
-    private final AbstractPreferences preferences;
+    private final AbstractStorage storage;
     private final Frame parentFrame;
     private final IMessageManager messageManager;
     private final IConsole console;
     private final AbstractTaskFactory taskFactory;
+    private User account;
+    private LanguageCollection languageCollection;
     private SearchSnippetDialog searchSnippetDialog;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
         wallet = new Wallet(frameworkConfig.getPasswordKeyChain());
         client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), wallet);
         tagMyCode = new TagMyCode(client);
-        this.preferences = frameworkConfig.getPreferences();
+        this.storage = frameworkConfig.getPreferences();
         this.messageManager = frameworkConfig.getMessageManager();
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
@@ -57,20 +57,20 @@ public class Framework {
         return mainWindow;
     }
 
-    public void setAccount(User account) {
-        this.account = account;
-    }
-
-    public void setLanguageCollection(LanguageCollection languageCollection) {
-        this.languageCollection = languageCollection;
-    }
-
     public User getAccount() {
         return account;
     }
 
+    public void setAccount(User account) {
+        this.account = account;
+    }
+
     public LanguageCollection getLanguageCollection() {
         return languageCollection;
+    }
+
+    public void setLanguageCollection(LanguageCollection languageCollection) {
+        this.languageCollection = languageCollection;
     }
 
     public void resetData() {
@@ -94,19 +94,19 @@ public class Framework {
         return messageManager;
     }
 
-    public OauthToken loadAccessTokenFormWallet() throws TagMyCodeGuiException {
+    public OauthToken loadAccessTokenFormWallet() throws TagMyCodeException {
         OauthToken oauthToken = wallet.loadOauthToken();
         client.setOauthToken(oauthToken);
         return oauthToken;
     }
 
-    public AbstractPreferences getPreferences() {
-        return preferences;
+    public AbstractStorage getStorage() {
+        return storage;
     }
 
     public void loadPreferences() throws TagMyCodeJsonException {
-        account = preferences.getAccount();
-        languageCollection = preferences.getLanguageCollection();
+        account = storage.getAccount();
+        languageCollection = storage.getLanguageCollection();
     }
 
     public void fetchAllData() throws TagMyCodeException {
@@ -121,22 +121,27 @@ public class Framework {
 
     public void storeData() throws TagMyCodeJsonException {
         try {
-            preferences.setLanguageCollection(languageCollection);
-            preferences.setAccount(account);
-            preferences.setLastUpdate(new Date());
+            storage.setLanguageCollection(languageCollection);
+            storage.setAccount(account);
+            storage.setLastUpdate(new Date());
         } catch (JSONException e) {
             throw new TagMyCodeJsonException(e);
         }
     }
 
     public void logout() {
-        client.revokeAccess();
+        try {
+            client.revokeAccess();
+        } catch (TagMyCodeException e) {
+            manageTagMyCodeExceptions(e);
+        }
+
         try {
             wallet.deleteAccessToken();
         } catch (TagMyCodeGuiException e) {
             manageTagMyCodeExceptions(e);
         }
-        preferences.clearAll();
+        storage.clearAll();
     }
 
     public void refreshDataIfItIsOld() {
@@ -150,7 +155,7 @@ public class Framework {
     public boolean isDataToBeRefreshed() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_MONTH, -1 * DAYS_BEFORE_RELOAD);
-        return preferences.getLastUpdate().before(cal.getTime());
+        return storage.getLastUpdate().before(cal.getTime());
     }
 
     public boolean isRefreshable() {
@@ -230,7 +235,7 @@ public class Framework {
             loadPreferences();
         } catch (TagMyCodeJsonException e) {
             resetData();
-        } catch (TagMyCodeGuiException e) {
+        } catch (TagMyCodeException e) {
             manageTagMyCodeExceptions(e);
         }
     }
@@ -262,8 +267,6 @@ public class Framework {
             manageTagMyCodeExceptions(e);
             logoutAndAuthenticateAgain();
         }
-
-
     }
 
     public TagMyCode getTagMyCode() {

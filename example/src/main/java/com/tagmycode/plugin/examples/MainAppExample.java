@@ -4,9 +4,6 @@ import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.FrameworkConfig;
 import com.tagmycode.plugin.examples.support.*;
 import com.tagmycode.sdk.authentication.TagMyCodeApiProduction;
-import com.tagmycode.sdk.model.ModelCollection;
-import com.tagmycode.sdk.model.Snippet;
-import support.ResourceGenerate;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,13 +23,9 @@ public class MainAppExample {
         Container contentPane = frame.getContentPane();
         contentPane.setLayout(new BorderLayout());
 
-//        StatusBar statusBar = new StatusBar();
-//        contentPane.add(statusBar, BorderLayout.SOUTH);
-
-
         FrameworkConfig frameworkConfig = new FrameworkConfig(
                 new PasswordKeyChain(),
-                new Preferences(),
+                new Storage(),
                 new MessageManager(),
                 new TaskFactory(),
                 frame);
@@ -40,12 +33,6 @@ public class MainAppExample {
 
         contentPane.add(framework.getMainWindow().getMainPanel(), BorderLayout.CENTER);
 
-        try {
-            ModelCollection<Snippet> snippets = new ResourceGenerate().aSnippetCollection();
-            framework.getMainWindow().getSnippetsTab().getSnippetsJList().updateWithSnippets(snippets);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         frame.setSize(800, 600);
         frame.setVisible(true);
     }

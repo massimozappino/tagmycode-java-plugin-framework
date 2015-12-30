@@ -4,12 +4,12 @@ import java.awt.*;
 
 public class FrameworkConfig {
     private final IPasswordKeyChain passwordManager;
-    private final AbstractPreferences preferences;
+    private final AbstractStorage preferences;
     private final IMessageManager messageManager;
     private final Frame parentFrame;
     private AbstractTaskFactory task;
 
-    public FrameworkConfig(IPasswordKeyChain passwordManager, AbstractPreferences preferences, IMessageManager messageManager, AbstractTaskFactory task, Frame parentFrame) {
+    public FrameworkConfig(IPasswordKeyChain passwordManager, AbstractStorage preferences, IMessageManager messageManager, AbstractTaskFactory task, Frame parentFrame) {
         this.passwordManager = passwordManager;
         this.preferences = preferences;
         this.messageManager = messageManager;
@@ -21,7 +21,7 @@ public class FrameworkConfig {
         return passwordManager;
     }
 
-    public AbstractPreferences getPreferences() {
+    public AbstractStorage getPreferences() {
         return preferences;
     }
 

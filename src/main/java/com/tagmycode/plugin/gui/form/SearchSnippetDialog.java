@@ -6,7 +6,7 @@ import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.plugin.gui.SnippetEditorPane;
 import com.tagmycode.plugin.gui.SnippetsJList;
-import com.tagmycode.plugin.gui.operation.SearchSnippetOperation;
+import com.tagmycode.plugin.gui.operation.SearchSnippetsOperation;
 import com.tagmycode.sdk.model.ModelCollection;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -116,7 +116,7 @@ public class SearchSnippetDialog extends AbstractDialog {
         String query = getQuery();
         if (query.length() > 0) {
             clearResults();
-            new SearchSnippetOperation(this, query).runWithTask(framework.getTaskFactory(), "Searching snippets");
+            new SearchSnippetsOperation(this, query).runWithTask(framework.getTaskFactory(), "Searching snippets");
         }
     }
 

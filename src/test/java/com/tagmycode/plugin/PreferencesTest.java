@@ -1,12 +1,12 @@
 package com.tagmycode.plugin;
 
-import support.FakePreferences;
-import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
+import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.User;
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
+import support.FakeStorage;
 
 import java.io.IOException;
 import java.util.Date;
@@ -16,11 +16,11 @@ import static org.junit.Assert.assertEquals;
 
 public class PreferencesTest extends AbstractTest {
 
-    private FakePreferences preferences;
+    private FakeStorage preferences;
 
     @Before
     public void init() {
-        preferences = new FakePreferences();
+        preferences = new FakeStorage();
     }
 
     @Test

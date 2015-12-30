@@ -1,17 +1,18 @@
 package com.tagmycode.plugin.gui.operation;
 
 import com.tagmycode.plugin.gui.form.SnippetsTab;
-import com.tagmycode.sdk.model.ModelCollection;
-import com.tagmycode.sdk.model.Snippet;
+import com.tagmycode.sdk.exception.TagMyCodeException;
+import com.tagmycode.sdk.model.SnippetCollection;
+import org.json.JSONException;
 
-public class RefreshSnippetOperation extends TagMyCodeAsynchronousOperation<String> {
+public class RefreshSnippetsOperation extends TagMyCodeAsynchronousOperation<String> {
     private SnippetsTab snippetsTab;
-    private ModelCollection<Snippet> snippets;
+    private SnippetCollection snippets;
 
-    public RefreshSnippetOperation(SnippetsTab snippetsTab) {
+    public RefreshSnippetsOperation(SnippetsTab snippetsTab) {
         super(snippetsTab);
         this.snippetsTab = snippetsTab;
-        snippets = new ModelCollection<Snippet>();
+        snippets = new SnippetCollection();
     }
 
     @Override
@@ -34,5 +35,10 @@ public class RefreshSnippetOperation extends TagMyCodeAsynchronousOperation<Stri
     @Override
     protected void onSuccess(String result) {
         snippetsTab.getSnippetsJList().updateWithSnippets(snippets);
+        try {
+            snippetsTab.getFramework().getStorage().setSnippets(snippets);
+        } catch (JSONException e) {
+            snippetsTab.getFramework().manageTagMyCodeExceptions(new TagMyCodeException(e));
+        }
     }
 }

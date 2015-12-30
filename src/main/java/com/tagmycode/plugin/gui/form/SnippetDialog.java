@@ -98,7 +98,7 @@ public class SnippetDialog extends AbstractDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedIndex = languageComboBox.getSelectedIndex();
-                framework.getPreferences().setLastLanguageIndex(selectedIndex);
+                framework.getStorage().setLastLanguageIndex(selectedIndex);
             }
         });
 
@@ -107,7 +107,7 @@ public class SnippetDialog extends AbstractDialog {
             public void actionPerformed(ActionEvent e) {
                 boolean selected = privateSnippetCheckBox.isSelected();
 
-                framework.getPreferences().setPrivateSnippet(selected);
+                framework.getStorage().setPrivateSnippet(selected);
             }
         });
     }
@@ -116,13 +116,13 @@ public class SnippetDialog extends AbstractDialog {
         new GuiThread().execute(new Runnable() {
             @Override
             public void run() {
-                boolean privateSnippet = framework.getPreferences().getPrivateSnippet();
+                boolean privateSnippet = framework.getStorage().getPrivateSnippet();
                 privateSnippetCheckBox.setSelected(privateSnippet);
                 try {
-                    int lastLanguageIndex = framework.getPreferences().getLastLanguageIndex();
+                    int lastLanguageIndex = framework.getStorage().getLastLanguageIndex();
                     languageComboBox.setSelectedIndex(lastLanguageIndex);
                 } catch (Exception e) {
-                    framework.getPreferences().setLastLanguageIndex(0);
+                    framework.getStorage().setLastLanguageIndex(0);
                 }
             }
         });

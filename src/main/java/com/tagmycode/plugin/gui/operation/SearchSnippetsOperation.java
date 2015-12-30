@@ -4,12 +4,12 @@ import com.tagmycode.plugin.gui.form.SearchSnippetDialog;
 import com.tagmycode.sdk.model.ModelCollection;
 import com.tagmycode.sdk.model.Snippet;
 
-public class SearchSnippetOperation extends TagMyCodeAsynchronousOperation<String> {
+public class SearchSnippetsOperation extends TagMyCodeAsynchronousOperation<String> {
     private SearchSnippetDialog searchSnippetDialog;
     private ModelCollection<Snippet> snippets;
     private String query;
 
-    public SearchSnippetOperation(SearchSnippetDialog searchSnippetDialog, String query) {
+    public SearchSnippetsOperation(SearchSnippetDialog searchSnippetDialog, String query) {
         super(searchSnippetDialog);
         this.searchSnippetDialog = searchSnippetDialog;
         snippets = new ModelCollection<Snippet>();

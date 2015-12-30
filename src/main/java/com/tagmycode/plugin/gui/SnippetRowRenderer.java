@@ -13,8 +13,8 @@ public class SnippetRowRenderer extends JLabel implements ListCellRenderer {
     @Override
     public Component getListCellRendererComponent(JList list, Object object, int index, boolean isSelected, boolean cellHasFocus) {
         Snippet snippet = (Snippet) object;
-        if (snippet instanceof NoResultsFoundSnippetItem) {
-            setText("No results found");
+        if (snippet instanceof CustomTextSnippetItem) {
+            setText(((CustomTextSnippetItem) snippet).getText());
             colorsForNotSelected(list);
         } else {
             setText("<html><font color=\"#600000\">[" + snippet.getLanguage().getName() + "]</font> <font>" + snippet.getTitle() + "</font></html>");
