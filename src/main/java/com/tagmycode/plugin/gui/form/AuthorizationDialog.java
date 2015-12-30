@@ -94,7 +94,7 @@ public class AuthorizationDialog extends AbstractDialog {
     }
 
     @Override
-    public JPanel getMainPanel() {
+    public JComponent getMainComponent() {
         return contentPane;
     }
 
@@ -125,14 +125,6 @@ public class AuthorizationDialog extends AbstractDialog {
             buttonOK.setEnabled(true);
             throw new TagMyCodeGuiException("Insert a valid verification code");
         }
-    }
-
-    public JButton getOpenLinkButton() {
-        return openLinkButton;
-    }
-
-    public JTextField getVerificationCodeTextField() {
-        return verificationCodeTextField;
     }
 
     public JButton getButtonOK() {

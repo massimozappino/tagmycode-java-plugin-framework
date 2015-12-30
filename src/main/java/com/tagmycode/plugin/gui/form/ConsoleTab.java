@@ -19,11 +19,11 @@ public class ConsoleTab extends AbstractGui {
         consoleEditorPane.setBorder(createEmptyBorder());
         consoleEditorPane.setEditable(false);
         console = new Console(consoleEditorPane);
-        initPopupMenuForJTextComponents(getMainPanel());
+        initPopupMenuForJTextComponents(getMainComponent());
     }
 
     @Override
-    public JPanel getMainPanel() {
+    public JComponent getMainComponent() {
         return mainPanel;
     }
 

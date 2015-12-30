@@ -2,8 +2,9 @@ package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.AbstractGui;
+import com.tagmycode.plugin.gui.AbstractSnippetsListGui;
 import com.tagmycode.plugin.gui.IonErrorCallback;
-import com.tagmycode.plugin.gui.SnippetsJList;
+import com.tagmycode.plugin.gui.SnippetsJTable;
 import com.tagmycode.plugin.gui.operation.LoadSnippetsOperation;
 import com.tagmycode.plugin.gui.operation.RefreshSnippetsOperation;
 import com.tagmycode.sdk.exception.TagMyCodeException;
@@ -12,42 +13,45 @@ import com.tagmycode.sdk.model.Snippet;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class SnippetsTab extends AbstractGui implements IonErrorCallback {
-    private SnippetsJList snippetsJList;
-    private JPanel snippetViewFormPanel;
+    private AbstractSnippetsListGui abstractSnippetsListGui;
+    private JPanel snippetViewFormPane;
     private JButton addSnippetButton;
     private JPanel mainPanel;
     private JButton refreshButton;
+    private JPanel leftPane;
+    private JButton searchButton;
+    private JPanel snippetListPane;
     private Framework framework;
 
     public SnippetsTab(final Framework framework) {
         this.framework = framework;
-        snippetViewFormPanel.removeAll();
+        snippetViewFormPane.removeAll();
+        ListSelectionListener listener = createListener();
 
-        snippetsJList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
-                    snippetViewFormPanel.removeAll();
+        abstractSnippetsListGui = new SnippetsJTable();
+        ((SnippetsJTable) abstractSnippetsListGui).getCellSelectionModel().addListSelectionListener(listener);
 
-                    Snippet snippet = snippetsJList.getSelectedSnippet();
-                    if (snippet != null) {
-                        JPanel snippetViewForm = new SnippetForm(snippet).getMainPanel();
-                        snippetViewFormPanel.add(snippetViewForm);
-                    }
-                    snippetViewFormPanel.revalidate();
-                    snippetViewFormPanel.repaint();
+        abstractSnippetsListGui.getComponent().addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) { // check if a double click
+                    Snippet snippet = abstractSnippetsListGui.getSelectedSnippet();
+                    System.out.println("Double clicked: " + snippet.getTitle());
                 }
             }
         });
 
+        leftPane.add(abstractSnippetsListGui.getMainComponent(), BorderLayout.CENTER);
+
         addSnippetButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String mimeType = "text/java";
-                framework.showSnippetDialog(new Snippet(), mimeType);
+                framework.showSnippetDialog(new Snippet(), null);
             }
         });
 
@@ -58,8 +62,34 @@ public class SnippetsTab extends AbstractGui implements IonErrorCallback {
             }
         });
 
-        initPopupMenuForJTextComponents(getMainPanel());
+        searchButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                framework.showSearchDialog(null);
+            }
+        });
+
+        initPopupMenuForJTextComponents(getMainComponent());
         loadSnippets();
+    }
+
+    private ListSelectionListener createListener() {
+        return new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    snippetViewFormPane.removeAll();
+
+                    Snippet snippet = abstractSnippetsListGui.getSelectedSnippet();
+                    if (snippet != null) {
+                        JComponent snippetViewForm = new SnippetForm(snippet).getMainComponent();
+                        snippetViewFormPane.add(snippetViewForm);
+                    }
+                    snippetViewFormPane.revalidate();
+                    snippetViewFormPane.repaint();
+                }
+            }
+        };
     }
 
     private void loadSnippets() {
@@ -70,16 +100,16 @@ public class SnippetsTab extends AbstractGui implements IonErrorCallback {
         new RefreshSnippetsOperation(this).runWithTask(framework.getTaskFactory(), "Refreshing snippets");
     }
 
-    public SnippetsJList getSnippetsJList() {
-        return snippetsJList;
+    public AbstractSnippetsListGui getAbstractSnippetsListGui() {
+        return abstractSnippetsListGui;
     }
 
-    public JPanel getSnippetViewFormPanel() {
-        return snippetViewFormPanel;
+    public JPanel getSnippetViewFormPane() {
+        return snippetViewFormPane;
     }
 
     @Override
-    public JPanel getMainPanel() {
+    public JComponent getMainComponent() {
         return mainPanel;
     }
 

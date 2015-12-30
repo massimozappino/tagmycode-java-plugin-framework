@@ -7,8 +7,8 @@ import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.plugin.gui.SnippetEditorPane;
 import com.tagmycode.plugin.gui.SnippetsJList;
 import com.tagmycode.plugin.gui.operation.SearchSnippetsOperation;
-import com.tagmycode.sdk.model.ModelCollection;
 import com.tagmycode.sdk.model.Snippet;
+import com.tagmycode.sdk.model.SnippetCollection;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -25,6 +25,8 @@ public class SearchSnippetDialog extends AbstractDialog {
     private SnippetEditorPane snippetEditorPane;
     private JButton insertButton;
     private JLabel resultsFoundLabel;
+    private JPanel leftPane;
+    private JSplitPane splitPane;
     private SnippetsJList snippetsList;
     private JScrollPane listPane;
     private IDocumentInsertText documentUpdate;
@@ -42,7 +44,7 @@ public class SearchSnippetDialog extends AbstractDialog {
     }
 
     private void initResultList() {
-        snippetsList.addListSelectionListener(new ListSelectionListener() {
+        snippetsList.getComponent().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
@@ -96,6 +98,9 @@ public class SearchSnippetDialog extends AbstractDialog {
         });
         snippetEditorPane.setEditable(false);
         insertButton.setEnabled(false);
+        splitPane.setDividerLocation(200);
+        snippetsList = new SnippetsJList();
+        leftPane.add(snippetsList.getMainComponent(), BorderLayout.CENTER);
     }
 
     private void refreshResultsFoundLabel() {
@@ -103,7 +108,7 @@ public class SearchSnippetDialog extends AbstractDialog {
         resultsFoundLabel.setText(String.format("%d snippets found", size));
     }
 
-    public DefaultListModel getModel() {
+    public DefaultListModel<Snippet> getModel() {
         return snippetsList.getSnippetsModel();
     }
 
@@ -142,7 +147,7 @@ public class SearchSnippetDialog extends AbstractDialog {
     }
 
     @Override
-    public JPanel getMainPanel() {
+    public JComponent getMainComponent() {
         return contentPane;
     }
 
@@ -150,7 +155,7 @@ public class SearchSnippetDialog extends AbstractDialog {
         return searchTextField.getText();
     }
 
-    public void updateListWithSnippets(final ModelCollection<Snippet> snippets) {
+    public void updateListWithSnippets(final SnippetCollection snippets) {
         new GuiThread().execute(new Runnable() {
             @Override
             public void run() {
@@ -162,8 +167,8 @@ public class SearchSnippetDialog extends AbstractDialog {
     }
 
     @Override
-    public void showAtCenter() {
-        super.showAtCenter();
+    public void display() {
+        super.display();
         searchTextField.selectAll();
         searchTextField.requestFocus();
     }

@@ -36,7 +36,13 @@
               <component id="a458a" class="javax.swing.JButton" binding="refreshButton">
                 <constraints/>
                 <properties>
-                  <text value="Refresh"/>
+                  <text value="Refresh snippets"/>
+                </properties>
+              </component>
+              <component id="bd760" class="javax.swing.JButton" binding="searchButton">
+                <constraints/>
+                <properties>
+                  <text value="Search..."/>
                 </properties>
               </component>
             </children>
@@ -50,22 +56,17 @@
             <properties/>
             <border type="none"/>
             <children>
-              <scrollpane id="8b870">
+              <grid id="41ead" binding="snippetViewFormPane" layout-manager="BorderLayout" hgap="0" vgap="0">
                 <constraints>
-                  <splitpane position="left"/>
+                  <splitpane position="right"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
-                <children>
-                  <component id="11917" class="com.tagmycode.plugin.gui.SnippetsJList" binding="snippetsJList">
-                    <constraints/>
-                    <properties/>
-                  </component>
-                </children>
-              </scrollpane>
-              <grid id="41ead" binding="snippetViewFormPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+                <children/>
+              </grid>
+              <grid id="2e6a7" binding="leftPane" layout-manager="BorderLayout" hgap="0" vgap="0">
                 <constraints>
-                  <splitpane position="right"/>
+                  <splitpane position="left"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>

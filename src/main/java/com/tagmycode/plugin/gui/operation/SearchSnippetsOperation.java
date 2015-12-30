@@ -1,18 +1,17 @@
 package com.tagmycode.plugin.gui.operation;
 
 import com.tagmycode.plugin.gui.form.SearchSnippetDialog;
-import com.tagmycode.sdk.model.ModelCollection;
-import com.tagmycode.sdk.model.Snippet;
+import com.tagmycode.sdk.model.SnippetCollection;
 
 public class SearchSnippetsOperation extends TagMyCodeAsynchronousOperation<String> {
     private SearchSnippetDialog searchSnippetDialog;
-    private ModelCollection<Snippet> snippets;
+    private SnippetCollection snippets;
     private String query;
 
     public SearchSnippetsOperation(SearchSnippetDialog searchSnippetDialog, String query) {
         super(searchSnippetDialog);
         this.searchSnippetDialog = searchSnippetDialog;
-        snippets = new ModelCollection<Snippet>();
+        snippets = new SnippetCollection();
         this.query = query;
     }
 

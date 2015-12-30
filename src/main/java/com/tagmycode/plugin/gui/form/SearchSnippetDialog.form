@@ -94,31 +94,18 @@
             <properties/>
             <border type="none"/>
             <children>
-              <splitpane id="2f7d4">
+              <splitpane id="2f7d4" binding="splitPane">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
                     <preferred-size width="200" height="200"/>
                   </grid>
                 </constraints>
                 <properties>
-                  <dividerLocation value="256"/>
+                  <dividerLocation value="24"/>
                   <dividerSize value="10"/>
                 </properties>
                 <border type="none"/>
                 <children>
-                  <scrollpane id="36395">
-                    <constraints>
-                      <splitpane position="left"/>
-                    </constraints>
-                    <properties/>
-                    <border type="none"/>
-                    <children>
-                      <component id="88638" class="com.tagmycode.plugin.gui.SnippetsJList" binding="snippetsList" custom-create="true">
-                        <constraints/>
-                        <properties/>
-                      </component>
-                    </children>
-                  </scrollpane>
                   <scrollpane id="cb939">
                     <constraints>
                       <splitpane position="right"/>
@@ -132,6 +119,14 @@
                       </component>
                     </children>
                   </scrollpane>
+                  <grid id="4120d" binding="leftPane" layout-manager="BorderLayout" hgap="0" vgap="0">
+                    <constraints>
+                      <splitpane position="left"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </splitpane>
             </children>

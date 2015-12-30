@@ -22,7 +22,7 @@ public abstract class AbstractDialog extends AbstractGui implements IonErrorCall
     protected abstract void initWindow();
 
     protected void defaultInitWindow() {
-        dialog.setContentPane(getMainPanel());
+        dialog.setContentPane(getMainComponent());
         dialog.getRootPane().setDefaultButton(getButtonOk());
 
         getButtonOk().addActionListener(new ActionListener() {
@@ -49,7 +49,7 @@ public abstract class AbstractDialog extends AbstractGui implements IonErrorCall
         });
 
         // call onCancel() on ESCAPE
-        getMainPanel().registerKeyboardAction(new ActionListener() {
+        getMainComponent().registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
             }
@@ -72,18 +72,6 @@ public abstract class AbstractDialog extends AbstractGui implements IonErrorCall
         dialog.dispose();
     }
 
-    public void showAtCenter() {
-        new GuiThread().execute(new Runnable() {
-            @Override
-            public void run() {
-                CenterLocation location = new CenterLocation(parentFrame, dialog);
-                dialog.setLocation(location.getX(), location.getY());
-                dialog.setVisible(true);
-            }
-        });
-
-    }
-
     @Override
     public void onError(TagMyCodeException exception) {
         framework.manageTagMyCodeExceptions(exception);
@@ -95,5 +83,16 @@ public abstract class AbstractDialog extends AbstractGui implements IonErrorCall
 
     public JDialog getDialog() {
         return dialog;
+    }
+
+    public void display() {
+        new GuiThread().execute(new Runnable() {
+            @Override
+            public void run() {
+                CenterLocation location = new CenterLocation(parentFrame, dialog);
+                dialog.setLocation(location.getX(), location.getY());
+                dialog.setVisible(true);
+            }
+        });
     }
 }

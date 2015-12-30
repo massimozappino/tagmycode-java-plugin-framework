@@ -31,7 +31,7 @@ public class MainAppExample {
                 frame);
         Framework framework = new Framework(new TagMyCodeApiProduction(), frameworkConfig, new Secret());
 
-        contentPane.add(framework.getMainWindow().getMainPanel(), BorderLayout.CENTER);
+        contentPane.add(framework.getMainWindow().getMainComponent(), BorderLayout.CENTER);
 
         frame.setSize(800, 600);
         frame.setVisible(true);

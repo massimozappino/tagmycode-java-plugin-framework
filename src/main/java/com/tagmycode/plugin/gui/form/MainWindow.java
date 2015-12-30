@@ -15,12 +15,12 @@ public class MainWindow implements IAbstractGUI {
     public MainWindow(final Framework framework) {
         snippetsTab = new SnippetsTab(framework);
         consoleTab = new ConsoleTab();
-        jTabbedPane.addTab("Snippets", snippetsTab.getMainPanel());
-        jTabbedPane.addTab("Console", consoleTab.getMainPanel());
+        jTabbedPane.addTab("Snippets", snippetsTab.getMainComponent());
+        jTabbedPane.addTab("Console", consoleTab.getMainComponent());
     }
 
     @Override
-    public JPanel getMainPanel() {
+    public JComponent getMainComponent() {
         return mainPanel;
     }
 

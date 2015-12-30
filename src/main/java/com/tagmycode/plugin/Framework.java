@@ -167,13 +167,13 @@ public class Framework {
     }
 
     public void showAuthenticateDialog(ICallback... iCallback) {
-        new AuthorizationDialog(this, iCallback, getParentFrame()).showAtCenter();
+        new AuthorizationDialog(this, iCallback, getParentFrame());
     }
 
     public void showSnippetDialog(Snippet snippet, String mimeType) {
         SnippetDialog snippetDialog = new SnippetDialog(this, mimeType, getParentFrame());
         snippetDialog.populateWithSnippet(snippet);
-        snippetDialog.showAtCenter();
+        snippetDialog.display();
     }
 
     public void showSearchDialog(IDocumentInsertText documentUpdate) {
@@ -183,7 +183,7 @@ public class Framework {
         new GuiThread().execute(new Runnable() {
             @Override
             public void run() {
-                searchSnippetDialog.showAtCenter();
+                searchSnippetDialog.display();
             }
         });
     }

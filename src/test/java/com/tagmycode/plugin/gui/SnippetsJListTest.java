@@ -1,7 +1,6 @@
 package com.tagmycode.plugin.gui;
 
-import com.tagmycode.sdk.model.ModelCollection;
-import com.tagmycode.sdk.model.Snippet;
+import com.tagmycode.sdk.model.SnippetCollection;
 import org.junit.Test;
 import support.ResourceGenerate;
 
@@ -13,7 +12,7 @@ public class SnippetsJListTest {
     public void testUpdateWithSnippets() throws Exception {
         SnippetsJList snippetsJList = new SnippetsJList();
         assertEquals(0, snippetsJList.getSnippetsSize());
-        ModelCollection<Snippet> snippetsCollection = new ResourceGenerate().aSnippetCollection();
+        SnippetCollection snippetsCollection = new ResourceGenerate().aSnippetCollection();
         snippetsJList.updateWithSnippets(snippetsCollection);
         assertEquals(2, snippetsJList.getSnippetsSize());
 
@@ -30,7 +29,7 @@ public class SnippetsJListTest {
     public void testGetSelectedSnippet() throws Exception {
         SnippetsJList snippetsJList = new SnippetsJList();
         snippetsJList.updateWithSnippets(new ResourceGenerate().aSnippetCollection());
-        snippetsJList.setSelectedIndex(0);
+        snippetsJList.getComponent().setSelectedIndex(0);
         assertEquals("My title", snippetsJList.getSelectedSnippet().getTitle());
     }
 }

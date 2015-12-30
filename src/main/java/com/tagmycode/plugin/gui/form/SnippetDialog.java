@@ -31,6 +31,9 @@ public class SnippetDialog extends AbstractDialog {
         super(framework, parent);
         defaultInitWindow();
         initWindow();
+        if (mimeType == null) {
+            mimeType = "plain/text";
+        }
         setMimeType(mimeType);
     }
 
@@ -74,7 +77,7 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     @Override
-    public JPanel getMainPanel() {
+    public JComponent getMainComponent() {
         return contentPane;
     }
 
@@ -126,10 +129,6 @@ public class SnippetDialog extends AbstractDialog {
                 }
             }
         });
-    }
-
-    public JPanel getContentPane() {
-        return contentPane;
     }
 
     public Snippet getSnippet() {

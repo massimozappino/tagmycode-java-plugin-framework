@@ -65,7 +65,7 @@ public class SettingsForm implements IAbstractGUI {
     }
 
     @Override
-    public JPanel getMainPanel() {
+    public JComponent getMainComponent() {
         return mainPanel;
     }
 

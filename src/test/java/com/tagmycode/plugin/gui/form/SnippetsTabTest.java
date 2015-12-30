@@ -1,7 +1,7 @@
 package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.AbstractTest;
-import com.tagmycode.plugin.gui.SnippetsJList;
+import com.tagmycode.plugin.gui.AbstractSnippetsListGui;
 import org.junit.Test;
 import support.ResourceGenerate;
 
@@ -27,17 +27,19 @@ public class SnippetsTabTest extends AbstractTest {
     @Test
     public void testSelection() throws Exception {
         SnippetsTab snippetsTab = new SnippetsTab(createFramework());
-        SnippetsJList snippetsJList = snippetsTab.getSnippetsJList();
-        snippetsJList.updateWithSnippets(new ResourceGenerate().aSnippetCollection());
-        JPanel snippetViewFormPanel = snippetsTab.getSnippetViewFormPanel();
+        AbstractSnippetsListGui snippetsListGui = snippetsTab.getAbstractSnippetsListGui();
+        snippetsListGui.updateWithSnippets(new ResourceGenerate().aSnippetCollection());
+        JPanel snippetViewFormPanel = snippetsTab.getSnippetViewFormPane();
 
         assertEquals(0, snippetViewFormPanel.getComponentCount());
 
-        snippetsJList.setSelectedIndex(0);
+        JTable jTable = (JTable) snippetsListGui.getComponent();
+
+        jTable.setRowSelectionInterval(0, 0);
         assertEquals(1, snippetViewFormPanel.getComponentCount());
 
-        snippetsJList.setSelectedIndex(1);
-        snippetsJList.setSelectedIndex(0);
+        jTable.setRowSelectionInterval(1, 0);
+        jTable.setRowSelectionInterval(0, 0);
         assertEquals(1, snippetViewFormPanel.getComponentCount());
     }
 }

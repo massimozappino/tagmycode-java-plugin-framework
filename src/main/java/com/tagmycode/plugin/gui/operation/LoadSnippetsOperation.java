@@ -23,7 +23,7 @@ public class LoadSnippetsOperation extends TagMyCodeAsynchronousOperation<String
     }
 
     private void updateSnippets(SnippetCollection snippets) {
-        snippetsTab.getSnippetsJList().updateWithSnippets(snippets);
+        snippetsTab.getAbstractSnippetsListGui().updateWithSnippets(snippets);
     }
 
     @Override

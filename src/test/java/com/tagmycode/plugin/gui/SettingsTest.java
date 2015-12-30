@@ -17,7 +17,7 @@ public class SettingsTest extends AbstractTest {
         Framework framework = createFramework();
         SettingsForm settingsForm = new SettingsForm(framework);
 
-        assertEquals(3, settingsForm.getMainPanel().getComponentCount());
+        assertEquals(3, settingsForm.getMainComponent().getComponentCount());
     }
 
     @Test
