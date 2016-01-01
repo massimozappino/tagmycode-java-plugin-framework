@@ -1,7 +1,7 @@
 package com.tagmycode.plugin.gui.form;
 
+import com.tagmycode.plugin.gui.AbstractGui;
 import com.tagmycode.plugin.gui.ClipboardCopy;
-import com.tagmycode.plugin.gui.IAbstractGUI;
 import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class SnippetForm implements IAbstractGUI {
+public class SnippetForm extends AbstractGui {
     private JButton copyButton;
     private JPanel mainPanel;
     private JEditorPane snippetEditorPane;
@@ -28,6 +28,7 @@ public class SnippetForm implements IAbstractGUI {
                 clipboardCopy.copy(snippetEditorPane.getText());
             }
         });
+        initPopupMenuForJTextComponents(getMainComponent());
     }
 
     public JEditorPane getSnippetEditorPane() {

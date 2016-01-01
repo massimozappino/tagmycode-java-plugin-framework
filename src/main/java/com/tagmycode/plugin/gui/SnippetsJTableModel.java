@@ -56,5 +56,6 @@ public class SnippetsJTableModel extends AbstractTableModel {
         for (Snippet snippet : snippets) {
             snippetVector.add(snippet);
         }
+        fireTableDataChanged();
     }
 }

@@ -12,30 +12,31 @@ public class CutCopyPastePopup extends JPopupMenu implements ActionListener {
 
     private JTextComponent target;
 
-    public CutCopyPastePopup(JTextComponent target) {
+    public CutCopyPastePopup(final JTextComponent target) {
         this.target = target;
 
-        JMenuItem mi = new JMenuItem("Cut");
-        mi.addActionListener(this);
-        mi.setActionCommand("cut");
-        add(mi);
+        JMenuItem cutItem = new JMenuItem("Cut");
+        cutItem.addActionListener(this);
+        cutItem.setActionCommand("cut");
+        add(cutItem);
 
-        mi = new JMenuItem("Copy");
-        mi.addActionListener(this);
-        mi.setActionCommand("copy");
-        add(mi);
+        JMenuItem copyItem = new JMenuItem("Copy");
+        copyItem.addActionListener(this);
+        copyItem.setActionCommand("copy");
 
-        mi = new JMenuItem("Paste");
-        mi.addActionListener(this);
-        mi.setActionCommand("paste");
-        add(mi);
+        add(copyItem);
+
+        JMenuItem pasteItem = new JMenuItem("Paste");
+        pasteItem.addActionListener(this);
+        pasteItem.setActionCommand("paste");
+        add(pasteItem);
 
         add(new JSeparator());
 
-        mi = new JMenuItem("Select all");
-        mi.addActionListener(this);
-        mi.setActionCommand("selectall");
-        add(mi);
+        JMenuItem selectAllItem = new JMenuItem("Select all");
+        selectAllItem.addActionListener(this);
+        selectAllItem.setActionCommand("selectall");
+        add(selectAllItem);
 
         target.addMouseListener(new MouseAdapter() {
 
@@ -55,6 +56,11 @@ public class CutCopyPastePopup extends JPopupMenu implements ActionListener {
                 }
             }
         });
+
+        if (!target.isEditable()) {
+            pasteItem.setEnabled(false);
+            cutItem.setEnabled(false);
+        }
     }
 
     @Override

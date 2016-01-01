@@ -2,6 +2,7 @@ package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.IAbstractGUI;
+import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
 
@@ -30,5 +31,13 @@ public class MainWindow implements IAbstractGUI {
 
     public SnippetsTab getSnippetsTab() {
         return snippetsTab;
+    }
+
+    public void addTab(Snippet snippet) {
+        final String title = snippet.getTitle();
+        jTabbedPane.addTab(title, new SnippetForm(snippet).getMainComponent());
+
+
+        jTabbedPane.setSelectedIndex(jTabbedPane.getTabCount() - 1);
     }
 }

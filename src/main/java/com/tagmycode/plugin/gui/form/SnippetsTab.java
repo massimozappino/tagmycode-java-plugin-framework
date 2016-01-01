@@ -39,9 +39,9 @@ public class SnippetsTab extends AbstractGui implements IonErrorCallback {
 
         abstractSnippetsListGui.getComponent().addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // check if a double click
+                if (e.getClickCount() == 2) {
                     Snippet snippet = abstractSnippetsListGui.getSelectedSnippet();
-                    System.out.println("Double clicked: " + snippet.getTitle());
+                    framework.getMainWindow().addTab(snippet);
                 }
             }
         });
