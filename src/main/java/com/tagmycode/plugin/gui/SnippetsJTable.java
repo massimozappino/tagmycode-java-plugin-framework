@@ -22,23 +22,11 @@ public class SnippetsJTable extends AbstractSnippetsListGui {
 
         table.setCellSelectionEnabled(false);
         table.setRowSelectionAllowed(true);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         table.setAutoCreateRowSorter(true);
         table.setShowGrid(false);
 
         cellSelectionModel = table.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//        cellSelectionModel.addListSelectionListener(new ListSelectionListener() {
-//            @Override
-//            public void valueChanged(ListSelectionEvent e) {
-//                if (!e.getValueIsAdjusting()) {
-//                    Snippet snippet = getSelectedSnippet();
-//                    System.out.println("Selected: " + snippet.getTitle());
-//                }
-//            }
-//
-//        });
-
     }
 
     public ListSelectionModel getCellSelectionModel() {

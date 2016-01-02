@@ -41,7 +41,7 @@ public class SnippetsTab extends AbstractGui implements IonErrorCallback {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     Snippet snippet = abstractSnippetsListGui.getSelectedSnippet();
-                    framework.getMainWindow().addTab(snippet);
+                    framework.getMainWindow().addSnippetTab(snippet);
                 }
             }
         });

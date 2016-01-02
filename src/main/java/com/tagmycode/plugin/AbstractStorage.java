@@ -67,7 +67,7 @@ public abstract class AbstractStorage {
     }
 
     public void setLastLanguageIndex(int lastLanguageId) {
-        write(LAST_LANGUAGE, lastLanguageId + "");
+        write(LAST_LANGUAGE, String.valueOf(lastLanguageId));
     }
 
     public Date getLastUpdate() {

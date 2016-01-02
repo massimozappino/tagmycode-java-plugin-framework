@@ -167,7 +167,7 @@ public class Framework {
     }
 
     public void showAuthenticateDialog(ICallback... iCallback) {
-        new AuthorizationDialog(this, iCallback, getParentFrame());
+        new AuthorizationDialog(this, iCallback, getParentFrame()).display();
     }
 
     public void showSnippetDialog(Snippet snippet, String mimeType) {
