@@ -29,7 +29,7 @@ public class SnippetsJListTest {
     public void testGetSelectedSnippet() throws Exception {
         SnippetsJList snippetsJList = new SnippetsJList();
         snippetsJList.updateWithSnippets(new ResourceGenerate().aSnippetCollection());
-        snippetsJList.getComponent().setSelectedIndex(0);
+        snippetsJList.getSnippetsComponent().setSelectedIndex(0);
         assertEquals("My title", snippetsJList.getSelectedSnippet().getTitle());
     }
 }

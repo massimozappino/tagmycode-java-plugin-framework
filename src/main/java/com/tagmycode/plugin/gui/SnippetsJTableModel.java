@@ -33,7 +33,6 @@ public class SnippetsJTableModel extends AbstractTableModel {
         return columns[column];
     }
 
-
     public Snippet getSnippetAt(int rowIndex) {
         return snippetVector.get(rowIndex);
     }

@@ -49,7 +49,7 @@ public class SnippetsJTable extends AbstractSnippetsListGui {
     }
 
     @Override
-    public JComponent getComponent() {
+    public JComponent getSnippetsComponent() {
         return table;
     }
 }

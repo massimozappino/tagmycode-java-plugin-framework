@@ -37,7 +37,7 @@ public class SnippetsTab extends AbstractGui implements IonErrorCallback {
         abstractSnippetsListGui = new SnippetsJTable();
         ((SnippetsJTable) abstractSnippetsListGui).getCellSelectionModel().addListSelectionListener(listener);
 
-        abstractSnippetsListGui.getComponent().addMouseListener(new MouseAdapter() {
+        abstractSnippetsListGui.getSnippetsComponent().addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     Snippet snippet = abstractSnippetsListGui.getSelectedSnippet();

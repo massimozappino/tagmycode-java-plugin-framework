@@ -31,15 +31,15 @@ public class SearchSnippetDialogTest extends AbstractTest {
         SnippetsJList snippetsList = searchSnippetDialog.getSnippetsList();
         makeASearchWithoutResultsAndWait(searchSnippetDialog);
 
-        assertSelectedFirstElementIs(snippetsList.getComponent(), null);
-        assertResultSizeIs(snippetsList.getComponent(), 1);
-        assertTrue(snippetsList.getComponent().getModel().getElementAt(0) instanceof CustomTextSnippetItem);
+        assertSelectedFirstElementIs(snippetsList.getSnippetsComponent(), null);
+        assertResultSizeIs(snippetsList.getSnippetsComponent(), 1);
+        assertTrue(snippetsList.getSnippetsComponent().getModel().getElementAt(0) instanceof CustomTextSnippetItem);
         assertResultsLabelIs(searchSnippetDialog, "0 snippets found");
 
         makeASearchWithResultsAndWait(searchSnippetDialog);
 
-        assertResultSizeIs(snippetsList.getComponent(), 2);
-        assertSelectedFirstElementIs(snippetsList.getComponent(), resourceGenerate.aSnippetCollection().get(0));
+        assertResultSizeIs(snippetsList.getSnippetsComponent(), 2);
+        assertSelectedFirstElementIs(snippetsList.getSnippetsComponent(), resourceGenerate.aSnippetCollection().get(0));
     }
 
     @Test
@@ -56,14 +56,14 @@ public class SearchSnippetDialogTest extends AbstractTest {
         assertInsertButtonIsDisabled(searchSnippetDialog);
 
         makeASearchWithResultsAndWait(searchSnippetDialog);
-        searchSnippetDialog.getSnippetsList().getComponent().setSelectedIndex(0);
+        searchSnippetDialog.getSnippetsList().getSnippetsComponent().setSelectedIndex(0);
         assertInsertButtonIsEnabled(searchSnippetDialog);
 
         makeASearchWithResultsAndWait(searchSnippetDialog);
         assertInsertButtonIsDisabled(searchSnippetDialog);
 
         makeASearchWithoutResultsAndWait(searchSnippetDialog);
-        searchSnippetDialog.getSnippetsList().getComponent().setSelectedIndex(0);
+        searchSnippetDialog.getSnippetsList().getSnippetsComponent().setSelectedIndex(0);
         assertInsertButtonIsDisabled(searchSnippetDialog);
     }
 

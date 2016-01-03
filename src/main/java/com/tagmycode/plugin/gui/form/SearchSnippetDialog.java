@@ -44,7 +44,7 @@ public class SearchSnippetDialog extends AbstractDialog {
     }
 
     private void initResultList() {
-        snippetsList.getComponent().addListSelectionListener(new ListSelectionListener() {
+        snippetsList.getSnippetsComponent().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {

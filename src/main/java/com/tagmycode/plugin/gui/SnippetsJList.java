@@ -7,11 +7,11 @@ import javax.swing.*;
 
 public class SnippetsJList extends AbstractSnippetsListGui {
     private final SnippetsListModel snippetsListModel;
+    private final JScrollPane scrollPane;
+    private final JList<Snippet> list;
     private DisabledItemSelectionModel disabledItemSelectionModel;
     private DefaultListSelectionModel defaultListSelectionModel;
     private SnippetRowRenderer snippetRowRenderer;
-    private final JScrollPane scrollPane;
-    private final JList<Snippet> list;
 
     public SnippetsJList() {
         disabledItemSelectionModel = new DisabledItemSelectionModel();
@@ -74,7 +74,7 @@ public class SnippetsJList extends AbstractSnippetsListGui {
     }
 
     @Override
-    public JList<Snippet> getComponent() {
+    public JList<Snippet> getSnippetsComponent() {
         return list;
     }
 }

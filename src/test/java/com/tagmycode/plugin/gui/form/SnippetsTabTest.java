@@ -33,7 +33,7 @@ public class SnippetsTabTest extends AbstractTest {
 
         assertEquals(0, snippetViewFormPanel.getComponentCount());
 
-        JTable jTable = (JTable) snippetsListGui.getComponent();
+        JTable jTable = (JTable) snippetsListGui.getSnippetsComponent();
 
         jTable.setRowSelectionInterval(0, 0);
         assertEquals(1, snippetViewFormPanel.getComponentCount());
