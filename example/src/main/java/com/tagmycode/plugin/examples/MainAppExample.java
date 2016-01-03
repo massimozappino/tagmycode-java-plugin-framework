@@ -29,7 +29,7 @@ public class MainAppExample {
                 new MessageManager(),
                 new TaskFactory(),
                 frame);
-        Framework framework = new Framework(new TagMyCodeApiProduction(), frameworkConfig, new Secret());
+        final Framework framework = new Framework(new TagMyCodeApiProduction(), frameworkConfig, new Secret());
 
         contentPane.add(framework.getMainWindow().getMainComponent(), BorderLayout.CENTER);
 

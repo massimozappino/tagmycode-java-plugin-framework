@@ -39,8 +39,13 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
                             onSuccess(result);
                         }
                     });
-                } catch (InterruptedException e) {
-                    onInterrupted();
+                } catch (final InterruptedException e) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            onInterrupted();
+                            e.printStackTrace();
+                        }
+                    });
                 } catch (final Throwable e) {
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
@@ -55,7 +60,7 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
     }
 
     protected void onInterrupted() {
-
+        onComplete();
     }
 
     protected void beforePerformOperation() {

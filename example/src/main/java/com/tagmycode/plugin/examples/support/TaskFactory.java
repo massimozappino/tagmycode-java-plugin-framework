@@ -8,6 +8,5 @@ public class TaskFactory extends AbstractTaskFactory {
         System.out.println(title);
 
         new Thread(runnable).start();
-
     }
 }

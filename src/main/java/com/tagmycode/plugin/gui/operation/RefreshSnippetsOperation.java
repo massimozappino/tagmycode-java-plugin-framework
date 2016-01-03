@@ -5,14 +5,13 @@ import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.SnippetCollection;
 import org.json.JSONException;
 
-public class RefreshSnippetsOperation extends TagMyCodeAsynchronousOperation<String> {
+public class RefreshSnippetsOperation extends TagMyCodeAsynchronousOperation<SnippetCollection> {
     private SnippetsTab snippetsTab;
     private SnippetCollection snippets;
 
     public RefreshSnippetsOperation(SnippetsTab snippetsTab) {
         super(snippetsTab);
         this.snippetsTab = snippetsTab;
-        snippets = new SnippetCollection();
     }
 
     @Override
@@ -21,10 +20,10 @@ public class RefreshSnippetsOperation extends TagMyCodeAsynchronousOperation<Str
     }
 
     @Override
-    protected String performOperation() throws Exception {
-        snippets = snippetsTab.getFramework().getTagMyCode().fetchSnippets();
+    protected SnippetCollection performOperation() throws Exception {
+        SnippetCollection snippets = snippetsTab.getFramework().getTagMyCode().fetchSnippets();
         snippetsTab.getFramework().getConsole().log(String.format("Fetched %d snippets", snippets.size()));
-        return null;
+        return snippets;
     }
 
     @Override
@@ -33,7 +32,7 @@ public class RefreshSnippetsOperation extends TagMyCodeAsynchronousOperation<Str
     }
 
     @Override
-    protected void onSuccess(String result) {
+    protected void onSuccess(SnippetCollection snippets) {
         snippetsTab.getAbstractSnippetsListGui().updateWithSnippets(snippets);
         try {
             snippetsTab.getFramework().getStorage().setSnippets(snippets);

@@ -9,8 +9,8 @@ import javax.swing.*;
 
 public class MainWindow implements IAbstractGUI {
     private final ConsoleTab consoleTab;
+    private final SnippetsTab snippetsTab;
     private JPanel mainPanel;
-
     private JClosableTabbedPane jTabbedPane;
 
     public MainWindow(final Framework framework) {
@@ -18,7 +18,8 @@ public class MainWindow implements IAbstractGUI {
         jTabbedPane = new JClosableTabbedPane();
 
         getMainComponent().add(jTabbedPane);
-        jTabbedPane.addTab("Snippets", new SnippetsTab(framework).getMainComponent());
+        snippetsTab = new SnippetsTab(framework);
+        jTabbedPane.addTab("Snippets", snippetsTab.getMainComponent());
         jTabbedPane.addTab("Console", consoleTab.getMainComponent());
     }
 
@@ -33,6 +34,14 @@ public class MainWindow implements IAbstractGUI {
 
     public void addSnippetTab(Snippet snippet) {
         final String title = snippet.getTitle();
-        jTabbedPane.addClosableTab(title, new SnippetForm(snippet).getMainComponent());
+        String trimmedTitle = title.substring(0, Math.min(title.length(), 18)).trim();
+        if (trimmedTitle.length() != title.length()) {
+            trimmedTitle += "...";
+        }
+        jTabbedPane.addClosableTab(trimmedTitle, new SnippetForm(snippet).getMainComponent());
+    }
+
+    public SnippetsTab getSnippetsTab() {
+        return snippetsTab;
     }
 }

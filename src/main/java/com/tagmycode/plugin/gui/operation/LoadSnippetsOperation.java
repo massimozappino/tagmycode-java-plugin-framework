@@ -4,14 +4,12 @@ import com.tagmycode.plugin.gui.CustomTextSnippetItem;
 import com.tagmycode.plugin.gui.form.SnippetsTab;
 import com.tagmycode.sdk.model.SnippetCollection;
 
-public class LoadSnippetsOperation extends TagMyCodeAsynchronousOperation<String> {
+public class LoadSnippetsOperation extends TagMyCodeAsynchronousOperation<SnippetCollection> {
     private SnippetsTab snippetsTab;
-    private SnippetCollection snippets;
 
     public LoadSnippetsOperation(SnippetsTab snippetsTab) {
         super(snippetsTab);
         this.snippetsTab = snippetsTab;
-        snippets = null;
     }
 
     @Override
@@ -27,25 +25,18 @@ public class LoadSnippetsOperation extends TagMyCodeAsynchronousOperation<String
     }
 
     @Override
-    protected String performOperation() throws Exception {
+    protected SnippetCollection performOperation() throws Exception {
+        SnippetCollection snippets;
         try {
             snippets = snippetsTab.getFramework().getStorage().getSnippets();
         } catch (Throwable e) {
             snippets = new SnippetCollection();
         }
-        return null;
+        return snippets;
     }
 
     @Override
-    protected void onInterrupted() {
-        if (snippets == null) {
-            snippets = new SnippetCollection();
-            updateSnippets(snippets);
-        }
-    }
-
-    @Override
-    protected void onSuccess(String result) {
+    protected void onSuccess(SnippetCollection snippets) {
         updateSnippets(snippets);
     }
 

@@ -19,6 +19,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class SnippetsTab extends AbstractGui implements IonErrorCallback {
+    RefreshSnippetsOperation refreshSnippetsOperation;
     private AbstractSnippetsListGui abstractSnippetsListGui;
     private JPanel snippetViewFormPane;
     private JButton addSnippetButton;
@@ -33,6 +34,7 @@ public class SnippetsTab extends AbstractGui implements IonErrorCallback {
         this.framework = framework;
         snippetViewFormPane.removeAll();
         ListSelectionListener listener = createListener();
+        refreshSnippetsOperation = new RefreshSnippetsOperation(this);
 
         abstractSnippetsListGui = new SnippetsJTable();
         ((SnippetsJTable) abstractSnippetsListGui).getCellSelectionModel().addListSelectionListener(listener);
@@ -97,7 +99,7 @@ public class SnippetsTab extends AbstractGui implements IonErrorCallback {
     }
 
     private void refreshSnippets() {
-        new RefreshSnippetsOperation(this).runWithTask(framework.getTaskFactory(), "Refreshing snippets");
+        refreshSnippetsOperation.runWithTask(framework.getTaskFactory(), "Refreshing snippets");
     }
 
     public AbstractSnippetsListGui getAbstractSnippetsListGui() {
@@ -124,5 +126,9 @@ public class SnippetsTab extends AbstractGui implements IonErrorCallback {
 
     public Framework getFramework() {
         return framework;
+    }
+
+    public RefreshSnippetsOperation getRefreshSnippetsOperation() {
+        return refreshSnippetsOperation;
     }
 }
