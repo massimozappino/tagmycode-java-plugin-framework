@@ -19,7 +19,7 @@ public class CreateSnippetOperation extends TagMyCodeAsynchronousOperation<Strin
 
     @Override
     protected String performOperation() throws Exception {
-        obtainedSnippet = snippetDialog.getFramework().getTagMyCode().createSnippet(snippetDialog.getSnippet());
+        obtainedSnippet = snippetDialog.getFramework().getTagMyCode().createSnippet(snippetDialog.createSnippetObject());
         return null;
     }
 

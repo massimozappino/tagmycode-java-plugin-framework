@@ -33,9 +33,41 @@ public class SnippetDialogTest extends AbstractTest {
         assertEquals("code\r\nsecond line", snippetDialog.getCodeEditorPane().getText());
         assertEquals("A simple description", snippetDialog.getDescriptionTextField().getText());
         assertEquals("tag1 tag2 tag3", snippetDialog.getTagsTextField().getText());
-        // TODO: private and languages should not depends on preferences
     }
 
+    @Test
+    public void populateSnippetDialogWithEmptyLanguage() throws Exception {
+
+    }
+
+    @Test
+    public void populateSnippetDialogWithExistentLanguageOverridePreferredLanguage() throws Exception {
+//        final Framework framework = createFramework();
+//
+//        LanguageCollection languageCollection = resourceGenerate.aLanguageCollection();
+//        Language customLanguage = new Language();
+//        customLanguage.setId(88);
+//        customLanguage.setName("Custom");
+//        customLanguage.setCode("custom");
+//        languageCollection.add(customLanguage);
+//
+//
+//        System.out.println(languageCollection);
+//        framework.setLanguageCollection(languageCollection);
+//        framework.getStorage().setLastLanguageIndex(2);
+//
+//        SnippetDialog snippetDialog = createSnippetDialog(framework);
+//        Thread.sleep(1500);
+//
+//        assertEquals(2, snippetDialog.getLanguageComboBox().getSelectedIndex());
+//        assertEquals(customLanguage, snippetDialog.getLanguageComboBox().getSelectedItem());
+//
+//        Snippet expectedSnippet = resourceGenerate.aSnippet();
+//        snippetDialog.populateWithSnippet(expectedSnippet);
+//        Thread.sleep(1500);
+//
+//        assertEquals(expectedSnippet.getLanguage(), snippetDialog.getLanguageComboBox().getSelectedItem());
+    }
 
     @Test
     public void lastSelectedLanguageWillBeDefaultAfterShowingDialog() throws Exception {
@@ -65,6 +97,6 @@ public class SnippetDialogTest extends AbstractTest {
     }
 
     private SnippetDialog createSnippetDialog(Framework framework) {
-        return new SnippetDialog(framework, "", null);
+        return new SnippetDialog(framework, null, null);
     }
 }

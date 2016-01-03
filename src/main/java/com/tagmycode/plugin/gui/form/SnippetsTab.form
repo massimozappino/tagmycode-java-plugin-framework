@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="61" width="469" height="359"/>
+      <xy x="20" y="61" width="486" height="359"/>
     </constraints>
     <properties/>
     <border type="empty"/>
@@ -31,6 +31,18 @@
                 <constraints/>
                 <properties>
                   <text value="Add Snippet..."/>
+                </properties>
+              </component>
+              <component id="eeff8" class="javax.swing.JButton" binding="editSnippetButton">
+                <constraints/>
+                <properties>
+                  <text value="Edit"/>
+                </properties>
+              </component>
+              <component id="44c11" class="javax.swing.JButton" binding="deleteSnippetButton">
+                <constraints/>
+                <properties>
+                  <text value="Delete"/>
                 </properties>
               </component>
               <component id="a458a" class="javax.swing.JButton" binding="refreshButton">
@@ -61,7 +73,7 @@
                   <splitpane position="right"/>
                 </constraints>
                 <properties/>
-                <border type="none"/>
+                <border type="empty"/>
                 <children/>
               </grid>
               <grid id="2e6a7" binding="leftPane" layout-manager="BorderLayout" hgap="0" vgap="0">

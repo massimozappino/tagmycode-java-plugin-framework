@@ -34,7 +34,11 @@ public class SnippetsJTableModel extends AbstractTableModel {
     }
 
     public Snippet getSnippetAt(int rowIndex) {
-        return snippetVector.get(rowIndex);
+        try {
+            return snippetVector.get(rowIndex);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
     @Override

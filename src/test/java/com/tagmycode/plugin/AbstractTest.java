@@ -12,8 +12,7 @@ import support.*;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -89,11 +88,7 @@ public class AbstractTest {
         } catch (Exception ignored) {
         }
 
-        try {
-            preferences.getPrivateSnippet();
-            fail("Excepted exception");
-        } catch (Exception ignored) {
-        }
+        assertFalse(preferences.getPrivateSnippet());
     }
 
     protected void assertConsoleMessageContains(IConsole console, String expected) {

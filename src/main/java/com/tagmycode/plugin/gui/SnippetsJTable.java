@@ -13,7 +13,6 @@ public class SnippetsJTable extends AbstractSnippetsListGui {
     private SnippetsJTableModel tableModel;
     private ListSelectionModel cellSelectionModel;
 
-
     public SnippetsJTable() {
         tableModel = new SnippetsJTableModel();
         table = new JTable(tableModel);

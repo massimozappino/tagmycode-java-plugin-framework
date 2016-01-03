@@ -6,6 +6,7 @@ import com.tagmycode.plugin.GuiThread;
 import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.gui.SnippetEditorPane;
 import com.tagmycode.plugin.gui.operation.CreateSnippetOperation;
+import com.tagmycode.sdk.model.DefaultLanguage;
 import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -21,7 +22,7 @@ public class SnippetDialog extends AbstractDialog {
     private JTextField descriptionTextField;
     private JTextField titleBox;
     private SnippetEditorPane codeEditorPane;
-    private JComboBox languageComboBox;
+    private JComboBox<Language> languageComboBox;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JPanel jpanel;
@@ -31,9 +32,6 @@ public class SnippetDialog extends AbstractDialog {
         super(framework, parent);
         defaultInitWindow();
         initWindow();
-        if (mimeType == null) {
-            mimeType = "plain/text";
-        }
         setMimeType(mimeType);
     }
 
@@ -42,13 +40,14 @@ public class SnippetDialog extends AbstractDialog {
         descriptionTextField.setText(snippet.getDescription());
         tagsTextField.setText(snippet.getTags());
         codeEditorPane.setTextWithSnippet(snippet);
+        selectLanguage(snippet.getLanguage());
     }
 
     @Override
     protected void initWindow() {
         descriptionTextField.requestFocus();
         getDialog().setSize(650, 450);
-        getDialog().setTitle("Create snippet");
+        getDialog().setTitle("Add snippet");
         getDialog().setResizable(true);
 
         new GuiThread().execute(new Runnable() {
@@ -83,12 +82,7 @@ public class SnippetDialog extends AbstractDialog {
 
     private void populateLanguages() {
         if (framework.getLanguageCollection() == null) {
-            // TODO add default language Text
-//            Language language = new Language();
-//            language.setId(48);
-//            language.setCode("text");
-//            language.setName("Text");
-//            languageComboBox.addItem(language);
+            languageComboBox.addItem(new DefaultLanguage());
         } else {
             for (Language l : framework.getLanguageCollection()) {
                 languageComboBox.addItem(l);
@@ -116,22 +110,18 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     private void restorePreferences() {
-        new GuiThread().execute(new Runnable() {
-            @Override
-            public void run() {
-                boolean privateSnippet = framework.getStorage().getPrivateSnippet();
-                privateSnippetCheckBox.setSelected(privateSnippet);
-                try {
-                    int lastLanguageIndex = framework.getStorage().getLastLanguageIndex();
-                    languageComboBox.setSelectedIndex(lastLanguageIndex);
-                } catch (Exception e) {
-                    framework.getStorage().setLastLanguageIndex(0);
-                }
-            }
-        });
+        boolean privateSnippet = framework.getStorage().getPrivateSnippet();
+        privateSnippetCheckBox.setSelected(privateSnippet);
+        try {
+            int lastLanguageIndex = framework.getStorage().getLastLanguageIndex();
+            languageComboBox.setSelectedIndex(lastLanguageIndex);
+        } catch (Exception e) {
+            framework.getStorage().setLastLanguageIndex(0);
+        }
     }
 
-    public Snippet getSnippet() {
+
+    public Snippet createSnippetObject() {
         Snippet snippet = new Snippet();
         snippet.setCode(codeEditorPane.getText());
         snippet.setLanguage((Language) languageComboBox.getSelectedItem());
@@ -149,6 +139,9 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     public void setMimeType(String mimeType) {
+        if (mimeType == null) {
+            mimeType = "plain/text";
+        }
         codeEditorPane.setContentType(mimeType);
     }
 
@@ -170,5 +163,13 @@ public class SnippetDialog extends AbstractDialog {
 
     public JCheckBox getPrivateSnippetCheckBox() {
         return privateSnippetCheckBox;
+    }
+
+    public void selectLanguage(Language language) {
+        for (int i = 0; i < languageComboBox.getItemCount(); i++) {
+            if (languageComboBox.getItemAt(i) == language) {
+                languageComboBox.setSelectedIndex(i);
+            }
+        }
     }
 }

@@ -91,6 +91,9 @@ public abstract class AbstractStorage {
     }
 
     protected boolean stringToBoolean(String s) {
+        if (s == null) {
+            return false;
+        }
         return s.equals("1");
     }
 
