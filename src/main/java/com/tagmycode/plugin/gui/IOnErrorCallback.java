@@ -1,7 +1,7 @@
 package com.tagmycode.plugin.gui;
 
-/**
- * Created by max on 04/01/16.
- */
+import com.tagmycode.sdk.exception.TagMyCodeException;
+
 public interface IOnErrorCallback {
+    void onError(TagMyCodeException e);
 }
