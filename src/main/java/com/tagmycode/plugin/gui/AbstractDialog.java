@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public abstract class AbstractDialog extends AbstractGui implements IonErrorCallback {
+public abstract class AbstractDialog extends AbstractGui implements IOnErrorCallback {
     protected final Framework framework;
     private final Frame parentFrame;
     private final JDialog dialog;

@@ -27,6 +27,7 @@ public class SnippetDialog extends AbstractDialog {
     private JButton buttonCancel;
     private JPanel jpanel;
     private JScrollPane scrollPane;
+    private DefaultComboBoxModel<Language> defaultComboBoxModel;
 
     public SnippetDialog(final Framework framework, String mimeType, Frame parent) {
         super(framework, parent);
@@ -45,16 +46,19 @@ public class SnippetDialog extends AbstractDialog {
 
     @Override
     protected void initWindow() {
+        defaultComboBoxModel = new DefaultComboBoxModel<Language>();
+        languageComboBox.setModel(defaultComboBoxModel);
         descriptionTextField.requestFocus();
         getDialog().setSize(650, 450);
         getDialog().setTitle("Add snippet");
         getDialog().setResizable(true);
 
+        populateLanguages();
+        restorePreferences();
+
         new GuiThread().execute(new Runnable() {
             @Override
             public void run() {
-                populateLanguages();
-                restorePreferences();
                 listenForChanges();
             }
         });
@@ -82,10 +86,10 @@ public class SnippetDialog extends AbstractDialog {
 
     private void populateLanguages() {
         if (framework.getLanguageCollection() == null) {
-            languageComboBox.addItem(new DefaultLanguage());
+            defaultComboBoxModel.addElement(new DefaultLanguage());
         } else {
             for (Language l : framework.getLanguageCollection()) {
-                languageComboBox.addItem(l);
+                defaultComboBoxModel.addElement(l);
             }
         }
     }
@@ -94,8 +98,7 @@ public class SnippetDialog extends AbstractDialog {
         languageComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int selectedIndex = languageComboBox.getSelectedIndex();
-                framework.getStorage().setLastLanguageIndex(selectedIndex);
+                framework.getStorage().setLastLanguageUsed(getSelectedLanguage());
             }
         });
 
@@ -109,15 +112,14 @@ public class SnippetDialog extends AbstractDialog {
         });
     }
 
+    private Language getSelectedLanguage() {
+        return (Language) defaultComboBoxModel.getSelectedItem();
+    }
+
     private void restorePreferences() {
         boolean privateSnippet = framework.getStorage().getPrivateSnippet();
         privateSnippetCheckBox.setSelected(privateSnippet);
-        try {
-            int lastLanguageIndex = framework.getStorage().getLastLanguageIndex();
-            languageComboBox.setSelectedIndex(lastLanguageIndex);
-        } catch (Exception e) {
-            framework.getStorage().setLastLanguageIndex(0);
-        }
+        defaultComboBoxModel.setSelectedItem(framework.getStorage().getLastLanguageUsed());
     }
 
 
@@ -166,10 +168,9 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     public void selectLanguage(Language language) {
-        for (int i = 0; i < languageComboBox.getItemCount(); i++) {
-            if (languageComboBox.getItemAt(i) == language) {
-                languageComboBox.setSelectedIndex(i);
-            }
-        }
+
+        defaultComboBoxModel.setSelectedItem(language);
+
+
     }
 }

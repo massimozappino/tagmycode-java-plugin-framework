@@ -2,9 +2,7 @@ package com.tagmycode.plugin;
 
 
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
-import com.tagmycode.sdk.model.LanguageCollection;
-import com.tagmycode.sdk.model.SnippetCollection;
-import com.tagmycode.sdk.model.User;
+import com.tagmycode.sdk.model.*;
 import org.json.JSONException;
 
 import java.util.Date;
@@ -55,19 +53,28 @@ public abstract class AbstractStorage {
         write(PRIVATE_SNIPPET, booleanToString(flag));
     }
 
-    public int getLastLanguageIndex() {
-        String value = read(LAST_LANGUAGE);
-        int index;
+    public Language getLastLanguageUsed() {
+        String jsonLanguage = read(LAST_LANGUAGE);
+        Language language;
         try {
-            index = Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            index = 0;
+            if (jsonLanguage == null) {
+                throw new TagMyCodeJsonException();
+            }
+            language = new Language(jsonLanguage);
+        } catch (TagMyCodeJsonException e) {
+            language = new DefaultLanguage();
         }
-        return index;
+        return language;
     }
 
-    public void setLastLanguageIndex(int lastLanguageId) {
-        write(LAST_LANGUAGE, String.valueOf(lastLanguageId));
+    public void setLastLanguageUsed(Language lastLanguage) {
+        String json;
+        try {
+            json = lastLanguage.toJson();
+        } catch (JSONException e) {
+            json = "";
+        }
+        write(LAST_LANGUAGE, json);
     }
 
     public Date getLastUpdate() {
@@ -91,10 +98,7 @@ public abstract class AbstractStorage {
     }
 
     protected boolean stringToBoolean(String s) {
-        if (s == null) {
-            return false;
-        }
-        return s.equals("1");
+        return s != null && s.equals("1");
     }
 
     protected String booleanToString(boolean b) {

@@ -1,6 +1,8 @@
 package com.tagmycode.plugin;
 
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
+import com.tagmycode.sdk.model.DefaultLanguage;
+import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.User;
 import org.json.JSONException;
@@ -44,15 +46,15 @@ public class PreferencesTest extends AbstractTest {
     }
 
     @Test
-    public void setAndGetLastLanguageId() {
-        int lastLanguageId = 3;
-        preferences.setLastLanguageIndex(lastLanguageId);
-        assertEquals(lastLanguageId, preferences.getLastLanguageIndex());
+    public void setAndGetLastLanguageUsed() throws Exception {
+        Language language = resourceGenerate.aLanguage();
+        preferences.setLastLanguageUsed(language);
+        assertEquals(language, preferences.getLastLanguageUsed());
     }
 
     @Test
-    public void getLastLanguageIdReturnsZeroIfItsNotSet() {
-        assertEquals(0, preferences.getLastLanguageIndex());
+    public void getLastLanguageUsedReturnsDefaultLanguageIfItsNotSet() {
+        assertEquals(new DefaultLanguage(), preferences.getLastLanguageUsed());
     }
 
     @Test

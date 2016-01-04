@@ -1,16 +1,16 @@
 package com.tagmycode.plugin.gui.operation;
 
 import com.tagmycode.plugin.AbstractTaskFactory;
-import com.tagmycode.plugin.gui.IonErrorCallback;
+import com.tagmycode.plugin.gui.IOnErrorCallback;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 
 import javax.swing.*;
 
 public abstract class TagMyCodeAsynchronousOperation<T> {
-    protected IonErrorCallback ionErrorCallback;
+    protected IOnErrorCallback onErrorCallback;
 
-    public TagMyCodeAsynchronousOperation(IonErrorCallback ionErrorCallback) {
-        this.ionErrorCallback = ionErrorCallback;
+    public TagMyCodeAsynchronousOperation(IOnErrorCallback onErrorCallback) {
+        this.onErrorCallback = onErrorCallback;
     }
 
     public final void run() {
@@ -79,9 +79,9 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
 
     protected void onFailure(Throwable e) {
         if (e instanceof TagMyCodeException) {
-            ionErrorCallback.onError((TagMyCodeException) e);
+            onErrorCallback.onError((TagMyCodeException) e);
         } else {
-            ionErrorCallback.onError(new TagMyCodeException());
+            onErrorCallback.onError(new TagMyCodeException());
         }
     }
 }
