@@ -19,7 +19,6 @@ import com.tagmycode.sdk.model.Snippet;
 import com.tagmycode.sdk.model.User;
 import org.json.JSONException;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,11 +29,11 @@ public class Framework {
     private final Wallet wallet;
     private final Client client;
     private final TagMyCode tagMyCode;
-    private final AbstractStorage storage;
     private final Frame parentFrame;
     private final IMessageManager messageManager;
     private final IConsole console;
     private final AbstractTaskFactory taskFactory;
+    private Data data;
     private User account;
     private LanguageCollection languageCollection;
     private SearchSnippetDialog searchSnippetDialog;
@@ -43,7 +42,7 @@ public class Framework {
         wallet = new Wallet(frameworkConfig.getPasswordKeyChain());
         client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), wallet);
         tagMyCode = new TagMyCode(client);
-        this.storage = frameworkConfig.getPreferences();
+        this.data = new Data(frameworkConfig.getStorage());
         this.messageManager = frameworkConfig.getMessageManager();
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
@@ -55,14 +54,6 @@ public class Framework {
 
     public MainWindow getMainWindow() {
         return mainWindow;
-    }
-
-    public User getAccount() {
-        return account;
-    }
-
-    public void setAccount(User account) {
-        this.account = account;
     }
 
     public LanguageCollection getLanguageCollection() {
@@ -100,13 +91,9 @@ public class Framework {
         return oauthToken;
     }
 
-    public AbstractStorage getStorage() {
-        return storage;
-    }
-
-    public void loadPreferences() throws TagMyCodeJsonException {
-        account = storage.getAccount();
-        languageCollection = storage.getLanguageCollection();
+    public void loadFromStorage() throws TagMyCodeJsonException {
+        account = data.getAccount();
+        languageCollection = data.getLanguageCollection();
     }
 
     public void fetchAllData() throws TagMyCodeException {
@@ -119,11 +106,11 @@ public class Framework {
         storeData();
     }
 
-    public void storeData() throws TagMyCodeJsonException {
+    protected void storeData() throws TagMyCodeJsonException {
         try {
-            storage.setLanguageCollection(languageCollection);
-            storage.setAccount(account);
-            storage.setLastUpdate(new Date());
+            data.setLanguageCollection(languageCollection);
+            data.setAccount(account);
+            data.setLastUpdate(new Date());
         } catch (JSONException e) {
             throw new TagMyCodeJsonException(e);
         }
@@ -141,7 +128,7 @@ public class Framework {
         } catch (TagMyCodeGuiException e) {
             manageTagMyCodeExceptions(e);
         }
-        storage.clearAll();
+        data.clearAll();
     }
 
     public void refreshDataIfItIsOld() {
@@ -155,7 +142,7 @@ public class Framework {
     public boolean isDataToBeRefreshed() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_MONTH, -1 * DAYS_BEFORE_RELOAD);
-        return storage.getLastUpdate().before(cal.getTime());
+        return data.getLastUpdate().before(cal.getTime());
     }
 
     public boolean isRefreshable() {
@@ -193,7 +180,7 @@ public class Framework {
     }
 
     public void error(final String message) {
-        SwingUtilities.invokeLater(new Runnable() {
+        new GuiThread().execute(new Runnable() {
             @Override
             public void run() {
                 messageManager.error(message);
@@ -232,7 +219,7 @@ public class Framework {
     public void restoreData() {
         try {
             loadAccessTokenFormWallet();
-            loadPreferences();
+            loadFromStorage();
         } catch (TagMyCodeJsonException e) {
             resetData();
         } catch (TagMyCodeException e) {
@@ -271,5 +258,21 @@ public class Framework {
 
     public TagMyCode getTagMyCode() {
         return tagMyCode;
+    }
+
+    public User getAccount() {
+        return account;
+    }
+
+    public void setAccount(User account) {
+        this.account = account;
+    }
+
+    public Data getData() {
+        return data;
+    }
+
+    protected void setData(Data data) {
+        this.data = data;
     }
 }

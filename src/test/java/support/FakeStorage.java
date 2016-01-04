@@ -1,11 +1,11 @@
 package support;
 
 
-import com.tagmycode.plugin.AbstractStorage;
+import com.tagmycode.plugin.IStorage;
 
 import java.util.HashMap;
 
-public class FakeStorage extends AbstractStorage {
+public class FakeStorage implements IStorage {
     private HashMap<String, String> resource;
 
     public FakeStorage() {
@@ -17,17 +17,17 @@ public class FakeStorage extends AbstractStorage {
     }
 
     @Override
-    protected void write(String key, String value) {
+    public void write(String key, String value) {
         resource.put(key, value);
     }
 
     @Override
-    protected String read(String key) {
+    public String read(String key) {
         return resource.get(key);
     }
 
     @Override
-    protected void unset(String key) {
+    public void unset(String key) {
         resource.remove(key);
     }
 }

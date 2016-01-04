@@ -1,6 +1,5 @@
 package com.tagmycode.plugin.gui.operation;
 
-import com.tagmycode.plugin.gui.CustomTextSnippetItem;
 import com.tagmycode.plugin.gui.form.SnippetsTab;
 import com.tagmycode.sdk.model.SnippetCollection;
 
@@ -14,10 +13,7 @@ public class LoadSnippetsOperation extends TagMyCodeAsynchronousOperation<Snippe
 
     @Override
     protected void beforePerformOperation() {
-        SnippetCollection initialSnippetCollection = new SnippetCollection();
-
-        initialSnippetCollection.add(new CustomTextSnippetItem("Loading snippets..."));
-        updateSnippets(initialSnippetCollection);
+        // TODO disable all buttons
     }
 
     private void updateSnippets(SnippetCollection snippets) {
@@ -28,11 +24,17 @@ public class LoadSnippetsOperation extends TagMyCodeAsynchronousOperation<Snippe
     protected SnippetCollection performOperation() throws Exception {
         SnippetCollection snippets;
         try {
-            snippets = snippetsTab.getFramework().getStorage().getSnippets();
+            snippets = snippetsTab.getFramework().getData().getSnippets();
         } catch (Throwable e) {
             snippets = new SnippetCollection();
         }
         return snippets;
+    }
+
+    @Override
+    protected void onComplete() {
+        super.onComplete();
+        // TODO enable all buttons
     }
 
     @Override

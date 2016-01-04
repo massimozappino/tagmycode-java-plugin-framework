@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class FrameworkTest extends AbstractTest {
 
@@ -32,7 +33,7 @@ public class FrameworkTest extends AbstractTest {
 
     @Test
     public void testConstructor() {
-        assertNotNull(framework.getStorage());
+        assertNotNull(framework.getData());
         assertNotNull(framework.getWallet());
         assertNotNull(framework.getMessageManager());
         assertNotNull(framework.getConsole());
@@ -56,15 +57,15 @@ public class FrameworkTest extends AbstractTest {
 
     @Test
     public void testLoadPreferences() throws Exception {
-        framework.getStorage().setAccount(resourceGenerate.anUser());
-        framework.getStorage().setLanguageCollection(resourceGenerate.aLanguageCollection());
-        framework.loadPreferences();
+        framework.getData().setAccount(resourceGenerate.anUser());
+        framework.getData().setLanguageCollection(resourceGenerate.aLanguageCollection());
+        framework.loadFromStorage();
         assertFrameworkReturnsValidAccountAndLanguageCollection();
     }
 
     @Test
     public void testRestoreData() throws Exception {
-        setDataForWalletAndPreferences();
+        setValuesForWalletAndData();
         framework.restoreData();
         assertAccessTokenIs(oauthToken);
         assertFrameworkReturnsValidAccountAndLanguageCollection();
@@ -72,33 +73,35 @@ public class FrameworkTest extends AbstractTest {
 
     @Test
     public void restoreDataAfterReloadIde() throws Exception {
-        setDataForWalletAndPreferences();
+        setValuesForWalletAndData();
 
         User newUser = resourceGenerate.anUser();
         newUser.setUsername("fakeUsername");
-        framework.getStorage().setAccount(newUser);
+        framework.getData().setAccount(newUser);
 
         LanguageCollection languageCollection = new LanguageCollection();
         languageCollection.add(resourceGenerate.aLanguage());
-        framework.getStorage().setLanguageCollection(languageCollection);
+        framework.getData().setLanguageCollection(languageCollection);
 
         OauthToken newOauthToken = new OauthToken("newToken", "newToken");
         framework.getWallet().saveOauthToken(newOauthToken);
 
-        FrameworkConfig frameworkConfig = new FrameworkConfig(framework.getWallet().getPasswordKeyChain(), framework.getStorage(), framework.getMessageManager(), framework.getTaskFactory(), framework.getParentFrame());
+        FrameworkConfig frameworkConfig = new FrameworkConfig(framework.getWallet().getPasswordKeyChain(), framework.getData().getStorage(), framework.getMessageManager(), framework.getTaskFactory(), framework.getParentFrame());
         Framework reloadedFramework = new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret());
 
         assertEquals(newOauthToken, reloadedFramework.getClient().getOauthToken());
-        assertEquals("fakeUsername", reloadedFramework.getAccount().getUsername());
+        assertEquals("fakeUsername", reloadedFramework.getData().getAccount().getUsername());
         assertEquals(1, reloadedFramework.getLanguageCollection().size());
         assertEquals(resourceGenerate.aLanguage(), reloadedFramework.getLanguageCollection().get(0));
     }
 
     @Test
     public void testOnExceptionInRestoreDataThenResetData() throws Exception {
-        setDataForWalletAndPreferences();
+        setValuesForWalletAndData();
 
-        ((FakeStorage) framework.getStorage()).generateExceptionForLanguageCollection();
+        framework.getData().clearAll();
+
+        ((FakeStorage) framework.getData().getStorage()).generateExceptionForLanguageCollection();
 
         framework.restoreData();
         assertAccessTokenIs(oauthToken);
@@ -114,7 +117,7 @@ public class FrameworkTest extends AbstractTest {
         framework.fetchAllData();
         framework.storeData();
         assertPreferencesReturnsValidData();
-        assertDateGreaterOrEqualsThan(framework.getStorage().getLastUpdate(), beforeDate);
+        assertDateGreaterOrEqualsThan(framework.getData().getLastUpdate(), beforeDate);
     }
 
     @Test
@@ -140,7 +143,7 @@ public class FrameworkTest extends AbstractTest {
 
     @Test
     public void testIsDataNotToBeRefreshedWithFreshDate() {
-        framework.getStorage().setLastUpdate(new Date());
+        framework.getData().setLastUpdate(new Date());
         assertFalse(framework.isDataToBeRefreshed());
     }
 
@@ -177,12 +180,14 @@ public class FrameworkTest extends AbstractTest {
 
     @Test
     public void testLogout() throws Exception {
-        setDataForWalletAndPreferences();
+        Data dataMock = mock(Data.class);
+        framework.setData(dataMock);
+        setValuesForWalletAndData();
         setAccessToken();
         framework.logout();
         assertTrue(framework.getClient().getOauthToken() instanceof VoidOauthToken);
         assertEquals(null, framework.getWallet().loadOauthToken());
-        assertPreferencesAreCleared(framework.getStorage());
+        verify(dataMock, times(1)).clearAll();
     }
 
     @Test
@@ -217,11 +222,11 @@ public class FrameworkTest extends AbstractTest {
     }
 
     protected void assertPreferencesReturnsValidData() throws IOException, TagMyCodeJsonException {
-        assertEquals(resourceGenerate.anUser(), framework.getStorage().getAccount());
-        assertEquals(resourceGenerate.aLanguageCollection(), framework.getStorage().getLanguageCollection());
+        assertEquals(resourceGenerate.anUser(), framework.getAccount());
+        assertEquals(resourceGenerate.aLanguageCollection(), framework.getLanguageCollection());
     }
 
-    protected void assertAccountAndLanguageCollectionFromFrameworkAreNull() {
+    protected void assertAccountAndLanguageCollectionFromFrameworkAreNull() throws TagMyCodeJsonException {
         assertEquals(null, framework.getAccount());
         assertEquals(null, framework.getLanguageCollection());
     }
@@ -235,16 +240,16 @@ public class FrameworkTest extends AbstractTest {
         assertTrue(actual.compareTo(compare) >= 0);
     }
 
-    protected void setDataForWalletAndPreferences() throws Exception {
+    protected void setValuesForWalletAndData() throws Exception {
         framework.getWallet().saveOauthToken(oauthToken);
-        framework.getStorage().setAccount(resourceGenerate.anUser());
-        framework.getStorage().setLanguageCollection(resourceGenerate.aLanguageCollection());
+        framework.getData().setAccount(resourceGenerate.anUser());
+        framework.getData().setLanguageCollection(resourceGenerate.aLanguageCollection());
     }
 
     protected void setDataToBeRefreshed() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_MONTH, -2 * Framework.DAYS_BEFORE_RELOAD);
-        framework.getStorage().setLastUpdate(cal.getTime());
+        framework.getData().setLastUpdate(cal.getTime());
     }
 
     protected void setAValidLanguageCollection() throws IOException, TagMyCodeJsonException {
@@ -252,7 +257,7 @@ public class FrameworkTest extends AbstractTest {
     }
 
     protected void setDataAlreadyRefreshed() {
-        framework.getStorage().setLastUpdate(new Date());
+        framework.getData().setLastUpdate(new Date());
     }
 
     protected void setAValidAccountAccount() throws IOException, TagMyCodeJsonException {

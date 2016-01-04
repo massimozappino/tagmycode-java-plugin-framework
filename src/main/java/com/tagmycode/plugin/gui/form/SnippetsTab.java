@@ -6,7 +6,6 @@ import com.tagmycode.plugin.gui.operation.LoadSnippetsOperation;
 import com.tagmycode.plugin.gui.operation.RefreshSnippetsOperation;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.Snippet;
-import com.tagmycode.sdk.model.SnippetCollection;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -180,8 +179,8 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     private void deleteSnippetAction() {
-        Snippet snippet = snippetsJTable.getSelectedSnippet();
-        snippetsJTable.updateWithSnippets(new SnippetCollection());
+//        Snippet snippet = snippetsJTable.getSelectedSnippet();
+//        snippetsJTable.updateWithSnippets(new SnippetCollection());
     }
 
     private void addSnippetAction(Framework framework) {

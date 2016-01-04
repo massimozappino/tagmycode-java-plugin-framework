@@ -6,9 +6,11 @@ import com.tagmycode.plugin.GuiThread;
 import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.gui.SnippetEditorPane;
 import com.tagmycode.plugin.gui.operation.CreateSnippetOperation;
+import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.DefaultLanguage;
 import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.Snippet;
+import org.json.JSONException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -98,7 +100,10 @@ public class SnippetDialog extends AbstractDialog {
         languageComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                framework.getStorage().setLastLanguageUsed(getSelectedLanguage());
+                try {
+                    framework.getData().setLastLanguageUsed(getSelectedLanguage());
+                } catch (JSONException ignored) {
+                }
             }
         });
 
@@ -107,7 +112,7 @@ public class SnippetDialog extends AbstractDialog {
             public void actionPerformed(ActionEvent e) {
                 boolean selected = privateSnippetCheckBox.isSelected();
 
-                framework.getStorage().setPrivateSnippet(selected);
+                framework.getData().setPrivateSnippet(selected);
             }
         });
     }
@@ -117,9 +122,15 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     private void restorePreferences() {
-        boolean privateSnippet = framework.getStorage().getPrivateSnippet();
+        boolean privateSnippet = framework.getData().getPrivateSnippet();
         privateSnippetCheckBox.setSelected(privateSnippet);
-        defaultComboBoxModel.setSelectedItem(framework.getStorage().getLastLanguageUsed());
+        Language lastLanguageUsed;
+        try {
+            lastLanguageUsed = framework.getData().getLastLanguageUsed();
+        } catch (TagMyCodeJsonException e) {
+            lastLanguageUsed = new DefaultLanguage();
+        }
+        defaultComboBoxModel.setSelectedItem(lastLanguageUsed);
     }
 
 

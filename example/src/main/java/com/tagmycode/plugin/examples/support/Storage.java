@@ -1,8 +1,8 @@
 package com.tagmycode.plugin.examples.support;
 
-import com.tagmycode.plugin.AbstractStorage;
+import com.tagmycode.plugin.IStorage;
 
-public class Storage extends AbstractStorage {
+public class Storage implements IStorage {
 
     private HashMapToFile hashMapToFile;
 
@@ -11,17 +11,17 @@ public class Storage extends AbstractStorage {
     }
 
     @Override
-    protected String read(String key) {
+    public String read(String key) {
         return hashMapToFile.loadValue(key);
     }
 
     @Override
-    protected void write(String key, String value) {
+    public void write(String key, String value) {
         hashMapToFile.saveValue(key, value);
     }
 
     @Override
-    protected void unset(String key) {
+    public void unset(String key) {
         hashMapToFile.deleteValue(key);
     }
 }

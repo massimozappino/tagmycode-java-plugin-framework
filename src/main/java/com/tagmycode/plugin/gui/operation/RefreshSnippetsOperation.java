@@ -7,7 +7,6 @@ import org.json.JSONException;
 
 public class RefreshSnippetsOperation extends TagMyCodeAsynchronousOperation<SnippetCollection> {
     private SnippetsTab snippetsTab;
-    private SnippetCollection snippets;
 
     public RefreshSnippetsOperation(SnippetsTab snippetsTab) {
         super(snippetsTab);
@@ -35,7 +34,7 @@ public class RefreshSnippetsOperation extends TagMyCodeAsynchronousOperation<Sni
     protected void onSuccess(SnippetCollection snippets) {
         snippetsTab.getAbstractSnippetsListGui().updateWithSnippets(snippets);
         try {
-            snippetsTab.getFramework().getStorage().setSnippets(snippets);
+            snippetsTab.getFramework().getData().setSnippets(snippets);
         } catch (JSONException e) {
             snippetsTab.getFramework().manageTagMyCodeExceptions(new TagMyCodeException(e));
         }

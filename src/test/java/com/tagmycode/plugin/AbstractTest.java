@@ -4,15 +4,13 @@ package com.tagmycode.plugin;
 import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.TagMyCodeApiDevelopment;
-import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.Snippet;
 import org.mockito.Mockito;
 import support.*;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -25,10 +23,7 @@ public class AbstractTest {
     }
 
     public Framework createFramework() {
-        FakeStorage preferences = new FakeStorage();
-        preferences.setPrivateSnippet(true);
-
-        FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), preferences, new FakeMessageManager(), new FakeTaskFactory(), null);
+        FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), new FakeStorage(), new FakeMessageManager(), new FakeTaskFactory(), null);
         return new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret());
     }
 
@@ -67,28 +62,6 @@ public class AbstractTest {
         field.setAccessible(true);
         field.set(framework, mockedClient);
         return mockedClient;
-    }
-
-    protected void assertPreferencesAreCleared(AbstractStorage preferences) throws IOException, TagMyCodeJsonException {
-        try {
-            preferences.getAccount();
-            fail("Excepted exception");
-        } catch (Exception ignored) {
-        }
-
-        try {
-            preferences.getLanguageCollection();
-            fail("Excepted exception");
-        } catch (Exception ignored) {
-        }
-
-        try {
-            preferences.getLastUpdate();
-            fail("Excepted exception");
-        } catch (Exception ignored) {
-        }
-
-        assertFalse(preferences.getPrivateSnippet());
     }
 
     protected void assertConsoleMessageContains(IConsole console, String expected) {
