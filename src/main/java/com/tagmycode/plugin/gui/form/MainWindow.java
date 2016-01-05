@@ -34,7 +34,7 @@ public class MainWindow implements IAbstractGUI {
 
     public void addSnippetTab(Snippet snippet) {
         final String title = snippet.getTitle();
-        String trimmedTitle = title.substring(0, Math.min(title.length(), 18)).trim();
+        String trimmedTitle = title.substring(0, Math.min(title.length(), 50)).trim();
         if (trimmedTitle.length() != title.length()) {
             trimmedTitle += "...";
         }

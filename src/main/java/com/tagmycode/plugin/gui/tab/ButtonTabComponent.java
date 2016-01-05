@@ -37,7 +37,7 @@ public class ButtonTabComponent extends JPanel {
 
         JLabel label = new JLabel() {
             public String getText() {
-                int i = currentTabIndex(pane);
+                int i = getCurrentTabIndex();
                 if (i != -1) {
                     return pane.getTitleAt(i);
                 }
@@ -55,23 +55,23 @@ public class ButtonTabComponent extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if ((e.getModifiers() & InputEvent.BUTTON2_MASK) != 0) {
-                    removeCurrentTab();
+                    closeCurrentTab();
                 }
                 if (e.getClickCount() == 1) {
-                    pane.setSelectedIndex(currentTabIndex(pane));
+                    pane.setSelectedIndex(getCurrentTabIndex());
                 }
             }
         });
     }
 
-    private int currentTabIndex(JTabbedPane pane) {
+    public int getCurrentTabIndex() {
         return pane.indexOfTabComponent(ButtonTabComponent.this);
     }
 
-    private void removeCurrentTab() {
-        int i = currentTabIndex(pane);
+    public void closeCurrentTab() {
+        int i = getCurrentTabIndex();
         if (i != -1) {
-            pane.remove(i);
+            pane.removeTabAt(i);
         }
     }
 
@@ -98,7 +98,7 @@ public class ButtonTabComponent extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            removeCurrentTab();
+            closeCurrentTab();
         }
 
         //we don't want to update UI for this button

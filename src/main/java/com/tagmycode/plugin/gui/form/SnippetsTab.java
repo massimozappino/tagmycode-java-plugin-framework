@@ -8,10 +8,7 @@ import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,6 +26,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private JButton searchButton;
     private JButton editSnippetButton;
     private JButton deleteSnippetButton;
+    private JTextField filterTextField;
     private JPanel snippetListPane;
     private Framework framework;
     private JTable snippetsTableComponent;
@@ -45,6 +43,30 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         initToolBarButtons(framework);
         initPopupMenuForJTextComponents(getMainComponent());
         loadSnippets();
+
+        filterTextField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                doFilter();
+
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                doFilter();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                doFilter();
+            }
+
+            private void doFilter() {
+                String filterText = filterTextField.getText();
+                snippetsJTable.filter(filterText);
+                System.out.println(filterText);
+            }
+        });
     }
 
     private void initToolBarButtons(final Framework framework) {
@@ -85,7 +107,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     private void initSnippetsJTable() {
-        snippetsJTable = new SnippetsJTable();
+        snippetsJTable = new SnippetsJTable(framework);
         snippetsTableComponent = (JTable) snippetsJTable.getSnippetsComponent();
         snippetsJTable.getCellSelectionModel().addListSelectionListener(createSelectionListener());
 

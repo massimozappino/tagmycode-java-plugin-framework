@@ -34,4 +34,9 @@ public class JClosableTabbedPane extends JTabbedPane {
         setTabComponentAt(index, new ButtonTabComponent(this));
         setSelectedIndex(index);
     }
+
+    public ButtonTabComponent getClosableTab(int index) {
+        Component tabComponentAt = getTabComponentAt(index);
+        return tabComponentAt instanceof ButtonTabComponent ? (ButtonTabComponent) tabComponentAt : null;
+    }
 }

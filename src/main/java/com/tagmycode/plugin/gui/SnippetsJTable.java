@@ -1,5 +1,7 @@
 package com.tagmycode.plugin.gui;
 
+import com.tagmycode.plugin.Framework;
+import com.tagmycode.plugin.GuiThread;
 import com.tagmycode.sdk.model.Snippet;
 import com.tagmycode.sdk.model.SnippetCollection;
 
@@ -13,8 +15,8 @@ public class SnippetsJTable extends AbstractSnippetsListGui {
     private SnippetsJTableModel tableModel;
     private ListSelectionModel cellSelectionModel;
 
-    public SnippetsJTable() {
-        tableModel = new SnippetsJTableModel();
+    public SnippetsJTable(Framework framework) {
+        tableModel = new SnippetsJTableModel(framework);
         table = new JTable(tableModel);
         scrollPane = new JScrollPane(table);
         table.setIntercellSpacing(new Dimension(0, 0));
@@ -50,5 +52,15 @@ public class SnippetsJTable extends AbstractSnippetsListGui {
     @Override
     public JComponent getSnippetsComponent() {
         return table;
+    }
+
+    public void filter(final String filterText) {
+        new GuiThread().execute(new Runnable() {
+            @Override
+            public void run() {
+                tableModel.filter(filterText);
+            }
+        });
+
     }
 }
