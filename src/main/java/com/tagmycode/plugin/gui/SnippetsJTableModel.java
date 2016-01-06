@@ -1,6 +1,5 @@
 package com.tagmycode.plugin.gui;
 
-import com.tagmycode.plugin.Framework;
 import com.tagmycode.sdk.model.Snippet;
 import com.tagmycode.sdk.model.SnippetCollection;
 
@@ -8,17 +7,15 @@ import javax.swing.table.AbstractTableModel;
 import java.util.Vector;
 
 public class SnippetsJTableModel extends AbstractTableModel {
-    public final static int LANGUAGE = 0;
-    public final static int TITLE = 1;
+    public final static int LANGUAGE = 1;
+    public final static int TITLE = 0;
 
     private Vector<Snippet> snippetVector;
     private String[] columns;
-    private Framework framework;
 
-    public SnippetsJTableModel(Framework framework) {
-        this.framework = framework;
+    public SnippetsJTableModel() {
         snippetVector = new Vector<Snippet>();
-        columns = new String[]{"Language", "Title"};
+        columns = new String[]{"Title", "Language"};
     }
 
     @Override

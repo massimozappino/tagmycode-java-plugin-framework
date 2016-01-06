@@ -3,13 +3,14 @@ package com.tagmycode.plugin.gui.form;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.GuiThread;
 import com.tagmycode.plugin.ICallback;
-import com.tagmycode.plugin.gui.IAbstractGUI;
+import com.tagmycode.plugin.gui.AbstractDialog;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SettingsForm implements IAbstractGUI {
+public class SettingsForm extends AbstractDialog {
     private JPanel mainPanel;
     private JPanel loginPanel;
     private JPanel logoutPanel;
@@ -19,28 +20,12 @@ public class SettingsForm implements IAbstractGUI {
 
     private Framework framework;
 
-    public SettingsForm(final Framework framework) {
+    public SettingsForm(final Framework framework, Frame parent) {
+        super(framework, parent);
         this.framework = framework;
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                framework.showAuthenticateDialog(new ICallback() {
-                    @Override
-                    public void doOperation() {
-                        refreshPanelInGuiThread();
-                    }
-                });
-            }
-        });
 
-        logoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                framework.logout();
-                framework.getConsole().log("User log out");
-                refreshPanelInGuiThread();
-            }
-        });
+        defaultInitWindow();
+        initWindow();
         doRefreshPanel();
     }
 
@@ -83,5 +68,47 @@ public class SettingsForm implements IAbstractGUI {
 
     public JButton getLogoutButton() {
         return logoutButton;
+    }
+
+    @Override
+    protected void initWindow() {
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                framework.showAuthenticateDialog(new ICallback() {
+                    @Override
+                    public void doOperation() {
+                        refreshPanelInGuiThread();
+                    }
+                });
+            }
+        });
+
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                framework.logout();
+                framework.getConsole().log("User log out");
+                refreshPanelInGuiThread();
+            }
+        });
+        getDialog().getRootPane().setDefaultButton(null);
+        getDialog().setSize(400, 300);
+        getDialog().setResizable(true);
+    }
+
+    @Override
+    protected void onOK() {
+
+    }
+
+    @Override
+    public JButton getButtonOk() {
+        return new JButton();
+    }
+
+    @Override
+    protected JButton getButtonCancel() {
+        return new JButton();
     }
 }

@@ -23,7 +23,9 @@
           <component id="a1c8b" class="javax.swing.JButton" binding="copyButton" default-binding="true">
             <constraints/>
             <properties>
-              <text value="Copy"/>
+              <icon value="icons/copy.png"/>
+              <text value=""/>
+              <toolTipText value="Copy Code"/>
             </properties>
           </component>
         </children>

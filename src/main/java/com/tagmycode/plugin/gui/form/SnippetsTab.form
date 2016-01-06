@@ -27,31 +27,60 @@
               <component id="b35f" class="javax.swing.JButton" binding="addSnippetButton" default-binding="true">
                 <constraints/>
                 <properties>
-                  <text value="Add Snippet..."/>
+                  <icon value="icons/add.png"/>
+                  <text value=""/>
+                  <toolTipText value="Add Snippet..."/>
                 </properties>
               </component>
               <component id="eeff8" class="javax.swing.JButton" binding="editSnippetButton">
                 <constraints/>
                 <properties>
-                  <text value="Edit"/>
+                  <icon value="icons/edit.png"/>
+                  <text value=""/>
+                  <toolTipText value="Edit..."/>
                 </properties>
               </component>
               <component id="44c11" class="javax.swing.JButton" binding="deleteSnippetButton">
                 <constraints/>
                 <properties>
-                  <text value="Delete"/>
+                  <icon value="icons/delete.png"/>
+                  <text value=""/>
+                  <toolTipText value="Delete"/>
                 </properties>
+              </component>
+              <component id="5b6d4" class="javax.swing.JToolBar$Separator">
+                <constraints/>
+                <properties/>
               </component>
               <component id="a458a" class="javax.swing.JButton" binding="refreshButton">
                 <constraints/>
                 <properties>
-                  <text value="Refresh snippets"/>
+                  <icon value="icons/sync.png"/>
+                  <text value=""/>
+                  <toolTipText value="Sync snippets"/>
                 </properties>
+              </component>
+              <component id="f8afd" class="javax.swing.JToolBar$Separator">
+                <constraints/>
+                <properties/>
               </component>
               <component id="bd760" class="javax.swing.JButton" binding="searchButton">
                 <constraints/>
                 <properties>
-                  <text value="Search..."/>
+                  <icon value="icons/search.png"/>
+                  <text value=""/>
+                </properties>
+              </component>
+              <component id="383c0" class="javax.swing.JToolBar$Separator">
+                <constraints/>
+                <properties/>
+              </component>
+              <component id="ea780" class="javax.swing.JButton" binding="settingsButton">
+                <constraints/>
+                <properties>
+                  <icon value="icons/settings.png"/>
+                  <text value=""/>
+                  <toolTipText value="Settings..."/>
                 </properties>
               </component>
               <grid id="9cff1" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

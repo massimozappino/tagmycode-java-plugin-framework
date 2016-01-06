@@ -3,10 +3,7 @@ package com.tagmycode.plugin;
 
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
-import com.tagmycode.plugin.gui.form.AuthorizationDialog;
-import com.tagmycode.plugin.gui.form.MainWindow;
-import com.tagmycode.plugin.gui.form.SearchSnippetDialog;
-import com.tagmycode.plugin.gui.form.SnippetDialog;
+import com.tagmycode.plugin.gui.form.*;
 import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.OauthToken;
@@ -167,12 +164,12 @@ public class Framework {
         if (searchSnippetDialog == null) {
             searchSnippetDialog = new SearchSnippetDialog(documentUpdate, this, getParentFrame());
         }
-        new GuiThread().execute(new Runnable() {
-            @Override
-            public void run() {
-                searchSnippetDialog.display();
-            }
-        });
+
+        searchSnippetDialog.display();
+    }
+
+    public void showSettingsDialog() {
+        new SettingsForm(this, getParentFrame()).display();
     }
 
     public Frame getParentFrame() {

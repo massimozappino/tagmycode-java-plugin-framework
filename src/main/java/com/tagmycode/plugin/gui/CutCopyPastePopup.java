@@ -1,5 +1,7 @@
 package com.tagmycode.plugin.gui;
 
+import com.tagmycode.plugin.IconResources;
+
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.event.ActionEvent;
@@ -18,17 +20,21 @@ public class CutCopyPastePopup extends JPopupMenu implements ActionListener {
         JMenuItem cutItem = new JMenuItem("Cut");
         cutItem.addActionListener(this);
         cutItem.setActionCommand("cut");
+        cutItem.setIcon(IconResources.createImageIcon("cut.png"));
+
         add(cutItem);
 
         JMenuItem copyItem = new JMenuItem("Copy");
         copyItem.addActionListener(this);
         copyItem.setActionCommand("copy");
+        copyItem.setIcon(IconResources.createImageIcon("copy.png"));
 
         add(copyItem);
 
         JMenuItem pasteItem = new JMenuItem("Paste");
         pasteItem.addActionListener(this);
         pasteItem.setActionCommand("paste");
+        pasteItem.setIcon(IconResources.createImageIcon("paste.png"));
         add(pasteItem);
 
         add(new JSeparator());
