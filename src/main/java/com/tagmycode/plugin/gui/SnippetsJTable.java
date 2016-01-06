@@ -1,7 +1,6 @@
 package com.tagmycode.plugin.gui;
 
 import com.tagmycode.plugin.Framework;
-import com.tagmycode.plugin.GuiThread;
 import com.tagmycode.sdk.model.Snippet;
 import com.tagmycode.sdk.model.SnippetCollection;
 
@@ -46,21 +45,15 @@ public class SnippetsJTable extends AbstractSnippetsListGui {
 
     @Override
     public Snippet getSelectedSnippet() {
-        return tableModel.getSnippetAt(table.getSelectedRow());
+        return tableModel.getSnippetAt(getSelectedModelIndex());
+    }
+
+    private int getSelectedModelIndex() {
+        return table.convertRowIndexToModel(table.getSelectedRow());
     }
 
     @Override
     public JComponent getSnippetsComponent() {
         return table;
-    }
-
-    public void filter(final String filterText) {
-        new GuiThread().execute(new Runnable() {
-            @Override
-            public void run() {
-                tableModel.filter(filterText);
-            }
-        });
-
     }
 }

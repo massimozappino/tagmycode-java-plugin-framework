@@ -17,7 +17,7 @@ public class LoadSnippetsOperation extends TagMyCodeAsynchronousOperation<Snippe
     }
 
     private void updateSnippets(SnippetCollection snippets) {
-        snippetsTab.getAbstractSnippetsListGui().updateWithSnippets(snippets);
+        snippetsTab.getSnippetsJTable().updateWithSnippets(snippets);
     }
 
     @Override

@@ -1,7 +1,11 @@
 package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Framework;
-import com.tagmycode.plugin.gui.*;
+import com.tagmycode.plugin.gui.AbstractGui;
+import com.tagmycode.plugin.gui.ClipboardCopy;
+import com.tagmycode.plugin.gui.IOnErrorCallback;
+import com.tagmycode.plugin.gui.SnippetsJTable;
+import com.tagmycode.plugin.gui.operation.FilterSnippetsOperation;
 import com.tagmycode.plugin.gui.operation.LoadSnippetsOperation;
 import com.tagmycode.plugin.gui.operation.RefreshSnippetsOperation;
 import com.tagmycode.sdk.exception.TagMyCodeException;
@@ -29,8 +33,9 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private JTextField filterTextField;
     private JPanel snippetListPane;
     private Framework framework;
-    private JTable snippetsTableComponent;
+    private JTable jTable;
     private ClipboardCopy clipboardCopy = new ClipboardCopy();
+    private FilterSnippetsOperation filterSnippetsOperation;
 
     public SnippetsTab(final Framework framework) {
         this.framework = framework;
@@ -62,9 +67,12 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
             }
 
             private void doFilter() {
+                if (filterSnippetsOperation != null) {
+                    filterSnippetsOperation.stop();
+                }
                 String filterText = filterTextField.getText();
-                snippetsJTable.filter(filterText);
-                System.out.println(filterText);
+                filterSnippetsOperation = new FilterSnippetsOperation(SnippetsTab.this, filterText);
+                filterSnippetsOperation.run();
             }
         });
     }
@@ -108,10 +116,10 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
     private void initSnippetsJTable() {
         snippetsJTable = new SnippetsJTable(framework);
-        snippetsTableComponent = (JTable) snippetsJTable.getSnippetsComponent();
+        jTable = (JTable) snippetsJTable.getSnippetsComponent();
         snippetsJTable.getCellSelectionModel().addListSelectionListener(createSelectionListener());
 
-        snippetsTableComponent.addMouseListener(new MouseAdapter() {
+        jTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     openSnippetAction();
@@ -164,7 +172,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         });
         popupMenu.add(copyCodeMenuItem);
 
-        snippetsTableComponent.setComponentPopupMenu(popupMenu);
+        jTable.setComponentPopupMenu(popupMenu);
         popupMenu.addPopupMenuListener(new PopupMenuListener() {
 
             @Override
@@ -172,9 +180,9 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        int rowAtPoint = snippetsTableComponent.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), snippetsTableComponent));
+                        int rowAtPoint = jTable.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), jTable));
                         if (rowAtPoint > -1) {
-                            snippetsTableComponent.setRowSelectionInterval(rowAtPoint, rowAtPoint);
+                            jTable.setRowSelectionInterval(rowAtPoint, rowAtPoint);
                         }
                     }
                 });
@@ -255,7 +263,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         refreshSnippetsOperation.runWithTask(framework.getTaskFactory(), "Refreshing snippets");
     }
 
-    public AbstractSnippetsListGui getAbstractSnippetsListGui() {
+    public SnippetsJTable getSnippetsJTable() {
         return snippetsJTable;
     }
 
@@ -279,9 +287,5 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
     public Framework getFramework() {
         return framework;
-    }
-
-    public RefreshSnippetsOperation getRefreshSnippetsOperation() {
-        return refreshSnippetsOperation;
     }
 }

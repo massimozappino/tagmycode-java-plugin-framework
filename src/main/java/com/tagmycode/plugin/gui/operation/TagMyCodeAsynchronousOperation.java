@@ -8,21 +8,29 @@ import javax.swing.*;
 
 public abstract class TagMyCodeAsynchronousOperation<T> {
     protected IOnErrorCallback onErrorCallback;
+    private Thread thread;
 
     public TagMyCodeAsynchronousOperation(IOnErrorCallback onErrorCallback) {
         this.onErrorCallback = onErrorCallback;
     }
 
     public final void run() {
-        Runnable runnable = getRunnable();
-        new Thread(runnable).start();
+        Runnable runnable = createRunnable();
+        thread = new Thread(runnable);
+        thread.start();
+    }
+
+    public void stop() {
+        if (thread != null) {
+            thread.interrupt();
+        }
     }
 
     public void runWithTask(AbstractTaskFactory task, String title) {
-        task.create(getRunnable(), title);
+        task.create(createRunnable(), title);
     }
 
-    private Runnable getRunnable() {
+    private Runnable createRunnable() {
         return new Runnable() {
             @Override
             public void run() {
@@ -67,8 +75,7 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
 
     }
 
-    protected abstract T performOperation()
-            throws Exception;
+    protected abstract T performOperation() throws Exception;
 
     protected void onComplete() {
     }

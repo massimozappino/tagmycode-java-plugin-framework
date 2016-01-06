@@ -1,7 +1,6 @@
 package com.tagmycode.plugin.gui;
 
 import com.tagmycode.plugin.Framework;
-import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.Snippet;
 import com.tagmycode.sdk.model.SnippetCollection;
 
@@ -62,25 +61,6 @@ public class SnippetsJTableModel extends AbstractTableModel {
         snippetVector.clear();
         for (Snippet snippet : snippets) {
             snippetVector.add(snippet);
-        }
-        fireTableDataChanged();
-    }
-
-    public void filter(String filterText) {
-        // TODO use Operation
-        snippetVector.clear();
-        String filterLowerCase = filterText.toLowerCase();
-
-        try {
-            for (Snippet snippet : framework.getData().getSnippets()) {
-                if (snippet.getTitle().toLowerCase().contains(filterLowerCase) ||
-                        snippet.getCode().toLowerCase().contains(filterLowerCase)
-                        || snippet.getDescription().toLowerCase().contains(filterLowerCase)) {
-                    snippetVector.add(snippet);
-                }
-            }
-        } catch (TagMyCodeJsonException e) {
-            e.printStackTrace();
         }
         fireTableDataChanged();
     }

@@ -3,9 +3,8 @@ package com.tagmycode.plugin.gui.operation;
 import com.tagmycode.plugin.gui.form.SnippetDialog;
 import com.tagmycode.sdk.model.Snippet;
 
-public class CreateSnippetOperation extends TagMyCodeAsynchronousOperation<String> {
+public class CreateSnippetOperation extends TagMyCodeAsynchronousOperation<Snippet> {
     private SnippetDialog snippetDialog;
-    private Snippet obtainedSnippet;
 
     public CreateSnippetOperation(SnippetDialog snippetDialog) {
         super(snippetDialog);
@@ -18,9 +17,8 @@ public class CreateSnippetOperation extends TagMyCodeAsynchronousOperation<Strin
     }
 
     @Override
-    protected String performOperation() throws Exception {
-        obtainedSnippet = snippetDialog.getFramework().getTagMyCode().createSnippet(snippetDialog.createSnippetObject());
-        return null;
+    protected Snippet performOperation() throws Exception {
+        return snippetDialog.getFramework().getTagMyCode().createSnippet(snippetDialog.createSnippetObject());
     }
 
     @Override
@@ -29,9 +27,9 @@ public class CreateSnippetOperation extends TagMyCodeAsynchronousOperation<Strin
     }
 
     @Override
-    protected void onSuccess(String result) {
-        String url = obtainedSnippet.getUrl();
-        snippetDialog.getFramework().getConsole().log(String.format("<strong>%s</strong>", obtainedSnippet.getTitle()) + " " + getHtmlLink(url));
+    protected void onSuccess(Snippet snippet) {
+        String url = snippet.getUrl();
+        snippetDialog.getFramework().getConsole().log(String.format("<strong>%s</strong>", snippet.getTitle()) + " " + getHtmlLink(url));
         snippetDialog.closeDialog();
     }
 

@@ -27,7 +27,7 @@ public class SnippetsTabTest extends AbstractTest {
     @Test
     public void testSelection() throws Exception {
         SnippetsTab snippetsTab = new SnippetsTab(createFramework());
-        AbstractSnippetsListGui snippetsListGui = snippetsTab.getAbstractSnippetsListGui();
+        AbstractSnippetsListGui snippetsListGui = snippetsTab.getSnippetsJTable();
         snippetsListGui.updateWithSnippets(new ResourceGenerate().aSnippetCollection());
         JPanel snippetViewFormPanel = snippetsTab.getSnippetViewFormPane();
 

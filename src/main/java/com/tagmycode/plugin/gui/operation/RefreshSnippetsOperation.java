@@ -32,7 +32,7 @@ public class RefreshSnippetsOperation extends TagMyCodeAsynchronousOperation<Sni
 
     @Override
     protected void onSuccess(SnippetCollection snippets) {
-        snippetsTab.getAbstractSnippetsListGui().updateWithSnippets(snippets);
+        snippetsTab.getSnippetsJTable().updateWithSnippets(snippets);
         try {
             snippetsTab.getFramework().getData().setSnippets(snippets);
         } catch (JSONException e) {
