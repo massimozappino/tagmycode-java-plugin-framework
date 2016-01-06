@@ -45,8 +45,31 @@ public class Framework {
         this.taskFactory = frameworkConfig.getTask();
         this.mainWindow = new MainWindow(this);
         this.console = mainWindow.getConsoleTab().getConsole();
-        restoreData();
         getConsole().log("TagMyCode started");
+        restoreData();
+        new PollingProcess().start();
+    }
+
+    public void showAuthenticateDialog(ICallback... iCallback) {
+        new AuthorizationDialog(this, iCallback, getParentFrame()).display();
+    }
+
+    public void showSnippetDialog(Snippet snippet, String mimeType) {
+        SnippetDialog snippetDialog = new SnippetDialog(this, mimeType, getParentFrame());
+        snippetDialog.populateWithSnippet(snippet);
+        snippetDialog.display();
+    }
+
+    public void showSearchDialog(IDocumentInsertText documentUpdate) {
+        if (searchSnippetDialog == null) {
+            searchSnippetDialog = new SearchSnippetDialog(documentUpdate, this, getParentFrame());
+        }
+
+        searchSnippetDialog.display();
+    }
+
+    public void showSettingsDialog() {
+        new SettingsForm(this, getParentFrame()).display();
     }
 
     public MainWindow getMainWindow() {
@@ -150,28 +173,6 @@ public class Framework {
         return client.isAuthenticated() && account != null && languageCollection != null;
     }
 
-    public void showAuthenticateDialog(ICallback... iCallback) {
-        new AuthorizationDialog(this, iCallback, getParentFrame()).display();
-    }
-
-    public void showSnippetDialog(Snippet snippet, String mimeType) {
-        SnippetDialog snippetDialog = new SnippetDialog(this, mimeType, getParentFrame());
-        snippetDialog.populateWithSnippet(snippet);
-        snippetDialog.display();
-    }
-
-    public void showSearchDialog(IDocumentInsertText documentUpdate) {
-        if (searchSnippetDialog == null) {
-            searchSnippetDialog = new SearchSnippetDialog(documentUpdate, this, getParentFrame());
-        }
-
-        searchSnippetDialog.display();
-    }
-
-    public void showSettingsDialog() {
-        new SettingsForm(this, getParentFrame()).display();
-    }
-
     public Frame getParentFrame() {
         return parentFrame;
     }
@@ -207,10 +208,6 @@ public class Framework {
             showAuthenticateDialog();
         }
         return isInitialized();
-    }
-
-    public IConsole getConsole() {
-        return console;
     }
 
     public void restoreData() {
@@ -255,6 +252,10 @@ public class Framework {
 
     public TagMyCode getTagMyCode() {
         return tagMyCode;
+    }
+
+    public IConsole getConsole() {
+        return console;
     }
 
     public User getAccount() {
