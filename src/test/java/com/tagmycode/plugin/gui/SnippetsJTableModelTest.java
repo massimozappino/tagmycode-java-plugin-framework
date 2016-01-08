@@ -12,7 +12,7 @@ public class SnippetsJTableModelTest extends AbstractTest {
 
     @Test
     public void testGetSnippetAt() throws Exception {
-        SnippetsJTableModel snippetsJTableModel = new SnippetsJTableModel();
+        SnippetsJTableModel snippetsJTableModel = new SnippetsJTableModel(createFramework());
         SnippetCollection snippets = new SnippetCollection();
         snippets.add(new ResourceGenerate().aSnippet());
         snippetsJTableModel.updateWithSnippets(snippets);

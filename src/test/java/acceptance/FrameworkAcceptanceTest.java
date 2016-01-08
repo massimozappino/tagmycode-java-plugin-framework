@@ -23,11 +23,4 @@ public class FrameworkAcceptanceTest extends AbstractTest {
         frameworkSpy.canOperate();
         verify(frameworkSpy, times(1)).showAuthenticateDialog();
     }
-
-    @Test
-    public void createASnippet() throws Exception {
-        frameworkSpy = createSpyFramework();
-        frameworkSpy.canOperate();
-        verify(frameworkSpy, times(1)).showAuthenticateDialog();
-    }
 }

@@ -6,7 +6,7 @@ import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.plugin.gui.SnippetEditorPane;
 import com.tagmycode.plugin.gui.SnippetsJList;
-import com.tagmycode.plugin.gui.operation.SearchSnippetsOperation;
+import com.tagmycode.plugin.operation.SearchSnippetsOperation;
 import com.tagmycode.sdk.model.Snippet;
 import com.tagmycode.sdk.model.SnippetCollection;
 

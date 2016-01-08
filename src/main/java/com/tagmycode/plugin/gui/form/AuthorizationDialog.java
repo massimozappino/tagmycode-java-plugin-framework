@@ -5,7 +5,7 @@ import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.ICallback;
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.gui.AbstractDialog;
-import com.tagmycode.plugin.gui.operation.FetchOauthTokenOperation;
+import com.tagmycode.plugin.operation.FetchOauthTokenOperation;
 
 import javax.swing.*;
 import java.awt.*;

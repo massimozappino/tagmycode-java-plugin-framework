@@ -5,9 +5,9 @@ import com.tagmycode.plugin.gui.AbstractGui;
 import com.tagmycode.plugin.gui.ClipboardCopy;
 import com.tagmycode.plugin.gui.IOnErrorCallback;
 import com.tagmycode.plugin.gui.SnippetsJTable;
-import com.tagmycode.plugin.gui.operation.FilterSnippetsOperation;
-import com.tagmycode.plugin.gui.operation.LoadSnippetsOperation;
-import com.tagmycode.plugin.gui.operation.RefreshSnippetsOperation;
+import com.tagmycode.plugin.operation.FilterSnippetsOperation;
+import com.tagmycode.plugin.operation.LoadSnippetsOperation;
+import com.tagmycode.plugin.operation.RefreshSnippetsOperation;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -54,7 +54,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 doFilter();
-
             }
 
             @Override

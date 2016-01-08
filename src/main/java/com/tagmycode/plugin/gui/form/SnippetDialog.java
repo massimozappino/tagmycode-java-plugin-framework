@@ -5,7 +5,7 @@ import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.GuiThread;
 import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.gui.SnippetEditorPane;
-import com.tagmycode.plugin.gui.operation.CreateSnippetOperation;
+import com.tagmycode.plugin.operation.CreateSnippetOperation;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.DefaultLanguage;
 import com.tagmycode.sdk.model.Language;
@@ -16,6 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 public class SnippetDialog extends AbstractDialog {
     private JPanel contentPane;
@@ -30,6 +31,7 @@ public class SnippetDialog extends AbstractDialog {
     private JPanel jpanel;
     private JScrollPane scrollPane;
     private DefaultComboBoxModel<Language> defaultComboBoxModel;
+    private Snippet editableSnippet;
 
     public SnippetDialog(final Framework framework, String mimeType, Frame parent) {
         super(framework, parent);
@@ -39,6 +41,7 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     public void populateWithSnippet(Snippet snippet) {
+        editableSnippet = snippet;
         titleBox.setText(snippet.getTitle());
         descriptionTextField.setText(snippet.getDescription());
         tagsTextField.setText(snippet.getTags());
@@ -140,9 +143,17 @@ public class SnippetDialog extends AbstractDialog {
         snippet.setLanguage((Language) languageComboBox.getSelectedItem());
         snippet.setTitle(titleBox.getText());
         snippet.setDescription(descriptionTextField.getText());
-
         snippet.setTags(tagsTextField.getText());
         snippet.setPrivate(privateSnippetCheckBox.isSelected());
+        Date now = new Date();
+        Date creationDate = null;
+        Date updateDate = null;
+        if (editableSnippet != null) {
+            creationDate = editableSnippet.getCreationDate();
+            updateDate = editableSnippet.getUpdateDate();
+        }
+        snippet.setCreationDate(creationDate == null ? now : creationDate);
+        snippet.setUpdateDate(updateDate == null ? now : updateDate);
 
         return snippet;
     }
@@ -179,9 +190,6 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     public void selectLanguage(Language language) {
-
         defaultComboBoxModel.setSelectedItem(language);
-
-
     }
 }

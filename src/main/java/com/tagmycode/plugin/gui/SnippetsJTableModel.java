@@ -1,5 +1,6 @@
 package com.tagmycode.plugin.gui;
 
+import com.tagmycode.plugin.Framework;
 import com.tagmycode.sdk.model.Snippet;
 import com.tagmycode.sdk.model.SnippetCollection;
 
@@ -12,8 +13,10 @@ public class SnippetsJTableModel extends AbstractTableModel {
 
     private Vector<Snippet> snippetVector;
     private String[] columns;
+    private Framework framework;
 
-    public SnippetsJTableModel() {
+    public SnippetsJTableModel(Framework framework) {
+        this.framework = framework;
         snippetVector = new Vector<Snippet>();
         columns = new String[]{"Title", "Language"};
     }

@@ -8,21 +8,42 @@ import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.Snippet;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class SnippetDialogTest extends AbstractTest {
 
     @Test
     public void populateSnippetDialog() throws Exception {
-        final Framework framework = createFramework();
-
-        SnippetDialog snippetDialog = createSnippetDialog(framework);
+        SnippetDialog snippetDialog = createSnippetDialog(createFramework());
         snippetDialog.populateWithSnippet(resourceGenerate.aSnippet());
         Thread.sleep(800);
 
         assertEquals("code\r\nsecond line", snippetDialog.getCodeEditorPane().getText());
         assertEquals("A simple description", snippetDialog.getDescriptionTextField().getText());
         assertEquals("tag1 tag2 tag3", snippetDialog.getTagsTextField().getText());
+    }
+
+    @Test
+    public void testCreateSnippetObjectForEmptySnippet() throws Exception {
+        SnippetDialog snippetDialog = createSnippetDialog(createFramework());
+        assertTrue(snippetDialog.createSnippetObject().toJson().length() > 0);
+    }
+
+    @Test
+    public void testCreateSnippetObjectForSyncSnippet() throws Exception {
+        SnippetDialog snippetDialog = createSnippetDialog(createFramework());
+        Snippet snippet = resourceGenerate.aSnippet();
+
+        snippetDialog.populateWithSnippet(snippet);
+        assertEquals(snippet.getCreationDate(), snippetDialog.createSnippetObject().getCreationDate());
+        assertEquals(snippet.getUpdateDate(), snippetDialog.createSnippetObject().getUpdateDate());
+
+        snippet.setCreationDate(null);
+        snippet.setUpdateDate(null);
+
+        snippetDialog.populateWithSnippet(snippet);
+        assertNotNull(snippetDialog.createSnippetObject().getCreationDate());
+        assertNotNull(snippetDialog.createSnippetObject().getUpdateDate());
     }
 
     @Test

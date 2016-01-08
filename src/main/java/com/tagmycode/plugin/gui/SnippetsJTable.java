@@ -17,7 +17,7 @@ public class SnippetsJTable extends AbstractSnippetsListGui {
     private ListSelectionModel cellSelectionModel;
 
     public SnippetsJTable(Framework framework) {
-        tableModel = new SnippetsJTableModel();
+        tableModel = new SnippetsJTableModel(framework);
         table = new JTable(tableModel);
         scrollPane = new JScrollPane(table);
         table.setIntercellSpacing(new Dimension(0, 0));
