@@ -2,16 +2,14 @@ package com.tagmycode.plugin.operation;
 
 
 import com.tagmycode.plugin.ICallback;
-import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.gui.form.AuthorizationDialog;
-import com.tagmycode.sdk.exception.TagMyCodeConnectionException;
 
-public class FetchOauthTokenOperation extends TagMyCodeAsynchronousOperation {
+public class LoginTokenOperation extends TagMyCodeAsynchronousOperation {
     private AuthorizationDialog authorizationDialog;
     private String verificationCode;
     private ICallback[] callbacks;
 
-    public FetchOauthTokenOperation(AuthorizationDialog authorizationDialog, String verificationCode, ICallback[] callbacks) {
+    public LoginTokenOperation(AuthorizationDialog authorizationDialog, String verificationCode, ICallback[] callbacks) {
         super(authorizationDialog);
         this.authorizationDialog = authorizationDialog;
         this.verificationCode = verificationCode;
@@ -20,12 +18,7 @@ public class FetchOauthTokenOperation extends TagMyCodeAsynchronousOperation {
 
     @Override
     protected Object performOperation() throws Exception {
-        try {
-            authorizationDialog.getFramework().getClient().fetchOauthToken(verificationCode);
-            authorizationDialog.getFramework().initialize(callbacks);
-        } catch (TagMyCodeConnectionException e) {
-            throw new TagMyCodeGuiException("Unable to authenticate");
-        }
+        authorizationDialog.getFramework().initialize(verificationCode, callbacks);
         return null;
     }
 

@@ -23,6 +23,7 @@ public class HashMapToFile {
 
     public void deleteValue(String key) {
         storage.remove(key);
+        saveToFile();
     }
 
     private void saveToFile() {

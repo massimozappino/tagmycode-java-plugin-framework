@@ -15,11 +15,8 @@ import support.FakeSecret;
 import support.FakeStorage;
 
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 public class FrameworkTest extends AbstractTest {
 
@@ -34,7 +31,7 @@ public class FrameworkTest extends AbstractTest {
 
     @Test
     public void testConstructor() {
-        assertNotNull(framework.getStorageEngine());
+        assertNotNull(framework.getData());
         assertNotNull(framework.getWallet());
         assertNotNull(framework.getMessageManager());
         assertNotNull(framework.getConsole());
@@ -110,46 +107,16 @@ public class FrameworkTest extends AbstractTest {
     }
 
     @Test
-    public void testIsDataToBeRefreshedWithOldDate() throws IOException {
-        setDataToBeRefreshed();
-        assertTrue(framework.isDataToBeRefreshed());
-    }
-
-    @Test
-    public void testIsDataNotToBeRefreshedWithFreshDate() throws IOException {
-        framework.getStorageEngine().saveLastUpdate(new Date());
-        assertFalse(framework.isDataToBeRefreshed());
-    }
-
-    @Test
-    public void testIsRefreshableIsTrueWithOldData() throws Exception {
-        mockClientReturningValidAccountData(framework);
-        setDataToBeRefreshed();
-        assertTrue(framework.isRefreshable());
-    }
-
-    @Test
-    public void testIsRefreshableIsFalseWithFreshData() throws Exception {
-        mockClientReturningValidAccountData(framework);
-        setDataAlreadyRefreshed();
-        assertFalse(framework.isRefreshable());
-    }
-
-    @Test
-    public void testIsNotRefreshableWithoutAuthenticated() throws Exception {
-        assertFalse(framework.isRefreshable());
-    }
-
-    @Test
     public void testLogout() throws Exception {
-        StorageEngine storageEngineMock = mock(StorageEngine.class);
-        framework.setStorageEngine(storageEngineMock);
         setValuesForWalletAndData();
         setAccessToken();
+
         framework.logout();
+
+        assertDataIsReset(framework.getData());
         assertTrue(framework.getClient().getOauthToken() instanceof VoidOauthToken);
         assertEquals(null, framework.getWallet().loadOauthToken());
-        verify(storageEngineMock, times(1)).clearAll();
+        assertStorageDataIsCleared(framework.getStorageEngine());
     }
 
     @Test
@@ -205,10 +172,6 @@ public class FrameworkTest extends AbstractTest {
         assertEquals(resourceGenerate.aSnippetCollection(), framework.getData().getSnippets());
     }
 
-    protected void assertDateGreaterOrEqualsThan(Date actual, Date compare) {
-        assertTrue(actual.compareTo(compare) >= 0);
-    }
-
     protected void setValuesForWalletAndData() throws Exception {
         framework.getWallet().saveOauthToken(oauthToken);
         framework.getStorageEngine().saveAccount(resourceGenerate.aUser());
@@ -216,18 +179,8 @@ public class FrameworkTest extends AbstractTest {
         framework.getStorageEngine().saveSnippets(resourceGenerate.aSnippetCollection());
     }
 
-    protected void setDataToBeRefreshed() throws IOException {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_MONTH, -2 * Framework.DAYS_BEFORE_RELOAD);
-        framework.getStorageEngine().saveLastUpdate(cal.getTime());
-    }
-
     protected void setAValidLanguageCollection() throws IOException, TagMyCodeJsonException {
         framework.setLanguageCollection(resourceGenerate.aLanguageCollection());
-    }
-
-    protected void setDataAlreadyRefreshed() throws IOException {
-        framework.getStorageEngine().saveLastUpdate(new Date());
     }
 
     protected void setAValidAccountAccount() throws IOException, TagMyCodeJsonException {

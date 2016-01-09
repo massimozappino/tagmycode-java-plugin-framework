@@ -1,33 +1,28 @@
 package com.tagmycode.plugin;
 
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
-import com.tagmycode.sdk.model.DefaultLanguage;
-import com.tagmycode.sdk.model.LanguageCollection;
-import com.tagmycode.sdk.model.SnippetCollection;
 import org.junit.Test;
 import support.FakeStorage;
 
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.spy;
 
 public class DataTest extends AbstractTest {
 
 
     @Test
     public void testLoadLanguageCollection() throws Exception {
-        Data data = new Data(new StorageEngine(new FakeStorage()));
+        StorageEngine storageSpy = spy(new StorageEngine(new FakeStorage()));
+        Data data = new Data(storageSpy);
         data.setAccount(resourceGenerate.aUser());
         data.setLanguages(resourceGenerate.aLanguageCollection());
         data.setSnippets(resourceGenerate.aSnippetCollection());
 
         data.reset();
 
-        assertEquals(null, data.getAccount());
-        LanguageCollection defaultLanguages = new LanguageCollection();
-        defaultLanguages.add(new DefaultLanguage());
-        assertEquals(defaultLanguages, data.getLanguages());
-        assertEquals(new SnippetCollection(), data.getSnippets());
+        assertDataIsReset(data);
     }
 
     @Test

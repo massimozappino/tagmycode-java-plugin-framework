@@ -1,16 +1,22 @@
 package com.tagmycode.plugin;
 
 
+import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.TagMyCodeApiDevelopment;
+import com.tagmycode.sdk.exception.TagMyCodeJsonException;
+import com.tagmycode.sdk.model.DefaultLanguage;
+import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.Snippet;
+import com.tagmycode.sdk.model.SnippetCollection;
 import org.mockito.Mockito;
 import support.*;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -67,5 +73,23 @@ public class AbstractTest {
 
     protected void assertConsoleMessageContains(IConsole console, String expected) {
         assertTrue(console.getFullLog().contains(expected));
+    }
+
+    protected void assertDataIsReset(Data data) {
+        assertEquals(null, data.getAccount());
+        LanguageCollection defaultLanguages = new LanguageCollection();
+        defaultLanguages.add(new DefaultLanguage());
+        assertEquals(defaultLanguages, data.getLanguages());
+        assertEquals(new SnippetCollection(), data.getSnippets());
+    }
+
+    protected void assertStorageDataIsCleared(StorageEngine storageEngine) throws IOException, TagMyCodeJsonException, TagMyCodeStorageException {
+        assertNull(storageEngine.loadAccount());
+        LanguageCollection languageCollection = new LanguageCollection();
+        languageCollection.add(new DefaultLanguage());
+        assertEquals(languageCollection, storageEngine.loadLanguageCollection());
+        assertEquals(new DefaultLanguage(), storageEngine.loadLastLanguageUsed());
+        assertEquals(new SnippetCollection(), storageEngine.loadSnippets());
+        assertFalse(storageEngine.loadPrivateSnippetFlag());
     }
 }

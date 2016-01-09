@@ -1,14 +1,9 @@
 package com.tagmycode.plugin;
 
-import com.tagmycode.plugin.exception.TagMyCodeStorageException;
-import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.*;
 import org.junit.Before;
 import org.junit.Test;
 import support.FakeStorage;
-
-import java.io.IOException;
-import java.util.Date;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.spy;
@@ -69,17 +64,6 @@ public class StorageEngineTest extends AbstractTest {
     }
 
     @Test
-    public void testSaveAndLoadLastUpdate() throws IOException {
-        Date date = new Date();
-        storageEngine.saveLastUpdate(date);
-        assertEquals(date, storageEngine.loadLastUpdate());
-
-        Date newDate = new Date();
-        storageEngine.saveLastUpdate(newDate);
-        assertEquals(newDate, storageEngine.loadLastUpdate());
-    }
-
-    @Test
     public void testSaveAndLoadSnippets() throws Exception {
         SnippetCollection snippetCollection = resourceGenerate.aSnippetCollection();
         storageEngine.saveSnippets(snippetCollection);
@@ -99,20 +83,8 @@ public class StorageEngineTest extends AbstractTest {
         storageEngine.saveLanguageCollection(resourceGenerate.aLanguageCollection());
         storageEngine.saveLastLanguageUsed(new DefaultLanguage());
         storageEngine.savePrivateSnippetFlag(true);
-        storageEngine.saveLastUpdate(new Date());
         storageEngine.saveSnippets(resourceGenerate.aSnippetCollection());
         storageEngine.clearAll();
         assertStorageDataIsCleared(storageEngine);
-    }
-
-    protected void assertStorageDataIsCleared(StorageEngine storageEngine) throws IOException, TagMyCodeJsonException, TagMyCodeStorageException {
-        assertNull(storageEngine.loadAccount());
-        LanguageCollection languageCollection = new LanguageCollection();
-        languageCollection.add(new DefaultLanguage());
-        assertEquals(languageCollection, storageEngine.loadLanguageCollection());
-        assertEquals(new DefaultLanguage(), storageEngine.loadLastLanguageUsed());
-        assertNull(storageEngine.loadLastUpdate());
-        assertEquals(new SnippetCollection(), storageEngine.loadSnippets());
-        assertFalse(storageEngine.loadPrivateSnippetFlag());
     }
 }

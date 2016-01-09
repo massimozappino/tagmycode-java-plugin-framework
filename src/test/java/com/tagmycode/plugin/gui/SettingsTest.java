@@ -42,7 +42,7 @@ public class SettingsTest extends AbstractTest {
     @Test
     public void loginShowAuthenticateDialogAndRefreshPanel() {
         settingsForm.getLoginButton().doClick();
-        verify(framework, times(1)).showAuthenticateDialog(any(ICallback.class));
+        verify(framework, times(1)).showAuthorizationDialog(any(ICallback.class));
         assertLoginPanelIsVisible(settingsForm);
     }
 

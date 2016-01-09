@@ -21,6 +21,6 @@ public class FrameworkAcceptanceTest extends AbstractTest {
     public void notAuthenticatedUserShouldSeeAuthorizationDialog() throws Exception {
         frameworkSpy = createSpyFramework();
         frameworkSpy.canOperate();
-        verify(frameworkSpy, times(1)).showAuthenticateDialog();
+        verify(frameworkSpy, times(1)).showAuthorizationDialog();
     }
 }

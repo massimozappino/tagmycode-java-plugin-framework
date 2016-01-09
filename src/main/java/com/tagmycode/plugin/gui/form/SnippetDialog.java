@@ -3,6 +3,7 @@ package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.GuiThread;
+import com.tagmycode.plugin.StorageEngine;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.gui.SnippetEditorPane;
@@ -18,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.util.Date;
 
 public class SnippetDialog extends AbstractDialog {
+    private final StorageEngine storageEngine;
     private JPanel contentPane;
     private JTextField tagsTextField;
     private JCheckBox privateSnippetCheckBox;
@@ -37,6 +39,7 @@ public class SnippetDialog extends AbstractDialog {
         defaultInitWindow();
         initWindow();
         setMimeType(mimeType);
+        storageEngine = framework.getStorageEngine();
     }
 
     public void populateWithSnippet(Snippet snippet) {
@@ -135,7 +138,6 @@ public class SnippetDialog extends AbstractDialog {
         lastLanguageUsed = framework.getStorageEngine().loadLastLanguageUsed();
         defaultComboBoxModel.setSelectedItem(lastLanguageUsed);
     }
-
 
     public Snippet createSnippetObject() {
         Snippet snippet = new Snippet();

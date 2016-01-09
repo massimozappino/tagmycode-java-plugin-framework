@@ -75,7 +75,7 @@ public class SettingsForm extends AbstractDialog {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                framework.showAuthenticateDialog(new ICallback() {
+                framework.showAuthorizationDialog(new ICallback() {
                     @Override
                     public void doOperation() {
                         refreshPanelInGuiThread();

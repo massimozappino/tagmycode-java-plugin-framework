@@ -5,7 +5,7 @@ import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.ICallback;
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.gui.AbstractDialog;
-import com.tagmycode.plugin.operation.FetchOauthTokenOperation;
+import com.tagmycode.plugin.operation.LoginTokenOperation;
 
 import javax.swing.*;
 import java.awt.*;
@@ -110,8 +110,8 @@ public class AuthorizationDialog extends AbstractDialog {
         }
     }
 
-    private FetchOauthTokenOperation getFetchOauthTokenOperation() {
-        return new FetchOauthTokenOperation(AuthorizationDialog.this, verificationCodeTextField.getText(), iCallback);
+    private LoginTokenOperation getFetchOauthTokenOperation() {
+        return new LoginTokenOperation(AuthorizationDialog.this, verificationCodeTextField.getText(), iCallback);
     }
 
     private void onOpenLink() {

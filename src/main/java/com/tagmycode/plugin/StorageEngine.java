@@ -5,7 +5,6 @@ import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.sdk.model.*;
 
 import java.io.IOException;
-import java.util.Date;
 
 public class StorageEngine {
     protected static final String SNIPPETS = "snippets";
@@ -13,7 +12,6 @@ public class StorageEngine {
     protected static final String PRIVATE_SNIPPET = "private_snippet";
     protected static final String LAST_LANGUAGE = "last_language";
     protected static final String ACCOUNT = "account";
-    protected static final String LAST_UPDATE = "last_update";
     private final IStorage storage;
 
     public StorageEngine(IStorage storage) {
@@ -113,32 +111,11 @@ public class StorageEngine {
         }
     }
 
-    public Date loadLastUpdate() {
-        Date lastUpdate;
-        try {
-            String read = read(LAST_UPDATE);
-            if (read == null) {
-                throw new IOException();
-            }
-            lastUpdate = new Date();
-            lastUpdate.setTime(Long.valueOf(read));
-        } catch (IOException ignored) {
-            lastUpdate = null;
-        }
-
-        return lastUpdate;
-    }
-
-    public void saveLastUpdate(Date date) throws IOException {
-        write(LAST_UPDATE, String.valueOf(date.getTime()));
-    }
-
     public void clearAll() throws IOException {
         unset(ACCOUNT);
         unset(LANGUAGES);
         unset(PRIVATE_SNIPPET);
         unset(LAST_LANGUAGE);
-        unset(LAST_UPDATE);
         unset(SNIPPETS);
     }
 

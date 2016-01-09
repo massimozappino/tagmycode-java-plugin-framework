@@ -9,6 +9,7 @@ import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.OauthToken;
 import com.tagmycode.sdk.authentication.TagMyCodeApi;
+import com.tagmycode.sdk.exception.TagMyCodeConnectionException;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.exception.TagMyCodeUnauthorizedException;
 import com.tagmycode.sdk.model.LanguageCollection;
@@ -16,10 +17,8 @@ import com.tagmycode.sdk.model.Snippet;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.Calendar;
 
 public class Framework {
-    public static final int DAYS_BEFORE_RELOAD = 5;
     private final MainWindow mainWindow;
     private final Wallet wallet;
     private final Client client;
@@ -29,27 +28,26 @@ public class Framework {
     private final IConsole console;
     private final AbstractTaskFactory taskFactory;
     private final Data data;
-    private StorageEngine storageEngine;
     private SearchSnippetDialog searchSnippetDialog;
+    private StorageEngine storageEngine;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
         wallet = new Wallet(frameworkConfig.getPasswordKeyChain());
         client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), wallet);
         tagMyCode = new TagMyCode(client);
-        // TODO remove field
-        this.storageEngine = new StorageEngine(frameworkConfig.getStorage());
         this.messageManager = frameworkConfig.getMessageManager();
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
         this.mainWindow = new MainWindow(this);
         this.console = mainWindow.getConsoleTab().getConsole();
+        this.storageEngine = new StorageEngine(frameworkConfig.getStorage());
         this.data = new Data(storageEngine);
         getConsole().log("TagMyCode started");
         restoreData();
         new PollingProcess().start();
     }
 
-    public void showAuthenticateDialog(ICallback... iCallback) {
+    public void showAuthorizationDialog(ICallback... iCallback) {
         new AuthorizationDialog(this, iCallback, getParentFrame()).display();
     }
 
@@ -129,26 +127,19 @@ public class Framework {
             wallet.deleteAccessToken();
         } catch (TagMyCodeGuiException e) {
             manageTagMyCodeExceptions(e);
-        }
-        try {
-            client.revokeAccess();
-            storageEngine.clearAll();
-        } catch (TagMyCodeException e) {
-            manageTagMyCodeExceptions(e);
-        } catch (IOException e) {
-            manageTagMyCodeExceptions(new TagMyCodeException());
+        } finally {
+            try {
+                client.revokeAccess();
+                data.reset();
+                storageEngine.clearAll();
+            } catch (TagMyCodeException e) {
+                manageTagMyCodeExceptions(e);
+            } catch (IOException e) {
+                manageTagMyCodeExceptions(new TagMyCodeException());
+            }
         }
     }
 
-    public boolean isDataToBeRefreshed() {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_MONTH, -1 * DAYS_BEFORE_RELOAD);
-        return storageEngine.loadLastUpdate().before(cal.getTime());
-    }
-
-    public boolean isRefreshable() {
-        return client.isAuthenticated() && isDataToBeRefreshed();
-    }
 
     public boolean isInitialized() {
         return client.isAuthenticated() && data.getAccount() != null && data.getLanguages() != null;
@@ -181,12 +172,12 @@ public class Framework {
 
     public void logoutAndAuthenticateAgain() {
         logout();
-        showAuthenticateDialog();
+        showAuthorizationDialog();
     }
 
     public boolean canOperate() {
         if (!isInitialized()) {
-            showAuthenticateDialog();
+            showAuthorizationDialog();
         }
         return isInitialized();
     }
@@ -203,11 +194,16 @@ public class Framework {
         }
     }
 
-    public void initialize(final ICallback[] callbacks) {
+    public void initialize(final String verificationCode, final ICallback[] callbacks) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 try {
+                    try {
+                        getClient().fetchOauthToken(verificationCode);
+                    } catch (TagMyCodeConnectionException e) {
+                        throw new TagMyCodeGuiException("Unable to authenticate");
+                    }
                     fetchAndStoreAllData();
                     console.log(String.format("User authenticated as <strong>%s</strong>", data.getAccount().getEmail()));
                 } catch (TagMyCodeException ex) {
@@ -240,15 +236,11 @@ public class Framework {
         return console;
     }
 
-    public StorageEngine getStorageEngine() {
-        return storageEngine;
-    }
-
-    protected void setStorageEngine(StorageEngine storageEngine) {
-        this.storageEngine = storageEngine;
-    }
-
     public Data getData() {
         return data;
+    }
+
+    public StorageEngine getStorageEngine() {
+        return storageEngine;
     }
 }
