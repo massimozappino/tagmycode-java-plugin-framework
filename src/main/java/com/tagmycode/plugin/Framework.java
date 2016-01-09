@@ -2,6 +2,7 @@ package com.tagmycode.plugin;
 
 
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
+import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.plugin.gui.form.*;
 import com.tagmycode.sdk.Client;
@@ -9,16 +10,13 @@ import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.OauthToken;
 import com.tagmycode.sdk.authentication.TagMyCodeApi;
 import com.tagmycode.sdk.exception.TagMyCodeException;
-import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.exception.TagMyCodeUnauthorizedException;
 import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.Snippet;
-import com.tagmycode.sdk.model.User;
-import org.json.JSONException;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.Calendar;
-import java.util.Date;
 
 public class Framework {
     public static final int DAYS_BEFORE_RELOAD = 5;
@@ -30,21 +28,22 @@ public class Framework {
     private final IMessageManager messageManager;
     private final IConsole console;
     private final AbstractTaskFactory taskFactory;
-    private Data data;
-    private User account;
-    private LanguageCollection languageCollection;
+    private final Data data;
+    private StorageEngine storageEngine;
     private SearchSnippetDialog searchSnippetDialog;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
         wallet = new Wallet(frameworkConfig.getPasswordKeyChain());
         client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), wallet);
         tagMyCode = new TagMyCode(client);
-        this.data = new Data(frameworkConfig.getStorage());
+        // TODO remove field
+        this.storageEngine = new StorageEngine(frameworkConfig.getStorage());
         this.messageManager = frameworkConfig.getMessageManager();
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
         this.mainWindow = new MainWindow(this);
         this.console = mainWindow.getConsoleTab().getConsole();
+        this.data = new Data(storageEngine);
         getConsole().log("TagMyCode started");
         restoreData();
         new PollingProcess().start();
@@ -77,16 +76,11 @@ public class Framework {
     }
 
     public LanguageCollection getLanguageCollection() {
-        return languageCollection;
+        return data.getLanguages();
     }
 
     public void setLanguageCollection(LanguageCollection languageCollection) {
-        this.languageCollection = languageCollection;
-    }
-
-    public void resetData() {
-        account = null;
-        languageCollection = null;
+        data.setLanguages(languageCollection);
     }
 
     public AbstractTaskFactory getTaskFactory() {
@@ -111,58 +105,45 @@ public class Framework {
         return oauthToken;
     }
 
-    public void loadFromStorage() throws TagMyCodeJsonException {
-        account = data.getAccount();
-        languageCollection = data.getLanguageCollection();
-    }
-
-    public void fetchAllData() throws TagMyCodeException {
-        account = tagMyCode.fetchAccount();
-        languageCollection = tagMyCode.fetchLanguages();
-    }
-
     public void fetchAndStoreAllData() throws TagMyCodeException {
         fetchAllData();
         storeData();
     }
 
-    protected void storeData() throws TagMyCodeJsonException {
-        try {
-            data.setLanguageCollection(languageCollection);
-            data.setAccount(account);
-            data.setLastUpdate(new Date());
-        } catch (JSONException e) {
-            throw new TagMyCodeJsonException(e);
-        }
+    protected void fetchAllData() throws TagMyCodeException {
+        data.setAccount(tagMyCode.fetchAccount());
+        data.setLanguages(tagMyCode.fetchLanguages());
+        data.setSnippets(tagMyCode.fetchSnippets());
+    }
+
+    protected void loadData() throws TagMyCodeStorageException {
+        data.loadAll();
+    }
+
+    protected void storeData() throws TagMyCodeStorageException {
+        data.saveAll();
     }
 
     public void logout() {
-        try {
-            client.revokeAccess();
-        } catch (TagMyCodeException e) {
-            manageTagMyCodeExceptions(e);
-        }
-
         try {
             wallet.deleteAccessToken();
         } catch (TagMyCodeGuiException e) {
             manageTagMyCodeExceptions(e);
         }
-        data.clearAll();
-    }
-
-    public void refreshDataIfItIsOld() {
         try {
-            fetchAndStoreAllData();
-            console.log("Data refreshed");
-        } catch (TagMyCodeException ignore) {
+            client.revokeAccess();
+            storageEngine.clearAll();
+        } catch (TagMyCodeException e) {
+            manageTagMyCodeExceptions(e);
+        } catch (IOException e) {
+            manageTagMyCodeExceptions(new TagMyCodeException());
         }
     }
 
     public boolean isDataToBeRefreshed() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_MONTH, -1 * DAYS_BEFORE_RELOAD);
-        return data.getLastUpdate().before(cal.getTime());
+        return storageEngine.loadLastUpdate().before(cal.getTime());
     }
 
     public boolean isRefreshable() {
@@ -170,7 +151,7 @@ public class Framework {
     }
 
     public boolean isInitialized() {
-        return client.isAuthenticated() && account != null && languageCollection != null;
+        return client.isAuthenticated() && data.getAccount() != null && data.getLanguages() != null;
     }
 
     public Frame getParentFrame() {
@@ -213,9 +194,10 @@ public class Framework {
     public void restoreData() {
         try {
             loadAccessTokenFormWallet();
-            loadFromStorage();
-        } catch (TagMyCodeJsonException e) {
-            resetData();
+            loadData();
+        } catch (TagMyCodeStorageException e) {
+            data.reset();
+            // TODO what to do? reload from server?
         } catch (TagMyCodeException e) {
             manageTagMyCodeExceptions(e);
         }
@@ -227,7 +209,7 @@ public class Framework {
             public void run() {
                 try {
                     fetchAndStoreAllData();
-                    console.log(String.format("User authenticated as <strong>%s</strong>", account.getEmail()));
+                    console.log(String.format("User authenticated as <strong>%s</strong>", data.getAccount().getEmail()));
                 } catch (TagMyCodeException ex) {
                     manageTagMyCodeExceptions(ex);
                     logout();
@@ -258,19 +240,15 @@ public class Framework {
         return console;
     }
 
-    public User getAccount() {
-        return account;
+    public StorageEngine getStorageEngine() {
+        return storageEngine;
     }
 
-    public void setAccount(User account) {
-        this.account = account;
+    protected void setStorageEngine(StorageEngine storageEngine) {
+        this.storageEngine = storageEngine;
     }
 
     public Data getData() {
         return data;
-    }
-
-    protected void setData(Data data) {
-        this.data = data;
     }
 }

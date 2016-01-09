@@ -3,7 +3,6 @@ package com.tagmycode.plugin.operation;
 import com.tagmycode.plugin.gui.form.SnippetsTab;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.SnippetCollection;
-import org.json.JSONException;
 
 public class RefreshSnippetsOperation extends TagMyCodeAsynchronousOperation<SnippetCollection> {
     private SnippetsTab snippetsTab;
@@ -35,7 +34,7 @@ public class RefreshSnippetsOperation extends TagMyCodeAsynchronousOperation<Sni
         snippetsTab.getSnippetsJTable().updateWithSnippets(snippets);
         try {
             snippetsTab.getFramework().getData().setSnippets(snippets);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             snippetsTab.getFramework().manageTagMyCodeExceptions(new TagMyCodeException(e));
         }
     }

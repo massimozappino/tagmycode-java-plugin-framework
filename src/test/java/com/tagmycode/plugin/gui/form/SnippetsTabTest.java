@@ -1,7 +1,7 @@
 package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.AbstractTest;
-import com.tagmycode.plugin.gui.AbstractSnippetsListGui;
+import com.tagmycode.plugin.gui.SnippetsJTable;
 import org.junit.Test;
 import support.ResourceGenerate;
 
@@ -27,7 +27,7 @@ public class SnippetsTabTest extends AbstractTest {
     @Test
     public void testSelection() throws Exception {
         SnippetsTab snippetsTab = new SnippetsTab(createFramework());
-        AbstractSnippetsListGui snippetsListGui = snippetsTab.getSnippetsJTable();
+        SnippetsJTable snippetsListGui = snippetsTab.getSnippetsJTable();
         snippetsListGui.updateWithSnippets(new ResourceGenerate().aSnippetCollection());
         JPanel snippetViewFormPanel = snippetsTab.getSnippetViewFormPane();
 

@@ -40,7 +40,7 @@ public class SettingsForm extends AbstractDialog {
 
     private void doRefreshPanel() {
         if (framework.isInitialized()) {
-            identity.setText(framework.getAccount().getEmail());
+            identity.setText(framework.getData().getAccount().getEmail());
             loginPanel.setVisible(false);
             logoutPanel.setVisible(true);
         } else {

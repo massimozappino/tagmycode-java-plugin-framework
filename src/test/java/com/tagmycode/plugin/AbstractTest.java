@@ -36,8 +36,9 @@ public class AbstractTest {
         when(mockedClient.isAuthenticated()).thenReturn(true);
 
         TagMyCode mockTagMyCode = getMockedTagMyCode(framework);
-        when(mockTagMyCode.fetchAccount()).thenReturn(resourceGenerate.anUser());
+        when(mockTagMyCode.fetchAccount()).thenReturn(resourceGenerate.aUser());
         when(mockTagMyCode.fetchLanguages()).thenReturn(resourceGenerate.aLanguageCollection());
+        when(mockTagMyCode.fetchSnippets()).thenReturn(resourceGenerate.aSnippetCollection());
     }
 
     protected TagMyCode getMockedTagMyCode(Framework framework) throws NoSuchFieldException, IllegalAccessException {

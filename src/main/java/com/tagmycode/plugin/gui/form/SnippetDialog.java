@@ -3,14 +3,13 @@ package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.GuiThread;
+import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.gui.SnippetEditorPane;
 import com.tagmycode.plugin.operation.CreateSnippetOperation;
-import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.DefaultLanguage;
 import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.Snippet;
-import org.json.JSONException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -100,12 +99,13 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     private void listenForChanges() {
+        // TODO do not use getStorageEngine
         languageComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    framework.getData().setLastLanguageUsed(getSelectedLanguage());
-                } catch (JSONException ignored) {
+                    framework.getStorageEngine().saveLastLanguageUsed(getSelectedLanguage());
+                } catch (Exception ignored) {
                 }
             }
         });
@@ -115,7 +115,11 @@ public class SnippetDialog extends AbstractDialog {
             public void actionPerformed(ActionEvent e) {
                 boolean selected = privateSnippetCheckBox.isSelected();
 
-                framework.getData().setPrivateSnippet(selected);
+                try {
+                    // TODO do not use getStorageEngine
+                    framework.getStorageEngine().savePrivateSnippetFlag(selected);
+                } catch (TagMyCodeStorageException ignored) {
+                }
             }
         });
     }
@@ -125,14 +129,10 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     private void restorePreferences() {
-        boolean privateSnippet = framework.getData().getPrivateSnippet();
+        boolean privateSnippet = framework.getStorageEngine().loadPrivateSnippetFlag();
         privateSnippetCheckBox.setSelected(privateSnippet);
         Language lastLanguageUsed;
-        try {
-            lastLanguageUsed = framework.getData().getLastLanguageUsed();
-        } catch (TagMyCodeJsonException e) {
-            lastLanguageUsed = new DefaultLanguage();
-        }
+        lastLanguageUsed = framework.getStorageEngine().loadLastLanguageUsed();
         defaultComboBoxModel.setSelectedItem(lastLanguageUsed);
     }
 

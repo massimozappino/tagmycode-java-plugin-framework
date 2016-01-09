@@ -20,7 +20,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
-    RefreshSnippetsOperation refreshSnippetsOperation;
+    private RefreshSnippetsOperation refreshSnippetsOperation;
     private SnippetsJTable snippetsJTable;
     private JPanel snippetViewFormPane;
     private JButton addSnippetButton;

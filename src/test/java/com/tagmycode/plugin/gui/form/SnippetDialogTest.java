@@ -66,7 +66,7 @@ public class SnippetDialogTest extends AbstractTest {
         languageCollection.add(customLanguage);
 
         framework.setLanguageCollection(languageCollection);
-        framework.getData().setLastLanguageUsed(customLanguage);
+        framework.getStorageEngine().saveLastLanguageUsed(customLanguage);
 
         SnippetDialog snippetDialog = createSnippetDialog(framework);
 
@@ -84,8 +84,8 @@ public class SnippetDialogTest extends AbstractTest {
 
         mockClientReturningValidAccountData(framework);
         framework.fetchAndStoreAllData();
-        framework.getData().setLastLanguageUsed(resourceGenerate.aLanguage());
-        framework.getData().setPrivateSnippet(true);
+        framework.getStorageEngine().saveLastLanguageUsed(resourceGenerate.aLanguage());
+        framework.getStorageEngine().savePrivateSnippetFlag(true);
 
         SnippetDialog snippetDialog = createSnippetDialog(framework);
         Thread.sleep(800);

@@ -1,11 +1,15 @@
 package com.tagmycode.plugin.gui;
 
 import com.tagmycode.plugin.AbstractTest;
+import com.tagmycode.plugin.Data;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.ICallback;
 import com.tagmycode.plugin.gui.form.SettingsForm;
+import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import org.junit.Test;
 import support.FakeConsole;
+
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
@@ -28,8 +32,7 @@ public class SettingsTest extends AbstractTest {
 
     @Test
     public void loggedUserGetsLogoutPanel() throws Exception {
-        when(framework.isInitialized()).thenReturn(true);
-        when(framework.getAccount()).thenReturn(resourceGenerate.anUser());
+        getMockValues();
 
         settingsForm = new SettingsForm(framework, null);
 
@@ -45,14 +48,20 @@ public class SettingsTest extends AbstractTest {
 
     @Test
     public void logoutCallLogoutMethodAndRefreshPanel() throws Exception {
-        when(framework.getAccount()).thenReturn(resourceGenerate.anUser());
-        when(framework.getConsole()).thenReturn(new FakeConsole());
+        getMockValues();
 
-        when(framework.isInitialized()).thenReturn(false);
         settingsForm.getLogoutButton().doClick();
 
         verify(framework, times(1)).logout();
         assertLoginPanelIsVisible(settingsForm);
+    }
+
+    private void getMockValues() throws IOException, TagMyCodeJsonException {
+        when(framework.isInitialized()).thenReturn(true);
+        Data dataMock = mock(Data.class);
+        when(framework.getData()).thenReturn(dataMock);
+        when(dataMock.getAccount()).thenReturn(resourceGenerate.aUser());
+        when(framework.getConsole()).thenReturn(new FakeConsole());
     }
 
     private void assertLoginPanelIsVisible(SettingsForm settingsForm) {

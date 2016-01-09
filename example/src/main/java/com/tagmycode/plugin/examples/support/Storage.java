@@ -2,6 +2,8 @@ package com.tagmycode.plugin.examples.support;
 
 import com.tagmycode.plugin.IStorage;
 
+import java.io.IOException;
+
 public class Storage implements IStorage {
 
     private HashMapToFile hashMapToFile;
@@ -11,17 +13,17 @@ public class Storage implements IStorage {
     }
 
     @Override
-    public String read(String key) {
+    public String read(String key) throws IOException {
         return hashMapToFile.loadValue(key);
     }
 
     @Override
-    public void write(String key, String value) {
+    public void write(String key, String value) throws IOException {
         hashMapToFile.saveValue(key, value);
     }
 
     @Override
-    public void unset(String key) {
+    public void unset(String key) throws IOException {
         hashMapToFile.deleteValue(key);
     }
 }
