@@ -19,8 +19,7 @@ public class RefreshSnippetsOperation extends TagMyCodeAsynchronousOperation<Sni
 
     @Override
     protected SnippetCollection performOperation() throws Exception {
-        SnippetCollection snippets = snippetsTab.getFramework().getTagMyCode().fetchSnippets();
-        return snippets;
+        return snippetsTab.getFramework().getTagMyCode().fetchSnippets();
     }
 
     @Override
@@ -33,6 +32,7 @@ public class RefreshSnippetsOperation extends TagMyCodeAsynchronousOperation<Sni
         snippetsTab.getSnippetsJTable().updateWithSnippets(snippets);
         try {
             snippetsTab.getFramework().getData().setSnippets(snippets);
+            snippetsTab.getFramework().getData().saveAll();
         } catch (Exception e) {
             snippetsTab.getFramework().manageTagMyCodeExceptions(new TagMyCodeException(e));
         }

@@ -115,6 +115,7 @@ public class Framework {
 
     protected void loadData() throws TagMyCodeStorageException {
         data.loadAll();
+        getMainWindow().getSnippetsTab().getSnippetsJTable().updateWithSnippets(data.getSnippets());
     }
 
     protected void storeData() throws TagMyCodeStorageException {
@@ -138,7 +139,6 @@ public class Framework {
             }
         }
     }
-
 
     public boolean isInitialized() {
         return client.isAuthenticated() && data.getAccount() != null && data.getLanguages() != null;
