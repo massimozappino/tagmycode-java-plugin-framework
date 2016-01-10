@@ -93,18 +93,6 @@ public class SnippetDialogTest extends AbstractTest {
         assertEquals(resourceGenerate.aLanguage(), snippetDialog.getLanguageComboBox().getSelectedItem());
     }
 
-    @Test
-    public void createSnippetWriteOnConsole() throws Exception {
-        final Framework framework = createFramework();
-        mockClientCreateASnippet(framework);
-
-        SnippetDialog snippetDialog = createSnippetDialog(framework);
-        snippetDialog.getButtonOk().doClick();
-        Thread.sleep(500);
-
-        assertConsoleMessageContains(framework.getConsole(), "https://tagmycode.com/snippet/1");
-    }
-
     private SnippetDialog createSnippetDialog(Framework framework) {
         return new SnippetDialog(framework, null, null);
     }

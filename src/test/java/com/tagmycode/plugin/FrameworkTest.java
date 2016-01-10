@@ -34,7 +34,6 @@ public class FrameworkTest extends AbstractTest {
         assertNotNull(framework.getData());
         assertNotNull(framework.getWallet());
         assertNotNull(framework.getMessageManager());
-        assertNotNull(framework.getConsole());
         assertNotNull(framework.getMainWindow());
         assertNotNull(framework.getTaskFactory());
     }

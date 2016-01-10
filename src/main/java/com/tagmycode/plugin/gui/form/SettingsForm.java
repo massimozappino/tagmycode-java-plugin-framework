@@ -88,7 +88,6 @@ public class SettingsForm extends AbstractDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 framework.logout();
-                framework.getConsole().log("User log out");
                 refreshPanelInGuiThread();
             }
         });

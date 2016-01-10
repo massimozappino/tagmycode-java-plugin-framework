@@ -7,7 +7,6 @@ import com.tagmycode.plugin.ICallback;
 import com.tagmycode.plugin.gui.form.SettingsForm;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import org.junit.Test;
-import support.FakeConsole;
 
 import java.io.IOException;
 
@@ -61,7 +60,6 @@ public class SettingsTest extends AbstractTest {
         Data dataMock = mock(Data.class);
         when(framework.getData()).thenReturn(dataMock);
         when(dataMock.getAccount()).thenReturn(resourceGenerate.aUser());
-        when(framework.getConsole()).thenReturn(new FakeConsole());
     }
 
     private void assertLoginPanelIsVisible(SettingsForm settingsForm) {

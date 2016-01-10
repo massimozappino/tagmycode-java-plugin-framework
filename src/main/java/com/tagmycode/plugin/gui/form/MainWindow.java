@@ -8,28 +8,22 @@ import com.tagmycode.sdk.model.Snippet;
 import javax.swing.*;
 
 public class MainWindow implements IAbstractGUI {
-    private final ConsoleTab consoleTab;
     private final SnippetsTab snippetsTab;
     private JPanel mainPanel;
     private JClosableTabbedPane jTabbedPane;
 
     public MainWindow(final Framework framework) {
-        consoleTab = new ConsoleTab();
         jTabbedPane = new JClosableTabbedPane();
 
         getMainComponent().add(jTabbedPane);
         snippetsTab = new SnippetsTab(framework);
         jTabbedPane.addTab("Snippets", snippetsTab.getMainComponent());
-        jTabbedPane.addTab("Console", consoleTab.getMainComponent());
+
     }
 
     @Override
     public JComponent getMainComponent() {
         return mainPanel;
-    }
-
-    public ConsoleTab getConsoleTab() {
-        return consoleTab;
     }
 
     public void addSnippetTab(Snippet snippet) {

@@ -25,7 +25,6 @@ public class Framework {
     private final TagMyCode tagMyCode;
     private final Frame parentFrame;
     private final IMessageManager messageManager;
-    private final IConsole console;
     private final AbstractTaskFactory taskFactory;
     private final Data data;
     private SearchSnippetDialog searchSnippetDialog;
@@ -39,10 +38,8 @@ public class Framework {
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
         this.mainWindow = new MainWindow(this);
-        this.console = mainWindow.getConsoleTab().getConsole();
         this.storageEngine = new StorageEngine(frameworkConfig.getStorage());
         this.data = new Data(storageEngine);
-        getConsole().log("TagMyCode started");
         restoreData();
         new PollingProcess().start();
     }
@@ -208,7 +205,6 @@ public class Framework {
                     }
                     fetchAndStoreAllData();
                     getMainWindow().getSnippetsTab().getSnippetsJTable().updateWithSnippets(data.getSnippets());
-                    console.log(String.format("User authenticated as <strong>%s</strong>", data.getAccount().getEmail()));
                 } catch (TagMyCodeException ex) {
                     manageTagMyCodeExceptions(ex);
                     logout();
@@ -233,10 +229,6 @@ public class Framework {
 
     public TagMyCode getTagMyCode() {
         return tagMyCode;
-    }
-
-    public IConsole getConsole() {
-        return console;
     }
 
     public Data getData() {

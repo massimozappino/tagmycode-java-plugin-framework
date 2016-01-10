@@ -28,16 +28,7 @@ public class CreateSnippetOperation extends TagMyCodeAsynchronousOperation<Snipp
 
     @Override
     protected void onSuccess(Snippet snippet) {
-        String url = snippet.getUrl();
-        snippetDialog.getFramework().getConsole().log(String.format("<strong>%s</strong>", snippet.getTitle()) + " " + getHtmlLink(url));
         snippetDialog.closeDialog();
     }
 
-    private String getHtmlLink(String url, String text) {
-        return "<a href=\"" + url + "\">" + text + "</a>";
-    }
-
-    private String getHtmlLink(String url) {
-        return getHtmlLink(url, url);
-    }
 }

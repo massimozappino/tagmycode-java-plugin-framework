@@ -20,7 +20,6 @@ public class RefreshSnippetsOperation extends TagMyCodeAsynchronousOperation<Sni
     @Override
     protected SnippetCollection performOperation() throws Exception {
         SnippetCollection snippets = snippetsTab.getFramework().getTagMyCode().fetchSnippets();
-        snippetsTab.getFramework().getConsole().log(String.format("Fetched %d snippets", snippets.size()));
         return snippets;
     }
 

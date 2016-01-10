@@ -75,10 +75,6 @@ public class AbstractTest {
         return mockedClient;
     }
 
-    protected void assertConsoleMessageContains(IConsole console, String expected) {
-        assertTrue(console.getFullLog().contains(expected));
-    }
-
     protected void assertDataIsReset(Data data) {
         assertEquals(null, data.getAccount());
         LanguageCollection defaultLanguages = new LanguageCollection();
