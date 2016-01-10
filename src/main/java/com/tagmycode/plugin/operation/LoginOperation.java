@@ -4,12 +4,12 @@ package com.tagmycode.plugin.operation;
 import com.tagmycode.plugin.ICallback;
 import com.tagmycode.plugin.gui.form.AuthorizationDialog;
 
-public class LoginTokenOperation extends TagMyCodeAsynchronousOperation {
+public class LoginOperation extends TagMyCodeAsynchronousOperation {
     private AuthorizationDialog authorizationDialog;
     private String verificationCode;
     private ICallback[] callbacks;
 
-    public LoginTokenOperation(AuthorizationDialog authorizationDialog, String verificationCode, ICallback[] callbacks) {
+    public LoginOperation(AuthorizationDialog authorizationDialog, String verificationCode, ICallback[] callbacks) {
         super(authorizationDialog);
         this.authorizationDialog = authorizationDialog;
         this.verificationCode = verificationCode;

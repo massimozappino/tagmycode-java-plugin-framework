@@ -1,12 +1,8 @@
 package com.tagmycode.plugin;
 
-import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import org.junit.Test;
 import support.FakeStorage;
 
-import java.io.IOException;
-
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.spy;
 
 public class DataTest extends AbstractTest {
@@ -36,12 +32,6 @@ public class DataTest extends AbstractTest {
         data.loadAll();
 
         assertDataIsValid(data);
-    }
-
-    private void assertDataIsValid(Data data) throws IOException, TagMyCodeJsonException {
-        assertEquals(resourceGenerate.aUser(), data.getAccount());
-        assertEquals(resourceGenerate.aLanguageCollection(), data.getLanguages());
-        assertEquals(resourceGenerate.aSnippetCollection(), data.getSnippets());
     }
 
     @Test

@@ -5,7 +5,7 @@ import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.ICallback;
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.gui.AbstractDialog;
-import com.tagmycode.plugin.operation.LoginTokenOperation;
+import com.tagmycode.plugin.operation.LoginOperation;
 
 import javax.swing.*;
 import java.awt.*;
@@ -110,8 +110,8 @@ public class AuthorizationDialog extends AbstractDialog {
         }
     }
 
-    private LoginTokenOperation getFetchOauthTokenOperation() {
-        return new LoginTokenOperation(AuthorizationDialog.this, verificationCodeTextField.getText(), iCallback);
+    private LoginOperation getFetchOauthTokenOperation() {
+        return new LoginOperation(AuthorizationDialog.this, verificationCodeTextField.getText(), iCallback);
     }
 
     private void onOpenLink() {
@@ -129,5 +129,9 @@ public class AuthorizationDialog extends AbstractDialog {
 
     public JButton getButtonOK() {
         return buttonOK;
+    }
+
+    public JTextField getVerificationCodeTextField() {
+        return verificationCodeTextField;
     }
 }

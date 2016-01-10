@@ -47,8 +47,10 @@ public class Framework {
         new PollingProcess().start();
     }
 
-    public void showAuthorizationDialog(ICallback... iCallback) {
-        new AuthorizationDialog(this, iCallback, getParentFrame()).display();
+    public AuthorizationDialog showAuthorizationDialog(ICallback... iCallback) {
+        AuthorizationDialog authorizationDialog = new AuthorizationDialog(this, iCallback, getParentFrame());
+        authorizationDialog.display();
+        return authorizationDialog;
     }
 
     public void showSnippetDialog(Snippet snippet, String mimeType) {
@@ -205,6 +207,7 @@ public class Framework {
                         throw new TagMyCodeGuiException("Unable to authenticate");
                     }
                     fetchAndStoreAllData();
+                    getMainWindow().getSnippetsTab().getSnippetsJTable().updateWithSnippets(data.getSnippets());
                     console.log(String.format("User authenticated as <strong>%s</strong>", data.getAccount().getEmail()));
                 } catch (TagMyCodeException ex) {
                     manageTagMyCodeExceptions(ex);

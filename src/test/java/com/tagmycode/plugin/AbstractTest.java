@@ -4,6 +4,7 @@ package com.tagmycode.plugin;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.TagMyCode;
+import com.tagmycode.sdk.authentication.OauthToken;
 import com.tagmycode.sdk.authentication.TagMyCodeApiDevelopment;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.DefaultLanguage;
@@ -18,6 +19,7 @@ import java.lang.reflect.Field;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -40,6 +42,8 @@ public class AbstractTest {
     protected void mockClientReturningValidAccountData(Framework framework) throws Exception {
         Client mockedClient = getMockedClient(framework);
         when(mockedClient.isAuthenticated()).thenReturn(true);
+        Mockito.doNothing().when(mockedClient).fetchOauthToken(anyString());
+        when(mockedClient.getOauthToken()).thenReturn(new OauthToken("123", "456"));
 
         TagMyCode mockTagMyCode = getMockedTagMyCode(framework);
         when(mockTagMyCode.fetchAccount()).thenReturn(resourceGenerate.aUser());
@@ -81,6 +85,12 @@ public class AbstractTest {
         defaultLanguages.add(new DefaultLanguage());
         assertEquals(defaultLanguages, data.getLanguages());
         assertEquals(new SnippetCollection(), data.getSnippets());
+    }
+
+    protected void assertDataIsValid(Data data) throws IOException, TagMyCodeJsonException {
+        assertEquals(resourceGenerate.aUser(), data.getAccount());
+        assertEquals(resourceGenerate.aLanguageCollection(), data.getLanguages());
+        assertEquals(resourceGenerate.aSnippetCollection(), data.getSnippets());
     }
 
     protected void assertStorageDataIsCleared(StorageEngine storageEngine) throws IOException, TagMyCodeJsonException, TagMyCodeStorageException {
