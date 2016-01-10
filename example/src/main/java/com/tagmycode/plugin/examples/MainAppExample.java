@@ -7,6 +7,8 @@ import com.tagmycode.sdk.authentication.TagMyCodeApiProduction;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class MainAppExample {
     public static void main(String args[]) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
@@ -18,7 +20,7 @@ public class MainAppExample {
         }
 
         JFrame frame = new JFrame("TagMyCode Plugin Example");
-        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.setBounds(200, 200, 600, 200);
         Container contentPane = frame.getContentPane();
         contentPane.setLayout(new BorderLayout());
@@ -35,5 +37,11 @@ public class MainAppExample {
 
         frame.setSize(800, 600);
         frame.setVisible(true);
+
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
     }
 }
