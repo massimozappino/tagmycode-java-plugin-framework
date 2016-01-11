@@ -59,6 +59,10 @@ public class SnippetsJTable extends AbstractSnippetsListGui {
     public JTable getSnippetsComponent() {
         return table;
     }
+
+    public void addSnippet(Snippet snippet) {
+        tableModel.addSnippet(snippet);
+    }
 }
 
 class SnippetTableCellRender extends DefaultTableCellRenderer {

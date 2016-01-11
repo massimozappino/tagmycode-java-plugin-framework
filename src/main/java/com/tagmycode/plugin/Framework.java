@@ -4,6 +4,7 @@ package com.tagmycode.plugin;
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
+import com.tagmycode.plugin.gui.SnippetsJTable;
 import com.tagmycode.plugin.gui.form.*;
 import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.TagMyCode;
@@ -14,6 +15,7 @@ import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.exception.TagMyCodeUnauthorizedException;
 import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.Snippet;
+import com.tagmycode.sdk.model.SnippetCollection;
 
 import java.awt.*;
 import java.io.IOException;
@@ -115,7 +117,7 @@ public class Framework {
 
     protected void loadData() throws TagMyCodeStorageException {
         data.loadAll();
-        getMainWindow().getSnippetsTab().getSnippetsJTable().updateWithSnippets(data.getSnippets());
+        updateSnippets(data.getSnippets());
     }
 
     protected void storeData() throws TagMyCodeStorageException {
@@ -204,7 +206,7 @@ public class Framework {
                         throw new TagMyCodeGuiException("Unable to authenticate");
                     }
                     fetchAndStoreAllData();
-                    getMainWindow().getSnippetsTab().getSnippetsJTable().updateWithSnippets(data.getSnippets());
+                    updateSnippets(data.getSnippets());
                 } catch (TagMyCodeException ex) {
                     manageTagMyCodeExceptions(ex);
                     logout();
@@ -237,5 +239,29 @@ public class Framework {
 
     public StorageEngine getStorageEngine() {
         return storageEngine;
+    }
+
+    public void addSnippet(Snippet snippet) {
+        getData().getSnippets().add(snippet);
+        getSnippetsJTable().addSnippet(snippet);
+        saveData();
+    }
+
+    public void updateSnippets(SnippetCollection snippets) {
+        getData().setSnippets(snippets);
+        getSnippetsJTable().updateWithSnippets(snippets);
+        saveData();
+    }
+
+    private SnippetsJTable getSnippetsJTable() {
+        return getMainWindow().getSnippetsTab().getSnippetsJTable();
+    }
+
+    private void saveData() {
+        try {
+            getData().saveAll();
+        } catch (TagMyCodeStorageException e) {
+            manageTagMyCodeExceptions(e);
+        }
     }
 }

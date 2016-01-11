@@ -64,4 +64,9 @@ public class SnippetsJTableModel extends AbstractTableModel {
         }
         fireTableDataChanged();
     }
+
+    public void addSnippet(Snippet snippet) {
+        snippetVector.add(snippet);
+        fireTableDataChanged();
+    }
 }

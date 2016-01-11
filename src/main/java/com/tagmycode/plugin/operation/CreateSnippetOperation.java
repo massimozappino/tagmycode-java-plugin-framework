@@ -29,6 +29,7 @@ public class CreateSnippetOperation extends TagMyCodeAsynchronousOperation<Snipp
     @Override
     protected void onSuccess(Snippet snippet) {
         snippetDialog.closeDialog();
+        snippetDialog.getFramework().addSnippet(snippet);
     }
 
 }
