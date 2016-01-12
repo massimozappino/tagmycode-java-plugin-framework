@@ -2,11 +2,16 @@ package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
+import com.tagmycode.plugin.gui.field.AbstractFieldValidation;
+import com.tagmycode.plugin.gui.field.CodeFieldValidation;
+import com.tagmycode.plugin.gui.field.TitleFieldValidation;
 import com.tagmycode.sdk.model.DefaultLanguage;
 import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.Snippet;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -30,7 +35,7 @@ public class SnippetDialogTest extends AbstractTest {
     }
 
     @Test
-    public void testCreateSnippetObjectForSyncSnippet() throws Exception {
+    public void testCreateSnippetObjectForSnippet() throws Exception {
         SnippetDialog snippetDialog = createSnippetDialog(createFramework());
         Snippet snippet = resourceGenerate.aSnippet();
 
@@ -95,5 +100,36 @@ public class SnippetDialogTest extends AbstractTest {
 
     private SnippetDialog createSnippetDialog(Framework framework) {
         return new SnippetDialog(framework, null, null);
+    }
+
+    @Test
+    public void checkValidFormIsCalled() {
+        final String[] value = {null};
+        SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null, null) {
+            @Override
+            public boolean checkValidForm() {
+                value[0] = "OK";
+                return false;
+            }
+        };
+        snippetDialog.getButtonOk().doClick();
+        assertEquals("OK", value[0]);
+    }
+
+    @Test
+    public void snippetFormValidation() throws Exception {
+        SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null, null);
+        assertFalse(snippetDialog.checkValidForm());
+        //TODO
+    }
+
+    @Test
+    public void testElementValidateList() throws Exception {
+        SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null, null);
+        ArrayList<AbstractFieldValidation> elementValidateList = snippetDialog.createElementValidateList();
+        assertEquals(2, elementValidateList.size());
+        assertTrue(elementValidateList.get(0) instanceof TitleFieldValidation);
+        assertTrue(elementValidateList.get(1) instanceof CodeFieldValidation);
+
     }
 }

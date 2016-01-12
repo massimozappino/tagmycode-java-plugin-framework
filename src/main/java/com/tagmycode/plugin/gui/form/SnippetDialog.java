@@ -3,10 +3,12 @@ package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.GuiThread;
-import com.tagmycode.plugin.StorageEngine;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.gui.SnippetEditorPane;
+import com.tagmycode.plugin.gui.field.AbstractFieldValidation;
+import com.tagmycode.plugin.gui.field.CodeFieldValidation;
+import com.tagmycode.plugin.gui.field.TitleFieldValidation;
 import com.tagmycode.plugin.operation.CreateSnippetOperation;
 import com.tagmycode.sdk.model.DefaultLanguage;
 import com.tagmycode.sdk.model.Language;
@@ -16,10 +18,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class SnippetDialog extends AbstractDialog {
-    private final StorageEngine storageEngine;
     private JPanel contentPane;
     private JTextField tagsTextField;
     private JCheckBox privateSnippetCheckBox;
@@ -39,7 +41,6 @@ public class SnippetDialog extends AbstractDialog {
         defaultInitWindow();
         initWindow();
         setMimeType(mimeType);
-        storageEngine = framework.getStorageEngine();
     }
 
     public void populateWithSnippet(Snippet snippet) {
@@ -73,7 +74,8 @@ public class SnippetDialog extends AbstractDialog {
 
     @Override
     protected void onOK() {
-        new CreateSnippetOperation(this).runWithTask(framework.getTaskFactory(), "Saving snippet");
+        if (checkValidForm())
+            new CreateSnippetOperation(this).runWithTask(framework.getTaskFactory(), "Saving snippet");
     }
 
     @Override
@@ -171,6 +173,10 @@ public class SnippetDialog extends AbstractDialog {
         codeEditorPane.setContentType(mimeType);
     }
 
+    public JTextField getTitleBox() {
+        return titleBox;
+    }
+
     public JEditorPane getCodeEditorPane() {
         return codeEditorPane;
     }
@@ -183,15 +189,26 @@ public class SnippetDialog extends AbstractDialog {
         return descriptionTextField;
     }
 
-    public JTextField getTitleBox() {
-        return titleBox;
-    }
-
-    public JCheckBox getPrivateSnippetCheckBox() {
-        return privateSnippetCheckBox;
-    }
-
     public void selectLanguage(Language language) {
         defaultComboBoxModel.setSelectedItem(language);
     }
+
+    public boolean checkValidForm() {
+        for (AbstractFieldValidation fieldValidation : createElementValidateList()) {
+            if (!fieldValidation.performValidation()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    protected ArrayList<AbstractFieldValidation> createElementValidateList() {
+        ArrayList<AbstractFieldValidation> fieldValidations = new ArrayList<AbstractFieldValidation>();
+
+        fieldValidations.add(new TitleFieldValidation(getTitleBox(), framework));
+        fieldValidations.add(new CodeFieldValidation(getCodeEditorPane(), framework));
+
+        return fieldValidations;
+    }
+
 }

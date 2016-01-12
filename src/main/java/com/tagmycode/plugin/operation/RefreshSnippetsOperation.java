@@ -2,7 +2,6 @@ package com.tagmycode.plugin.operation;
 
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.form.SnippetsTab;
-import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.SnippetCollection;
 
 public class RefreshSnippetsOperation extends TagMyCodeAsynchronousOperation<SnippetCollection> {
@@ -30,15 +29,8 @@ public class RefreshSnippetsOperation extends TagMyCodeAsynchronousOperation<Sni
 
     @Override
     protected void onSuccess(SnippetCollection snippets) {
-
         Framework framework = snippetsTab.getFramework();
         framework.updateSnippets(snippets);
         snippetsTab.getSnippetsJTable().updateWithSnippets(snippets);
-        try {
-            framework.getData().setSnippets(snippets);
-            framework.getData().saveAll();
-        } catch (Exception e) {
-            framework.manageTagMyCodeExceptions(new TagMyCodeException(e));
-        }
     }
 }

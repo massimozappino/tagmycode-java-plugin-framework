@@ -9,14 +9,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class SnippetForm extends AbstractGui {
+public class SnippetView extends AbstractGui {
     private JButton copyButton;
     private JPanel mainPanel;
     private JEditorPane snippetEditorPane;
     private JLabel title;
     private ClipboardCopy clipboardCopy;
 
-    public SnippetForm(Snippet snippet) {
+    public SnippetView(Snippet snippet) {
         clipboardCopy = new ClipboardCopy();
         snippetEditorPane.setEditable(false);
         snippetEditorPane.setText(snippet.getCode());

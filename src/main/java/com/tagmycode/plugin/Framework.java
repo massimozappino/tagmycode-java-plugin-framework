@@ -150,7 +150,7 @@ public class Framework {
         return parentFrame;
     }
 
-    public void error(final String message) {
+    public void showError(final String message) {
         new GuiThread().execute(new Runnable() {
             @Override
             public void run() {
@@ -159,15 +159,17 @@ public class Framework {
         });
     }
 
-    public void error() {
-        error(new TagMyCodeException().getMessage());
+    public void showGenericError() {
+        showError(new TagMyCodeException().getMessage());
     }
 
     public void manageTagMyCodeExceptions(TagMyCodeException exception) {
         if (exception instanceof TagMyCodeUnauthorizedException) {
             logoutAndAuthenticateAgain();
+        } else if (exception instanceof TagMyCodeConnectionException) {
+            showError(exception.getMessage());
         } else {
-            error();
+            showGenericError();
         }
     }
 
