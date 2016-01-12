@@ -7,7 +7,7 @@ import com.tagmycode.plugin.gui.IOnErrorCallback;
 import com.tagmycode.plugin.gui.SnippetsJTable;
 import com.tagmycode.plugin.operation.FilterSnippetsOperation;
 import com.tagmycode.plugin.operation.LoadSnippetsOperation;
-import com.tagmycode.plugin.operation.RefreshSnippetsOperation;
+import com.tagmycode.plugin.operation.ReloadSnippetsOperation;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -20,7 +20,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
-    private RefreshSnippetsOperation refreshSnippetsOperation;
+    private ReloadSnippetsOperation refreshSnippetsOperation;
     private SnippetsJTable snippetsJTable;
     private JPanel snippetViewFormPane;
     private JButton addSnippetButton;
@@ -41,7 +41,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     public SnippetsTab(final Framework framework) {
         this.framework = framework;
         snippetViewFormPane.removeAll();
-        refreshSnippetsOperation = new RefreshSnippetsOperation(this);
+        refreshSnippetsOperation = new ReloadSnippetsOperation(this);
         initSnippetsJTable();
 
         leftPane.add(snippetsJTable.getMainComponent(), BorderLayout.CENTER);

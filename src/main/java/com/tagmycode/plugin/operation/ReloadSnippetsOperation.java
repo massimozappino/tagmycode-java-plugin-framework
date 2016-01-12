@@ -4,10 +4,10 @@ import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.form.SnippetsTab;
 import com.tagmycode.sdk.model.SnippetCollection;
 
-public class RefreshSnippetsOperation extends TagMyCodeAsynchronousOperation<SnippetCollection> {
+public class ReloadSnippetsOperation extends TagMyCodeAsynchronousOperation<SnippetCollection> {
     private SnippetsTab snippetsTab;
 
-    public RefreshSnippetsOperation(SnippetsTab snippetsTab) {
+    public ReloadSnippetsOperation(SnippetsTab snippetsTab) {
         super(snippetsTab);
         this.snippetsTab = snippetsTab;
     }
