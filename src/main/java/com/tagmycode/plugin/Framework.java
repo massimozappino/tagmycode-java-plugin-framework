@@ -163,11 +163,11 @@ public class Framework {
         showError(new TagMyCodeException().getMessage());
     }
 
-    public void manageTagMyCodeExceptions(TagMyCodeException exception) {
-        if (exception instanceof TagMyCodeUnauthorizedException) {
+    public void manageTagMyCodeExceptions(TagMyCodeException e) {
+        if (e instanceof TagMyCodeUnauthorizedException) {
             logoutAndAuthenticateAgain();
-        } else if (exception instanceof TagMyCodeConnectionException) {
-            showError(exception.getMessage());
+        } else if (e instanceof TagMyCodeConnectionException || e instanceof TagMyCodeStorageException) {
+            showError(e.getMessage());
         } else {
             showGenericError();
         }

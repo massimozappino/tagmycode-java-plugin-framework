@@ -1,6 +1,5 @@
 package com.tagmycode.plugin.operation;
 
-import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.form.SnippetsTab;
 import com.tagmycode.sdk.model.SnippetCollection;
 
@@ -29,8 +28,6 @@ public class ReloadSnippetsOperation extends TagMyCodeAsynchronousOperation<Snip
 
     @Override
     protected void onSuccess(SnippetCollection snippets) {
-        Framework framework = snippetsTab.getFramework();
-        framework.updateSnippets(snippets);
-        snippetsTab.getSnippetsJTable().updateWithSnippets(snippets);
+        snippetsTab.getFramework().updateSnippets(snippets);
     }
 }

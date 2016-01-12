@@ -120,7 +120,11 @@ public class SnippetDialogTest extends AbstractTest {
     public void snippetFormValidation() throws Exception {
         SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null, null);
         assertFalse(snippetDialog.checkValidForm());
-        //TODO
+
+        snippetDialog.getTitleBox().setText("a title");
+        snippetDialog.getCodeEditorPane().setText("a code");
+
+        assertTrue(snippetDialog.checkValidForm());
     }
 
     @Test
@@ -130,6 +134,5 @@ public class SnippetDialogTest extends AbstractTest {
         assertEquals(2, elementValidateList.size());
         assertTrue(elementValidateList.get(0) instanceof TitleFieldValidation);
         assertTrue(elementValidateList.get(1) instanceof CodeFieldValidation);
-
     }
 }

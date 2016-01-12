@@ -12,7 +12,11 @@ public class CodeFieldValidation extends AbstractFieldValidation {
 
     @Override
     protected boolean validate() {
-        return false;
+        if (field.getText().length() <= 0) {
+            field.requestFocus();
+            return false;
+        }
+        return true;
     }
 
     @Override

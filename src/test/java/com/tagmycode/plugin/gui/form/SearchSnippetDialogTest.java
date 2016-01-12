@@ -76,8 +76,8 @@ public class SearchSnippetDialogTest extends AbstractTest {
 
         makeASearchWithResults(searchSnippetDialog);
         assertResultsLabelIs(searchSnippetDialog, "");
-
-        Thread.sleep(1000);
+        // TODO wait for condition
+        Thread.sleep(1200);
 
         assertResultsLabelIs(searchSnippetDialog, "2 snippets found");
     }
