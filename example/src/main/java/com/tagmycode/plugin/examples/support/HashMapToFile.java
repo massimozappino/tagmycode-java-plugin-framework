@@ -48,7 +48,8 @@ public class HashMapToFile {
             fis.close();
 
         } catch (Exception e) {
-            storage = new HashMap<String, String>();
+            storage = new HashMap<>();
+            saveToFile();
             e.printStackTrace();
         }
     }

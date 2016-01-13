@@ -23,7 +23,7 @@ public class StorageEngine {
             String jsonAccount = read(ACCOUNT);
             return jsonAccount != null ? new User(jsonAccount) : null;
         } catch (Exception e) {
-            throw new TagMyCodeStorageException();
+            throw new TagMyCodeStorageException(e);
         }
     }
 
@@ -31,7 +31,7 @@ public class StorageEngine {
         try {
             write(ACCOUNT, user.toJson());
         } catch (Exception e) {
-            throw new TagMyCodeStorageException();
+            throw new TagMyCodeStorageException(e);
         }
     }
 
@@ -41,18 +41,27 @@ public class StorageEngine {
             String jsonLanguages = read(LANGUAGES);
             languageCollection = new LanguageCollection(jsonLanguages);
         } catch (Exception e) {
-            languageCollection = new LanguageCollection();
-            languageCollection.add(new DefaultLanguage());
+            languageCollection = createDefaultLanguageCollection();
         }
 
         return languageCollection;
     }
 
+    private LanguageCollection createDefaultLanguageCollection() {
+        LanguageCollection languageCollection = new LanguageCollection();
+        languageCollection.add(new DefaultLanguage());
+        return languageCollection;
+    }
+
     public void saveLanguageCollection(LanguageCollection languageCollection) throws TagMyCodeStorageException {
         try {
-            write(LANGUAGES, languageCollection.toJson());
+            String languageCollectionJson = "";
+            if (languageCollection != null) {
+                languageCollectionJson = languageCollection.toJson();
+            }
+            write(LANGUAGES, languageCollectionJson);
         } catch (Exception e) {
-            throw new TagMyCodeStorageException();
+            throw new TagMyCodeStorageException(e);
         }
 
     }
@@ -71,7 +80,7 @@ public class StorageEngine {
         try {
             write(PRIVATE_SNIPPET, booleanToString(flag));
         } catch (IOException e) {
-            throw new TagMyCodeStorageException();
+            throw new TagMyCodeStorageException(e);
         }
     }
 
@@ -87,10 +96,17 @@ public class StorageEngine {
 
     public void saveLastLanguageUsed(Language lastLanguage) throws TagMyCodeStorageException {
         try {
+            if (lastLanguage == null) {
+                lastLanguage = createDefaultLanguage();
+            }
             write(LAST_LANGUAGE, lastLanguage.toJson());
         } catch (Exception e) {
-            throw new TagMyCodeStorageException();
+            throw new TagMyCodeStorageException(e);
         }
+    }
+
+    private Language createDefaultLanguage() {
+        return new DefaultLanguage();
     }
 
     public SnippetCollection loadSnippets() {
@@ -98,16 +114,19 @@ public class StorageEngine {
         try {
             snippets = new SnippetCollection(read(SNIPPETS));
         } catch (Exception e) {
-            snippets = new SnippetCollection();
+            snippets = createDefaultSnippetCollection();
         }
         return snippets;
     }
 
     public void saveSnippets(SnippetCollection snippetCollection) throws TagMyCodeStorageException {
         try {
+            if (snippetCollection == null) {
+                snippetCollection = createDefaultSnippetCollection();
+            }
             write(SNIPPETS, snippetCollection.toJson());
         } catch (Exception e) {
-            throw new TagMyCodeStorageException();
+            throw new TagMyCodeStorageException(e);
         }
     }
 
@@ -143,4 +162,7 @@ public class StorageEngine {
         return storage;
     }
 
+    private SnippetCollection createDefaultSnippetCollection() {
+        return new SnippetCollection();
+    }
 }

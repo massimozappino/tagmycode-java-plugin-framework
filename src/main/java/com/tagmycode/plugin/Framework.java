@@ -164,6 +164,8 @@ public class Framework {
     }
 
     public void manageTagMyCodeExceptions(TagMyCodeException e) {
+        // TODO convert with Logger
+        e.printStackTrace();
         if (e instanceof TagMyCodeUnauthorizedException) {
             logoutAndAuthenticateAgain();
         } else if (e instanceof TagMyCodeConnectionException || e instanceof TagMyCodeStorageException) {
