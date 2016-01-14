@@ -7,6 +7,7 @@ import com.tagmycode.sdk.authentication.VoidOauthToken;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.DefaultLanguage;
+import com.tagmycode.sdk.model.DefaultLanguageCollection;
 import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.User;
 import org.junit.Before;
@@ -160,9 +161,7 @@ public class FrameworkTest extends AbstractTest {
     }
 
     private void assertLanguageCollectionIsDefault() {
-        LanguageCollection languageCollection = new LanguageCollection();
-        languageCollection.add(new DefaultLanguage());
-        assertEquals(languageCollection, framework.getLanguageCollection());
+        assertEquals(new DefaultLanguageCollection(), framework.getLanguageCollection());
     }
 
     protected void assertFrameworkReturnsValidData() throws IOException, TagMyCodeJsonException {

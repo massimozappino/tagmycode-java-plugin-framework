@@ -7,10 +7,7 @@ import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.OauthToken;
 import com.tagmycode.sdk.authentication.TagMyCodeApiDevelopment;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
-import com.tagmycode.sdk.model.DefaultLanguage;
-import com.tagmycode.sdk.model.LanguageCollection;
-import com.tagmycode.sdk.model.Snippet;
-import com.tagmycode.sdk.model.SnippetCollection;
+import com.tagmycode.sdk.model.*;
 import org.mockito.Mockito;
 import support.*;
 
@@ -77,9 +74,7 @@ public class AbstractTest {
 
     protected void assertDataIsReset(Data data) {
         assertEquals(null, data.getAccount());
-        LanguageCollection defaultLanguages = new LanguageCollection();
-        defaultLanguages.add(new DefaultLanguage());
-        assertEquals(defaultLanguages, data.getLanguages());
+        assertEquals(new DefaultLanguageCollection(), data.getLanguages());
         assertEquals(new SnippetCollection(), data.getSnippets());
     }
 

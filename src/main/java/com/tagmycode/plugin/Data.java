@@ -2,10 +2,7 @@ package com.tagmycode.plugin;
 
 
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
-import com.tagmycode.sdk.model.DefaultLanguage;
-import com.tagmycode.sdk.model.LanguageCollection;
-import com.tagmycode.sdk.model.SnippetCollection;
-import com.tagmycode.sdk.model.User;
+import com.tagmycode.sdk.model.*;
 
 public class Data {
 
@@ -20,8 +17,7 @@ public class Data {
 
     public void reset() {
         account = null;
-        languages = new LanguageCollection();
-        languages.add(new DefaultLanguage());
+        languages = new DefaultLanguageCollection();
         snippets = new SnippetCollection();
     }
 

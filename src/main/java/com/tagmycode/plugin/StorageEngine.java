@@ -48,9 +48,7 @@ public class StorageEngine {
     }
 
     private LanguageCollection createDefaultLanguageCollection() {
-        LanguageCollection languageCollection = new LanguageCollection();
-        languageCollection.add(new DefaultLanguage());
-        return languageCollection;
+        return new DefaultLanguageCollection();
     }
 
     public void saveLanguageCollection(LanguageCollection languageCollection) throws TagMyCodeStorageException {

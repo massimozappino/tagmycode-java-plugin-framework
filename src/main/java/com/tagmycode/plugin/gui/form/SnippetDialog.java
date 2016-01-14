@@ -10,7 +10,6 @@ import com.tagmycode.plugin.gui.field.AbstractFieldValidation;
 import com.tagmycode.plugin.gui.field.CodeFieldValidation;
 import com.tagmycode.plugin.gui.field.TitleFieldValidation;
 import com.tagmycode.plugin.operation.CreateSnippetOperation;
-import com.tagmycode.sdk.model.DefaultLanguage;
 import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -94,12 +93,8 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     private void populateLanguages() {
-        if (framework.getLanguageCollection() == null) {
-            defaultComboBoxModel.addElement(new DefaultLanguage());
-        } else {
-            for (Language l : framework.getLanguageCollection()) {
-                defaultComboBoxModel.addElement(l);
-            }
+        for (Language l : framework.getLanguageCollection()) {
+            defaultComboBoxModel.addElement(l);
         }
     }
 
