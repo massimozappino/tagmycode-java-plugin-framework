@@ -5,6 +5,7 @@ import com.tagmycode.plugin.gui.AbstractGui;
 import com.tagmycode.plugin.gui.ClipboardCopy;
 import com.tagmycode.plugin.gui.IOnErrorCallback;
 import com.tagmycode.plugin.gui.SnippetsJTable;
+import com.tagmycode.plugin.operation.DeleteSnippetOperation;
 import com.tagmycode.plugin.operation.FilterSnippetsOperation;
 import com.tagmycode.plugin.operation.LoadSnippetsOperation;
 import com.tagmycode.plugin.operation.ReloadSnippetsOperation;
@@ -214,8 +215,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
     private void deleteSnippetAction() {
         Snippet snippet = snippetsJTable.getSelectedSnippet();
-       // snippetsJTable.getSnippetsComponent().getModel()
-//        snippetsJTable.updateWithSnippets(new SnippetCollection());
+        new DeleteSnippetOperation(this, snippet).runWithTask(getFramework().getTaskFactory(), "Deleting snippet");
     }
 
     private void addSnippetAction(Framework framework) {

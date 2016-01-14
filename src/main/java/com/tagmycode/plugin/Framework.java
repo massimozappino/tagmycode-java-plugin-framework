@@ -257,6 +257,12 @@ public class Framework {
         saveData();
     }
 
+    public void deleteSnippet(Snippet snippetToDelete) {
+        SnippetCollection snippets = getData().getSnippets();
+        snippets.deleteById(snippetToDelete.getId());
+        updateSnippets(snippets);
+    }
+
     private SnippetsJTable getSnippetsJTable() {
         return getMainWindow().getSnippetsTab().getSnippetsJTable();
     }
