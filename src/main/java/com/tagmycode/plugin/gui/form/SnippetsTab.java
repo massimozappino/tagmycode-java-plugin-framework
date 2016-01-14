@@ -13,7 +13,10 @@ import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,7 +27,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private ReloadSnippetsOperation refreshSnippetsOperation;
     private SnippetsJTable snippetsJTable;
     private JPanel snippetViewFormPane;
-    private JButton addSnippetButton;
+    private JButton newSnippetButton;
     private JPanel mainPanel;
     private JButton refreshButton;
     private JPanel leftPane;
@@ -91,10 +94,10 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                 deleteSnippetAction();
             }
         });
-        addSnippetButton.addActionListener(new AbstractAction() {
+        newSnippetButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addSnippetAction(framework);
+                newSnippetAction(framework);
             }
         });
         refreshButton.addActionListener(new AbstractAction() {
@@ -121,7 +124,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
     private void initSnippetsJTable() {
         snippetsJTable = new SnippetsJTable(framework);
-        jTable = (JTable) snippetsJTable.getSnippetsComponent();
+        jTable = snippetsJTable.getSnippetsComponent();
         snippetsJTable.getCellSelectionModel().addListSelectionListener(createSelectionListener());
 
         jTable.addMouseListener(new MouseAdapter() {
@@ -177,28 +180,21 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         });
         popupMenu.add(copyCodeMenuItem);
 
-        jTable.setComponentPopupMenu(popupMenu);
-        popupMenu.addPopupMenuListener(new PopupMenuListener() {
-
-            @Override
-            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        int rowAtPoint = jTable.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), jTable));
-                        if (rowAtPoint > -1) {
-                            jTable.setRowSelectionInterval(rowAtPoint, rowAtPoint);
-                        }
-                    }
-                });
+        jTable.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                selectClickedRow(e);
+                showPopup(e);
             }
 
-            @Override
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+            private void selectClickedRow(MouseEvent e) {
+                int rowIndex = jTable.rowAtPoint(e.getPoint());
+                jTable.setRowSelectionInterval(rowIndex, rowIndex);
             }
 
-            @Override
-            public void popupMenuCanceled(PopupMenuEvent e) {
+            private void showPopup(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
             }
         });
     }
@@ -215,10 +211,15 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
     private void deleteSnippetAction() {
         Snippet snippet = snippetsJTable.getSelectedSnippet();
-        new DeleteSnippetOperation(this, snippet).runWithTask(getFramework().getTaskFactory(), "Deleting snippet");
+
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Do you really want to delete the snippet:\n" + snippet.getTitle(), "Confirm", JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+
+            new DeleteSnippetOperation(this, snippet).runWithTask(getFramework().getTaskFactory(), "Deleting snippet");
+        }
     }
 
-    private void addSnippetAction(Framework framework) {
+    private void newSnippetAction(Framework framework) {
         framework.showSnippetDialog(new Snippet(), null);
     }
 

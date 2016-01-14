@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class SnippetDialog extends AbstractDialog {
+    private static final String NEW_SNIPPET_TITLE = "New snippet";
+    private static final String EDIT_SNIPPET_TITLE = "Edit snippet";
+
     private JPanel contentPane;
     private JTextField tagsTextField;
     private JCheckBox privateSnippetCheckBox;
@@ -43,6 +46,7 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     public void populateWithSnippet(Snippet snippet) {
+        getDialog().setTitle(EDIT_SNIPPET_TITLE);
         editableSnippet = snippet;
         titleBox.setText(snippet.getTitle());
         descriptionTextField.setText(snippet.getDescription());
@@ -57,7 +61,7 @@ public class SnippetDialog extends AbstractDialog {
         languageComboBox.setModel(defaultComboBoxModel);
         descriptionTextField.requestFocus();
         getDialog().setSize(650, 450);
-        getDialog().setTitle("Add snippet");
+        getDialog().setTitle(NEW_SNIPPET_TITLE);
         getDialog().setResizable(true);
 
         populateLanguages();

@@ -32,6 +32,7 @@ public class SnippetDialogTest extends AbstractTest {
     public void testCreateSnippetObjectForEmptySnippet() throws Exception {
         SnippetDialog snippetDialog = createSnippetDialog(createFramework());
         assertTrue(snippetDialog.createSnippetObject().toJson().length() > 0);
+        assertEquals("New snippet", snippetDialog.getDialog().getTitle());
     }
 
     @Test
@@ -49,6 +50,8 @@ public class SnippetDialogTest extends AbstractTest {
         snippetDialog.populateWithSnippet(snippet);
         assertNotNull(snippetDialog.createSnippetObject().getCreationDate());
         assertNotNull(snippetDialog.createSnippetObject().getUpdateDate());
+
+        assertEquals("Edit snippet", snippetDialog.getDialog().getTitle());
     }
 
     @Test

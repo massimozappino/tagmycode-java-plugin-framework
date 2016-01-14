@@ -24,12 +24,12 @@
             </properties>
             <border type="empty"/>
             <children>
-              <component id="b35f" class="javax.swing.JButton" binding="addSnippetButton" default-binding="true">
+              <component id="b35f" class="javax.swing.JButton" binding="newSnippetButton">
                 <constraints/>
                 <properties>
                   <icon value="icons/add.png"/>
                   <text value=""/>
-                  <toolTipText value="Add Snippet..."/>
+                  <toolTipText value="New Snippet..."/>
                 </properties>
               </component>
               <component id="eeff8" class="javax.swing.JButton" binding="editSnippetButton">
