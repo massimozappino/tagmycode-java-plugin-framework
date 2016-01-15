@@ -4,8 +4,8 @@ package com.tagmycode.plugin;
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
-import com.tagmycode.plugin.gui.SnippetsJTable;
 import com.tagmycode.plugin.gui.form.*;
+import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.OauthToken;
@@ -263,8 +263,8 @@ public class Framework {
         updateSnippets(snippets);
     }
 
-    private SnippetsJTable getSnippetsJTable() {
-        return getMainWindow().getSnippetsTab().getSnippetsJTable();
+    private SnippetsTable getSnippetsJTable() {
+        return getMainWindow().getSnippetsTab().getSnippetsTable();
     }
 
     private void saveData() {

@@ -32,7 +32,7 @@ public class FrameworkAcceptanceTest extends AbstractTest {
         verify(frameworkSpy, times(1)).initialize(verificationCode, new ICallback[0]);
 
         assertDataIsValid(frameworkSpy.getData());
-        assertEquals(2, frameworkSpy.getMainWindow().getSnippetsTab().getSnippetsJTable().getSnippetsComponent().getRowCount());
+        assertEquals(2, frameworkSpy.getMainWindow().getSnippetsTab().getSnippetsTable().getSnippetsComponent().getRowCount());
     }
 
 }

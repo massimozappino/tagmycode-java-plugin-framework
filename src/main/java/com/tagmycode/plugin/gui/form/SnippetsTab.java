@@ -4,7 +4,7 @@ import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.AbstractGui;
 import com.tagmycode.plugin.gui.ClipboardCopy;
 import com.tagmycode.plugin.gui.IOnErrorCallback;
-import com.tagmycode.plugin.gui.SnippetsJTable;
+import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.plugin.operation.DeleteSnippetOperation;
 import com.tagmycode.plugin.operation.FilterSnippetsOperation;
 import com.tagmycode.plugin.operation.LoadSnippetsOperation;
@@ -25,7 +25,7 @@ import java.awt.event.MouseEvent;
 
 public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private ReloadSnippetsOperation refreshSnippetsOperation;
-    private SnippetsJTable snippetsJTable;
+    private SnippetsTable snippetsTable;
     private JPanel snippetViewFormPane;
     private JButton newSnippetButton;
     private JPanel mainPanel;
@@ -48,7 +48,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         refreshSnippetsOperation = new ReloadSnippetsOperation(this);
         initSnippetsJTable();
 
-        leftPane.add(snippetsJTable.getMainComponent(), BorderLayout.CENTER);
+        leftPane.add(snippetsTable.getMainComponent(), BorderLayout.CENTER);
 
         initToolBarButtons(framework);
         initPopupMenuForJTextComponents(getMainComponent());
@@ -123,9 +123,10 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     private void initSnippetsJTable() {
-        snippetsJTable = new SnippetsJTable(framework);
-        jTable = snippetsJTable.getSnippetsComponent();
-        snippetsJTable.getCellSelectionModel().addListSelectionListener(createSelectionListener());
+        snippetsTable = new SnippetsTable();
+
+        jTable = snippetsTable.getSnippetsComponent();
+        snippetsTable.getCellSelectionModel().addListSelectionListener(createSelectionListener());
 
         jTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -139,7 +140,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
     private void initTablePopupMenu() {
         final JPopupMenu popupMenu = new JPopupMenu();
-
+        popupMenu.setFocusable(false);
         final JMenuItem openSnippet = new JMenuItem("Open");
         openSnippet.addActionListener(new ActionListener() {
             @Override
@@ -200,17 +201,17 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     private void copyCodeAction() {
-        Snippet snippet = snippetsJTable.getSelectedSnippet();
+        Snippet snippet = snippetsTable.getSelectedSnippet();
         clipboardCopy.copy(snippet.getCode());
     }
 
     private void editSnippetAction() {
-        Snippet snippet = snippetsJTable.getSelectedSnippet();
+        Snippet snippet = snippetsTable.getSelectedSnippet();
         framework.showSnippetDialog(snippet, null);
     }
 
     private void deleteSnippetAction() {
-        Snippet snippet = snippetsJTable.getSelectedSnippet();
+        Snippet snippet = snippetsTable.getSelectedSnippet();
 
         int dialogResult = JOptionPane.showConfirmDialog(null, "Do you really want to delete the snippet:\n" + snippet.getTitle(), "Confirm", JOptionPane.YES_NO_OPTION);
         if (dialogResult == JOptionPane.YES_OPTION) {
@@ -224,7 +225,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     private void openSnippetAction() {
-        Snippet snippet = snippetsJTable.getSelectedSnippet();
+        Snippet snippet = snippetsTable.getSelectedSnippet();
         framework.getMainWindow().addSnippetTab(snippet);
     }
 
@@ -235,7 +236,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                 if (!e.getValueIsAdjusting()) {
                     snippetViewFormPane.removeAll();
 
-                    Snippet snippet = snippetsJTable.getSelectedSnippet();
+                    Snippet snippet = snippetsTable.getSelectedSnippet();
                     // TODO test
                     if (snippet != null) {
                         JComponent snippetViewForm = new SnippetView(snippet).getSnippetEditorPane();
@@ -269,8 +270,8 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         refreshSnippetsOperation.runWithTask(framework.getTaskFactory(), "Refreshing snippets");
     }
 
-    public SnippetsJTable getSnippetsJTable() {
-        return snippetsJTable;
+    public SnippetsTable getSnippetsTable() {
+        return snippetsTable;
     }
 
     public JPanel getSnippetViewFormPane() {

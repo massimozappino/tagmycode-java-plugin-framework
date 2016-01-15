@@ -16,7 +16,7 @@ public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Snip
 
     @Override
     protected SnippetCollection performOperation() throws Exception {
-        snippetsTab.getSnippetsJTable();
+        snippetsTab.getSnippetsTable();
         SnippetCollection filteredSnippets = new SnippetCollection();
         for (Snippet snippet : snippetsTab.getFramework().getData().getSnippets()) {
             if (snippet.getTitle().toLowerCase().contains(filterText)
@@ -33,6 +33,6 @@ public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Snip
 
     @Override
     protected void onSuccess(SnippetCollection snippets) {
-        snippetsTab.getSnippetsJTable().updateWithSnippets(snippets);
+        snippetsTab.getSnippetsTable().updateWithSnippets(snippets);
     }
 }
