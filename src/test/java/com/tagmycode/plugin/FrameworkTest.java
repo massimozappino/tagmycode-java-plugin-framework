@@ -6,7 +6,6 @@ import com.tagmycode.sdk.authentication.TagMyCodeApiDevelopment;
 import com.tagmycode.sdk.authentication.VoidOauthToken;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
-import com.tagmycode.sdk.model.DefaultLanguage;
 import com.tagmycode.sdk.model.DefaultLanguageCollection;
 import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.User;

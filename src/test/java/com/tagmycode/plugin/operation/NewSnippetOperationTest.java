@@ -8,17 +8,18 @@ import org.junit.Test;
 
 import static org.mockito.Mockito.*;
 
-public class CreateSnippetOperationTest extends AbstractTest{
+public class NewSnippetOperationTest extends AbstractTest {
 
     @Test
     public void testOnSuccess() throws Exception {
         SnippetDialog snippetDialogMock = mock(SnippetDialog.class);
-        CreateSnippetOperation createSnippetOperation = new CreateSnippetOperation(snippetDialogMock);
+        NewSnippetOperation newSnippetOperation = new NewSnippetOperation(snippetDialogMock);
         Framework frameworkMock = mock(Framework.class);
-
         when(snippetDialogMock.getFramework()).thenReturn(frameworkMock);
         Snippet snippet = resourceGenerate.aSnippet();
-        createSnippetOperation.onSuccess(snippet);
+
+        newSnippetOperation.onSuccess(snippet);
+
         verify(snippetDialogMock, times(1)).closeDialog();
         verify(frameworkMock, times(1)).addSnippet(snippet);
     }

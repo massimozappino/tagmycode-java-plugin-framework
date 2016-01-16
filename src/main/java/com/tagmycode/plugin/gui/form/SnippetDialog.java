@@ -9,7 +9,9 @@ import com.tagmycode.plugin.gui.SnippetEditorPane;
 import com.tagmycode.plugin.gui.field.AbstractFieldValidation;
 import com.tagmycode.plugin.gui.field.CodeFieldValidation;
 import com.tagmycode.plugin.gui.field.TitleFieldValidation;
-import com.tagmycode.plugin.operation.CreateSnippetOperation;
+import com.tagmycode.plugin.operation.EditSnippetOperation;
+import com.tagmycode.plugin.operation.NewSnippetOperation;
+import com.tagmycode.plugin.operation.TagMyCodeAsynchronousOperation;
 import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -37,6 +39,8 @@ public class SnippetDialog extends AbstractDialog {
     private JScrollPane scrollPane;
     private DefaultComboBoxModel<Language> defaultComboBoxModel;
     private Snippet editableSnippet;
+    private NewSnippetOperation newSnippetOperation;
+    private EditSnippetOperation editSnippetOperation;
 
     public SnippetDialog(final Framework framework, String mimeType, Frame parent) {
         super(framework, parent);
@@ -57,6 +61,8 @@ public class SnippetDialog extends AbstractDialog {
 
     @Override
     protected void initWindow() {
+        newSnippetOperation = new NewSnippetOperation(this);
+        editSnippetOperation = new EditSnippetOperation(this);
         defaultComboBoxModel = new DefaultComboBoxModel<Language>();
         languageComboBox.setModel(defaultComboBoxModel);
         descriptionTextField.requestFocus();
@@ -77,8 +83,9 @@ public class SnippetDialog extends AbstractDialog {
 
     @Override
     protected void onOK() {
-        if (checkValidForm())
-            new CreateSnippetOperation(this).runWithTask(framework.getTaskFactory(), "Saving snippet");
+        if (checkValidForm()) {
+            getSaveOperation().runWithTask(framework.getTaskFactory(), "Saving snippet");
+        }
     }
 
     @Override
@@ -152,6 +159,7 @@ public class SnippetDialog extends AbstractDialog {
         Date creationDate = null;
         Date updateDate = null;
         if (editableSnippet != null) {
+            snippet.setId(editableSnippet.getId());
             creationDate = editableSnippet.getCreationDate();
             updateDate = editableSnippet.getUpdateDate();
         }
@@ -210,4 +218,15 @@ public class SnippetDialog extends AbstractDialog {
         return fieldValidations;
     }
 
+    public boolean isNewSnippet() {
+        return !(editableSnippet != null && editableSnippet.getId() > 0);
+    }
+
+    public TagMyCodeAsynchronousOperation<Snippet> getSaveOperation() {
+        if (isNewSnippet()) {
+            return newSnippetOperation;
+        } else {
+            return editSnippetOperation;
+        }
+    }
 }

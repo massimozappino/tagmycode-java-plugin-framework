@@ -23,8 +23,8 @@ public class MainWindow implements IAbstractGUI {
         return mainPanel;
     }
 
-    public void addSnippetTab(Snippet snippet) {
-        framework.showSnippetDialog(snippet, null);
+    public void openSnippet(Snippet snippet) {
+        framework.showEditSnippetDialog(snippet, null);
     }
 
     public SnippetsTab getSnippetsTab() {

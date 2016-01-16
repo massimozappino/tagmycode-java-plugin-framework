@@ -52,7 +52,12 @@ public class Framework {
         return authorizationDialog;
     }
 
-    public void showSnippetDialog(Snippet snippet, String mimeType) {
+    public void showNewSnippetDialog() {
+        SnippetDialog snippetDialog = new SnippetDialog(this, null, getParentFrame());
+        snippetDialog.display();
+    }
+
+    public void showEditSnippetDialog(Snippet snippet, String mimeType) {
         SnippetDialog snippetDialog = new SnippetDialog(this, mimeType, getParentFrame());
         snippetDialog.populateWithSnippet(snippet);
         snippetDialog.display();
@@ -273,5 +278,10 @@ public class Framework {
         } catch (TagMyCodeStorageException e) {
             manageTagMyCodeExceptions(e);
         }
+    }
+
+    public void updateSnippet(Snippet snippet) {
+        // TODO create test
+        // TODO create method to get snippet by id
     }
 }

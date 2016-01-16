@@ -5,6 +5,8 @@ import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.field.AbstractFieldValidation;
 import com.tagmycode.plugin.gui.field.CodeFieldValidation;
 import com.tagmycode.plugin.gui.field.TitleFieldValidation;
+import com.tagmycode.plugin.operation.EditSnippetOperation;
+import com.tagmycode.plugin.operation.NewSnippetOperation;
 import com.tagmycode.sdk.model.DefaultLanguage;
 import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.LanguageCollection;
@@ -14,6 +16,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class SnippetDialogTest extends AbstractTest {
 
@@ -31,8 +34,11 @@ public class SnippetDialogTest extends AbstractTest {
     @Test
     public void testCreateSnippetObjectForEmptySnippet() throws Exception {
         SnippetDialog snippetDialog = createSnippetDialog(createFramework());
-        assertTrue(snippetDialog.createSnippetObject().toJson().length() > 0);
+        Snippet snippetObject = snippetDialog.createSnippetObject();
+        assertEquals(0, snippetObject.getId());
+        assertTrue(snippetObject.toJson().length() > 0);
         assertEquals("New snippet", snippetDialog.getDialog().getTitle());
+        assertTrue(snippetDialog.isNewSnippet());
     }
 
     @Test
@@ -41,17 +47,24 @@ public class SnippetDialogTest extends AbstractTest {
         Snippet snippet = resourceGenerate.aSnippet();
 
         snippetDialog.populateWithSnippet(snippet);
-        assertEquals(snippet.getCreationDate(), snippetDialog.createSnippetObject().getCreationDate());
-        assertEquals(snippet.getUpdateDate(), snippetDialog.createSnippetObject().getUpdateDate());
+        Snippet snippetObject;
+
+        snippetObject = snippetDialog.createSnippetObject();
+        assertEquals(1, snippetObject.getId());
+        assertEquals(snippet.getCreationDate(), snippetObject.getCreationDate());
+        assertEquals(snippet.getCreationDate(), snippetObject.getCreationDate());
+        assertEquals(snippet.getUpdateDate(), snippetObject.getUpdateDate());
 
         snippet.setCreationDate(null);
         snippet.setUpdateDate(null);
 
         snippetDialog.populateWithSnippet(snippet);
-        assertNotNull(snippetDialog.createSnippetObject().getCreationDate());
-        assertNotNull(snippetDialog.createSnippetObject().getUpdateDate());
+        snippetObject = snippetDialog.createSnippetObject();
+        assertNotNull(snippetObject.getCreationDate());
+        assertNotNull(snippetObject.getUpdateDate());
 
         assertEquals("Edit snippet", snippetDialog.getDialog().getTitle());
+        assertFalse(snippetDialog.isNewSnippet());
     }
 
     @Test
@@ -137,5 +150,50 @@ public class SnippetDialogTest extends AbstractTest {
         assertEquals(2, elementValidateList.size());
         assertTrue(elementValidateList.get(0) instanceof TitleFieldValidation);
         assertTrue(elementValidateList.get(1) instanceof CodeFieldValidation);
+    }
+
+    @Test
+    public void testOnOk() throws Exception {
+        SnippetDialog snippetDialog = spy(new SnippetDialog(createSpyFramework(), null, null));
+        snippetDialog.onOK();
+
+        verify(snippetDialog, times(1)).checkValidForm();
+        verify(snippetDialog, times(0)).getSaveOperation();
+
+        snippetDialog.populateWithSnippet(resourceGenerate.aSnippet());
+
+        snippetDialog.onOK();
+
+        verify(snippetDialog, times(2)).checkValidForm();
+        verify(snippetDialog, times(1)).getSaveOperation();
+    }
+
+    @Test
+    public void testGetSaveOperation() {
+        SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null, null);
+
+        assertTrue(snippetDialog.isNewSnippet());
+        assertTrue(snippetDialog.getSaveOperation() instanceof NewSnippetOperation);
+
+        snippetDialog.populateWithSnippet(new Snippet());
+        assertTrue(snippetDialog.isNewSnippet());
+        assertTrue(snippetDialog.getSaveOperation() instanceof NewSnippetOperation);
+
+        snippetDialog.populateWithSnippet(new Snippet().setId(1));
+        assertFalse(snippetDialog.isNewSnippet());
+        assertTrue(snippetDialog.getSaveOperation() instanceof EditSnippetOperation);
+    }
+
+    @Test
+    public void testIsNewSnippet() {
+        SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null, null);
+
+        assertTrue(snippetDialog.isNewSnippet());
+
+        snippetDialog.populateWithSnippet(new Snippet());
+        assertTrue(snippetDialog.isNewSnippet());
+
+        snippetDialog.populateWithSnippet(new Snippet().setId(1));
+        assertFalse(snippetDialog.isNewSnippet());
     }
 }

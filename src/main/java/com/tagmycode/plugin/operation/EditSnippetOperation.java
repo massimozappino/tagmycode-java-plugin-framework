@@ -3,10 +3,10 @@ package com.tagmycode.plugin.operation;
 import com.tagmycode.plugin.gui.form.SnippetDialog;
 import com.tagmycode.sdk.model.Snippet;
 
-public class CreateSnippetOperation extends TagMyCodeAsynchronousOperation<Snippet> {
+public class EditSnippetOperation extends TagMyCodeAsynchronousOperation<Snippet> {
     private SnippetDialog snippetDialog;
 
-    public CreateSnippetOperation(SnippetDialog snippetDialog) {
+    public EditSnippetOperation(SnippetDialog snippetDialog) {
         super(snippetDialog);
         this.snippetDialog = snippetDialog;
     }
@@ -18,7 +18,8 @@ public class CreateSnippetOperation extends TagMyCodeAsynchronousOperation<Snipp
 
     @Override
     protected Snippet performOperation() throws Exception {
-        return snippetDialog.getFramework().getTagMyCode().createSnippet(snippetDialog.createSnippetObject());
+        Snippet snippetObject = snippetDialog.createSnippetObject();
+        return snippetDialog.getFramework().getTagMyCode().updateSnippet(snippetObject);
     }
 
     @Override
@@ -29,7 +30,7 @@ public class CreateSnippetOperation extends TagMyCodeAsynchronousOperation<Snipp
     @Override
     protected void onSuccess(Snippet snippet) {
         snippetDialog.closeDialog();
-        snippetDialog.getFramework().addSnippet(snippet);
+        snippetDialog.getFramework().updateSnippet(snippet);
     }
 
 }

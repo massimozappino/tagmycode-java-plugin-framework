@@ -207,7 +207,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
     private void editSnippetAction() {
         Snippet snippet = snippetsTable.getSelectedSnippet();
-        framework.showSnippetDialog(snippet, null);
+        framework.showEditSnippetDialog(snippet, null);
     }
 
     private void deleteSnippetAction() {
@@ -221,12 +221,12 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     private void newSnippetAction(Framework framework) {
-        framework.showSnippetDialog(new Snippet(), null);
+        framework.showNewSnippetDialog();
     }
 
     private void openSnippetAction() {
         Snippet snippet = snippetsTable.getSelectedSnippet();
-        framework.getMainWindow().addSnippetTab(snippet);
+        framework.getMainWindow().openSnippet(snippet);
     }
 
     private ListSelectionListener createSelectionListener() {
