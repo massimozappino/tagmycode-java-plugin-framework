@@ -262,6 +262,12 @@ public class Framework {
         saveData();
     }
 
+    public void updateSnippet(Snippet snippet) {
+        SnippetCollection snippets = getData().getSnippets();
+        snippets.updateSnippet(snippet);
+        updateSnippets(snippets);
+    }
+
     public void deleteSnippet(Snippet snippetToDelete) {
         SnippetCollection snippets = getData().getSnippets();
         snippets.deleteById(snippetToDelete.getId());
@@ -278,10 +284,5 @@ public class Framework {
         } catch (TagMyCodeStorageException e) {
             manageTagMyCodeExceptions(e);
         }
-    }
-
-    public void updateSnippet(Snippet snippet) {
-        // TODO create test
-        // TODO create method to get snippet by id
     }
 }

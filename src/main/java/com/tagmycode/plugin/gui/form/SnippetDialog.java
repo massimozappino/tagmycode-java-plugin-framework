@@ -56,6 +56,7 @@ public class SnippetDialog extends AbstractDialog {
         descriptionTextField.setText(snippet.getDescription());
         tagsTextField.setText(snippet.getTags());
         codeEditorPane.setTextWithSnippet(snippet);
+        privateSnippetCheckBox.setSelected(snippet.isPrivate());
         selectLanguage(snippet.getLanguage());
     }
 
@@ -190,6 +191,10 @@ public class SnippetDialog extends AbstractDialog {
 
     public JTextField getTagsTextField() {
         return tagsTextField;
+    }
+
+    public JCheckBox getPrivateSnippetCheckBox() {
+        return privateSnippetCheckBox;
     }
 
     public JTextField getDescriptionTextField() {

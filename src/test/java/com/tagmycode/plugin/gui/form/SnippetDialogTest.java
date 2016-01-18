@@ -23,12 +23,19 @@ public class SnippetDialogTest extends AbstractTest {
     @Test
     public void populateSnippetDialog() throws Exception {
         SnippetDialog snippetDialog = createSnippetDialog(createFramework());
-        snippetDialog.populateWithSnippet(resourceGenerate.aSnippet());
+        Snippet snippet = resourceGenerate.aSnippet();
+
+        snippetDialog.populateWithSnippet(snippet);
         Thread.sleep(800);
 
         assertEquals("code\r\nsecond line", snippetDialog.getCodeEditorPane().getText());
         assertEquals("A simple description", snippetDialog.getDescriptionTextField().getText());
         assertEquals("tag1 tag2 tag3", snippetDialog.getTagsTextField().getText());
+        assertFalse(snippetDialog.getPrivateSnippetCheckBox().isSelected());
+
+        snippet = resourceGenerate.aSnippet().setPrivate(true);
+        snippetDialog.populateWithSnippet(snippet);
+        assertTrue(snippetDialog.getPrivateSnippetCheckBox().isSelected());
     }
 
     @Test

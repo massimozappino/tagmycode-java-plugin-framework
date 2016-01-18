@@ -83,4 +83,5 @@ public class SnippetsTableModel extends AbstractTableModel {
         snippetVector.add(snippet);
         fireTableDataChanged();
     }
+
 }

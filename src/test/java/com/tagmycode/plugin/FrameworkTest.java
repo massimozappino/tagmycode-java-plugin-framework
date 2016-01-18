@@ -8,6 +8,7 @@ import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.DefaultLanguageCollection;
 import com.tagmycode.sdk.model.LanguageCollection;
+import com.tagmycode.sdk.model.SnippetCollection;
 import com.tagmycode.sdk.model.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +18,9 @@ import support.FakeStorage;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class FrameworkTest extends AbstractTest {
 
@@ -143,6 +147,15 @@ public class FrameworkTest extends AbstractTest {
         setAValidAccountAccount();
         setAValidLanguageCollection();
         assertTrue(framework.isInitialized());
+    }
+
+    @Test
+    public void testUpdateSnippet() throws Exception {
+        Framework framework = createSpyFramework();
+
+        framework.updateSnippet(resourceGenerate.aSnippet());
+
+        verify(framework, times(1)).updateSnippets(any(SnippetCollection.class));
     }
 
     protected void assertAccessTokenIs(OauthToken accessToken) {
