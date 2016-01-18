@@ -13,10 +13,7 @@ import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,6 +38,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private JTable jTable;
     private ClipboardCopy clipboardCopy = new ClipboardCopy();
     private FilterSnippetsOperation filterSnippetsOperation;
+    private int selectedRow;
 
     public SnippetsTab(final Framework framework) {
         this.framework = framework;
@@ -135,7 +133,26 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                 }
             }
         });
+
+        jTable.getModel().addTableModelListener(createTableModelListener());
         initTablePopupMenu();
+    }
+
+    private TableModelListener createTableModelListener() {
+        return new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TODO test: if last row is deleted, select last row -1
+                        if (selectedRow >= 0 && (jTable.getModel().getRowCount() - 1) > selectedRow) {
+                            jTable.addRowSelectionInterval(selectedRow, selectedRow);
+                        }
+                    }
+                });
+            }
+        };
     }
 
     private void initTablePopupMenu() {
@@ -233,6 +250,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         return new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
+                selectedRow = e.getFirstIndex();
                 if (!e.getValueIsAdjusting()) {
                     snippetViewFormPane.removeAll();
 

@@ -54,10 +54,13 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         return tableModel.getSnippetAt(getSelectedModelIndex());
     }
 
+
     private int getSelectedModelIndex() {
         // TODO manage IndexOutOfBoundsException
         try {
-            return table.convertRowIndexToModel(table.getSelectedRow());
+            int selectedRow = table.getSelectedRow();
+            int i = table.convertRowIndexToModel(selectedRow);
+            return i;
         } catch (IndexOutOfBoundsException e) {
             return 0;
         }
