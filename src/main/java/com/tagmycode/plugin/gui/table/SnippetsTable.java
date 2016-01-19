@@ -45,6 +45,7 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         columnIsPrivate.setHeaderRenderer(new IconTableHeaderCellRender(header.getDefaultRenderer()));
         columnIsPrivate.setMaxWidth(32);
         columnIsPrivate.setMinWidth(32);
+        columnIsPrivate.setResizable(false);
 
         TableColumn columnLanguage = table.getColumnModel().getColumn(SnippetsTableModel.LANGUAGE);
         columnLanguage.setPreferredWidth(80);
