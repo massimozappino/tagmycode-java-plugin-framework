@@ -32,9 +32,13 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         cellSelectionModel = table.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+        configureTableHeader();
+    }
 
+    private void configureTableHeader() {
         JTableHeader header = table.getTableHeader();
         header.setDefaultRenderer(new KeepSortIconHeaderRenderer(header.getDefaultRenderer()));
+        header.setReorderingAllowed(false);
 
         TableColumn columnIsPrivate = table.getColumnModel().getColumn(SnippetsTableModel.IS_PRIVATE);
         columnIsPrivate.setHeaderValue(IconResources.createImageIcon("private.png"));
