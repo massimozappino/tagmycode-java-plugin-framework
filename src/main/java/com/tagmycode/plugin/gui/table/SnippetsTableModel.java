@@ -8,9 +8,9 @@ import java.util.Date;
 import java.util.Vector;
 
 public class SnippetsTableModel extends AbstractTableModel {
-    public final static int TITLE = 0;
-    public final static int LANGUAGE = 1;
-    public static final int IS_PRIVATE = 2;
+    public static final int IS_PRIVATE = 0;
+    public final static int TITLE = 1;
+    public final static int LANGUAGE = 2;
     public static final int CREATED = 3;
 
     private Vector<Snippet> snippetVector;
@@ -18,7 +18,7 @@ public class SnippetsTableModel extends AbstractTableModel {
 
     public SnippetsTableModel() {
         snippetVector = new Vector<Snippet>();
-        columns = new String[]{"Title", "Language", "Private", "Created"};
+        columns = new String[]{"Private", "Title", "Language", "Created"};
     }
 
     @Override

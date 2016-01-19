@@ -8,7 +8,7 @@ public class TitleSnippetTableCellRender extends DefaultSnippetTableCellRender {
     static ImageIcon icon = IconResources.createImageIcon("snippet.png");
 
     @Override
-    protected void customText(Object value) {
+    protected void customLabel(Object value) {
         label.setText((String) value);
         label.setIcon(icon);
     }

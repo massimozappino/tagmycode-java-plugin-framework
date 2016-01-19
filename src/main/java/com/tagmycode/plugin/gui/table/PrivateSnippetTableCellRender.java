@@ -8,10 +8,11 @@ public class PrivateSnippetTableCellRender extends DefaultSnippetTableCellRender
     static ImageIcon icon = IconResources.createImageIcon("private.png");
 
     @Override
-    protected void customText(Object value) {
+    protected void customLabel(Object value) {
         label.setText("");
         if (value.toString().equals("true")) {
             label.setIcon(icon);
+            label.setHorizontalAlignment(CENTER);
         } else {
             label.setIcon(null);
         }

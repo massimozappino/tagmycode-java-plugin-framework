@@ -1,10 +1,13 @@
 package com.tagmycode.plugin.gui.table;
 
+import com.tagmycode.plugin.IconResources;
 import com.tagmycode.plugin.gui.AbstractSnippetsListGui;
 import com.tagmycode.sdk.model.Snippet;
 import com.tagmycode.sdk.model.SnippetCollection;
 
 import javax.swing.*;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 
 public class SnippetsTable extends AbstractSnippetsListGui {
@@ -29,9 +32,24 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         cellSelectionModel = table.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        table.getColumnModel().getColumn(SnippetsTableModel.TITLE).setCellRenderer(new TitleSnippetTableCellRender());
-        table.getColumnModel().getColumn(SnippetsTableModel.LANGUAGE).setCellRenderer(new DefaultSnippetTableCellRender());
-        table.getColumnModel().getColumn(SnippetsTableModel.IS_PRIVATE).setCellRenderer(new PrivateSnippetTableCellRender());
+
+        JTableHeader header = table.getTableHeader();
+        header.setDefaultRenderer(new KeepSortIconHeaderRenderer(header.getDefaultRenderer()));
+
+        TableColumn columnIsPrivate = table.getColumnModel().getColumn(SnippetsTableModel.IS_PRIVATE);
+        columnIsPrivate.setHeaderValue(IconResources.createImageIcon("private.png"));
+        columnIsPrivate.setHeaderRenderer(new IconTableHeaderCellRender(header.getDefaultRenderer()));
+        columnIsPrivate.setMaxWidth(32);
+        columnIsPrivate.setMinWidth(32);
+
+        TableColumn columnLanguage = table.getColumnModel().getColumn(SnippetsTableModel.LANGUAGE);
+        columnLanguage.setPreferredWidth(80);
+
+        TableColumn columnTitle = table.getColumnModel().getColumn(SnippetsTableModel.TITLE);
+        columnTitle.setPreferredWidth(200);
+        columnTitle.setCellRenderer(new TitleSnippetTableCellRender());
+        columnLanguage.setCellRenderer(new DefaultSnippetTableCellRender());
+        columnIsPrivate.setCellRenderer(new PrivateSnippetTableCellRender());
         table.getColumnModel().getColumn(SnippetsTableModel.CREATED).setCellRenderer(new DateSnippetTableCellRender());
     }
 

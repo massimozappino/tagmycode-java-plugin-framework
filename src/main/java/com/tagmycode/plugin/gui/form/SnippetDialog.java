@@ -70,6 +70,7 @@ public class SnippetDialog extends AbstractDialog {
         getDialog().setSize(650, 450);
         getDialog().setTitle(NEW_SNIPPET_TITLE);
         getDialog().setResizable(true);
+        getDialog().setModal(false);
 
         populateLanguages();
         restorePreferences();

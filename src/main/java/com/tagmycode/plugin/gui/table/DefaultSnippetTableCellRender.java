@@ -18,11 +18,11 @@ public class DefaultSnippetTableCellRender extends DefaultTableCellRenderer {
         label.setBackground(tableCellRendererComponent.getBackground());
         label.setForeground(tableCellRendererComponent.getForeground());
 
-        customText(value);
+        customLabel(value);
         return label;
     }
 
-    protected void customText(Object value) {
+    protected void customLabel(Object value) {
         label.setText(String.valueOf(value));
     }
 }

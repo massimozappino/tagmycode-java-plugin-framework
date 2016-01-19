@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class DateSnippetTableCellRender extends DefaultSnippetTableCellRender {
     @Override
-    protected void customText(Object value) {
+    protected void customLabel(Object value) {
         label.setText("");
 
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
