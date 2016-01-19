@@ -238,7 +238,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     private void newSnippetAction(Framework framework) {
-        framework.showNewSnippetDialog();
+        framework.showNewSnippetDialog(new Snippet(), null);
     }
 
     private void openSnippetAction() {

@@ -52,14 +52,15 @@ public class Framework {
         return authorizationDialog;
     }
 
-    public void showNewSnippetDialog() {
-        SnippetDialog snippetDialog = new SnippetDialog(this, null, getParentFrame());
+    public void showNewSnippetDialog(Snippet snippet, String mimeType) {
+        SnippetDialog snippetDialog = new SnippetDialog(this, mimeType, getParentFrame());
+        snippetDialog.populateFieldsWithSnippet(snippet);
         snippetDialog.display();
     }
 
     public void showEditSnippetDialog(Snippet snippet, String mimeType) {
         SnippetDialog snippetDialog = new SnippetDialog(this, mimeType, getParentFrame());
-        snippetDialog.populateWithSnippet(snippet);
+        snippetDialog.setEditableSnippet(snippet);
         snippetDialog.display();
     }
 

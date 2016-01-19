@@ -25,7 +25,7 @@ public class SnippetDialogTest extends AbstractTest {
         SnippetDialog snippetDialog = createSnippetDialog(createFramework());
         Snippet snippet = resourceGenerate.aSnippet();
 
-        snippetDialog.populateWithSnippet(snippet);
+        snippetDialog.populateFieldsWithSnippet(snippet);
         Thread.sleep(800);
 
         assertEquals("code\r\nsecond line", snippetDialog.getCodeEditorPane().getText());
@@ -34,7 +34,7 @@ public class SnippetDialogTest extends AbstractTest {
         assertFalse(snippetDialog.getPrivateSnippetCheckBox().isSelected());
 
         snippet = resourceGenerate.aSnippet().setPrivate(true);
-        snippetDialog.populateWithSnippet(snippet);
+        snippetDialog.populateFieldsWithSnippet(snippet);
         assertTrue(snippetDialog.getPrivateSnippetCheckBox().isSelected());
     }
 
@@ -53,7 +53,7 @@ public class SnippetDialogTest extends AbstractTest {
         SnippetDialog snippetDialog = createSnippetDialog(createFramework());
         Snippet snippet = resourceGenerate.aSnippet();
 
-        snippetDialog.populateWithSnippet(snippet);
+        snippetDialog.setEditableSnippet(snippet);
         Snippet snippetObject;
 
         snippetObject = snippetDialog.createSnippetObject();
@@ -65,7 +65,7 @@ public class SnippetDialogTest extends AbstractTest {
         snippet.setCreationDate(null);
         snippet.setUpdateDate(null);
 
-        snippetDialog.populateWithSnippet(snippet);
+        snippetDialog.setEditableSnippet(snippet);
         snippetObject = snippetDialog.createSnippetObject();
         assertNotNull(snippetObject.getCreationDate());
         assertNotNull(snippetObject.getUpdateDate());
@@ -101,7 +101,7 @@ public class SnippetDialogTest extends AbstractTest {
         assertEquals(customLanguage, snippetDialog.getLanguageComboBox().getSelectedItem());
 
         Snippet expectedSnippet = resourceGenerate.aSnippet();
-        snippetDialog.populateWithSnippet(expectedSnippet);
+        snippetDialog.populateFieldsWithSnippet(expectedSnippet);
 
         assertEquals(expectedSnippet.getLanguage(), snippetDialog.getLanguageComboBox().getSelectedItem());
     }
@@ -167,7 +167,7 @@ public class SnippetDialogTest extends AbstractTest {
         verify(snippetDialog, times(1)).checkValidForm();
         verify(snippetDialog, times(0)).getSaveOperation();
 
-        snippetDialog.populateWithSnippet(resourceGenerate.aSnippet());
+        snippetDialog.populateFieldsWithSnippet(resourceGenerate.aSnippet());
 
         snippetDialog.onOK();
 
@@ -182,11 +182,19 @@ public class SnippetDialogTest extends AbstractTest {
         assertTrue(snippetDialog.isNewSnippet());
         assertTrue(snippetDialog.getSaveOperation() instanceof NewSnippetOperation);
 
-        snippetDialog.populateWithSnippet(new Snippet());
+        snippetDialog.populateFieldsWithSnippet(new Snippet().setId(1));
         assertTrue(snippetDialog.isNewSnippet());
         assertTrue(snippetDialog.getSaveOperation() instanceof NewSnippetOperation);
 
-        snippetDialog.populateWithSnippet(new Snippet().setId(1));
+        snippetDialog.populateFieldsWithSnippet(new Snippet());
+        assertTrue(snippetDialog.isNewSnippet());
+        assertTrue(snippetDialog.getSaveOperation() instanceof NewSnippetOperation);
+
+        snippetDialog.setEditableSnippet(new Snippet());
+        assertTrue(snippetDialog.isNewSnippet());
+        assertTrue(snippetDialog.getSaveOperation() instanceof NewSnippetOperation);
+
+        snippetDialog.setEditableSnippet(new Snippet().setId(1));
         assertFalse(snippetDialog.isNewSnippet());
         assertTrue(snippetDialog.getSaveOperation() instanceof EditSnippetOperation);
     }
@@ -197,10 +205,10 @@ public class SnippetDialogTest extends AbstractTest {
 
         assertTrue(snippetDialog.isNewSnippet());
 
-        snippetDialog.populateWithSnippet(new Snippet());
+        snippetDialog.setEditableSnippet(new Snippet());
         assertTrue(snippetDialog.isNewSnippet());
 
-        snippetDialog.populateWithSnippet(new Snippet().setId(1));
+        snippetDialog.setEditableSnippet(new Snippet().setId(1));
         assertFalse(snippetDialog.isNewSnippet());
     }
 }

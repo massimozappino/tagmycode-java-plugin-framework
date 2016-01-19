@@ -49,9 +49,13 @@ public class SnippetDialog extends AbstractDialog {
         setMimeType(mimeType);
     }
 
-    public void populateWithSnippet(Snippet snippet) {
+    public void setEditableSnippet(Snippet snippet) {
         getDialog().setTitle(EDIT_SNIPPET_TITLE);
         editableSnippet = snippet;
+        populateFieldsWithSnippet(snippet);
+    }
+
+    public void populateFieldsWithSnippet(Snippet snippet) {
         titleBox.setText(snippet.getTitle());
         descriptionTextField.setText(snippet.getDescription());
         tagsTextField.setText(snippet.getTags());
