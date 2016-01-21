@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class SnippetsTable extends AbstractSnippetsListGui {
 
@@ -29,10 +30,20 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         table.setAutoCreateRowSorter(true);
         table.setShowGrid(false);
 
+        sortByCreationDate();
+
         cellSelectionModel = table.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         configureTableHeader();
+    }
+
+    private void sortByCreationDate() {
+        DefaultRowSorter sorter = ((DefaultRowSorter) table.getRowSorter());
+        ArrayList<RowSorter.SortKey> list = new ArrayList<RowSorter.SortKey>();
+        list.add(new RowSorter.SortKey(SnippetsTableModel.CREATED, SortOrder.DESCENDING));
+        sorter.setSortKeys(list);
+        sorter.sort();
     }
 
     private void configureTableHeader() {

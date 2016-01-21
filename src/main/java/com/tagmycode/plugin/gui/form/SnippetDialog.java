@@ -31,7 +31,7 @@ public class SnippetDialog extends AbstractDialog {
     private JPanel contentPane;
     private JTextField tagsTextField;
     private JCheckBox privateSnippetCheckBox;
-    private JTextField descriptionTextField;
+    private JTextArea descriptionTextField;
     private JTextField titleBox;
     private SnippetEditorPane codeEditorPane;
     private JComboBox<Language> languageComboBox;
@@ -253,7 +253,7 @@ public class SnippetDialog extends AbstractDialog {
         return privateSnippetCheckBox;
     }
 
-    public JTextField getDescriptionTextField() {
+    public JTextArea getDescriptionTextField() {
         return descriptionTextField;
     }
 
