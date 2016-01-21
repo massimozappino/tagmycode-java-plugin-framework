@@ -16,6 +16,8 @@ import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,6 +43,7 @@ public class SnippetDialog extends AbstractDialog {
     private Snippet editableSnippet;
     private NewSnippetOperation newSnippetOperation;
     private EditSnippetOperation editSnippetOperation;
+    private boolean isModified = false;
 
     public SnippetDialog(final Framework framework, String mimeType, Frame parent) {
         super(framework, parent);
@@ -66,11 +69,14 @@ public class SnippetDialog extends AbstractDialog {
 
     @Override
     protected void initWindow() {
+        snippetMarkedAsSaved();
+
         newSnippetOperation = new NewSnippetOperation(this);
         editSnippetOperation = new EditSnippetOperation(this);
         defaultComboBoxModel = new DefaultComboBoxModel<Language>();
         languageComboBox.setModel(defaultComboBoxModel);
         descriptionTextField.requestFocus();
+
         getDialog().setSize(650, 450);
         getDialog().setTitle(NEW_SNIPPET_TITLE);
         getDialog().setResizable(true);
@@ -85,6 +91,29 @@ public class SnippetDialog extends AbstractDialog {
                 listenForChanges();
             }
         });
+    }
+
+
+    @Override
+    public void closeDialog() {
+        if (isModified()) {
+            showConfirmDialog();
+        } else {
+            super.closeDialog();
+        }
+    }
+
+    protected void showConfirmDialog() {
+        String message = String.format("Do you want to save changes to \"%s\"?", titleBox.getText());
+        int reply = JOptionPane.showConfirmDialog(getDialog(), message, "Save changes?", JOptionPane.YES_NO_CANCEL_OPTION);
+        switch (reply) {
+            case JOptionPane.YES_OPTION:
+                onOK();
+                break;
+            case JOptionPane.NO_OPTION:
+                super.closeDialog();
+                break;
+        }
     }
 
     @Override
@@ -116,11 +145,32 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     private void listenForChanges() {
-        // TODO do not use getStorageEngine
+        DocumentListener listener = new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                setSnippetIsModified();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                setSnippetIsModified();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                setSnippetIsModified();
+            }
+        };
+        titleBox.getDocument().addDocumentListener(listener);
+        descriptionTextField.getDocument().addDocumentListener(listener);
+        codeEditorPane.getDocument().addDocumentListener(listener);
+        tagsTextField.getDocument().addDocumentListener(listener);
+
+
+
         languageComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    setSnippetIsModified();
+                    // TODO do not use getStorageEngine
                     framework.getStorageEngine().saveLastLanguageUsed(getSelectedLanguage());
                 } catch (Exception ignored) {
                 }
@@ -133,6 +183,7 @@ public class SnippetDialog extends AbstractDialog {
                 boolean selected = privateSnippetCheckBox.isSelected();
 
                 try {
+                    setSnippetIsModified();
                     // TODO do not use getStorageEngine
                     framework.getStorageEngine().savePrivateSnippetFlag(selected);
                 } catch (TagMyCodeStorageException ignored) {
@@ -190,7 +241,7 @@ public class SnippetDialog extends AbstractDialog {
         return titleBox;
     }
 
-    public JEditorPane getCodeEditorPane() {
+    public SnippetEditorPane getCodeEditorPane() {
         return codeEditorPane;
     }
 
@@ -238,5 +289,19 @@ public class SnippetDialog extends AbstractDialog {
         } else {
             return editSnippetOperation;
         }
+    }
+
+    public boolean isModified() {
+        return isModified;
+    }
+
+    public void snippetMarkedAsSaved() {
+        isModified = false;
+        getButtonOk().setEnabled(false);
+    }
+
+    public void setSnippetIsModified() {
+        this.isModified = true;
+        getButtonOk().setEnabled(true);
     }
 }

@@ -64,7 +64,7 @@ public abstract class AbstractDialog extends AbstractGui implements IOnErrorCall
 
     protected abstract JButton getButtonCancel();
 
-    private void onCancel() {
+    protected void onCancel() {
         closeDialog();
     }
 

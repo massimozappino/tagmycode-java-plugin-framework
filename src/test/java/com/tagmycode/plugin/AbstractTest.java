@@ -7,7 +7,10 @@ import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.OauthToken;
 import com.tagmycode.sdk.authentication.TagMyCodeApiDevelopment;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
-import com.tagmycode.sdk.model.*;
+import com.tagmycode.sdk.model.DefaultLanguage;
+import com.tagmycode.sdk.model.DefaultLanguageCollection;
+import com.tagmycode.sdk.model.LanguageCollection;
+import com.tagmycode.sdk.model.SnippetCollection;
 import org.mockito.Mockito;
 import support.*;
 
@@ -15,7 +18,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -55,12 +57,6 @@ public class AbstractTest {
         field.setAccessible(true);
         field.set(framework, mockedTagMyCode);
         return mockedTagMyCode;
-    }
-
-    protected void mockClientCreateASnippet(Framework framework) throws Exception {
-        TagMyCode mockedTagMyCode = getMockedTagMyCode(framework);
-
-        when(mockedTagMyCode.createSnippet(any(Snippet.class))).thenReturn(resourceGenerate.aSnippet());
     }
 
     protected Client getMockedClient(Framework framework) throws NoSuchFieldException, IllegalAccessException {

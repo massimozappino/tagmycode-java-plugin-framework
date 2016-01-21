@@ -141,7 +141,7 @@ public class SnippetDialogTest extends AbstractTest {
 
     @Test
     public void snippetFormValidation() throws Exception {
-        SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null, null);
+        SnippetDialog snippetDialog = createSnippetDialog();
         assertFalse(snippetDialog.checkValidForm());
 
         snippetDialog.getTitleBox().setText("a title");
@@ -152,7 +152,7 @@ public class SnippetDialogTest extends AbstractTest {
 
     @Test
     public void testElementValidateList() throws Exception {
-        SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null, null);
+        SnippetDialog snippetDialog = createSnippetDialog();
         ArrayList<AbstractFieldValidation> elementValidateList = snippetDialog.createElementValidateList();
         assertEquals(2, elementValidateList.size());
         assertTrue(elementValidateList.get(0) instanceof TitleFieldValidation);
@@ -161,7 +161,7 @@ public class SnippetDialogTest extends AbstractTest {
 
     @Test
     public void testOnOk() throws Exception {
-        SnippetDialog snippetDialog = spy(new SnippetDialog(createSpyFramework(), null, null));
+        SnippetDialog snippetDialog = spy(createSnippetDialog());
         snippetDialog.onOK();
 
         verify(snippetDialog, times(1)).checkValidForm();
@@ -177,7 +177,7 @@ public class SnippetDialogTest extends AbstractTest {
 
     @Test
     public void testGetSaveOperation() {
-        SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null, null);
+        SnippetDialog snippetDialog = createSnippetDialog();
 
         assertTrue(snippetDialog.isNewSnippet());
         assertTrue(snippetDialog.getSaveOperation() instanceof NewSnippetOperation);
@@ -201,7 +201,7 @@ public class SnippetDialogTest extends AbstractTest {
 
     @Test
     public void testIsNewSnippet() {
-        SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null, null);
+        SnippetDialog snippetDialog = createSnippetDialog();
 
         assertTrue(snippetDialog.isNewSnippet());
 
@@ -211,4 +211,72 @@ public class SnippetDialogTest extends AbstractTest {
         snippetDialog.setEditableSnippet(new Snippet().setId(1));
         assertFalse(snippetDialog.isNewSnippet());
     }
+
+    @Test
+    public void testSetSnippetIsNotModified() {
+        SnippetDialog snippetDialog = createSnippetDialog();
+        snippetDialog.snippetMarkedAsSaved();
+        assertFalse(snippetDialog.isModified());
+        assertFalse(snippetDialog.getButtonOk().isEnabled());
+    }
+
+    @Test
+    public void testSetSnippetIsModified() {
+        SnippetDialog snippetDialog = createSnippetDialog();
+        snippetDialog.setSnippetIsModified();
+        assertTrue(snippetDialog.isModified());
+        assertTrue(snippetDialog.getButtonOk().isEnabled());
+    }
+
+
+    @Test
+    public void testIsModified() throws Exception {
+        SnippetDialog snippetDialog = createSnippetDialog();
+        assertFalse(snippetDialog.isModified());
+        assertFalse(snippetDialog.getButtonOk().isEnabled());
+
+        snippetDialog = createSnippetDialog();
+        snippetDialog.getTitleBox().setText("title");
+        assertTrue(snippetDialog.isModified());
+
+        snippetDialog = createSnippetDialog();
+        snippetDialog.getDescriptionTextField().setText("description");
+        assertTrue(snippetDialog.isModified());
+
+//        snippetDialog = createSnippetDialog();
+//        snippetDialog.getCodeEditorPane().setText("code");
+//        assertTrue(snippetDialog.isModified());
+
+        snippetDialog = createSnippetDialog();
+        snippetDialog.getTagsTextField().setText("tags");
+        assertTrue(snippetDialog.isModified());
+
+        Framework spyFramework = createSpyFramework();
+        when(spyFramework.getLanguageCollection()).thenReturn(resourceGenerate.aLanguageCollection());
+        snippetDialog = new SnippetDialog(spyFramework, null, null);
+        snippetDialog.getLanguageComboBox().setSelectedIndex(1);
+        assertTrue(snippetDialog.isModified());
+
+        snippetDialog = createSnippetDialog();
+        snippetDialog.getPrivateSnippetCheckBox().doClick();
+        assertTrue(snippetDialog.isModified());
+    }
+
+    @Test
+    public void askToSaveIfModified() throws InterruptedException {
+        final boolean[] showConfirmDialogIsCalled = new boolean[1];
+        SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null, null) {
+            protected void showConfirmDialog() {
+                showConfirmDialogIsCalled[0] = true;
+            }
+        };
+        snippetDialog.setSnippetIsModified();
+        snippetDialog.closeDialog();
+        assertTrue(showConfirmDialogIsCalled[0]);
+    }
+
+    private SnippetDialog createSnippetDialog() {
+        return new SnippetDialog(createSpyFramework(), null, null);
+    }
+
 }
