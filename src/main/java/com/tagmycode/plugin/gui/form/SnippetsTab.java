@@ -15,13 +15,10 @@ import com.tagmycode.sdk.model.Snippet;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
-    private ReloadSnippetsOperation refreshSnippetsOperation;
+    private ReloadSnippetsOperation reloadSnippetsOperation;
     private SnippetsTable snippetsTable;
     private JPanel snippetViewFormPane;
     private JButton newSnippetButton;
@@ -43,7 +40,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     public SnippetsTab(final Framework framework) {
         this.framework = framework;
         snippetViewFormPane.removeAll();
-        refreshSnippetsOperation = new ReloadSnippetsOperation(this);
+        reloadSnippetsOperation = new ReloadSnippetsOperation(this);
         initSnippetsJTable();
 
         leftPane.add(snippetsTable.getMainComponent(), BorderLayout.CENTER);
@@ -215,6 +212,25 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                 }
             }
         });
+
+        jTable.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE || e.getKeyCode() == KeyEvent.VK_DELETE) {
+                    deleteSnippetAction();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
     }
 
     private void copyCodeAction() {
@@ -285,7 +301,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     private void refreshSnippets() {
-        refreshSnippetsOperation.runWithTask(framework.getTaskFactory(), "Refreshing snippets");
+        reloadSnippetsOperation.runWithTask(framework.getTaskFactory(), "Refreshing snippets");
     }
 
     public SnippetsTable getSnippetsTable() {
