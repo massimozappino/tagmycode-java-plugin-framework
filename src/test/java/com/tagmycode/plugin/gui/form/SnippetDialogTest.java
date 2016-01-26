@@ -13,6 +13,7 @@ import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.Snippet;
 import org.junit.Test;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
@@ -135,7 +136,12 @@ public class SnippetDialogTest extends AbstractTest {
                 return false;
             }
         };
-        snippetDialog.getButtonOk().doClick();
+        JButton buttonOk = snippetDialog.getButtonOk();
+        assertEquals(false, buttonOk.isEnabled());
+
+        snippetDialog.setSnippetIsModified();
+        buttonOk.doClick();
+
         assertEquals("OK", value[0]);
     }
 
