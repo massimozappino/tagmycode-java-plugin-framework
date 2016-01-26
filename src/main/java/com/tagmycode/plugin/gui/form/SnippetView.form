@@ -37,7 +37,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="946a5" class="javax.swing.JEditorPane" binding="snippetEditorPane">
+          <component id="e4e43" class="com.tagmycode.plugin.gui.SnippetEditorPane" binding="snippetEditorPane">
             <constraints/>
             <properties/>
           </component>
