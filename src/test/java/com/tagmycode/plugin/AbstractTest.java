@@ -47,7 +47,7 @@ public class AbstractTest {
         TagMyCode mockTagMyCode = getMockedTagMyCode(framework);
         when(mockTagMyCode.fetchAccount()).thenReturn(resourceGenerate.aUser());
         when(mockTagMyCode.fetchLanguages()).thenReturn(resourceGenerate.aLanguageCollection());
-        when(mockTagMyCode.fetchSnippets()).thenReturn(resourceGenerate.aSnippetCollection());
+        when(mockTagMyCode.fetchSnippetsCollection()).thenReturn(resourceGenerate.aSnippetCollection());
     }
 
     protected TagMyCode getMockedTagMyCode(Framework framework) throws NoSuchFieldException, IllegalAccessException {
@@ -72,12 +72,14 @@ public class AbstractTest {
         assertEquals(null, data.getAccount());
         assertEquals(new DefaultLanguageCollection(), data.getLanguages());
         assertEquals(new SnippetCollection(), data.getSnippets());
+        assertEquals(null, data.getLastSnippetsUpdate());
     }
 
     protected void assertDataIsValid(Data data) throws IOException, TagMyCodeJsonException {
         assertEquals(resourceGenerate.aUser(), data.getAccount());
         assertEquals(resourceGenerate.aLanguageCollection(), data.getLanguages());
         assertEquals(resourceGenerate.aSnippetCollection(), data.getSnippets());
+        assertEquals(resourceGenerate.aSnippetsLastUpdate(), data.getLastSnippetsUpdate());
     }
 
     protected void assertStorageDataIsCleared(StorageEngine storageEngine) throws IOException, TagMyCodeJsonException, TagMyCodeStorageException {

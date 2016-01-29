@@ -2,7 +2,10 @@ package com.tagmycode.plugin;
 
 
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
-import com.tagmycode.sdk.model.*;
+import com.tagmycode.sdk.model.DefaultLanguageCollection;
+import com.tagmycode.sdk.model.LanguageCollection;
+import com.tagmycode.sdk.model.SnippetCollection;
+import com.tagmycode.sdk.model.User;
 
 public class Data {
 
@@ -10,6 +13,7 @@ public class Data {
     private LanguageCollection languages;
     private SnippetCollection snippets;
     private StorageEngine storage;
+    private String lastSnippetsUpdate;
 
     public Data(StorageEngine storage) {
         this.storage = storage;
@@ -49,11 +53,21 @@ public class Data {
         setAccount(storage.loadAccount());
         setLanguages(storage.loadLanguageCollection());
         setSnippets(storage.loadSnippets());
+        setLastSnippetsUpdate(storage.loadLastSnippetsUpdate());
     }
 
     public void saveAll() throws TagMyCodeStorageException {
         storage.saveAccount(getAccount());
         storage.saveLanguageCollection(getLanguages());
         storage.saveSnippets(getSnippets());
+        storage.saveLastSnippetsUpdate(getLastSnippetsUpdate());
+    }
+
+    public String getLastSnippetsUpdate() {
+        return lastSnippetsUpdate;
+    }
+
+    public void setLastSnippetsUpdate(String lastSnippetsUpdate) {
+        this.lastSnippetsUpdate = lastSnippetsUpdate;
     }
 }

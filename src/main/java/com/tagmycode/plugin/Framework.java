@@ -118,7 +118,7 @@ public class Framework {
     protected void fetchAllData() throws TagMyCodeException {
         data.setAccount(tagMyCode.fetchAccount());
         data.setLanguages(tagMyCode.fetchLanguages());
-        data.setSnippets(tagMyCode.fetchSnippets());
+        data.setSnippets(tagMyCode.fetchSnippetsCollection());
     }
 
     protected void loadData() throws TagMyCodeStorageException {
@@ -267,6 +267,10 @@ public class Framework {
         SnippetCollection snippets = getData().getSnippets();
         snippets.updateSnippet(snippet);
         updateSnippets(snippets);
+    }
+
+    public void updateLastSnippetsUpdate(String lastSnippetUpdate) {
+        this.getData().setLastSnippetsUpdate(lastSnippetUpdate);
     }
 
     public void deleteSnippet(Snippet snippetToDelete) {

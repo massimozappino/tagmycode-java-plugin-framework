@@ -12,6 +12,7 @@ public class StorageEngine {
     protected static final String PRIVATE_SNIPPET = "private_snippet";
     protected static final String LAST_LANGUAGE = "last_language";
     protected static final String ACCOUNT = "account";
+    private static final String SNIPPETS_LAST_UPDATE = "snippets_last_update";
     private final IStorage storage;
 
     public StorageEngine(IStorage storage) {
@@ -124,6 +125,22 @@ public class StorageEngine {
             }
             write(SNIPPETS, snippetCollection.toJson());
         } catch (Exception e) {
+            throw new TagMyCodeStorageException(e);
+        }
+    }
+
+    public void saveLastSnippetsUpdate(String snippetsLastUpdate) throws TagMyCodeStorageException {
+        try {
+            write(SNIPPETS_LAST_UPDATE, snippetsLastUpdate);
+        } catch (IOException e) {
+            throw new TagMyCodeStorageException(e);
+        }
+    }
+
+    public String loadLastSnippetsUpdate() throws TagMyCodeStorageException {
+        try {
+            return read(SNIPPETS_LAST_UPDATE);
+        } catch (IOException e) {
             throw new TagMyCodeStorageException(e);
         }
     }

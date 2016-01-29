@@ -1,14 +1,18 @@
 package com.tagmycode.plugin.operation;
 
+import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.form.SnippetsTab;
 import com.tagmycode.sdk.model.SnippetCollection;
 
 public class ReloadSnippetsOperation extends TagMyCodeAsynchronousOperation<SnippetCollection> {
     private SnippetsTab snippetsTab;
+    private Framework framework;
+    private String lastSnippetsUpdate;
 
     public ReloadSnippetsOperation(SnippetsTab snippetsTab) {
         super(snippetsTab);
         this.snippetsTab = snippetsTab;
+        framework = snippetsTab.getFramework();
     }
 
     @Override
@@ -18,7 +22,9 @@ public class ReloadSnippetsOperation extends TagMyCodeAsynchronousOperation<Snip
 
     @Override
     protected SnippetCollection performOperation() throws Exception {
-        return snippetsTab.getFramework().getTagMyCode().fetchSnippets();
+        SnippetCollection snippets = framework.getTagMyCode().fetchSnippetsChanges(framework.getData().getLastSnippetsUpdate());
+        lastSnippetsUpdate = framework.getTagMyCode().getLastSnippetUpdate();
+        return snippets;
     }
 
     @Override
@@ -28,6 +34,7 @@ public class ReloadSnippetsOperation extends TagMyCodeAsynchronousOperation<Snip
 
     @Override
     protected void onSuccess(SnippetCollection snippets) {
-        snippetsTab.getFramework().updateSnippets(snippets);
+        framework.updateSnippets(snippets);
+        framework.updateLastSnippetsUpdate(lastSnippetsUpdate);
     }
 }

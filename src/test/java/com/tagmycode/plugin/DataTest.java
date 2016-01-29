@@ -27,6 +27,7 @@ public class DataTest extends AbstractTest {
         storage.saveAccount(resourceGenerate.aUser());
         storage.saveLanguageCollection(resourceGenerate.aLanguageCollection());
         storage.saveSnippets(resourceGenerate.aSnippetCollection());
+        storage.saveLastSnippetsUpdate(resourceGenerate.aSnippetsLastUpdate());
         Data data = new Data(storage);
 
         data.loadAll();
@@ -42,6 +43,7 @@ public class DataTest extends AbstractTest {
         data.setAccount(resourceGenerate.aUser());
         data.setLanguages(resourceGenerate.aLanguageCollection());
         data.setSnippets(resourceGenerate.aSnippetCollection());
+        data.setLastSnippetsUpdate(resourceGenerate.aSnippetsLastUpdate());
 
         data.saveAll();
 
