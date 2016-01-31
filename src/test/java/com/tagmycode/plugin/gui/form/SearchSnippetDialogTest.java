@@ -20,7 +20,7 @@ public class SearchSnippetDialogTest extends AbstractTest {
     private Framework framework;
 
     @Before
-    public void initFramework() {
+    public void initFramework() throws Exception {
         framework = createFramework();
     }
 

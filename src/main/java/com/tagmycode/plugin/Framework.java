@@ -19,6 +19,7 @@ import com.tagmycode.sdk.model.SnippetCollection;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public class Framework {
     private final MainWindow mainWindow;
@@ -31,6 +32,7 @@ public class Framework {
     private final Data data;
     private SearchSnippetDialog searchSnippetDialog;
     private StorageEngine storageEngine;
+    public final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
         wallet = new Wallet(frameworkConfig.getPasswordKeyChain());
@@ -112,7 +114,7 @@ public class Framework {
 
     public void fetchAndStoreAllData() throws TagMyCodeException {
         fetchAllData();
-        storeData();
+        saveData();
     }
 
     protected void fetchAllData() throws TagMyCodeException {
@@ -123,11 +125,7 @@ public class Framework {
 
     protected void loadData() throws TagMyCodeStorageException {
         data.loadAll();
-        updateSnippets(data.getSnippets());
-    }
-
-    protected void storeData() throws TagMyCodeStorageException {
-        data.saveAll();
+        snippetsDataChanged();
     }
 
     public void logout() {
@@ -170,8 +168,7 @@ public class Framework {
     }
 
     public void manageTagMyCodeExceptions(TagMyCodeException e) {
-        // TODO convert with Logger
-        e.printStackTrace();
+        LOGGER.severe(e.getMessage());
         if (e instanceof TagMyCodeUnauthorizedException) {
             logoutAndAuthenticateAgain();
         } else if (e instanceof TagMyCodeConnectionException || e instanceof TagMyCodeStorageException) {
@@ -199,7 +196,7 @@ public class Framework {
             loadData();
         } catch (TagMyCodeStorageException e) {
             data.reset();
-            // TODO what to do? reload from server?
+            LOGGER.severe(e.getMessage());
         } catch (TagMyCodeException e) {
             manageTagMyCodeExceptions(e);
         }
@@ -216,7 +213,7 @@ public class Framework {
                         throw new TagMyCodeGuiException("Unable to authenticate");
                     }
                     fetchAndStoreAllData();
-                    updateSnippets(data.getSnippets());
+                    snippetsDataChanged();
                 } catch (TagMyCodeException ex) {
                     manageTagMyCodeExceptions(ex);
                     logout();
@@ -257,37 +254,40 @@ public class Framework {
         saveData();
     }
 
-    public void updateSnippets(SnippetCollection snippets) {
-        getData().setSnippets(snippets);
-        getSnippetsJTable().updateWithSnippets(snippets);
-        saveData();
-    }
-
     public void updateSnippet(Snippet snippet) {
         SnippetCollection snippets = getData().getSnippets();
         snippets.updateSnippet(snippet);
-        updateSnippets(snippets);
-    }
-
-    public void updateLastSnippetsUpdate(String lastSnippetUpdate) {
-        this.getData().setLastSnippetsUpdate(lastSnippetUpdate);
+        snippetsDataChanged();
     }
 
     public void deleteSnippet(Snippet snippetToDelete) {
         SnippetCollection snippets = getData().getSnippets();
         snippets.deleteById(snippetToDelete.getId());
-        updateSnippets(snippets);
+        snippetsDataChanged();
     }
 
-    private SnippetsTable getSnippetsJTable() {
+    public void mergeSnippets(SnippetCollection snippets, String lastSnippetsUpdate) {
+        this.getData().setLastSnippetsUpdate(lastSnippetsUpdate);
+        getData().getSnippets().merge(snippets);
+        snippetsDataChanged();
+    }
+
+    public void snippetsDataChanged() {
+        saveData();
+        getSnippetsJTable().updateWithSnippets(getData().getSnippets());
+    }
+
+    protected SnippetsTable getSnippetsJTable() {
         return getMainWindow().getSnippetsTab().getSnippetsTable();
     }
 
-    private void saveData() {
+    protected void saveData() {
         try {
             getData().saveAll();
         } catch (TagMyCodeStorageException e) {
+            e.printStackTrace();
             manageTagMyCodeExceptions(e);
         }
     }
+
 }

@@ -127,7 +127,7 @@ public class SnippetDialogTest extends AbstractTest {
     }
 
     @Test
-    public void checkValidFormIsCalled() {
+    public void checkValidFormIsCalled() throws Exception {
         final String[] value = {null};
         SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null, null) {
             @Override
@@ -182,7 +182,7 @@ public class SnippetDialogTest extends AbstractTest {
     }
 
     @Test
-    public void testGetSaveOperation() {
+    public void testGetSaveOperation() throws Exception {
         SnippetDialog snippetDialog = createSnippetDialog();
 
         assertTrue(snippetDialog.isNewSnippet());
@@ -206,7 +206,7 @@ public class SnippetDialogTest extends AbstractTest {
     }
 
     @Test
-    public void testIsNewSnippet() {
+    public void testIsNewSnippet() throws Exception {
         SnippetDialog snippetDialog = createSnippetDialog();
 
         assertTrue(snippetDialog.isNewSnippet());
@@ -219,7 +219,7 @@ public class SnippetDialogTest extends AbstractTest {
     }
 
     @Test
-    public void testSetSnippetIsNotModified() {
+    public void testSetSnippetIsNotModified() throws Exception {
         SnippetDialog snippetDialog = createSnippetDialog();
         snippetDialog.snippetMarkedAsSaved();
         assertFalse(snippetDialog.isModified());
@@ -227,7 +227,7 @@ public class SnippetDialogTest extends AbstractTest {
     }
 
     @Test
-    public void testSetSnippetIsModified() {
+    public void testSetSnippetIsModified() throws Exception {
         SnippetDialog snippetDialog = createSnippetDialog();
         snippetDialog.setSnippetIsModified();
         assertTrue(snippetDialog.isModified());
@@ -269,7 +269,7 @@ public class SnippetDialogTest extends AbstractTest {
     }
 
     @Test
-    public void askToSaveIfModified() throws InterruptedException {
+    public void askToSaveIfModified() throws Exception {
         final boolean[] showConfirmDialogIsCalled = new boolean[1];
         SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null, null) {
             protected void showConfirmDialog() {
@@ -281,7 +281,7 @@ public class SnippetDialogTest extends AbstractTest {
         assertTrue(showConfirmDialogIsCalled[0]);
     }
 
-    private SnippetDialog createSnippetDialog() {
+    private SnippetDialog createSnippetDialog() throws Exception {
         return new SnippetDialog(createSpyFramework(), null, null);
     }
 

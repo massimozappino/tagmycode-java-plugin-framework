@@ -28,7 +28,9 @@ public class FrameworkAcceptanceTest extends AbstractTest {
         AuthorizationDialog authorizationDialog = frameworkSpy.showAuthorizationDialog();
         String verificationCode = "verification-code";
         authorizationDialog.getVerificationCodeTextField().setText(verificationCode);
+
         authorizationDialog.getButtonOk().doClick();
+
         verify(frameworkSpy, times(1)).initialize(verificationCode, new ICallback[0]);
 
         assertDataIsValid(frameworkSpy.getData());

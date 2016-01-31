@@ -1,9 +1,12 @@
 package com.tagmycode.plugin;
 
 
+import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.exception.TagMyCodeUnauthorizedException;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static org.mockito.Mockito.verify;
 
@@ -11,7 +14,7 @@ public class ManageExceptionTest extends AbstractTest {
     private Framework frameworkSpy;
 
     @Before
-    public void initFrameworkSpy() {
+    public void initFrameworkSpy() throws Exception {
         frameworkSpy = createSpyFramework();
     }
 

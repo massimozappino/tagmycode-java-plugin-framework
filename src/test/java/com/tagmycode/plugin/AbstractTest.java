@@ -29,12 +29,14 @@ public class AbstractTest {
         resourceGenerate = new ResourceGenerate();
     }
 
-    public Framework createFramework() {
+    public Framework createFramework() throws Exception {
         FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), new FakeStorage(), new FakeMessageManager(), new FakeTaskFactory(), null);
-        return new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret());
+        Framework framework = new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret());
+       framework.getData().setAccount(resourceGenerate.aUser());
+        return framework;
     }
 
-    protected Framework createSpyFramework() {
+    protected Framework createSpyFramework() throws Exception {
         return Mockito.spy(createFramework());
     }
 

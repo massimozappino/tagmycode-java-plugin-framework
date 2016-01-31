@@ -1,15 +1,13 @@
 package com.tagmycode.plugin;
 
 
+import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.sdk.authentication.OauthToken;
 import com.tagmycode.sdk.authentication.TagMyCodeApiDevelopment;
 import com.tagmycode.sdk.authentication.VoidOauthToken;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
-import com.tagmycode.sdk.model.DefaultLanguageCollection;
-import com.tagmycode.sdk.model.LanguageCollection;
-import com.tagmycode.sdk.model.SnippetCollection;
-import com.tagmycode.sdk.model.User;
+import com.tagmycode.sdk.model.*;
 import org.junit.Before;
 import org.junit.Test;
 import support.FakeSecret;
@@ -18,9 +16,7 @@ import support.FakeStorage;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class FrameworkTest extends AbstractTest {
 
@@ -28,7 +24,7 @@ public class FrameworkTest extends AbstractTest {
     private OauthToken oauthToken;
 
     @Before
-    public void init() {
+    public void init() throws Exception {
         framework = createFramework();
         oauthToken = new OauthToken("1", "2");
     }
@@ -155,7 +151,35 @@ public class FrameworkTest extends AbstractTest {
 
         framework.updateSnippet(resourceGenerate.aSnippet());
 
-        verify(framework, times(1)).updateSnippets(any(SnippetCollection.class));
+        verify(framework, times(1)).snippetsDataChanged();
+    }
+
+    @Test
+    public void testMergeSnippetsCollection() throws Exception {
+        framework = createSpyFramework();
+
+        SnippetsTable snippetsTableMock = mock(SnippetsTable.class);
+        when(framework.getSnippetsJTable()).thenReturn(snippetsTableMock);
+        Snippet existentSnippet = resourceGenerate.aSnippet();
+        Snippet newSnippet = new Snippet().setId(5).setTitle("...title...");
+
+        framework.getData().getSnippets().add(existentSnippet);
+        assertEquals(1, framework.getData().getSnippets().size());
+
+        SnippetCollection snippetCollection = new SnippetCollection();
+        snippetCollection.add(newSnippet);
+
+        framework.mergeSnippets(snippetCollection, resourceGenerate.aSnippetsLastUpdate());
+
+        verify(framework, times(1)).snippetsDataChanged();
+
+        SnippetCollection expectedSnippets = new SnippetCollection();
+        expectedSnippets.add(existentSnippet);
+        expectedSnippets.add(newSnippet);
+        assertEquals(expectedSnippets, framework.getData().getSnippets());
+
+        assertEquals(resourceGenerate.aSnippetsLastUpdate(), framework.getData().getLastSnippetsUpdate());
+        assertEquals(resourceGenerate.aSnippetsLastUpdate(), framework.getStorageEngine().loadLastSnippetsUpdate());
     }
 
     protected void assertAccessTokenIs(OauthToken accessToken) {

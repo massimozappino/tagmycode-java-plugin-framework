@@ -78,6 +78,18 @@ public class StorageEngineTest extends AbstractTest {
     }
 
     @Test
+    public void testSaveAndLoadLastSnippetsUpdate() throws Exception {
+        String lastUpdate = resourceGenerate.aSnippetsLastUpdate();
+        storageEngine.saveLastSnippetsUpdate(lastUpdate);
+        assertEquals(lastUpdate, storageEngine.loadLastSnippetsUpdate());
+
+        String newLastUpdate = resourceGenerate.aSnippetsLastUpdate();
+
+        storageEngine.saveLastSnippetsUpdate(newLastUpdate);
+        assertEquals(newLastUpdate, storageEngine.loadLastSnippetsUpdate());
+    }
+
+    @Test
     public void clearPreferences() throws Exception {
         storageEngine.saveAccount(resourceGenerate.aUser());
         storageEngine.saveLanguageCollection(resourceGenerate.aLanguageCollection());

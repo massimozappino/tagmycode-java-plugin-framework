@@ -24,7 +24,7 @@ public class ReloadSnippetOperationTest extends AbstractTest {
         when(frameworkMock.getData()).thenReturn(dataMock);
 
         when(tagMyCodeMock.getLastSnippetUpdate()).thenReturn(resourceGenerate.aSnippetsLastUpdate());
-        when(tagMyCodeMock.fetchSnippetsCollection()).thenReturn(resourceGenerate.aSnippetCollection());
+        when(tagMyCodeMock.fetchSnippetsChanges(any(String.class))).thenReturn(resourceGenerate.aSnippetCollection());
 
         ReloadSnippetsOperation reloadSnippetsOperation = new ReloadSnippetsOperation(snippetsTabMock);
 
@@ -32,7 +32,6 @@ public class ReloadSnippetOperationTest extends AbstractTest {
         reloadSnippetsOperation.performOperation();
         reloadSnippetsOperation.onSuccess(snippets);
 
-        verify(frameworkMock, times(1)).updateSnippets(snippets);
-        verify(frameworkMock, times(1)).updateLastSnippetsUpdate(resourceGenerate.aSnippetsLastUpdate());
+        verify(frameworkMock, times(1)).mergeSnippets(snippets, resourceGenerate.aSnippetsLastUpdate());
     }
 }

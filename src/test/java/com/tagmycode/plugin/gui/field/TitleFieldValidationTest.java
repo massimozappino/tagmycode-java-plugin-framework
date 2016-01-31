@@ -21,7 +21,7 @@ public class TitleFieldValidationTest extends AbstractTest {
         assertValidationFor(" ", "", false);
     }
 
-    protected void assertValidationFor(String value, String transformed, boolean expect) {
+    protected void assertValidationFor(String value, String transformed, boolean expect) throws Exception {
         JTextField jTextField = new JTextField();
         TitleFieldValidation titleFieldValidation = new TitleFieldValidation(jTextField, createSpyFramework());
 
