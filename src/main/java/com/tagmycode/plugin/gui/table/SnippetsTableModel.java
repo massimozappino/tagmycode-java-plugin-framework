@@ -1,29 +1,28 @@
 package com.tagmycode.plugin.gui.table;
 
+import com.tagmycode.plugin.Data;
 import com.tagmycode.sdk.model.Snippet;
-import com.tagmycode.sdk.model.SnippetCollection;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Date;
-import java.util.Vector;
 
 public class SnippetsTableModel extends AbstractTableModel {
     public static final int IS_PRIVATE = 0;
     public final static int TITLE = 1;
     public final static int LANGUAGE = 2;
     public static final int CREATED = 3;
+    private final Data data;
 
-    private Vector<Snippet> snippetVector;
     private String[] columns;
 
-    public SnippetsTableModel() {
-        snippetVector = new Vector<Snippet>();
+    public SnippetsTableModel(Data data) {
+        this.data = data;
         columns = new String[]{"Private", "Title", "Language", "Created"};
     }
 
     @Override
     public int getRowCount() {
-        return snippetVector.size();
+        return data.getSnippets().size();
     }
 
     @Override
@@ -38,7 +37,7 @@ public class SnippetsTableModel extends AbstractTableModel {
 
     public Snippet getSnippetAt(int rowIndex) {
         try {
-            return snippetVector.get(rowIndex);
+            return data.getSnippets().get(rowIndex);
         } catch (ArrayIndexOutOfBoundsException e) {
             return null;
         }
@@ -71,16 +70,7 @@ public class SnippetsTableModel extends AbstractTableModel {
         return super.getColumnClass(columnIndex);
     }
 
-    public void updateWithSnippets(SnippetCollection snippets) {
-        snippetVector.clear();
-        for (Snippet snippet : snippets) {
-            snippetVector.add(snippet);
-        }
-        fireTableDataChanged();
-    }
-
-    public void addSnippet(Snippet snippet) {
-        snippetVector.add(snippet);
+    public void fireSnippetsChanged() {
         fireTableDataChanged();
     }
 

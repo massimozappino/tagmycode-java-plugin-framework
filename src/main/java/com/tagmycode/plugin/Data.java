@@ -7,19 +7,27 @@ import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.SnippetCollection;
 import com.tagmycode.sdk.model.User;
 
+import java.io.IOException;
+
 public class Data {
 
+    private StorageEngine storage;
     private User account;
     private LanguageCollection languages;
     private SnippetCollection snippets;
-    private StorageEngine storage;
     private String lastSnippetsUpdate;
 
     public Data(StorageEngine storage) {
         this.storage = storage;
+        reset();
     }
 
-    public void reset() {
+    public void clearAll() throws IOException {
+        reset();
+        storage.clearAll();
+    }
+
+    private void reset() {
         account = null;
         languages = new DefaultLanguageCollection();
         snippets = new SnippetCollection();
@@ -69,5 +77,9 @@ public class Data {
 
     public void setLastSnippetsUpdate(String lastSnippetsUpdate) {
         this.lastSnippetsUpdate = lastSnippetsUpdate;
+    }
+
+    public StorageEngine getStorageEngine() {
+        return storage;
     }
 }

@@ -33,6 +33,6 @@ public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Snip
 
     @Override
     protected void onSuccess(SnippetCollection snippets) {
-        snippetsTab.getSnippetsTable().updateWithSnippets(snippets);
+        snippetsTab.getSnippetsTable().fireSnippetsChanged();
     }
 }

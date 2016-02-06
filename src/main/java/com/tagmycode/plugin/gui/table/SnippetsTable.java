@@ -1,9 +1,9 @@
 package com.tagmycode.plugin.gui.table;
 
+import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.IconResources;
 import com.tagmycode.plugin.gui.AbstractSnippetsListGui;
 import com.tagmycode.sdk.model.Snippet;
-import com.tagmycode.sdk.model.SnippetCollection;
 
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
@@ -18,8 +18,8 @@ public class SnippetsTable extends AbstractSnippetsListGui {
     private SnippetsTableModel tableModel;
     private ListSelectionModel cellSelectionModel;
 
-    public SnippetsTable() {
-        tableModel = new SnippetsTableModel();
+    public SnippetsTable(Framework framework) {
+        tableModel = new SnippetsTableModel(framework.getData());
         table = new JTable(tableModel);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         scrollPane = new JScrollPane(table);
@@ -79,8 +79,8 @@ public class SnippetsTable extends AbstractSnippetsListGui {
     }
 
     @Override
-    public void updateWithSnippets(SnippetCollection snippets) {
-        tableModel.updateWithSnippets(snippets);
+    public void fireSnippetsChanged() {
+        tableModel.fireSnippetsChanged();
     }
 
     @Override
@@ -105,8 +105,5 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         return table;
     }
 
-    public void addSnippet(Snippet snippet) {
-        tableModel.addSnippet(snippet);
-    }
 }
 

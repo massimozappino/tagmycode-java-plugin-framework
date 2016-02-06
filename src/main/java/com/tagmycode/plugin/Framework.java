@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 public class Framework {
+    public final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private final MainWindow mainWindow;
     private final Wallet wallet;
     private final Client client;
@@ -31,8 +32,6 @@ public class Framework {
     private final AbstractTaskFactory taskFactory;
     private final Data data;
     private SearchSnippetDialog searchSnippetDialog;
-    private StorageEngine storageEngine;
-    public final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
         wallet = new Wallet(frameworkConfig.getPasswordKeyChain());
@@ -41,10 +40,14 @@ public class Framework {
         this.messageManager = frameworkConfig.getMessageManager();
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
+        this.data = new Data(new StorageEngine(frameworkConfig.getStorage()));
         this.mainWindow = new MainWindow(this);
-        this.storageEngine = new StorageEngine(frameworkConfig.getStorage());
-        this.data = new Data(storageEngine);
-        restoreData();
+        try {
+            restoreData();
+        } catch (IOException e) {
+            // TODO
+            e.printStackTrace();
+        }
         new PollingProcess().start();
     }
 
@@ -136,8 +139,7 @@ public class Framework {
         } finally {
             try {
                 client.revokeAccess();
-                data.reset();
-                storageEngine.clearAll();
+                data.clearAll();
             } catch (TagMyCodeException e) {
                 manageTagMyCodeExceptions(e);
             } catch (IOException e) {
@@ -190,16 +192,17 @@ public class Framework {
         return isInitialized();
     }
 
-    public void restoreData() {
+    public void restoreData() throws IOException {
         try {
             loadAccessTokenFormWallet();
             loadData();
         } catch (TagMyCodeStorageException e) {
-            data.reset();
+            data.clearAll();
             LOGGER.severe(e.getMessage());
         } catch (TagMyCodeException e) {
             manageTagMyCodeExceptions(e);
         }
+
     }
 
     public void initialize(final String verificationCode, final ICallback[] callbacks) {
@@ -245,12 +248,12 @@ public class Framework {
     }
 
     public StorageEngine getStorageEngine() {
-        return storageEngine;
+        return data.getStorageEngine();
     }
 
     public void addSnippet(Snippet snippet) {
         getData().getSnippets().add(snippet);
-        getSnippetsJTable().addSnippet(snippet);
+        snippetsDataChanged();
         saveData();
     }
 
@@ -267,14 +270,14 @@ public class Framework {
     }
 
     public void mergeSnippets(SnippetCollection snippets, String lastSnippetsUpdate) {
-        this.getData().setLastSnippetsUpdate(lastSnippetsUpdate);
+        getData().setLastSnippetsUpdate(lastSnippetsUpdate);
         getData().getSnippets().merge(snippets);
         snippetsDataChanged();
     }
 
     public void snippetsDataChanged() {
         saveData();
-        getSnippetsJTable().updateWithSnippets(getData().getSnippets());
+        getSnippetsJTable().fireSnippetsChanged();
     }
 
     protected SnippetsTable getSnippetsJTable() {
@@ -285,7 +288,6 @@ public class Framework {
         try {
             getData().saveAll();
         } catch (TagMyCodeStorageException e) {
-            e.printStackTrace();
             manageTagMyCodeExceptions(e);
         }
     }

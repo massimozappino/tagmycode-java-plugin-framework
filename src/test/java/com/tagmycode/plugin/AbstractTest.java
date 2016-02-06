@@ -32,7 +32,8 @@ public class AbstractTest {
     public Framework createFramework() throws Exception {
         FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), new FakeStorage(), new FakeMessageManager(), new FakeTaskFactory(), null);
         Framework framework = new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret());
-       framework.getData().setAccount(resourceGenerate.aUser());
+        framework.getData().setAccount(resourceGenerate.aUser());
+        framework.getData().setSnippets(new SnippetCollection());
         return framework;
     }
 

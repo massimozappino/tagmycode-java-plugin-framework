@@ -22,6 +22,8 @@ public class ReloadSnippetsOperation extends TagMyCodeAsynchronousOperation<Snip
 
     @Override
     protected SnippetCollection performOperation() throws Exception {
+        Framework.LOGGER.info(String.format("Fetching snippets since: %s", framework.getData().getLastSnippetsUpdate()));
+
         SnippetCollection snippets = framework.getTagMyCode().fetchSnippetsChanges(framework.getData().getLastSnippetsUpdate());
         lastSnippetsUpdate = framework.getTagMyCode().getLastSnippetUpdate();
         Framework.LOGGER.info(String.format("Fetched %d snippets", snippets.size()));

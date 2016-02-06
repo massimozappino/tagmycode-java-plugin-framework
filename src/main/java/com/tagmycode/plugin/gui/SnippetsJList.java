@@ -5,7 +5,7 @@ import com.tagmycode.sdk.model.SnippetCollection;
 
 import javax.swing.*;
 
-public class SnippetsJList extends AbstractSnippetsListGui {
+public class SnippetsJList extends AbstractGui implements IAbstractGUI {
     private final SnippetsListModel snippetsListModel;
     private final JScrollPane scrollPane;
     private final JList<Snippet> list;
@@ -25,7 +25,6 @@ public class SnippetsJList extends AbstractSnippetsListGui {
         list.setModel(snippetsListModel);
     }
 
-    @Override
     public void updateWithSnippets(SnippetCollection snippets) {
         snippetsListModel.clear();
         if (snippets.size() == 0) {
@@ -39,7 +38,7 @@ public class SnippetsJList extends AbstractSnippetsListGui {
         }
     }
 
-    @Override
+
     public Snippet getSelectedSnippet() {
         Snippet selectedSnippet = null;
         if (!list.isSelectionEmpty()) {
@@ -73,7 +72,6 @@ public class SnippetsJList extends AbstractSnippetsListGui {
         return scrollPane;
     }
 
-    @Override
     public JList<Snippet> getSnippetsComponent() {
         return list;
     }

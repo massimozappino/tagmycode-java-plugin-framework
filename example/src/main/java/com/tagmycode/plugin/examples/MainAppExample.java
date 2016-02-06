@@ -1,13 +1,11 @@
 package com.tagmycode.plugin.examples;
 
-import com.sun.deploy.panel.JavaPanel;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.FrameworkConfig;
 import com.tagmycode.plugin.examples.support.MessageManager;
 import com.tagmycode.plugin.examples.support.PasswordKeyChain;
 import com.tagmycode.plugin.examples.support.Storage;
 import com.tagmycode.plugin.examples.support.TaskFactory;
-import com.tagmycode.plugin.operation.FilterSnippetsOperation;
 import com.tagmycode.sdk.authentication.TagMyCodeApiProduction;
 
 import javax.swing.*;

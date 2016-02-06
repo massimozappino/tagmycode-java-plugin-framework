@@ -118,7 +118,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     private void initSnippetsJTable() {
-        snippetsTable = new SnippetsTable();
+        snippetsTable = new SnippetsTable(framework);
 
         jTable = snippetsTable.getSnippetsComponent();
         snippetsTable.getCellSelectionModel().addListSelectionListener(createSelectionListener());

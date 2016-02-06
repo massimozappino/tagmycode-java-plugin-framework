@@ -16,7 +16,7 @@ public class DataTest extends AbstractTest {
         data.setLanguages(resourceGenerate.aLanguageCollection());
         data.setSnippets(resourceGenerate.aSnippetCollection());
 
-        data.reset();
+        data.clearAll();
 
         assertDataIsReset(data);
     }
@@ -47,7 +47,7 @@ public class DataTest extends AbstractTest {
 
         data.saveAll();
 
-        data.reset();
+        data.clearAll();
         data.loadAll();
         assertDataIsValid(data);
     }
