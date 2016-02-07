@@ -126,6 +126,7 @@ public class FrameworkTest extends AbstractTest {
     @Test
     public void testIsInitializedMustBeFalseIfAccountIsNotSet() throws Exception {
         mockClientReturningValidAccountData(framework);
+        framework.getData().setAccount(null);
         setAValidLanguageCollection();
         assertFalse(framework.isInitialized());
     }

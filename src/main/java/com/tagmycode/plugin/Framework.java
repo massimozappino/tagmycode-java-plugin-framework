@@ -139,7 +139,7 @@ public class Framework {
         } finally {
             try {
                 client.revokeAccess();
-                data.clearAll();
+                data.clearDataAndStorage();
             } catch (TagMyCodeException e) {
                 manageTagMyCodeExceptions(e);
             } catch (IOException e) {
@@ -197,7 +197,7 @@ public class Framework {
             loadAccessTokenFormWallet();
             loadData();
         } catch (TagMyCodeStorageException e) {
-            data.clearAll();
+            data.clearDataAndStorage();
             LOGGER.severe(e.getMessage());
         } catch (TagMyCodeException e) {
             manageTagMyCodeExceptions(e);

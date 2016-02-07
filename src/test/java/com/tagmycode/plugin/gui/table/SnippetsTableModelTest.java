@@ -15,9 +15,13 @@ public class SnippetsTableModelTest extends AbstractTest {
 
     @Test
     public void testGetSnippetAt() throws Exception {
-        SnippetsTableModel snippetsTableModel = new SnippetsTableModel(new Data(new StorageEngine(new FakeStorage())));
+        Data data = new Data(new StorageEngine(new FakeStorage()));
         SnippetCollection snippets = new SnippetCollection();
+        data.setSnippets(snippets);
+
+        SnippetsTableModel snippetsTableModel = new SnippetsTableModel(data);
         snippets.add(new ResourceGenerate().aSnippet());
+
         snippetsTableModel.fireSnippetsChanged();
 
         assertNull(snippetsTableModel.getSnippetAt(-1));

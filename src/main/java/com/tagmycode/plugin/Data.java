@@ -22,12 +22,12 @@ public class Data {
         reset();
     }
 
-    public void clearAll() throws IOException {
+    public void clearDataAndStorage() throws IOException {
         reset();
         storage.clearAll();
     }
 
-    private void reset() {
+    protected void reset() {
         account = null;
         languages = new DefaultLanguageCollection();
         snippets = new SnippetCollection();
