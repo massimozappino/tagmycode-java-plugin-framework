@@ -48,6 +48,7 @@ public class Framework {
             // TODO
             e.printStackTrace();
         }
+        tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
         new PollingProcess().start();
     }
 

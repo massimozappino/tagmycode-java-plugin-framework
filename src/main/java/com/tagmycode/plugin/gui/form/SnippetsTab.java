@@ -8,7 +8,7 @@ import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.plugin.operation.DeleteSnippetOperation;
 import com.tagmycode.plugin.operation.FilterSnippetsOperation;
 import com.tagmycode.plugin.operation.LoadSnippetsOperation;
-import com.tagmycode.plugin.operation.ReloadSnippetsOperation;
+import com.tagmycode.plugin.operation.SyncSnippetsOperation;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -18,7 +18,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
-    private ReloadSnippetsOperation reloadSnippetsOperation;
+    private SyncSnippetsOperation syncSnippetsOperation;
     private SnippetsTable snippetsTable;
     private JPanel snippetViewFormPane;
     private JButton newSnippetButton;
@@ -40,7 +40,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     public SnippetsTab(final Framework framework) {
         this.framework = framework;
         snippetViewFormPane.removeAll();
-        reloadSnippetsOperation = new ReloadSnippetsOperation(this);
+        syncSnippetsOperation = new SyncSnippetsOperation(this);
         initSnippetsJTable();
 
         leftPane.add(snippetsTable.getMainComponent(), BorderLayout.CENTER);
@@ -301,7 +301,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     private void refreshSnippets() {
-        reloadSnippetsOperation.runWithTask(framework.getTaskFactory(), "Refreshing snippets");
+        syncSnippetsOperation.runWithTask(framework.getTaskFactory(), "Refreshing snippets");
     }
 
     public SnippetsTable getSnippetsTable() {

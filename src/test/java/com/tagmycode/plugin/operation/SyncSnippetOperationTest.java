@@ -5,12 +5,12 @@ import com.tagmycode.plugin.Data;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.form.SnippetsTab;
 import com.tagmycode.sdk.TagMyCode;
-import com.tagmycode.sdk.model.SnippetCollection;
+import com.tagmycode.sdk.model.SnippetsDeletions;
 import org.junit.Test;
 
 import static org.mockito.Mockito.*;
 
-public class ReloadSnippetOperationTest extends AbstractTest {
+public class SyncSnippetOperationTest extends AbstractTest {
 
     @Test
     public void testOnSuccess() throws Exception {
@@ -20,18 +20,16 @@ public class ReloadSnippetOperationTest extends AbstractTest {
         TagMyCode tagMyCodeMock = mock(TagMyCode.class);
         when(frameworkMock.getTagMyCode()).thenReturn(tagMyCodeMock);
         Data dataMock = mock(Data.class);
-        when(dataMock.getLastSnippetsUpdate()).thenReturn("");
+        when(dataMock.getSnippets()).thenReturn(resourceGenerate.aSnippetCollection());
         when(frameworkMock.getData()).thenReturn(dataMock);
 
-        when(tagMyCodeMock.getLastSnippetUpdate()).thenReturn(resourceGenerate.aSnippetsLastUpdate());
-        when(tagMyCodeMock.fetchSnippetsChanges(any(String.class))).thenReturn(resourceGenerate.aSnippetCollection());
+        SyncSnippetsOperation syncSnippetsOperation = new SyncSnippetsOperation(snippetsTabMock);
 
-        ReloadSnippetsOperation reloadSnippetsOperation = new ReloadSnippetsOperation(snippetsTabMock);
+        syncSnippetsOperation.performOperation();
+        verify(tagMyCodeMock, times(1)).syncSnippets(resourceGenerate.aSnippetCollection(), new SnippetsDeletions());
 
-        SnippetCollection snippets = resourceGenerate.aSnippetCollection();
-        reloadSnippetsOperation.performOperation();
-        reloadSnippetsOperation.onSuccess(snippets);
+        syncSnippetsOperation.onSuccess(null);
 
-        verify(frameworkMock, times(1)).mergeSnippets(snippets, resourceGenerate.aSnippetsLastUpdate());
+        verify(frameworkMock, times(1)).snippetsDataChanged();
     }
 }
