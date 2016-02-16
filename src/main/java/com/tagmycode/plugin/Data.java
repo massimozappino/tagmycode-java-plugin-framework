@@ -60,8 +60,9 @@ public class Data {
     public void loadAll() throws TagMyCodeStorageException {
         setAccount(storage.loadAccount());
         setLanguages(storage.loadLanguageCollection());
+        String lastSnippetsUpdate = storage.loadLastSnippetsUpdate();
+        setLastSnippetsUpdate(lastSnippetsUpdate);
         setSnippets(storage.loadSnippets());
-        setLastSnippetsUpdate(storage.loadLastSnippetsUpdate());
     }
 
     public void saveAll() throws TagMyCodeStorageException {

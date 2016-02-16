@@ -30,7 +30,7 @@ public class Framework {
     private final Frame parentFrame;
     private final IMessageManager messageManager;
     private final AbstractTaskFactory taskFactory;
-    private final Data data;
+    private Data data;
     private SearchSnippetDialog searchSnippetDialog;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
@@ -49,6 +49,8 @@ public class Framework {
             e.printStackTrace();
         }
         tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
+
+        mainWindow.start();
         new PollingProcess().start();
     }
 
@@ -129,6 +131,7 @@ public class Framework {
 
     protected void loadData() throws TagMyCodeStorageException {
         data.loadAll();
+        tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
         snippetsDataChanged();
     }
 
@@ -248,6 +251,10 @@ public class Framework {
         return data;
     }
 
+    protected void setData(Data data) {
+        this.data = data;
+    }
+
     public StorageEngine getStorageEngine() {
         return data.getStorageEngine();
     }
@@ -270,13 +277,9 @@ public class Framework {
         snippetsDataChanged();
     }
 
-    public void mergeSnippets(SnippetCollection snippets, String lastSnippetsUpdate) {
-        getData().setLastSnippetsUpdate(lastSnippetsUpdate);
-        getData().getSnippets().merge(snippets);
-        snippetsDataChanged();
-    }
-
     public void snippetsDataChanged() {
+        String lastSnippetsUpdate = tagMyCode.getLastSnippetsUpdate();
+        getData().setLastSnippetsUpdate(lastSnippetsUpdate);
         saveData();
         getSnippetsJTable().fireSnippetsChanged();
     }

@@ -47,7 +47,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
         initToolBarButtons(framework);
         initPopupMenuForJTextComponents(getMainComponent());
-        loadSnippets();
 
         filterTextField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -296,7 +295,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         deleteSnippetButton.setEnabled(false);
     }
 
-    private void loadSnippets() {
+    public void loadSnippets() {
         new LoadSnippetsOperation(this).runWithTask(framework.getTaskFactory(), "Loading snippets");
     }
 

@@ -1,13 +1,14 @@
 package com.tagmycode.plugin;
 
 
-import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.sdk.authentication.OauthToken;
 import com.tagmycode.sdk.authentication.TagMyCodeApiDevelopment;
 import com.tagmycode.sdk.authentication.VoidOauthToken;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
-import com.tagmycode.sdk.model.*;
+import com.tagmycode.sdk.model.DefaultLanguageCollection;
+import com.tagmycode.sdk.model.LanguageCollection;
+import com.tagmycode.sdk.model.User;
 import org.junit.Before;
 import org.junit.Test;
 import support.FakeSecret;
@@ -156,31 +157,27 @@ public class FrameworkTest extends AbstractTest {
     }
 
     @Test
-    public void testMergeSnippetsCollection() throws Exception {
-        framework = createSpyFramework();
+    public void testSnippetsDataChanged() throws Exception {
+        Framework framework = createSpyFramework();
+        framework.getTagMyCode().setLastSnippetsUpdate("changed GMT string");
 
-        SnippetsTable snippetsTableMock = mock(SnippetsTable.class);
-        when(framework.getSnippetsJTable()).thenReturn(snippetsTableMock);
-        Snippet existentSnippet = resourceGenerate.aSnippet();
-        Snippet newSnippet = new Snippet().setId(5).setTitle("...title...");
+        framework.snippetsDataChanged();
 
-        framework.getData().getSnippets().add(existentSnippet);
-        assertEquals(1, framework.getData().getSnippets().size());
+        assertEquals("changed GMT string", framework.getData().getLastSnippetsUpdate());
+        verify(framework, times(1)).saveData();
+    }
 
-        SnippetCollection snippetCollection = new SnippetCollection();
-        snippetCollection.add(newSnippet);
 
-        framework.mergeSnippets(snippetCollection, resourceGenerate.aSnippetsLastUpdate());
+    @Test
+    public void testLoadData() throws Exception {
+        Data data = mock(Data.class);
+        when(data.getLastSnippetsUpdate()).thenReturn(resourceGenerate.aSnippetsLastUpdate());
+        Framework framework = spy(createFramework(data));
 
-        verify(framework, times(1)).snippetsDataChanged();
+        framework.loadData();
 
-        SnippetCollection expectedSnippets = new SnippetCollection();
-        expectedSnippets.add(existentSnippet);
-        expectedSnippets.add(newSnippet);
-        assertEquals(expectedSnippets, framework.getData().getSnippets());
+        assertEquals(resourceGenerate.aSnippetsLastUpdate(), framework.getTagMyCode().getLastSnippetsUpdate());
 
-        assertEquals(resourceGenerate.aSnippetsLastUpdate(), framework.getData().getLastSnippetsUpdate());
-        assertEquals(resourceGenerate.aSnippetsLastUpdate(), framework.getStorageEngine().loadLastSnippetsUpdate());
     }
 
     protected void assertAccessTokenIs(OauthToken accessToken) {

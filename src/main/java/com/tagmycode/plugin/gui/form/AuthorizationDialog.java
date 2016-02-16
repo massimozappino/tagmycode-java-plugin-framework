@@ -103,15 +103,15 @@ public class AuthorizationDialog extends AbstractDialog {
         buttonOK.setEnabled(false);
         try {
             checkVerificationCodeInput();
-            // do not use task because of nested tasks
-            getFetchOauthTokenOperation().run();
+            // TODO do not use task because of nested tasks
+            createLoginOperation().run();
         } catch (TagMyCodeGuiException e) {
             onError(e);
         }
     }
 
-    private LoginOperation getFetchOauthTokenOperation() {
-        return new LoginOperation(AuthorizationDialog.this, verificationCodeTextField.getText(), iCallback);
+    private LoginOperation createLoginOperation() {
+        return new LoginOperation(this, verificationCodeTextField.getText(), iCallback);
     }
 
     private void onOpenLink() {

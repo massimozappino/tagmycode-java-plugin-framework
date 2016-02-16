@@ -18,6 +18,10 @@ public class MainWindow implements IAbstractGUI {
         getMainComponent().add(snippetsTab.getMainComponent());
     }
 
+    public void start() {
+        snippetsTab.loadSnippets();
+    }
+
     @Override
     public JComponent getMainComponent() {
         return mainPanel;

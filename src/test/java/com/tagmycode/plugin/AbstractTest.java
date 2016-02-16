@@ -11,6 +11,7 @@ import com.tagmycode.sdk.model.DefaultLanguage;
 import com.tagmycode.sdk.model.DefaultLanguageCollection;
 import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.SnippetCollection;
+import org.junit.Assert;
 import org.mockito.Mockito;
 import support.*;
 
@@ -30,15 +31,31 @@ public class AbstractTest {
     }
 
     public Framework createFramework() throws Exception {
+        Data data = new Data(new StorageEngine(new FakeStorage()));
+        data.setAccount(resourceGenerate.aUser());
+        data.setSnippets(new SnippetCollection());
+        return createFramework(data);
+    }
+
+    public Framework createFramework(Data data) throws Exception {
         FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), new FakeStorage(), new FakeMessageManager(), new FakeTaskFactory(), null);
         Framework framework = new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret());
-        framework.getData().setAccount(resourceGenerate.aUser());
-        framework.getData().setSnippets(new SnippetCollection());
+        framework.setData(data);
         return framework;
     }
 
     protected Framework createSpyFramework() throws Exception {
         return Mockito.spy(createFramework());
+    }
+
+
+    public Data createFullData() throws Exception {
+        Data data = new Data(new StorageEngine(new FakeStorage()));
+        data.setAccount(resourceGenerate.aUser());
+        data.setSnippets(resourceGenerate.aSnippetCollection());
+        data.setLastSnippetsUpdate(resourceGenerate.aSnippetsLastUpdate());
+        data.setLanguages(resourceGenerate.aLanguageCollection());
+        return data;
     }
 
     protected void mockClientReturningValidAccountData(Framework framework) throws Exception {
@@ -93,5 +110,20 @@ public class AbstractTest {
         assertEquals(new DefaultLanguage(), storageEngine.loadLastLanguageUsed());
         assertEquals(new SnippetCollection(), storageEngine.loadSnippets());
         assertFalse(storageEngine.loadPrivateSnippetFlag());
+    }
+
+    public static void waitForCondition(Condition condition, int attempts) throws Exception {
+        while (attempts-- > 0) {
+            if (condition.eval()) {
+                return;
+            }
+            Thread.sleep(100);
+        }
+
+        Assert.fail("condition was false");
+    }
+
+    protected interface Condition {
+        boolean eval();
     }
 }

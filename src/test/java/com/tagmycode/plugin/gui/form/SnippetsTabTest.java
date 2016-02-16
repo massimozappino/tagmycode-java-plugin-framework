@@ -25,14 +25,15 @@ public class SnippetsTabTest extends AbstractTest {
 
     @Test
     public void testSelection() throws Exception {
-        SnippetsTab snippetsTab = new SnippetsTab(createFramework());
-        SnippetsTable snippetsListGui = snippetsTab.getSnippetsTable();
-        snippetsListGui.fireSnippetsChanged();
+        SnippetsTab snippetsTab = new SnippetsTab(createFramework(createFullData()));
+        SnippetsTable snippetsTable = snippetsTab.getSnippetsTable();
+        snippetsTable.fireSnippetsChanged();
         JPanel snippetViewFormPanel = snippetsTab.getSnippetViewFormPane();
 
         assertEquals(0, snippetViewFormPanel.getComponentCount());
 
-        JTable jTable = snippetsListGui.getSnippetsComponent();
+        JTable jTable = snippetsTable.getSnippetsComponent();
+        assertEquals(2, jTable.getRowCount());
 
         jTable.setRowSelectionInterval(0, 0);
         assertEquals(1, snippetViewFormPanel.getComponentCount());
