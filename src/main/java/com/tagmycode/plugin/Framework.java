@@ -3,8 +3,10 @@ package com.tagmycode.plugin;
 
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
-import com.tagmycode.plugin.gui.IDocumentInsertText;
-import com.tagmycode.plugin.gui.form.*;
+import com.tagmycode.plugin.gui.form.AuthorizationDialog;
+import com.tagmycode.plugin.gui.form.MainWindow;
+import com.tagmycode.plugin.gui.form.SettingsForm;
+import com.tagmycode.plugin.gui.form.SnippetDialog;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.TagMyCode;
@@ -31,7 +33,6 @@ public class Framework {
     private final IMessageManager messageManager;
     private final AbstractTaskFactory taskFactory;
     private Data data;
-    private SearchSnippetDialog searchSnippetDialog;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
         wallet = new Wallet(frameworkConfig.getPasswordKeyChain());
@@ -70,14 +71,6 @@ public class Framework {
         SnippetDialog snippetDialog = new SnippetDialog(this, mimeType, getParentFrame());
         snippetDialog.setEditableSnippet(snippet);
         snippetDialog.display();
-    }
-
-    public void showSearchDialog(IDocumentInsertText documentUpdate) {
-        if (searchSnippetDialog == null) {
-            searchSnippetDialog = new SearchSnippetDialog(documentUpdate, this, getParentFrame());
-        }
-
-        searchSnippetDialog.display();
     }
 
     public void showSettingsDialog() {

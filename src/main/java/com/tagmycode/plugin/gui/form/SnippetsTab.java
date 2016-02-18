@@ -25,7 +25,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private JPanel mainPanel;
     private JButton refreshButton;
     private JPanel leftPane;
-    private JButton searchButton;
     private JButton editSnippetButton;
     private JButton deleteSnippetButton;
     private JTextField filterTextField;
@@ -98,12 +97,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
             @Override
             public void actionPerformed(ActionEvent e) {
                 refreshSnippets();
-            }
-        });
-        searchButton.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                framework.showSearchDialog(null);
             }
         });
         settingsButton.addActionListener(new ActionListener() {

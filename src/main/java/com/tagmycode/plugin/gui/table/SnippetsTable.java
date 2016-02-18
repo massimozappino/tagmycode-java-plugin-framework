@@ -8,19 +8,21 @@ import com.tagmycode.sdk.model.Snippet;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.util.ArrayList;
 
 public class SnippetsTable extends AbstractSnippetsListGui {
 
+    public final TableRowSorter<SnippetsTableModel> sorter;
     private final JScrollPane scrollPane;
     private JTable table;
-    private SnippetsTableModel tableModel;
+    private SnippetsTableModel model;
     private ListSelectionModel cellSelectionModel;
 
     public SnippetsTable(Framework framework) {
-        tableModel = new SnippetsTableModel(framework.getData());
-        table = new JTable(tableModel);
+        model = new SnippetsTableModel(framework.getData());
+        table = new JTable(model);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         scrollPane = new JScrollPane(table);
         table.setIntercellSpacing(new Dimension(0, 0));
@@ -35,7 +37,11 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         cellSelectionModel = table.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+
         configureTableHeader();
+
+        sorter = new TableRowSorter<SnippetsTableModel>(model);
+        table.setRowSorter(sorter);
     }
 
     private void sortByCreationDate() {
@@ -80,12 +86,12 @@ public class SnippetsTable extends AbstractSnippetsListGui {
 
     @Override
     public void fireSnippetsChanged() {
-        tableModel.fireSnippetsChanged();
+        model.fireSnippetsChanged();
     }
 
     @Override
     public Snippet getSelectedSnippet() {
-        return tableModel.getSnippetAt(getSelectedModelIndex());
+        return model.getSnippetAt(getSelectedModelIndex());
     }
 
 

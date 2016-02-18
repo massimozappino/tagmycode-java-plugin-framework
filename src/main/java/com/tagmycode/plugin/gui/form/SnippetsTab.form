@@ -64,17 +64,6 @@
                 <constraints/>
                 <properties/>
               </component>
-              <component id="bd760" class="javax.swing.JButton" binding="searchButton">
-                <constraints/>
-                <properties>
-                  <icon value="icons/search.png"/>
-                  <text value=""/>
-                </properties>
-              </component>
-              <component id="383c0" class="javax.swing.JToolBar$Separator">
-                <constraints/>
-                <properties/>
-              </component>
               <component id="ea780" class="javax.swing.JButton" binding="settingsButton">
                 <constraints/>
                 <properties>

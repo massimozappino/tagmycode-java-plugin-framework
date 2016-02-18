@@ -1,10 +1,14 @@
 package com.tagmycode.plugin.operation;
 
 import com.tagmycode.plugin.gui.form.SnippetsTab;
+import com.tagmycode.plugin.gui.table.SnippetsTableModel;
 import com.tagmycode.sdk.model.Snippet;
-import com.tagmycode.sdk.model.SnippetCollection;
 
-public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<SnippetCollection> {
+import javax.swing.*;
+import javax.swing.table.TableRowSorter;
+import java.util.Vector;
+
+public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> {
     private SnippetsTab snippetsTab;
     private String filterText;
 
@@ -15,24 +19,52 @@ public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Snip
     }
 
     @Override
-    protected SnippetCollection performOperation() throws Exception {
-        snippetsTab.getSnippetsTable();
-        SnippetCollection filteredSnippets = new SnippetCollection();
-        for (Snippet snippet : snippetsTab.getFramework().getData().getSnippets()) {
-            if (snippet.getTitle().toLowerCase().contains(filterText)
-                    || snippet.getCode().toLowerCase().contains(filterText)
-                    || snippet.getDescription().toLowerCase().contains(filterText)
-                    || snippet.getTags().toLowerCase().contains(filterText)
-                    ) {
-                filteredSnippets.add(snippet);
+    protected Void performOperation() throws Exception {
+        final Vector<Integer> filteredIds = filterSnippets();
+
+        RowFilter<Object, Object> filter = new RowFilter<Object, Object>() {
+            public boolean include(Entry entry) {
+                int position = Integer.parseInt(entry.getIdentifier().toString());
+                return filteredIds.contains(position);
             }
+        };
+
+        TableRowSorter<SnippetsTableModel> sorter = snippetsTab.getSnippetsTable().sorter;
+
+        if (filterText.length() == 0) {
+            sorter.setRowFilter(null);
+        } else {
+            sorter.setRowFilter(filter);
+        }
+        return null;
+    }
+
+    private Vector<Integer> filterSnippets() {
+        final Vector<Integer> filteredIds = new Vector<Integer>();
+        int position = 0;
+        for (Snippet snippet : snippetsTab.getFramework().getData().getSnippets()) {
+            if (search(filterText, snippet.getCode())
+                    || search(filterText, snippet.getTitle())
+                    || search(filterText, snippet.getDescription())
+                    || search(filterText, snippet.getTags())
+                    ) {
+                filteredIds.add(position);
+            }
+            position++;
+        }
+        return filteredIds;
+    }
+
+    protected boolean search(String query, String fieldValue) {
+        fieldValue = fieldValue.toLowerCase();
+        String[] tokens = query.split(" ");
+
+        boolean ret = true;
+        for (String token : tokens) {
+            ret = fieldValue.contains(token) && ret;
         }
 
-        return filteredSnippets;
-    }
-
-    @Override
-    protected void onSuccess(SnippetCollection snippets) {
-        snippetsTab.getSnippetsTable().fireSnippetsChanged();
+        return ret;
     }
 }
+
