@@ -9,7 +9,7 @@ public class Storage implements IStorage {
     private HashMapToFile hashMapToFile;
 
     public Storage() {
-        this.hashMapToFile = new HashMapToFile("/tmp/tagmycode_storage.ser");
+        this.hashMapToFile = new HashMapToFile(new SaveFilePath().getPath("tagmycode_storage.ser"));
     }
 
     @Override

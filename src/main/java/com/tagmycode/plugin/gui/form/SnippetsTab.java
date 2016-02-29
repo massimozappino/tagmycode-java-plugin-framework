@@ -265,7 +265,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                     Snippet snippet = snippetsTable.getSelectedSnippet();
                     // TODO test
                     if (snippet != null) {
-                        JComponent snippetViewForm = new SnippetView(snippet).getSnippetEditorPane();
+                        JComponent snippetViewForm = new SnippetView(snippet).getMainComponent();
                         snippetViewFormPane.add(new JScrollPane(snippetViewForm));
                         enableButtonsForSnippet();
                     } else {
@@ -293,7 +293,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     private void refreshSnippets() {
-        syncSnippetsOperation.runWithTask(framework.getTaskFactory(), "Refreshing snippets");
+        syncSnippetsOperation.runWithTask(framework.getTaskFactory(), "Syncing snippets");
     }
 
     public SnippetsTable getSnippetsTable() {
