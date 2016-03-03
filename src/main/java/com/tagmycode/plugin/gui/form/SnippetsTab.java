@@ -266,7 +266,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                     // TODO test
                     if (snippet != null) {
                         JComponent snippetViewForm = new SnippetView(snippet).getMainComponent();
-                        snippetViewFormPane.add(new JScrollPane(snippetViewForm));
+                        snippetViewFormPane.add(snippetViewForm);
                         enableButtonsForSnippet();
                     } else {
                         disableButtonsForSnippet();
