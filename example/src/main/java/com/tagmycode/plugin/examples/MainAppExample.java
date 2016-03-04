@@ -41,8 +41,8 @@ public class MainAppExample {
                 new TaskFactory(),
                 frame);
         final Framework framework = new Framework(new TagMyCodeApiProduction(), frameworkConfig, new Secret());
-
-        contentPane.add(framework.getMainWindow().getMainComponent(), BorderLayout.CENTER);
+        framework.start();
+        contentPane.add(framework.getMainFrame(), BorderLayout.CENTER);
 
 
         lastSnippetsUpdateTextField.setText(framework.getData().getLastSnippetsUpdate());

@@ -1,13 +1,14 @@
 package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Framework;
+import com.tagmycode.plugin.gui.AbstractGui;
 import com.tagmycode.plugin.gui.IAbstractGUI;
-import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
 
 public class MainWindow implements IAbstractGUI {
     private final SnippetsTab snippetsTab;
+    private final LoginPanel loginPanel;
     private JPanel mainPanel;
     private Framework framework;
 
@@ -15,20 +16,24 @@ public class MainWindow implements IAbstractGUI {
         this.framework = framework;
 
         snippetsTab = new SnippetsTab(framework);
-        getMainComponent().add(snippetsTab.getMainComponent());
+        loginPanel = new LoginPanel(framework);
     }
 
     public void start() {
         snippetsTab.loadSnippets();
     }
 
+    public void setLoggedIn(boolean flag) {
+        getMainComponent().removeAll();
+        AbstractGui component = flag ? snippetsTab : loginPanel;
+        getMainComponent().add(component.getMainComponent());
+        getMainComponent().revalidate();
+        getMainComponent().repaint();
+    }
+
     @Override
     public JComponent getMainComponent() {
         return mainPanel;
-    }
-
-    public void openSnippet(Snippet snippet) {
-        framework.showEditSnippetDialog(snippet, null);
     }
 
     public SnippetsTab getSnippetsTab() {

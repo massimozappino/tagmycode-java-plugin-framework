@@ -70,6 +70,7 @@ public class FrameworkTest extends AbstractTest {
 
         FrameworkConfig frameworkConfig = new FrameworkConfig(framework.getWallet().getPasswordKeyChain(), framework.getStorageEngine().getStorage(), framework.getMessageManager(), framework.getTaskFactory(), framework.getParentFrame());
         Framework reloadedFramework = new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret());
+        reloadedFramework.start();
 
         assertEquals(newOauthToken, reloadedFramework.getClient().getOauthToken());
         assertEquals("fakeUsername", reloadedFramework.getStorageEngine().loadAccount().getUsername());

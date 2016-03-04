@@ -19,6 +19,7 @@ import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.Snippet;
 import com.tagmycode.sdk.model.SnippetCollection;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -43,16 +44,26 @@ public class Framework {
         this.taskFactory = frameworkConfig.getTask();
         this.data = new Data(new StorageEngine(frameworkConfig.getStorage()));
         this.mainWindow = new MainWindow(this);
+    }
+
+    public void start() {
         try {
             restoreData();
         } catch (IOException e) {
             // TODO
             e.printStackTrace();
         }
-        tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
+        boolean initialized = isInitialized();
+        LOGGER.info("is logged: " + initialized);
 
-        mainWindow.start();
-        new PollingProcess().start();
+        mainWindow.setLoggedIn(initialized);
+        if (initialized) {
+
+            tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
+
+            mainWindow.start();
+            new PollingProcess().start();
+        }
     }
 
     public AuthorizationDialog showAuthorizationDialog(ICallback... iCallback) {
@@ -223,6 +234,7 @@ public class Framework {
                             callback.doOperation();
                         }
                     }
+                    mainWindow.setLoggedIn(true);
                 }
             }
         };
@@ -289,4 +301,11 @@ public class Framework {
         }
     }
 
+    public void openSnippet(Snippet snippet) {
+        showEditSnippetDialog(snippet, null);
+    }
+
+    public JComponent getMainFrame() {
+        return mainWindow.getMainComponent();
+    }
 }
