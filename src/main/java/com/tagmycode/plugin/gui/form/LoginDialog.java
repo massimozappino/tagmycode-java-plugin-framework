@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class AuthorizationDialog extends AbstractDialog {
+public class LoginDialog extends AbstractDialog {
     private JPanel jPanelVerification;
     private JButton buttonCancel;
     private JPanel contentPane;
@@ -28,7 +28,7 @@ public class AuthorizationDialog extends AbstractDialog {
     private Component JPanelVerification;
     private ICallback[] iCallback;
 
-    public AuthorizationDialog(Framework framework, ICallback[] iCallback, Frame parent) {
+    public LoginDialog(Framework framework, ICallback[] iCallback, Frame parent) {
         super(framework, parent);
         this.iCallback = iCallback;
         defaultInitWindow();

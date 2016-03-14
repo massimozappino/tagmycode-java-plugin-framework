@@ -15,7 +15,7 @@ public class LoginPanel extends AbstractGui {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                framework.showAuthorizationDialog();
+                framework.showLoginDialog();
             }
         });
     }

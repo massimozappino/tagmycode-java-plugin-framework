@@ -3,7 +3,7 @@ package com.tagmycode.plugin;
 
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
-import com.tagmycode.plugin.gui.form.AuthorizationDialog;
+import com.tagmycode.plugin.gui.form.LoginDialog;
 import com.tagmycode.plugin.gui.form.MainWindow;
 import com.tagmycode.plugin.gui.form.SettingsForm;
 import com.tagmycode.plugin.gui.form.SnippetDialog;
@@ -59,15 +59,15 @@ public class Framework {
         mainWindow.setLoggedIn(initialized);
         if (initialized) {
             tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
-            mainWindow.start();
+            mainWindow.loadSnippets();
             new PollingProcess().start();
         }
     }
 
-    public AuthorizationDialog showAuthorizationDialog(ICallback... iCallback) {
-        AuthorizationDialog authorizationDialog = new AuthorizationDialog(this, iCallback, getParentFrame());
-        authorizationDialog.display();
-        return authorizationDialog;
+    public LoginDialog showLoginDialog(ICallback... iCallback) {
+        LoginDialog loginDialog = new LoginDialog(this, iCallback, getParentFrame());
+        loginDialog.display();
+        return loginDialog;
     }
 
     public void showNewSnippetDialog(Snippet snippet, String mimeType) {
@@ -189,12 +189,12 @@ public class Framework {
 
     public void logoutAndAuthenticateAgain() {
         logout();
-        showAuthorizationDialog();
+        showLoginDialog();
     }
 
     public boolean canOperate() {
         if (!isInitialized()) {
-            showAuthorizationDialog();
+            showLoginDialog();
         }
         return isInitialized();
     }
@@ -212,6 +212,7 @@ public class Framework {
     }
 
     public void initialize(final String verificationCode, final ICallback[] callbacks) {
+        // TODO do not load snippets here, delegate it to polling process
         Runnable runnable = new Runnable() {
             @Override
             public void run() {

@@ -10,16 +10,14 @@ public class MainWindow implements IAbstractGUI {
     private final SnippetsTab snippetsTab;
     private final LoginPanel loginPanel;
     private JPanel mainPanel;
-    private Framework framework;
 
     public MainWindow(final Framework framework) {
-        this.framework = framework;
 
         snippetsTab = new SnippetsTab(framework);
         loginPanel = new LoginPanel(framework);
     }
 
-    public void start() {
+    public void loadSnippets() {
         snippetsTab.loadSnippets();
     }
 

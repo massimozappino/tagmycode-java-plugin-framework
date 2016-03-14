@@ -3,7 +3,7 @@ package acceptance;
 import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.ICallback;
-import com.tagmycode.plugin.gui.form.AuthorizationDialog;
+import com.tagmycode.plugin.gui.form.LoginDialog;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class FrameworkAcceptanceTest extends AbstractTest {
     public void notAuthenticatedUserShouldSeeAuthorizationDialog() throws Exception {
         Framework frameworkSpy = createSpyFramework();
         frameworkSpy.canOperate();
-        verify(frameworkSpy, times(1)).showAuthorizationDialog();
+        verify(frameworkSpy, times(1)).showLoginDialog();
     }
 
     @Test
@@ -27,11 +27,11 @@ public class FrameworkAcceptanceTest extends AbstractTest {
         mockClientReturningValidAccountData(framework);
         Framework frameworkSpy = spy(framework);
 
-        AuthorizationDialog authorizationDialog = frameworkSpy.showAuthorizationDialog();
+        LoginDialog loginDialog = frameworkSpy.showLoginDialog();
         String verificationCode = "verification-code";
-        authorizationDialog.getVerificationCodeTextField().setText(verificationCode);
+        loginDialog.getVerificationCodeTextField().setText(verificationCode);
 
-        authorizationDialog.getButtonOk().doClick();
+        loginDialog.getButtonOk().doClick();
 
         verify(frameworkSpy, times(1)).initialize(verificationCode, new ICallback[0]);
 
