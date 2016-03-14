@@ -3,6 +3,7 @@ package com.tagmycode.plugin;
 import org.junit.Test;
 import support.FakeStorage;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
 public class DataTest extends AbstractTest {
@@ -33,6 +34,20 @@ public class DataTest extends AbstractTest {
         data.loadAll();
 
         assertDataIsValid(data);
+    }
+
+    @Test
+    public void testReset() throws Exception {
+        Data data = new Data(mock(StorageEngine.class));
+
+        data.setAccount(resourceGenerate.aUser());
+        data.setLanguages(resourceGenerate.aLanguageCollection());
+        data.setSnippets(resourceGenerate.aSnippetCollection());
+        data.setLastSnippetsUpdate(resourceGenerate.aSnippetsLastUpdate());
+
+        data.reset();
+
+        assertDataIsReset(data);
     }
 
     @Test

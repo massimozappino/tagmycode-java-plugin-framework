@@ -24,6 +24,9 @@ public class MainWindow implements IAbstractGUI {
     public void setLoggedIn(boolean flag) {
         getMainComponent().removeAll();
         AbstractGui component = flag ? snippetsTab : loginPanel;
+        if (component instanceof SnippetsTab) {
+            ((SnippetsTab) component).reset();
+        }
         getMainComponent().add(component.getMainComponent());
         getMainComponent().revalidate();
         getMainComponent().repaint();

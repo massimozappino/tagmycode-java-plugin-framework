@@ -38,7 +38,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
     public SnippetsTab(final Framework framework) {
         this.framework = framework;
-        snippetViewFormPane.removeAll();
+        reset();
         syncSnippetsOperation = new SyncSnippetsOperation(this);
         initSnippetsJTable();
 
@@ -320,5 +320,9 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
     public Framework getFramework() {
         return framework;
+    }
+
+    public void reset() {
+        snippetViewFormPane.removeAll();
     }
 }

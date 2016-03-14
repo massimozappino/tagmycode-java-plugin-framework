@@ -96,7 +96,7 @@ public class FrameworkTest extends AbstractTest {
     @Test
     public void testFetchAllData() throws Exception {
         mockClientReturningValidAccountData(framework);
-        framework.fetchAllData();
+        framework.fetchBasicData();
         assertFrameworkReturnsValidData();
     }
 
@@ -183,6 +183,19 @@ public class FrameworkTest extends AbstractTest {
         framework.loadData();
 
         assertEquals(resourceGenerate.aSnippetsLastUpdate(), framework.getTagMyCode().getLastSnippetsUpdate());
+    }
+
+    @Test
+    public void testReset() throws Exception {
+        framework.getTagMyCode().setLastSnippetsUpdate("a custom date");
+        framework.getClient().setOauthToken(new OauthToken("aaa", "bbb"));
+        framework.getData().setAccount(resourceGenerate.aUser());
+
+        framework.reset();
+
+        assertEquals(null, framework.getTagMyCode().getLastSnippetsUpdate());
+        assertEquals(new VoidOauthToken(), framework.getClient().getOauthToken());
+        assertEquals(null, framework.getData().getAccount());
     }
 
     protected void assertAccessTokenIs(OauthToken accessToken) {

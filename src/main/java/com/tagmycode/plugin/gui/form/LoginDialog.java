@@ -103,8 +103,7 @@ public class LoginDialog extends AbstractDialog {
         buttonOK.setEnabled(false);
         try {
             checkVerificationCodeInput();
-            // TODO do not use task because of nested tasks
-            createLoginOperation().run();
+            createLoginOperation().runWithTask(framework.getTaskFactory(), "Logging in");
         } catch (TagMyCodeGuiException e) {
             onError(e);
         }

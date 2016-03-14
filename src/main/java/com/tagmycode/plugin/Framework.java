@@ -121,14 +121,13 @@ public class Framework {
     }
 
     public void fetchAndStoreAllData() throws TagMyCodeException {
-        fetchAllData();
+        fetchBasicData();
         saveData();
     }
 
-    protected void fetchAllData() throws TagMyCodeException {
+    protected void fetchBasicData() throws TagMyCodeException {
         data.setAccount(tagMyCode.fetchAccount());
         data.setLanguages(tagMyCode.fetchLanguages());
-        data.setSnippets(tagMyCode.fetchSnippetsCollection());
     }
 
     protected void loadData() throws TagMyCodeStorageException {
@@ -145,14 +144,19 @@ public class Framework {
             manageTagMyCodeExceptions(e);
         } finally {
             try {
-                client.revokeAccess();
-                data.clearDataAndStorage();
+                reset();
             } catch (TagMyCodeException e) {
                 manageTagMyCodeExceptions(e);
             } catch (IOException e) {
                 manageTagMyCodeExceptions(new TagMyCodeException());
             }
         }
+    }
+
+    public void reset() throws TagMyCodeException, IOException {
+        client.revokeAccess();
+        data.clearDataAndStorage();
+        tagMyCode.setLastSnippetsUpdate(null);
     }
 
     public boolean isInitialized() {
@@ -212,35 +216,28 @@ public class Framework {
     }
 
     public void initialize(final String verificationCode, final ICallback[] callbacks) {
-        // TODO do not load snippets here, delegate it to polling process
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    try {
-                        getClient().fetchOauthToken(verificationCode);
-                    } catch (TagMyCodeConnectionException e) {
-                        throw new TagMyCodeGuiException("Unable to authenticate");
-                    }
-                    fetchAndStoreAllData();
-                    snippetsDataChanged();
-                } catch (TagMyCodeException ex) {
-                    manageTagMyCodeExceptions(ex);
-                    logout();
-                } finally {
-                    if (callbacks != null) {
-                        for (ICallback callback : callbacks) {
-                            callback.doOperation();
-                        }
-                    }
-                    mainWindow.setLoggedIn(true);
-                }
-            }
-        };
+        mainWindow.setLoggedIn(true);
 
         try {
             getWallet().saveOauthToken(client.getOauthToken());
-            getTaskFactory().create(runnable, "Initializing TagMyCode");
+            try {
+                try {
+                    getClient().fetchOauthToken(verificationCode);
+                } catch (TagMyCodeConnectionException e) {
+                    throw new TagMyCodeGuiException("Unable to authenticate");
+                }
+                fetchAndStoreAllData();
+                snippetsDataChanged();
+            } catch (TagMyCodeException ex) {
+                manageTagMyCodeExceptions(ex);
+                logout();
+            } finally {
+                if (callbacks != null) {
+                    for (ICallback callback : callbacks) {
+                        callback.doOperation();
+                    }
+                }
+            }
         } catch (TagMyCodeGuiException e) {
             manageTagMyCodeExceptions(e);
             logoutAndAuthenticateAgain();

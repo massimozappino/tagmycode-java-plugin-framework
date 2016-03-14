@@ -31,6 +31,7 @@ public class Data {
         account = null;
         languages = new DefaultLanguageCollection();
         snippets = new SnippetCollection();
+        lastSnippetsUpdate = null;
     }
 
     public User getAccount() {
