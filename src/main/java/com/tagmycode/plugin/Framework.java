@@ -58,9 +58,7 @@ public class Framework {
 
         mainWindow.setLoggedIn(initialized);
         if (initialized) {
-
             tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
-
             mainWindow.start();
             new PollingProcess().start();
         }
@@ -140,6 +138,7 @@ public class Framework {
     }
 
     public void logout() {
+        getMainWindow().setLoggedIn(false);
         try {
             wallet.deleteAccessToken();
         } catch (TagMyCodeGuiException e) {
@@ -210,7 +209,6 @@ public class Framework {
         } catch (TagMyCodeException e) {
             manageTagMyCodeExceptions(e);
         }
-
     }
 
     public void initialize(final String verificationCode, final ICallback[] callbacks) {

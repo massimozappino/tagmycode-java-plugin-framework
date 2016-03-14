@@ -1,6 +1,7 @@
 package com.tagmycode.plugin;
 
 
+import com.tagmycode.plugin.gui.form.MainWindow;
 import com.tagmycode.sdk.authentication.OauthToken;
 import com.tagmycode.sdk.authentication.TagMyCodeApiDevelopment;
 import com.tagmycode.sdk.authentication.VoidOauthToken;
@@ -109,15 +110,19 @@ public class FrameworkTest extends AbstractTest {
 
     @Test
     public void testLogout() throws Exception {
+        Framework frameworkSpy = createSpyFramework();
+        MainWindow mainWindowMock = mock(MainWindow.class);
+        when(frameworkSpy.getMainWindow()).thenReturn(mainWindowMock);
         setValuesForWalletAndData();
         setAccessToken();
 
-        framework.logout();
+        frameworkSpy.logout();
 
-        assertDataIsReset(framework.getData());
-        assertTrue(framework.getClient().getOauthToken() instanceof VoidOauthToken);
-        assertEquals(null, framework.getWallet().loadOauthToken());
-        assertStorageDataIsCleared(framework.getStorageEngine());
+        verify(mainWindowMock, times(1)).setLoggedIn(false);
+        assertDataIsReset(frameworkSpy.getData());
+        assertTrue(frameworkSpy.getClient().getOauthToken() instanceof VoidOauthToken);
+        assertEquals(null, frameworkSpy.getWallet().loadOauthToken());
+        assertStorageDataIsCleared(frameworkSpy.getStorageEngine());
     }
 
     @Test
@@ -178,7 +183,6 @@ public class FrameworkTest extends AbstractTest {
         framework.loadData();
 
         assertEquals(resourceGenerate.aSnippetsLastUpdate(), framework.getTagMyCode().getLastSnippetsUpdate());
-
     }
 
     protected void assertAccessTokenIs(OauthToken accessToken) {
