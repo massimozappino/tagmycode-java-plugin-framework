@@ -2,7 +2,6 @@ package acceptance;
 
 import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
-import com.tagmycode.plugin.ICallback;
 import com.tagmycode.plugin.gui.form.LoginDialog;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -33,7 +32,7 @@ public class FrameworkAcceptanceTest extends AbstractTest {
 
         loginDialog.getButtonOk().doClick();
 
-        verify(frameworkSpy, times(1)).initialize(verificationCode, new ICallback[0]);
+        verify(frameworkSpy, times(1)).initialize(verificationCode);
 
         assertDataIsValid(frameworkSpy.getData());
         assertEquals(2, frameworkSpy.getMainWindow().getSnippetsTab().getSnippetsTable().getSnippetsComponent().getRowCount());

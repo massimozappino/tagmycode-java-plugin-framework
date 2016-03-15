@@ -1,24 +1,21 @@
 package com.tagmycode.plugin.operation;
 
 
-import com.tagmycode.plugin.ICallback;
 import com.tagmycode.plugin.gui.form.LoginDialog;
 
 public class LoginOperation extends TagMyCodeAsynchronousOperation {
     private LoginDialog loginDialog;
     private String verificationCode;
-    private ICallback[] callbacks;
 
-    public LoginOperation(LoginDialog loginDialog, String verificationCode, ICallback[] callbacks) {
+    public LoginOperation(LoginDialog loginDialog, String verificationCode) {
         super(loginDialog);
         this.loginDialog = loginDialog;
         this.verificationCode = verificationCode;
-        this.callbacks = callbacks;
     }
 
     @Override
     protected Object performOperation() throws Exception {
-        loginDialog.getFramework().initialize(verificationCode, callbacks);
+        loginDialog.getFramework().initialize(verificationCode);
         return null;
     }
 

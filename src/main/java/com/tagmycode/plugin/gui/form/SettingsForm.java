@@ -38,8 +38,11 @@ public class SettingsForm extends AbstractDialog {
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                framework.logout();
-                closeDialog();
+                int dialogResult = JOptionPane.showConfirmDialog(null, "Do you really want to log out?", "Confirm", JOptionPane.YES_NO_OPTION);
+                if (dialogResult == JOptionPane.YES_OPTION) {
+                    framework.logout();
+                    closeDialog();
+                }
             }
         });
         getDialog().getRootPane().setDefaultButton(null);

@@ -60,12 +60,12 @@ public class Framework {
         if (initialized) {
             tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
             mainWindow.loadSnippets();
-            new PollingProcess().start();
+            new SnippetsUpdatePollingProcess().start();
         }
     }
 
-    public LoginDialog showLoginDialog(ICallback... iCallback) {
-        LoginDialog loginDialog = new LoginDialog(this, iCallback, getParentFrame());
+    public LoginDialog showLoginDialog() {
+        LoginDialog loginDialog = new LoginDialog(this, getParentFrame());
         loginDialog.display();
         return loginDialog;
     }
@@ -215,7 +215,7 @@ public class Framework {
         }
     }
 
-    public void initialize(final String verificationCode, final ICallback[] callbacks) {
+    public void initialize(final String verificationCode) {
         mainWindow.setLoggedIn(true);
 
         try {
@@ -231,12 +231,6 @@ public class Framework {
             } catch (TagMyCodeException ex) {
                 manageTagMyCodeExceptions(ex);
                 logout();
-            } finally {
-                if (callbacks != null) {
-                    for (ICallback callback : callbacks) {
-                        callback.doOperation();
-                    }
-                }
             }
         } catch (TagMyCodeGuiException e) {
             manageTagMyCodeExceptions(e);

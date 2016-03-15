@@ -1,11 +1,11 @@
 package com.tagmycode.plugin;
 
 
-public class PollingProcess {
+public class SnippetsUpdatePollingProcess {
     private boolean exitStatus;
     private Thread thread;
 
-    public PollingProcess() {
+    public SnippetsUpdatePollingProcess() {
         exitStatus = false;
         thread = new Thread(new Runnable() {
             @Override

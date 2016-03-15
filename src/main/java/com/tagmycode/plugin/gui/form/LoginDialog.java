@@ -2,7 +2,6 @@ package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Browser;
 import com.tagmycode.plugin.Framework;
-import com.tagmycode.plugin.ICallback;
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.operation.LoginOperation;
@@ -26,11 +25,9 @@ public class LoginDialog extends AbstractDialog {
     private JTextPane textHelp1;
     private JTextPane textHelp2;
     private Component JPanelVerification;
-    private ICallback[] iCallback;
 
-    public LoginDialog(Framework framework, ICallback[] iCallback, Frame parent) {
+    public LoginDialog(Framework framework, Frame parent) {
         super(framework, parent);
-        this.iCallback = iCallback;
         defaultInitWindow();
         initWindow();
     }
@@ -110,7 +107,7 @@ public class LoginDialog extends AbstractDialog {
     }
 
     private LoginOperation createLoginOperation() {
-        return new LoginOperation(this, verificationCodeTextField.getText(), iCallback);
+        return new LoginOperation(this, verificationCodeTextField.getText());
     }
 
     private void onOpenLink() {
