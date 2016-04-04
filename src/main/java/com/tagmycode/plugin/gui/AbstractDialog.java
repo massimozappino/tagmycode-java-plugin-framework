@@ -72,6 +72,10 @@ public abstract class AbstractDialog extends AbstractGui implements IOnErrorCall
         dialog.dispose();
     }
 
+    public void hideDialog() {
+        dialog.setVisible(false);
+    }
+
     @Override
     public void onError(TagMyCodeException exception) {
         framework.manageTagMyCodeExceptions(exception);

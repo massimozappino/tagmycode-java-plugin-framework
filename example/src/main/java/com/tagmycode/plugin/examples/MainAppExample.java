@@ -32,6 +32,8 @@ public class MainAppExample {
         comp.add(lookAndFeelPanel, BorderLayout.WEST);
         final JTextField lastSnippetsUpdateTextField = new JTextField("", 20);
         comp.add(lastSnippetsUpdateTextField, BorderLayout.EAST);
+        JButton searchButton = new JButton("Search");
+        comp.add(searchButton, BorderLayout.CENTER);
 
 
         FrameworkConfig frameworkConfig = new FrameworkConfig(
@@ -45,6 +47,12 @@ public class MainAppExample {
         contentPane.add(framework.getMainFrame(), BorderLayout.CENTER);
 
 
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                framework.showSearchDialog();
+            }
+        });
         lastSnippetsUpdateTextField.setText(framework.getData().getLastSnippetsUpdate());
         lastSnippetsUpdateTextField.getDocument().addDocumentListener(new DocumentListener() {
             @Override

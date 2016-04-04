@@ -3,6 +3,7 @@ package com.tagmycode.plugin.gui.form;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.AbstractGui;
 import com.tagmycode.plugin.gui.ClipboardCopy;
+import com.tagmycode.plugin.gui.FilterSnippetsTextField;
 import com.tagmycode.plugin.gui.IOnErrorCallback;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.plugin.operation.DeleteSnippetOperation;
@@ -27,7 +28,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private JPanel leftPane;
     private JButton editSnippetButton;
     private JButton deleteSnippetButton;
-    private JTextField filterTextField;
+    private FilterSnippetsTextField filterTextField;
     private JButton settingsButton;
     private JPanel snippetListPane;
     private Framework framework;
@@ -64,12 +65,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
             }
 
             private void doFilter() {
-                if (filterSnippetsOperation != null) {
-                    filterSnippetsOperation.stop();
-                }
-                String filterText = filterTextField.getText();
-                filterSnippetsOperation = new FilterSnippetsOperation(SnippetsTab.this, filterText);
-                filterSnippetsOperation.run();
+
             }
         });
     }
@@ -324,5 +320,9 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
     public void reset() {
         snippetViewFormPane.removeAll();
+    }
+
+    public void createUIComponents() {
+        filterTextField = new FilterSnippetsTextField(this);
     }
 }

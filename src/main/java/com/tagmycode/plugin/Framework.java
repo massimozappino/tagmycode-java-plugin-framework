@@ -3,10 +3,7 @@ package com.tagmycode.plugin;
 
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
-import com.tagmycode.plugin.gui.form.LoginDialog;
-import com.tagmycode.plugin.gui.form.MainWindow;
-import com.tagmycode.plugin.gui.form.SettingsForm;
-import com.tagmycode.plugin.gui.form.SnippetDialog;
+import com.tagmycode.plugin.gui.form.*;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.TagMyCode;
@@ -34,6 +31,7 @@ public class Framework {
     private final IMessageManager messageManager;
     private final AbstractTaskFactory taskFactory;
     private Data data;
+    private QuickSearchDialog quickSearchDialog;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
         wallet = new Wallet(frameworkConfig.getPasswordKeyChain());
@@ -44,6 +42,7 @@ public class Framework {
         this.taskFactory = frameworkConfig.getTask();
         this.data = new Data(new StorageEngine(frameworkConfig.getStorage()));
         this.mainWindow = new MainWindow(this);
+        quickSearchDialog = new QuickSearchDialog(this, getParentFrame());
     }
 
     public void start() {
@@ -84,6 +83,11 @@ public class Framework {
 
     public void showSettingsDialog() {
         new SettingsForm(this, getParentFrame()).display();
+    }
+
+    public QuickSearchDialog showSearchDialog() {
+        quickSearchDialog.display();
+        return quickSearchDialog;
     }
 
     public MainWindow getMainWindow() {
@@ -298,4 +302,5 @@ public class Framework {
     public JComponent getMainFrame() {
         return mainWindow.getMainComponent();
     }
+
 }
