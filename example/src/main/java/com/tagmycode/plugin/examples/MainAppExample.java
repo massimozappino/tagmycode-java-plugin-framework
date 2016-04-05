@@ -50,7 +50,7 @@ public class MainAppExample {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                framework.showSearchDialog();
+                framework.showSearchDialog(null);
             }
         });
         lastSnippetsUpdateTextField.setText(framework.getData().getLastSnippetsUpdate());

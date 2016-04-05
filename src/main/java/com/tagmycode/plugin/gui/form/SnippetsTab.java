@@ -7,14 +7,16 @@ import com.tagmycode.plugin.gui.FilterSnippetsTextField;
 import com.tagmycode.plugin.gui.IOnErrorCallback;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.plugin.operation.DeleteSnippetOperation;
-import com.tagmycode.plugin.operation.FilterSnippetsOperation;
 import com.tagmycode.plugin.operation.LoadSnippetsOperation;
 import com.tagmycode.plugin.operation.SyncSnippetsOperation;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -34,7 +36,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private Framework framework;
     private JTable jTable;
     private ClipboardCopy clipboardCopy = new ClipboardCopy();
-    private FilterSnippetsOperation filterSnippetsOperation;
     private int selectedRow;
 
     public SnippetsTab(final Framework framework) {
@@ -47,27 +48,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
         initToolBarButtons(framework);
         initPopupMenuForJTextComponents(getMainComponent());
-
-        filterTextField.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                doFilter();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                doFilter();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                doFilter();
-            }
-
-            private void doFilter() {
-
-            }
-        });
     }
 
     private void initToolBarButtons(final Framework framework) {

@@ -3,6 +3,7 @@ package com.tagmycode.plugin;
 
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
+import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.plugin.gui.form.*;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.sdk.Client;
@@ -85,8 +86,9 @@ public class Framework {
         new SettingsForm(this, getParentFrame()).display();
     }
 
-    public QuickSearchDialog showSearchDialog() {
+    public QuickSearchDialog showSearchDialog(IDocumentInsertText documentInsertText) {
         quickSearchDialog.display();
+        quickSearchDialog.setDocumentInsertText(documentInsertText);
         return quickSearchDialog;
     }
 
