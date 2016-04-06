@@ -9,6 +9,8 @@ import com.tagmycode.sdk.model.Snippet;
 import com.tagmycode.sdk.model.SnippetCollection;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
@@ -21,18 +23,39 @@ public class QuickSearchDialog extends AbstractDialog {
     private JScrollPane scroll;
     private JList list1;
     private IDocumentInsertText documentInsertText;
-    private DefaultListModel model;
+    private DefaultListModel<Snippet> model;
 
     public QuickSearchDialog(Framework framework, Frame parent) {
         super(framework, parent);
         buttonOk = new JButton();
         buttonCancel = new JButton();
-        model = new DefaultListModel();
+        model = new DefaultListModel<Snippet>();
         list1.setModel(model);
+        list1.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    Snippet snippet = getSelectedSnippet();
+                    if (snippet != null) {
+                        System.out.println(snippet.getTitle());
+                    } else {
+
+                    }
+                }
+            }
+        });
         defaultInitWindow();
         initWindow();
     }
 
+    public Snippet getSelectedSnippet() {
+        Snippet selectedSnippet = null;
+        if (!list1.isSelectionEmpty()) {
+            selectedSnippet = model.getElementAt(list1.getSelectedIndex());
+        }
+
+        return selectedSnippet;
+    }
     @Override
     protected void initWindow() {
         getDialog().getRootPane().setDefaultButton(null);
@@ -86,7 +109,7 @@ public class QuickSearchDialog extends AbstractDialog {
             public void run() {
                 model.clear();
                 for (Snippet snippet : filteredSnippets) {
-                    model.addElement(snippet.getTitle());
+                    model.addElement(snippet);
                 }
 
             }
