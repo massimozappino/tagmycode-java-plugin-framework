@@ -21,7 +21,7 @@ public class QuickSearchDialog extends AbstractDialog {
     private QuickFilterSnippetsTextField quickFilterSnippetsTextField;
     private JPanel mainPanel;
     private JScrollPane scroll;
-    private JList list1;
+    private JList<Snippet> list1;
     private IDocumentInsertText documentInsertText;
     private DefaultListModel<Snippet> model;
 
@@ -37,7 +37,7 @@ public class QuickSearchDialog extends AbstractDialog {
                 if (!e.getValueIsAdjusting()) {
                     Snippet snippet = getSelectedSnippet();
                     if (snippet != null) {
-                        System.out.println(snippet.getTitle());
+                        insertCodeIntoDocument(snippet);
                     } else {
 
                     }
@@ -48,6 +48,12 @@ public class QuickSearchDialog extends AbstractDialog {
         initWindow();
     }
 
+    private void insertCodeIntoDocument(Snippet snippet) {
+        if (documentInsertText != null) {
+            documentInsertText.insertText(snippet.getCode());
+        }
+    }
+
     public Snippet getSelectedSnippet() {
         Snippet selectedSnippet = null;
         if (!list1.isSelectionEmpty()) {
@@ -56,6 +62,7 @@ public class QuickSearchDialog extends AbstractDialog {
 
         return selectedSnippet;
     }
+
     @Override
     protected void initWindow() {
         getDialog().getRootPane().setDefaultButton(null);
