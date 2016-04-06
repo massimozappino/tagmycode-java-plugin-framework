@@ -35,7 +35,6 @@ public class QuickSearchDialog extends AbstractDialog {
 
     @Override
     protected void initWindow() {
-
         getDialog().getRootPane().setDefaultButton(null);
         getDialog().setSize(400, 300);
         getDialog().setResizable(true);
@@ -82,7 +81,6 @@ public class QuickSearchDialog extends AbstractDialog {
     }
 
     public void populateResults(final SnippetCollection filteredSnippets) {
-
         new GuiThread().execute(new Runnable() {
             @Override
             public void run() {
@@ -97,5 +95,12 @@ public class QuickSearchDialog extends AbstractDialog {
 
     private void createUIComponents() {
         quickFilterSnippetsTextField = new QuickFilterSnippetsTextField(this);
+    }
+
+    @Override
+    public void display() {
+        super.display();
+        quickFilterSnippetsTextField.selectAll();
+        quickFilterSnippetsTextField.requestFocus();
     }
 }
