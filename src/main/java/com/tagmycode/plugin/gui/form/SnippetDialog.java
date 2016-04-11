@@ -170,8 +170,7 @@ public class SnippetDialog extends AbstractDialog {
             public void actionPerformed(ActionEvent e) {
                 try {
                     setSnippetIsModified();
-                    // TODO do not use getStorageEngine
-                    framework.getStorageEngine().saveLastLanguageUsed(getSelectedLanguage());
+                    saveLastLanguageUsed();
                 } catch (Exception ignored) {
                 }
             }
@@ -184,12 +183,19 @@ public class SnippetDialog extends AbstractDialog {
 
                 try {
                     setSnippetIsModified();
-                    // TODO do not use getStorageEngine
-                    framework.getStorageEngine().savePrivateSnippetFlag(selected);
+                    savePrivateSnippetFlag(selected);
                 } catch (TagMyCodeStorageException ignored) {
                 }
             }
         });
+    }
+
+    private void savePrivateSnippetFlag(boolean selected) throws TagMyCodeStorageException {
+        framework.getStorageEngine().savePrivateSnippetFlag(selected);
+    }
+
+    private void saveLastLanguageUsed() throws TagMyCodeStorageException {
+        framework.getStorageEngine().saveLastLanguageUsed(getSelectedLanguage());
     }
 
     private Language getSelectedLanguage() {

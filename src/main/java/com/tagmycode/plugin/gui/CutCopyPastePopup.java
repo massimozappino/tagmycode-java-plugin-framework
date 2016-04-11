@@ -78,6 +78,7 @@ public class CutCopyPastePopup extends JPopupMenu implements ActionListener {
         } else if ("paste".equals(e.getActionCommand())) {
             target.paste();
         } else if ("selectall".equals(e.getActionCommand())) {
+            target.requestFocus();
             target.selectAll();
         }
     }

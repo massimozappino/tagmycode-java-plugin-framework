@@ -7,7 +7,6 @@ import com.tagmycode.plugin.gui.FilterSnippetsTextField;
 import com.tagmycode.plugin.gui.IOnErrorCallback;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.plugin.operation.DeleteSnippetOperation;
-import com.tagmycode.plugin.operation.LoadSnippetsOperation;
 import com.tagmycode.plugin.operation.SyncSnippetsOperation;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.Snippet;
@@ -262,10 +261,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private void disableButtonsForSnippet() {
         editSnippetButton.setEnabled(false);
         deleteSnippetButton.setEnabled(false);
-    }
-
-    public void loadSnippets() {
-        new LoadSnippetsOperation(this).runWithTask(framework.getTaskFactory(), "Loading snippets");
     }
 
     private void refreshSnippets() {

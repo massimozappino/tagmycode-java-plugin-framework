@@ -59,7 +59,6 @@ public class Framework {
         mainWindow.setLoggedIn(initialized);
         if (initialized) {
             tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
-            mainWindow.loadSnippets();
             new SnippetsUpdatePollingProcess().start();
         }
     }
