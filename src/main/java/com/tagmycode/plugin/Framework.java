@@ -58,6 +58,7 @@ public class Framework {
 
         mainWindow.setLoggedIn(initialized);
         if (initialized) {
+            snippetsDataChanged();
             tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
             new SnippetsUpdatePollingProcess().start();
         }
@@ -138,7 +139,6 @@ public class Framework {
     protected void loadData() throws TagMyCodeStorageException {
         data.loadAll();
         tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
-        snippetsDataChanged();
     }
 
     public void logout() {
@@ -278,10 +278,9 @@ public class Framework {
     }
 
     public void snippetsDataChanged() {
-        String lastSnippetsUpdate = tagMyCode.getLastSnippetsUpdate();
-        getData().setLastSnippetsUpdate(lastSnippetsUpdate);
-        saveData();
+        getData().setLastSnippetsUpdate(tagMyCode.getLastSnippetsUpdate());
         getSnippetsJTable().fireSnippetsChanged();
+        saveData();
     }
 
     protected SnippetsTable getSnippetsJTable() {

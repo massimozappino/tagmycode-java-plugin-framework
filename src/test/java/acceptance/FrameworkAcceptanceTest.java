@@ -6,7 +6,7 @@ import com.tagmycode.plugin.gui.form.LoginDialog;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class FrameworkAcceptanceTest extends AbstractTest {
@@ -16,11 +16,13 @@ public class FrameworkAcceptanceTest extends AbstractTest {
     public void notAuthenticatedUserShouldSeeAuthorizationDialog() throws Exception {
         Framework frameworkSpy = createSpyFramework();
         frameworkSpy.canOperate();
+        assertFalse(frameworkSpy.isInitialized());
+
         verify(frameworkSpy, times(1)).showLoginDialog();
     }
 
     @Test
-    @Ignore
+    @Ignore("Wait for polling process")
     public void afterLoginIShouldSeeMySnippets() throws Exception {
         Framework framework = createFramework(createFullData());
         mockClientReturningValidAccountData(framework);
@@ -38,4 +40,15 @@ public class FrameworkAcceptanceTest extends AbstractTest {
         assertEquals(2, frameworkSpy.getMainWindow().getSnippetsTab().getSnippetsTable().getSnippetsComponent().getRowCount());
     }
 
+    @Test
+    public void afterLogoutLSetLastSnippetsUpdateIsCleared() throws Exception {
+        Framework framework = createFramework(createFullData());
+        mockClientReturningValidAccountData(framework);
+        Framework frameworkSpy = spy(framework);
+        assertTrue(frameworkSpy.isInitialized());
+        assertDataIsValid(framework.getData());
+
+        framework.logout();
+        assertDataIsReset(framework.getData());
+    }
 }

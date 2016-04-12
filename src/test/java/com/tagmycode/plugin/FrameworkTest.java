@@ -51,7 +51,7 @@ public class FrameworkTest extends AbstractTest {
         setValuesForWalletAndData();
         framework.restoreData();
         assertAccessTokenIs(oauthToken);
-        assertFrameworkReturnsValidData();
+        assertFrameworkReturnsValidBasicData();
     }
 
     @Test
@@ -70,13 +70,25 @@ public class FrameworkTest extends AbstractTest {
         framework.getWallet().saveOauthToken(newOauthToken);
 
         FrameworkConfig frameworkConfig = new FrameworkConfig(framework.getWallet().getPasswordKeyChain(), framework.getStorageEngine().getStorage(), framework.getMessageManager(), framework.getTaskFactory(), framework.getParentFrame());
-        Framework reloadedFramework = new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret());
+        Framework reloadedFramework = spy(new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret()));
+
         reloadedFramework.start();
 
+        verify(reloadedFramework, times(1)).snippetsDataChanged();
         assertEquals(newOauthToken, reloadedFramework.getClient().getOauthToken());
         assertEquals("fakeUsername", reloadedFramework.getStorageEngine().loadAccount().getUsername());
         assertEquals(1, reloadedFramework.getLanguageCollection().size());
         assertEquals(resourceGenerate.aLanguage(), reloadedFramework.getLanguageCollection().get(0));
+    }
+
+    @Test
+    public void start() throws Exception {
+        userIsLogged();
+        Framework frameworkSpy = spy(framework);
+
+        frameworkSpy.start();
+
+        verify(frameworkSpy, times(1)).snippetsDataChanged();
     }
 
     @Test
@@ -95,16 +107,16 @@ public class FrameworkTest extends AbstractTest {
 
     @Test
     public void testFetchAllData() throws Exception {
-        mockClientReturningValidAccountData(framework);
+        userIsLogged();
         framework.fetchBasicData();
-        assertFrameworkReturnsValidData();
+        assertFrameworkReturnsValidBasicData();
     }
 
     @Test
     public void testFetchAndStoreAllData() throws Exception {
         mockClientReturningValidAccountData(framework);
         framework.fetchAndStoreAllData();
-        assertFrameworkReturnsValidData();
+        assertFrameworkReturnsValidBasicData();
         assertPreferencesReturnsValidData();
     }
 
@@ -216,10 +228,9 @@ public class FrameworkTest extends AbstractTest {
         assertEquals(new DefaultLanguageCollection(), framework.getLanguageCollection());
     }
 
-    protected void assertFrameworkReturnsValidData() throws IOException, TagMyCodeJsonException {
+    protected void assertFrameworkReturnsValidBasicData() throws IOException, TagMyCodeJsonException {
         assertEquals(resourceGenerate.aUser(), framework.getData().getAccount());
         assertEquals(resourceGenerate.aLanguageCollection(), framework.getLanguageCollection());
-        assertEquals(resourceGenerate.aSnippetCollection(), framework.getData().getSnippets());
     }
 
     protected void setValuesForWalletAndData() throws Exception {
@@ -239,6 +250,11 @@ public class FrameworkTest extends AbstractTest {
 
     private void setAccessToken() throws TagMyCodeException {
         framework.getClient().setOauthToken(oauthToken);
+    }
+
+    private void userIsLogged() throws Exception {
+        setValuesForWalletAndData();
+        mockClientReturningValidAccountData(framework);
     }
 
 }
