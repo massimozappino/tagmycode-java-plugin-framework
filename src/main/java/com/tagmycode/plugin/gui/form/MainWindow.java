@@ -12,7 +12,6 @@ public class MainWindow implements IAbstractGUI {
     private JPanel mainPanel;
 
     public MainWindow(final Framework framework) {
-
         snippetsTab = new SnippetsTab(framework);
         loginPanel = new LoginPanel(framework);
     }
