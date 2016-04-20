@@ -4,6 +4,8 @@ import com.tagmycode.plugin.AbstractTaskFactory;
 import com.tagmycode.plugin.gui.IOnErrorCallback;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 
+import javax.swing.*;
+
 public abstract class TagMyCodeAsynchronousOperation<T> {
     protected IOnErrorCallback onErrorCallback;
     private Thread thread;
@@ -33,17 +35,33 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
             @Override
             public void run() {
                 try {
-                    beforePerformOperation();
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            beforePerformOperation();
+                        }
+                    });
                     final T result = performOperation();
-                    onComplete();
-                    onSuccess(result);
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            onComplete();
+                            onSuccess(result);
+                        }
+                    });
                 } catch (final InterruptedException e) {
-                    onInterrupted();
-                    e.printStackTrace();
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            onInterrupted();
+                            e.printStackTrace();
+                        }
+                    });
                 } catch (final Throwable e) {
-                    onComplete();
-                    onFailure(e);
-                    e.printStackTrace();
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            onComplete();
+                            onFailure(e);
+                            e.printStackTrace();
+                        }
+                    });
                 }
             }
         };
