@@ -3,6 +3,7 @@ package com.tagmycode.plugin.operation;
 import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Data;
 import com.tagmycode.plugin.Framework;
+import com.tagmycode.plugin.SnippetsUpdatePollingProcess;
 import com.tagmycode.plugin.gui.form.SnippetsTab;
 import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.model.SnippetsDeletions;
@@ -23,7 +24,7 @@ public class SyncSnippetOperationTest extends AbstractTest {
         when(dataMock.getSnippets()).thenReturn(resourceGenerate.aSnippetCollection());
         when(frameworkMock.getData()).thenReturn(dataMock);
 
-        SyncSnippetsOperation syncSnippetsOperation = new SyncSnippetsOperation(snippetsTabMock);
+        SyncSnippetsOperation syncSnippetsOperation = new SyncSnippetsOperation(new SnippetsUpdatePollingProcess(frameworkMock));
 
         syncSnippetsOperation.performOperation();
         verify(tagMyCodeMock, times(1)).syncSnippets(resourceGenerate.aSnippetCollection(), new SnippetsDeletions());

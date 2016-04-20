@@ -7,7 +7,6 @@ import com.tagmycode.plugin.gui.FilterSnippetsTextField;
 import com.tagmycode.plugin.gui.IOnErrorCallback;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.plugin.operation.DeleteSnippetOperation;
-import com.tagmycode.plugin.operation.SyncSnippetsOperation;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -20,7 +19,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
-    private SyncSnippetsOperation syncSnippetsOperation;
     private SnippetsTable snippetsTable;
     private JPanel snippetViewFormPane;
     private JButton newSnippetButton;
@@ -40,7 +38,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     public SnippetsTab(final Framework framework) {
         this.framework = framework;
         reset();
-        syncSnippetsOperation = new SyncSnippetsOperation(this);
         initSnippetsJTable();
 
         leftPane.add(snippetsTable.getMainComponent(), BorderLayout.CENTER);
@@ -71,7 +68,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         refreshButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                refreshSnippets();
+                framework.syncSnippets();
             }
         });
         settingsButton.addActionListener(new ActionListener() {
@@ -261,10 +258,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private void disableButtonsForSnippet() {
         editSnippetButton.setEnabled(false);
         deleteSnippetButton.setEnabled(false);
-    }
-
-    private void refreshSnippets() {
-        syncSnippetsOperation.runWithTask(framework.getTaskFactory(), "Syncing snippets");
     }
 
     public SnippetsTable getSnippetsTable() {

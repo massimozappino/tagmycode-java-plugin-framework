@@ -17,7 +17,6 @@ public class QuickFilterSnippetsOperation extends TagMyCodeAsynchronousOperation
 
     @Override
     protected Void performOperation() throws Exception {
-
         quickSearchDialog.populateResults(filterSnippets());
         return null;
     }

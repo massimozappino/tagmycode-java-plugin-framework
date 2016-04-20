@@ -31,10 +31,12 @@ public class Framework {
     private final Frame parentFrame;
     private final IMessageManager messageManager;
     private final AbstractTaskFactory taskFactory;
+    private final SnippetsUpdatePollingProcess polling;
     private Data data;
     private QuickSearchDialog quickSearchDialog;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
+
         wallet = new Wallet(frameworkConfig.getPasswordKeyChain());
         client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), wallet);
         tagMyCode = new TagMyCode(client);
@@ -44,6 +46,7 @@ public class Framework {
         this.data = new Data(new StorageEngine(frameworkConfig.getStorage()));
         this.mainWindow = new MainWindow(this);
         quickSearchDialog = new QuickSearchDialog(this, getParentFrame());
+        polling = new SnippetsUpdatePollingProcess(this);
     }
 
     public void start() {
@@ -60,8 +63,12 @@ public class Framework {
         if (initialized) {
             snippetsDataChanged();
             tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
-            new SnippetsUpdatePollingProcess().start();
+            polling.start();
         }
+    }
+
+    public void syncSnippets() {
+        polling.forceScheduleUpdate();
     }
 
     public LoginDialog showLoginDialog() {
@@ -143,6 +150,7 @@ public class Framework {
 
     public void logout() {
         getMainWindow().setLoggedIn(false);
+        polling.terminate();
         try {
             wallet.deleteAccessToken();
         } catch (TagMyCodeGuiException e) {
@@ -233,6 +241,7 @@ public class Framework {
                 }
                 fetchAndStoreAllData();
                 snippetsDataChanged();
+                polling.start();
             } catch (TagMyCodeException ex) {
                 manageTagMyCodeExceptions(ex);
                 logout();

@@ -6,6 +6,6 @@ public class FakeTaskFactory extends AbstractTaskFactory {
 
     @Override
     public void create(Runnable runnable, String title) {
-        runnable.run();
+        new Thread(runnable).start();
     }
 }
