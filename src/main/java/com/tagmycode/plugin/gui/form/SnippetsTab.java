@@ -278,10 +278,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         framework.manageTagMyCodeExceptions(e);
     }
 
-    public JButton getRefreshButton() {
-        return refreshButton;
-    }
-
     public Framework getFramework() {
         return framework;
     }

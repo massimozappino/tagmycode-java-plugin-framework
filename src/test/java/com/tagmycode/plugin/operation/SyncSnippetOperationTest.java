@@ -19,6 +19,7 @@ public class SyncSnippetOperationTest extends AbstractTest {
         Framework frameworkMock = mock(Framework.class);
         when(snippetsTabMock.getFramework()).thenReturn(frameworkMock);
         TagMyCode tagMyCodeMock = mock(TagMyCode.class);
+        when(tagMyCodeMock.isServiceAvailable()).thenReturn(true);
         when(frameworkMock.getTagMyCode()).thenReturn(tagMyCodeMock);
         Data dataMock = mock(Data.class);
         when(dataMock.getSnippets()).thenReturn(resourceGenerate.aSnippetCollection());

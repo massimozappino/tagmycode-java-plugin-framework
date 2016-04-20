@@ -4,6 +4,7 @@ package com.tagmycode.plugin;
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
+import com.tagmycode.plugin.gui.IOnErrorCallback;
 import com.tagmycode.plugin.gui.form.*;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.sdk.Client;
@@ -22,7 +23,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-public class Framework {
+public class Framework implements IOnErrorCallback {
     public final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private final MainWindow mainWindow;
     private final Wallet wallet;
@@ -312,4 +313,8 @@ public class Framework {
         return mainWindow.getMainComponent();
     }
 
+    @Override
+    public void onError(TagMyCodeException e) {
+        manageTagMyCodeExceptions(e);
+    }
 }
