@@ -9,9 +9,9 @@ import com.tagmycode.sdk.model.Snippet;
 import com.tagmycode.sdk.model.SnippetCollection;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
@@ -25,25 +25,24 @@ public class QuickSearchDialog extends AbstractDialog {
     private IDocumentInsertText documentInsertText;
     private DefaultListModel<Snippet> model;
 
-    public QuickSearchDialog(Framework framework, Frame parent) {
+    public QuickSearchDialog(final Framework framework, Frame parent) {
         super(framework, parent);
         buttonOk = new JButton();
         buttonCancel = new JButton();
-        model = new DefaultListModel<Snippet>();
+        model = new DefaultListModel<>();
         list1.setModel(model);
-        list1.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
-                    Snippet snippet = getSelectedSnippet();
-                    if (snippet != null) {
-                        insertCodeIntoDocument(snippet);
-                    } else {
+        list1.setCellRenderer(new SnippetRenderer());
 
-                    }
+        list1.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                Snippet snippet = getSelectedSnippet();
+
+                if (evt.getClickCount() == 2) {
+                    framework.openSnippet(snippet);
                 }
             }
         });
+
         defaultInitWindow();
         initWindow();
     }

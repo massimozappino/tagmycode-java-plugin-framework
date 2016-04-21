@@ -2,10 +2,7 @@ package com.tagmycode.plugin.examples;
 
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.FrameworkConfig;
-import com.tagmycode.plugin.examples.support.MessageManager;
-import com.tagmycode.plugin.examples.support.PasswordKeyChain;
-import com.tagmycode.plugin.examples.support.Storage;
-import com.tagmycode.plugin.examples.support.TaskFactory;
+import com.tagmycode.plugin.examples.support.*;
 import com.tagmycode.sdk.authentication.TagMyCodeApiProduction;
 
 import javax.swing.*;

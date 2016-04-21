@@ -75,7 +75,6 @@ public class SnippetsUpdatePollingProcess {
     }
 
     private boolean isElapsedTime() {
-        System.out.println("isElapsed " + (now() - lastSync));
         if (lastSync == SYNC_NEVER) {
             return false;
         }
