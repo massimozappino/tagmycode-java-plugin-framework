@@ -131,6 +131,9 @@ public class StorageEngine {
 
     public void saveLastSnippetsUpdate(String snippetsLastUpdate) throws TagMyCodeStorageException {
         try {
+            if (snippetsLastUpdate == null) {
+                snippetsLastUpdate = "";
+            }
             write(SNIPPETS_LAST_UPDATE, snippetsLastUpdate);
         } catch (IOException e) {
             throw new TagMyCodeStorageException(e);
@@ -162,6 +165,10 @@ public class StorageEngine {
     }
 
     private void write(String key, String value) throws IOException {
+        // Compatibility with other storage engines
+        if (value == null) {
+            throw new NullPointerException();
+        }
         storage.write(key, value);
     }
 
