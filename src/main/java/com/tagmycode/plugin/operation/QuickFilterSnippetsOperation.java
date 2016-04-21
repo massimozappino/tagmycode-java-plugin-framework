@@ -24,13 +24,15 @@ public class QuickFilterSnippetsOperation extends TagMyCodeAsynchronousOperation
     private SnippetCollection filterSnippets() {
         SnippetCollection snippets = quickSearchDialog.getFramework().getData().getSnippets();
         SnippetCollection filteredSnippets = new SnippetCollection();
-        for (Snippet snippet : snippets) {
-            if (search(filterText, snippet.getCode())
-                    || search(filterText, snippet.getTitle())
-                    || search(filterText, snippet.getDescription())
-                    || search(filterText, snippet.getTags())
-                    ) {
-                filteredSnippets.add(snippet);
+        if (filterText.length() > 0) {
+            for (Snippet snippet : snippets) {
+                if (search(filterText, snippet.getCode())
+                        || search(filterText, snippet.getTitle())
+                        || search(filterText, snippet.getDescription())
+                        || search(filterText, snippet.getTags())
+                        ) {
+                    filteredSnippets.add(snippet);
+                }
             }
         }
         return filteredSnippets;
