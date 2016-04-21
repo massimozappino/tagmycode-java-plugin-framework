@@ -4,7 +4,7 @@ import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
 
-public class SnippetEditorPane extends JTextPane {
+public class SnippetEditorPane extends JEditorPane {
 
     public void setTextWithSnippet(Snippet snippet) {
         setText(snippet.getCode());
