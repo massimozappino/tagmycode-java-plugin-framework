@@ -37,16 +37,25 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         cellSelectionModel = table.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-
         configureTableHeader();
 
-        sorter = new TableRowSorter<SnippetsTableModel>(model);
+        sorter = new TableRowSorter<>(model);
+        defaultSortOn(SnippetsTableModel.CREATED);
+        sorter.sort();
+
         table.setRowSorter(sorter);
+    }
+
+    private void defaultSortOn(int columnIndexToSort) {
+        ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>();
+        sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.DESCENDING));
+
+        sorter.setSortKeys(sortKeys);
     }
 
     private void sortByCreationDate() {
         DefaultRowSorter sorter = ((DefaultRowSorter) table.getRowSorter());
-        ArrayList<RowSorter.SortKey> list = new ArrayList<RowSorter.SortKey>();
+        ArrayList<RowSorter.SortKey> list = new ArrayList<>();
         list.add(new RowSorter.SortKey(SnippetsTableModel.CREATED, SortOrder.DESCENDING));
         sorter.setSortKeys(list);
         sorter.sort();
