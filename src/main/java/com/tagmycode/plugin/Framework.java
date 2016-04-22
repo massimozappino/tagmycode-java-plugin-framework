@@ -35,9 +35,9 @@ public class Framework implements IOnErrorCallback {
     private final SnippetsUpdatePollingProcess polling;
     private Data data;
     private QuickSearchDialog quickSearchDialog;
+    private SettingsForm settingsForm;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
-
         wallet = new Wallet(frameworkConfig.getPasswordKeyChain());
         client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), wallet);
         tagMyCode = new TagMyCode(client);
@@ -48,6 +48,7 @@ public class Framework implements IOnErrorCallback {
         this.mainWindow = new MainWindow(this);
         quickSearchDialog = new QuickSearchDialog(this, getParentFrame());
         polling = new SnippetsUpdatePollingProcess(this);
+        settingsForm = new SettingsForm(this, getParentFrame());
     }
 
     public void start() {
@@ -91,7 +92,7 @@ public class Framework implements IOnErrorCallback {
     }
 
     public void showSettingsDialog() {
-        new SettingsForm(this, getParentFrame()).display();
+        settingsForm.display();
     }
 
     public QuickSearchDialog showSearchDialog(IDocumentInsertText documentInsertText) {

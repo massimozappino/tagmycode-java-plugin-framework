@@ -15,6 +15,6 @@ public class SettingsFormTest extends AbstractTest {
         Data data = new Data(mock(StorageEngine.class));
         data.setAccount(resourceGenerate.aUser());
         SettingsForm settingsForm = new SettingsForm(createFramework(data), null);
-        assertEquals(resourceGenerate.aUser().getEmail(), settingsForm.identity.getText());
+        assertEquals(resourceGenerate.aUser().getEmail(), settingsForm.email.getText());
     }
 }
