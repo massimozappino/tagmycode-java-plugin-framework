@@ -10,14 +10,14 @@ public class SnippetsTableModel extends AbstractTableModel {
     public static final int IS_PRIVATE = 0;
     public final static int TITLE = 1;
     public final static int LANGUAGE = 2;
-    public static final int CREATED = 3;
+    public static final int MODIFIED = 3;
     private final Data data;
 
     private String[] columns;
 
     public SnippetsTableModel(Data data) {
         this.data = data;
-        columns = new String[]{"Private", "Title", "Language", "Created"};
+        columns = new String[]{"Private", "Title", "Language", "Modified"};
     }
 
     @Override
@@ -53,8 +53,8 @@ public class SnippetsTableModel extends AbstractTableModel {
                 return snippet.getTitle();
             case IS_PRIVATE:
                 return snippet.isPrivate();
-            case CREATED:
-                return snippet.getCreationDate();
+            case MODIFIED:
+                return snippet.getUpdateDate();
         }
         return null;
     }
@@ -64,7 +64,7 @@ public class SnippetsTableModel extends AbstractTableModel {
         switch (columnIndex) {
             case IS_PRIVATE:
                 return Boolean.class;
-            case CREATED:
+            case MODIFIED:
                 return Date.class;
         }
         return super.getColumnClass(columnIndex);

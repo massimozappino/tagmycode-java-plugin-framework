@@ -40,7 +40,7 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         configureTableHeader();
 
         sorter = new TableRowSorter<>(model);
-        defaultSortOn(SnippetsTableModel.CREATED);
+        defaultSortOn(SnippetsTableModel.MODIFIED);
         sorter.sort();
 
         table.setRowSorter(sorter);
@@ -56,7 +56,7 @@ public class SnippetsTable extends AbstractSnippetsListGui {
     private void sortByCreationDate() {
         DefaultRowSorter sorter = ((DefaultRowSorter) table.getRowSorter());
         ArrayList<RowSorter.SortKey> list = new ArrayList<>();
-        list.add(new RowSorter.SortKey(SnippetsTableModel.CREATED, SortOrder.DESCENDING));
+        list.add(new RowSorter.SortKey(SnippetsTableModel.MODIFIED, SortOrder.DESCENDING));
         sorter.setSortKeys(list);
         sorter.sort();
     }
@@ -81,7 +81,7 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         columnTitle.setCellRenderer(new TitleSnippetTableCellRender());
         columnLanguage.setCellRenderer(new DefaultSnippetTableCellRender());
         columnIsPrivate.setCellRenderer(new PrivateSnippetTableCellRender());
-        table.getColumnModel().getColumn(SnippetsTableModel.CREATED).setCellRenderer(new DateSnippetTableCellRender());
+        table.getColumnModel().getColumn(SnippetsTableModel.MODIFIED).setCellRenderer(new DateSnippetTableCellRender());
     }
 
     public ListSelectionModel getCellSelectionModel() {
