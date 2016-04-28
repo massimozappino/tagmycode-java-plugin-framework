@@ -6,6 +6,7 @@ import com.tagmycode.plugin.gui.ClipboardCopy;
 import com.tagmycode.plugin.gui.FilterSnippetsTextField;
 import com.tagmycode.plugin.gui.IOnErrorCallback;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
+import com.tagmycode.plugin.gui.table.SnippetsTableModel;
 import com.tagmycode.plugin.operation.DeleteSnippetOperation;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.Snippet;
@@ -34,6 +35,8 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private JTable jTable;
     private ClipboardCopy clipboardCopy = new ClipboardCopy();
     private int selectedRow;
+    private Snippet selectedSnippet = null;
+    private SnippetsTableModel model;
 
     public SnippetsTab(final Framework framework) {
         this.framework = framework;
@@ -85,6 +88,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         snippetsTable = new SnippetsTable(framework);
 
         jTable = snippetsTable.getSnippetsComponent();
+        model = (SnippetsTableModel) jTable.getModel();
         snippetsTable.getCellSelectionModel().addListSelectionListener(createSelectionListener());
 
         jTable.addMouseListener(new MouseAdapter() {
@@ -107,8 +111,8 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                     @Override
                     public void run() {
                         // TODO test: if last row is deleted, select last row -1
-                        if (selectedRow >= 0 && (jTable.getModel().getRowCount() - 1) > selectedRow) {
-                            jTable.addRowSelectionInterval(selectedRow, selectedRow);
+                        if (selectedRow >= 0 && (model.getRowCount() - 1) > selectedRow) {
+                            jTable.setRowSelectionInterval(selectedRow, selectedRow);
                         }
                     }
                 });
@@ -288,5 +292,9 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
     public void createUIComponents() {
         filterTextField = new FilterSnippetsTextField(this);
+    }
+
+    public void fireSnippetsChanged() {
+        snippetsTable.fireSnippetsChanged();
     }
 }

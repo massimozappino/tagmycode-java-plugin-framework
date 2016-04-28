@@ -99,6 +99,7 @@
                   <forms/>
                 </constraints>
                 <properties>
+                  <font/>
                   <text value="Label"/>
                 </properties>
               </component>

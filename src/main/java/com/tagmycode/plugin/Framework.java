@@ -6,7 +6,6 @@ import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.plugin.gui.IOnErrorCallback;
 import com.tagmycode.plugin.gui.form.*;
-import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.OauthToken;
@@ -290,12 +289,8 @@ public class Framework implements IOnErrorCallback {
 
     public void snippetsDataChanged() {
         getData().setLastSnippetsUpdate(tagMyCode.getLastSnippetsUpdate());
-        getSnippetsJTable().fireSnippetsChanged();
+        getMainWindow().getSnippetsTab().fireSnippetsChanged();
         saveData();
-    }
-
-    protected SnippetsTable getSnippetsJTable() {
-        return getMainWindow().getSnippetsTab().getSnippetsTable();
     }
 
     protected void saveData() {

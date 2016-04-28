@@ -1,6 +1,7 @@
 package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Framework;
+import com.tagmycode.plugin.MD5Util;
 import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.sdk.model.User;
 
@@ -8,10 +9,10 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+
+import static com.tagmycode.plugin.gui.GuiUtil.addClickableLink;
+import static com.tagmycode.plugin.gui.GuiUtil.setBold;
 
 public class SettingsForm extends AbstractDialog {
     protected JLabel email;
@@ -27,6 +28,8 @@ public class SettingsForm extends AbstractDialog {
         this.framework = framework;
 
         defaultInitWindow();
+        setBold(userName);
+        addClickableLink(profilePicture, "https://tagmycode.com/account");
     }
 
     private void fillData() {
@@ -95,23 +98,3 @@ public class SettingsForm extends AbstractDialog {
     }
 }
 
-class MD5Util {
-    private static String hex(byte[] array) {
-        StringBuilder sb = new StringBuilder();
-        for (byte anArray : array) {
-            sb.append(Integer.toHexString((anArray
-                    & 0xFF) | 0x100).substring(1, 3));
-        }
-        return sb.toString();
-    }
-
-    static String md5Hex(String message) {
-        try {
-            MessageDigest md =
-                    MessageDigest.getInstance("MD5");
-            return hex(md.digest(message.getBytes("CP1252")));
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ignored) {
-        }
-        return null;
-    }
-}

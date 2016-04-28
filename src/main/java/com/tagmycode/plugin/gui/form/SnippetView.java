@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static com.tagmycode.plugin.gui.GuiUtil.setBold;
+
 
 public class SnippetView extends AbstractGui {
     private JButton copyButton;
@@ -21,6 +23,8 @@ public class SnippetView extends AbstractGui {
     private ClipboardCopy clipboardCopy;
 
     public SnippetView(final Snippet snippet) {
+        setBold(title);
+
         clipboardCopy = new ClipboardCopy();
         snippetEditorPane.setEditable(false);
         snippetEditorPane.setTextWithSnippet(snippet);

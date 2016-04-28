@@ -3,7 +3,7 @@ package com.tagmycode.plugin.gui;
 import com.tagmycode.sdk.model.Snippet;
 
 public interface ISnippetsListGui {
-    public void fireSnippetsChanged();
+    void fireSnippetsChanged();
 
-    public Snippet getSelectedSnippet();
+    Snippet getSelectedSnippet();
 }

@@ -7,12 +7,12 @@ import com.tagmycode.sdk.model.SnippetsDeletions;
 
 public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> {
     private Framework framework;
-    private SnippetsUpdatePollingProcess process;
+    private SnippetsUpdatePollingProcess syncProcess;
 
-    public SyncSnippetsOperation(SnippetsUpdatePollingProcess process) {
-        super(process.getFramework());
-        this.process = process;
-        this.framework = process.getFramework();
+    public SyncSnippetsOperation(SnippetsUpdatePollingProcess syncProcess) {
+        super(syncProcess.getFramework());
+        this.syncProcess = syncProcess;
+        this.framework = syncProcess.getFramework();
     }
 
     @Override
@@ -20,13 +20,13 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
         TagMyCode tagMyCode = framework.getTagMyCode();
 
         if (tagMyCode.isServiceAvailable()) {
-            process.setNetworkAvailable(true);
+            syncProcess.setNetworkAvailable(true);
             Framework.LOGGER.info(String.format("Fetching snippets since: %s", tagMyCode.getLastSnippetsUpdate()));
             SnippetsDeletions emptySnippetsDeletions = new SnippetsDeletions();
             tagMyCode.syncSnippets(framework.getData().getSnippets(), emptySnippetsDeletions);
             Framework.LOGGER.info(String.format("Last snippets update: %s", tagMyCode.getLastSnippetsUpdate()));
         } else {
-            process.setNetworkAvailable(false);
+            syncProcess.setNetworkAvailable(false);
 
             Framework.LOGGER.info("Fetching snippets: Network unreachable");
         }
@@ -35,7 +35,7 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
 
     @Override
     protected void onSuccess(Void ignored) {
-        process.syncCompleted();
+        syncProcess.syncCompleted();
         framework.snippetsDataChanged();
     }
 }

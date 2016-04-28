@@ -23,41 +23,29 @@ public class SnippetsTable extends AbstractSnippetsListGui {
     public SnippetsTable(Framework framework) {
         model = new SnippetsTableModel(framework.getData());
         table = new JTable(model);
+        sorter = new TableRowSorter<>(model);
+        table.setRowSorter(sorter);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         scrollPane = new JScrollPane(table);
         table.setIntercellSpacing(new Dimension(0, 0));
 
         table.setCellSelectionEnabled(false);
         table.setRowSelectionAllowed(true);
-        table.setAutoCreateRowSorter(true);
         table.setShowGrid(false);
-
-        sortByCreationDate();
 
         cellSelectionModel = table.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         configureTableHeader();
 
-        sorter = new TableRowSorter<>(model);
-        defaultSortOn(SnippetsTableModel.MODIFIED);
-        sorter.sort();
-
-        table.setRowSorter(sorter);
+        sortByColumn(SnippetsTableModel.MODIFIED);
     }
 
-    private void defaultSortOn(int columnIndexToSort) {
+    private void sortByColumn(int columnIndexToSort) {
         ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>();
         sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.DESCENDING));
 
         sorter.setSortKeys(sortKeys);
-    }
-
-    private void sortByCreationDate() {
-        DefaultRowSorter sorter = ((DefaultRowSorter) table.getRowSorter());
-        ArrayList<RowSorter.SortKey> list = new ArrayList<>();
-        list.add(new RowSorter.SortKey(SnippetsTableModel.MODIFIED, SortOrder.DESCENDING));
-        sorter.setSortKeys(list);
         sorter.sort();
     }
 
@@ -103,15 +91,12 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         return model.getSnippetAt(getSelectedModelIndex());
     }
 
-
     private int getSelectedModelIndex() {
-        // TODO manage IndexOutOfBoundsException
-        try {
-            int selectedRow = table.getSelectedRow();
-            int i = table.convertRowIndexToModel(selectedRow);
-            return i;
-        } catch (IndexOutOfBoundsException e) {
-            return 0;
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow >= 0) {
+            return table.convertRowIndexToModel(selectedRow);
+        } else {
+            return -1;
         }
     }
 
