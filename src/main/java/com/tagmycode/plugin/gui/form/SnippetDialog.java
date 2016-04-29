@@ -73,7 +73,7 @@ public class SnippetDialog extends AbstractDialog {
 
         newSnippetOperation = new NewSnippetOperation(this);
         editSnippetOperation = new EditSnippetOperation(this);
-        defaultComboBoxModel = new DefaultComboBoxModel<Language>();
+        defaultComboBoxModel = new DefaultComboBoxModel<>();
         languageComboBox.setModel(defaultComboBoxModel);
         descriptionTextField.requestFocus();
 
