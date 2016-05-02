@@ -150,12 +150,6 @@
         </properties>
         <border type="none"/>
         <children>
-          <component id="6c3fe" class="javax.swing.JTextArea" binding="descriptionTextField">
-            <constraints>
-              <splitpane position="left"/>
-            </constraints>
-            <properties/>
-          </component>
           <scrollpane id="b2e06">
             <constraints>
               <splitpane position="right"/>
@@ -164,6 +158,19 @@
             <border type="none"/>
             <children>
               <component id="9af9b" class="com.tagmycode.plugin.gui.SnippetEditorPane" binding="codeEditorPane">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
+          <scrollpane id="b9098">
+            <constraints>
+              <splitpane position="left"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="6c3fe" class="javax.swing.JTextArea" binding="descriptionTextField">
                 <constraints/>
                 <properties/>
               </component>
