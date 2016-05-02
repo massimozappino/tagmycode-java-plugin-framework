@@ -292,7 +292,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
     public void createUIComponents() {
         filterTextField = new FilterSnippetsTextField(this);
-        filterTextField.setMinimumSize(new Dimension(150, 25));
+        filterTextField.setMinimumSize(new Dimension(200, 25));
     }
 
     public void fireSnippetsChanged() {

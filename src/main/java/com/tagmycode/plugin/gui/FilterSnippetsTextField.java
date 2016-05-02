@@ -10,6 +10,8 @@ public class FilterSnippetsTextField extends AbstractJFilterSnippetsTextField {
 
     public FilterSnippetsTextField(SnippetsTab snippetsTab) {
         this.snippetsTab = snippetsTab;
+        TextPrompt tp7 = new TextPrompt("Filter snippets", this);
+        tp7.changeAlpha(0.5f);
     }
 
     public void doFilter() {
