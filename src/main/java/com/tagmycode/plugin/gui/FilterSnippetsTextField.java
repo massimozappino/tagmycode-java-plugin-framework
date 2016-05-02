@@ -3,6 +3,8 @@ package com.tagmycode.plugin.gui;
 import com.tagmycode.plugin.gui.form.SnippetsTab;
 import com.tagmycode.plugin.operation.FilterSnippetsOperation;
 
+import static com.tagmycode.plugin.gui.GuiUtil.setPlaceholder;
+
 public class FilterSnippetsTextField extends AbstractJFilterSnippetsTextField {
 
     private SnippetsTab snippetsTab;
@@ -10,8 +12,7 @@ public class FilterSnippetsTextField extends AbstractJFilterSnippetsTextField {
 
     public FilterSnippetsTextField(SnippetsTab snippetsTab) {
         this.snippetsTab = snippetsTab;
-        TextPrompt tp7 = new TextPrompt("Filter snippets", this);
-        tp7.changeAlpha(0.5f);
+        setPlaceholder("Filter snippets", this);
     }
 
     public void doFilter() {

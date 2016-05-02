@@ -24,6 +24,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.tagmycode.plugin.gui.GuiUtil.setPlaceholder;
+
 public class SnippetDialog extends AbstractDialog {
     private static final String NEW_SNIPPET_TITLE = "New snippet";
     private static final String EDIT_SNIPPET_TITLE = "Edit snippet";
@@ -37,6 +39,7 @@ public class SnippetDialog extends AbstractDialog {
     private JComboBox<Language> languageComboBox;
     private JButton buttonOK;
     private JButton buttonCancel;
+    private JPanel tagsPanel;
     private JPanel jpanel;
     private JScrollPane scrollPane;
     private DefaultComboBoxModel<Language> defaultComboBoxModel;
@@ -77,6 +80,9 @@ public class SnippetDialog extends AbstractDialog {
         languageComboBox.setModel(defaultComboBoxModel);
         descriptionTextField.requestFocus();
 
+        setPlaceholder("Description", descriptionTextField);
+        setPlaceholder("tags space separated", tagsTextField);
+
         getDialog().setSize(650, 450);
         getDialog().setTitle(NEW_SNIPPET_TITLE);
         getDialog().setResizable(true);
@@ -92,7 +98,6 @@ public class SnippetDialog extends AbstractDialog {
             }
         });
     }
-
 
     @Override
     public void closeDialog() {
@@ -162,7 +167,6 @@ public class SnippetDialog extends AbstractDialog {
         descriptionTextField.getDocument().addDocumentListener(listener);
         codeEditorPane.getDocument().addDocumentListener(listener);
         tagsTextField.getDocument().addDocumentListener(listener);
-
 
 
         languageComboBox.addActionListener(new ActionListener() {
