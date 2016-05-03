@@ -1,5 +1,6 @@
 package com.tagmycode.plugin.gui.form;
 
+import com.tagmycode.plugin.Browser;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.AbstractGui;
 import com.tagmycode.plugin.gui.ClipboardCopy;
@@ -20,14 +21,16 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
+    protected JButton editSnippetButton;
+    protected JButton deleteSnippetButton;
+    protected JButton copyButton;
+    protected JButton openInBrowser;
     private SnippetsTable snippetsTable;
     private JPanel snippetViewFormPane;
     private JButton newSnippetButton;
     private JPanel mainPanel;
     private JButton refreshButton;
     private JPanel leftPane;
-    private JButton editSnippetButton;
-    private JButton deleteSnippetButton;
     private FilterSnippetsTextField filterTextField;
     private JButton settingsButton;
     private JPanel snippetListPane;
@@ -62,10 +65,22 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                 deleteSnippetAction();
             }
         });
-        newSnippetButton.addActionListener(new AbstractAction() {
+        newSnippetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 newSnippetAction(framework);
+            }
+        });
+        copyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                copyCodeAction();
+            }
+        });
+        openInBrowser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openSnippetInBrowser();
             }
         });
         refreshButton.addActionListener(new AbstractAction() {
@@ -163,6 +178,15 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         });
         popupMenu.add(copyCodeMenuItem);
 
+        JMenuItem openInBrowser = new JMenuItem("Open in browser");
+        openInBrowser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openSnippetInBrowser();
+            }
+        });
+        popupMenu.add(openInBrowser);
+
         jTable.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 selectClickedRow(e);
@@ -199,6 +223,10 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
             }
         });
+    }
+
+    private void openSnippetInBrowser() {
+        new Browser().openUrl(snippetsTable.getSelectedSnippet().getUrl());
     }
 
     private void copyCodeAction() {
@@ -254,14 +282,18 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         };
     }
 
-    private void enableButtonsForSnippet() {
+    protected void enableButtonsForSnippet() {
         editSnippetButton.setEnabled(true);
         deleteSnippetButton.setEnabled(true);
+        copyButton.setEnabled(true);
+        openInBrowser.setEnabled(true);
     }
 
-    private void disableButtonsForSnippet() {
+    protected void disableButtonsForSnippet() {
         editSnippetButton.setEnabled(false);
         deleteSnippetButton.setEnabled(false);
+        copyButton.setEnabled(false);
+        openInBrowser.setEnabled(false);
     }
 
     public SnippetsTable getSnippetsTable() {

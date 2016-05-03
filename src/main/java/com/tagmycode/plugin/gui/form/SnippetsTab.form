@@ -48,6 +48,24 @@
                   <toolTipText value="Delete"/>
                 </properties>
               </component>
+              <component id="e0c3c" class="javax.swing.JToolBar$Separator">
+                <constraints/>
+                <properties/>
+              </component>
+              <component id="a079d" class="javax.swing.JButton" binding="copyButton">
+                <constraints/>
+                <properties>
+                  <icon value="icons/copy.png"/>
+                  <text value=""/>
+                </properties>
+              </component>
+              <component id="4c363" class="javax.swing.JButton" binding="openInBrowser">
+                <constraints/>
+                <properties>
+                  <icon value="icons/link.png"/>
+                  <text value=""/>
+                </properties>
+              </component>
               <component id="5b6d4" class="javax.swing.JToolBar$Separator">
                 <constraints/>
                 <properties/>

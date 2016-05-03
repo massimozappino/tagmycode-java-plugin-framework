@@ -11,6 +11,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class SnippetsTabTest extends AbstractTest {
+
     private boolean actual;
 
     @Test
@@ -42,4 +43,21 @@ public class SnippetsTabTest extends AbstractTest {
         jTable.setRowSelectionInterval(0, 0);
         assertEquals(1, snippetViewFormPanel.getComponentCount());
     }
+
+    @Test
+    public void disableEnableButtonsForSnippet() throws Exception {
+        SnippetsTab snippetsTab = new SnippetsTab(createFramework(createFullData()));
+        snippetsTab.disableButtonsForSnippet();
+        assertSnippetButtonsEnabledAre(snippetsTab, false);
+        snippetsTab.enableButtonsForSnippet();
+        assertSnippetButtonsEnabledAre(snippetsTab, true);
+    }
+
+    private void assertSnippetButtonsEnabledAre(SnippetsTab snippetsTab, boolean flag) {
+        assertEquals(flag, snippetsTab.editSnippetButton.isEnabled());
+        assertEquals(flag, snippetsTab.deleteSnippetButton.isEnabled());
+        assertEquals(flag, snippetsTab.copyButton.isEnabled());
+        assertEquals(flag, snippetsTab.openInBrowser.isEnabled());
+    }
+
 }
