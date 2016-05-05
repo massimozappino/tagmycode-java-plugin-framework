@@ -144,25 +144,12 @@
           </grid>
         </constraints>
         <properties>
-          <dividerLocation value="50"/>
+          <dividerLocation value="35"/>
           <enabled value="true"/>
           <orientation value="0"/>
         </properties>
         <border type="none"/>
         <children>
-          <scrollpane id="b2e06">
-            <constraints>
-              <splitpane position="right"/>
-            </constraints>
-            <properties/>
-            <border type="none"/>
-            <children>
-              <component id="9af9b" class="com.tagmycode.plugin.gui.SnippetEditorPane" binding="codeEditorPane">
-                <constraints/>
-                <properties/>
-              </component>
-            </children>
-          </scrollpane>
           <scrollpane id="b9098">
             <constraints>
               <splitpane position="left"/>
@@ -176,6 +163,14 @@
               </component>
             </children>
           </scrollpane>
+          <grid id="7c9f4" binding="snippetPane" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints>
+              <splitpane position="right"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children/>
+          </grid>
         </children>
       </splitpane>
     </children>

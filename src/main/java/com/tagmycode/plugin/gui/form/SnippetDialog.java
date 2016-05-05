@@ -5,7 +5,7 @@ import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.GuiThread;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.AbstractDialog;
-import com.tagmycode.plugin.gui.SnippetEditorPane;
+import com.tagmycode.plugin.gui.SyntaxSnippetEditor;
 import com.tagmycode.plugin.gui.field.AbstractFieldValidation;
 import com.tagmycode.plugin.gui.field.CodeFieldValidation;
 import com.tagmycode.plugin.gui.field.TitleFieldValidation;
@@ -18,6 +18,7 @@ import com.tagmycode.sdk.model.Snippet;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,17 +30,18 @@ import static com.tagmycode.plugin.gui.GuiUtil.setPlaceholder;
 public class SnippetDialog extends AbstractDialog {
     private static final String NEW_SNIPPET_TITLE = "New snippet";
     private static final String EDIT_SNIPPET_TITLE = "Edit snippet";
+    private final SyntaxSnippetEditor codeEditorPane;
 
     private JPanel contentPane;
     private JTextField tagsTextField;
     private JCheckBox privateSnippetCheckBox;
     private JTextArea descriptionTextField;
     private JTextField titleBox;
-    private SnippetEditorPane codeEditorPane;
     private JComboBox<Language> languageComboBox;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JPanel tagsPanel;
+    private JPanel snippetPane;
     private JPanel jpanel;
     private JScrollPane scrollPane;
     private DefaultComboBoxModel<Language> defaultComboBoxModel;
@@ -50,6 +52,8 @@ public class SnippetDialog extends AbstractDialog {
 
     public SnippetDialog(final Framework framework, String mimeType, Frame parent) {
         super(framework, parent);
+        codeEditorPane = new SyntaxSnippetEditor();
+        snippetPane.add(codeEditorPane.getMainComponent());
         defaultInitWindow();
         initWindow();
         setMimeType(mimeType);
@@ -73,6 +77,7 @@ public class SnippetDialog extends AbstractDialog {
     @Override
     protected void initWindow() {
         snippetMarkedAsSaved();
+
 
         newSnippetOperation = new NewSnippetOperation(this);
         editSnippetOperation = new EditSnippetOperation(this);
@@ -165,7 +170,7 @@ public class SnippetDialog extends AbstractDialog {
         };
         titleBox.getDocument().addDocumentListener(listener);
         descriptionTextField.getDocument().addDocumentListener(listener);
-        codeEditorPane.getDocument().addDocumentListener(listener);
+        codeEditorPane.getTextArea().getDocument().addDocumentListener(listener);
         tagsTextField.getDocument().addDocumentListener(listener);
 
 
@@ -216,7 +221,7 @@ public class SnippetDialog extends AbstractDialog {
 
     public Snippet createSnippetObject() {
         Snippet snippet = new Snippet();
-        snippet.setCode(codeEditorPane.getText());
+        snippet.setCode(codeEditorPane.getTextArea().getText());
         snippet.setLanguage((Language) languageComboBox.getSelectedItem());
         snippet.setTitle(titleBox.getText());
         snippet.setDescription(descriptionTextField.getText());
@@ -241,18 +246,19 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     public void setMimeType(String mimeType) {
-        if (mimeType == null) {
-            mimeType = "plain/text";
-        }
-        codeEditorPane.setContentType(mimeType);
+        // TODO
+//        if (mimeType == null) {
+//            mimeType = "plain/text";
+//        }
+//        codeEditorPane.getTextArea().setContentType(mimeType);
     }
 
     public JTextField getTitleBox() {
         return titleBox;
     }
 
-    public SnippetEditorPane getCodeEditorPane() {
-        return codeEditorPane;
+    public JTextComponent getCodeEditorPane() {
+        return codeEditorPane.getTextArea();
     }
 
     public JTextField getTagsTextField() {

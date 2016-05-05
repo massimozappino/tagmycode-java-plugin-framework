@@ -3,10 +3,10 @@ package com.tagmycode.plugin.gui.field;
 
 import com.tagmycode.plugin.Framework;
 
-import javax.swing.*;
+import javax.swing.text.JTextComponent;
 
 public class CodeFieldValidation extends AbstractFieldValidation {
-    public CodeFieldValidation(JEditorPane field, Framework framework) {
+    public CodeFieldValidation(JTextComponent field, Framework framework) {
         super(field, framework);
     }
 

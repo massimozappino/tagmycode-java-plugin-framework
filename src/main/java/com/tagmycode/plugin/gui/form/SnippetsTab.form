@@ -57,6 +57,7 @@
                 <properties>
                   <icon value="icons/copy.png"/>
                   <text value=""/>
+                  <toolTipText value="Copy code to clipboard"/>
                 </properties>
               </component>
               <component id="4c363" class="javax.swing.JButton" binding="openInBrowser">
@@ -64,6 +65,7 @@
                 <properties>
                   <icon value="icons/link.png"/>
                   <text value=""/>
+                  <toolTipText value="Open snippet in browser..."/>
                 </properties>
               </component>
               <component id="5b6d4" class="javax.swing.JToolBar$Separator">
