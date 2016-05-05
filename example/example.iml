@@ -38,5 +38,6 @@
     <orderEntry type="library" name="Maven: org.mockito:mockito-all:1.9.5" level="project" />
     <orderEntry type="library" name="Maven: com.intellij:forms_rt:5.0" level="project" />
     <orderEntry type="library" name="Maven: jgoodies:forms:1.0.5" level="project" />
+    <orderEntry type="library" name="Maven: com.fifesoft:rsyntaxtextarea:2.5.8" level="project" />
   </component>
 </module>

@@ -10,9 +10,4 @@ public class SnippetEditorPane extends JEditorPane {
         setText(snippet.getCode());
         setCaretPosition(0);
     }
-
-    public void clear() {
-        setText("");
-    }
-
 }
