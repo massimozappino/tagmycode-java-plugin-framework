@@ -48,7 +48,13 @@ public class SettingsForm extends AbstractDialog {
         getDialog().getRootPane().setDefaultButton(null);
         getDialog().setSize(450, 300);
         getDialog().setResizable(true);
-        loadProfilePicture(framework.getData().getAccount().getEmail());
+
+        new BackgroundWorker(new Runnable() {
+            @Override
+            public void run() {
+                loadProfilePicture(framework.getData().getAccount().getEmail());
+            }
+        }).execute();
     }
 
     @Override
@@ -78,23 +84,28 @@ public class SettingsForm extends AbstractDialog {
     }
 
     private void loadProfilePicture(final String email) {
-
-        SwingUtilities.invokeLater(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            String md5Email = MD5Util.md5Hex(email);
-                            String path = "https://www.gravatar.com/avatar/" + md5Email + "?s=128&d=wavatar&r=pg";
-                            URL url = new URL(path);
-                            BufferedImage image = ImageIO.read(url);
-                            profilePicture.setIcon(new ImageIcon(image));
-                        } catch (Exception exp) {
-                            exp.printStackTrace();
-                        }
-                    }
-                }
-        );
+        try {
+            String md5Email = MD5Util.md5Hex(email);
+            String path = "https://www.gravatar.com/avatar/" + md5Email + "?s=128&d=wavatar&r=pg";
+            URL url = new URL(path);
+            BufferedImage image = ImageIO.read(url);
+            profilePicture.setIcon(new ImageIcon(image));
+        } catch (Exception ignore) {
+        }
     }
 }
 
+class BackgroundWorker extends SwingWorker<Integer, String> {
+    private Runnable runnable;
+
+    public BackgroundWorker(Runnable runnable) {
+        this.runnable = runnable;
+    }
+
+    @Override
+    protected Integer doInBackground() throws Exception {
+        runnable.run();
+        return 0;
+    }
+
+}
