@@ -10,10 +10,7 @@ import com.tagmycode.sdk.model.SnippetCollection;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
+import java.awt.event.*;
 
 public class QuickSearchDialog extends AbstractDialog {
     private final JButton buttonOk;
@@ -124,6 +121,53 @@ public class QuickSearchDialog extends AbstractDialog {
 
     private void createUIComponents() {
         quickFilterSnippetsTextField = new QuickFilterSnippetsTextField(this);
+        quickFilterSnippetsTextField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                int code = e.getKeyCode();
+                switch (code) {
+                    case KeyEvent.VK_UP: {
+                        cycleTableSelectionUp();
+                        break;
+                    }
+
+                    case KeyEvent.VK_DOWN: {
+                        cycleTableSelectionDown();
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+
+    }
+
+    private void cycleTableSelectionDown() {
+        int moveMe = list1.getSelectedIndex();
+
+        ListModel<Snippet> listModel = list1.getModel();
+        if (moveMe != listModel.getSize() - 1) {
+            list1.setSelectedIndex(moveMe + 1);
+            list1.ensureIndexIsVisible(moveMe + 1);
+        }
+    }
+
+    private void cycleTableSelectionUp() {
+        int moveMe = list1.getSelectedIndex();
+
+        if (moveMe != 0) {
+            list1.setSelectedIndex(moveMe - 1);
+            list1.ensureIndexIsVisible(moveMe - 1);
+        }
     }
 
     @Override
