@@ -11,6 +11,7 @@ import com.tagmycode.sdk.model.DefaultLanguage;
 import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.Snippet;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.junit.Test;
 
 import javax.swing.*;
@@ -29,7 +30,7 @@ public class SnippetDialogTest extends AbstractTest {
         snippetDialog.populateFieldsWithSnippet(snippet);
         Thread.sleep(800);
 
-        assertEquals("code\r\nsecond line", snippetDialog.getCodeEditorPane().getText());
+        assertEquals("code\r\nsecond line", snippetDialog.getCodeEditorPane().getTextArea().getText());
         assertEquals("A simple description", snippetDialog.getDescriptionTextField().getText());
         assertEquals("tag1 tag2 tag3", snippetDialog.getTagsTextField().getText());
         assertFalse(snippetDialog.getPrivateSnippetCheckBox().isSelected());
@@ -123,13 +124,13 @@ public class SnippetDialogTest extends AbstractTest {
     }
 
     private SnippetDialog createSnippetDialog(Framework framework) {
-        return new SnippetDialog(framework, null, null);
+        return new SnippetDialog(framework, null);
     }
 
     @Test
     public void checkValidFormIsCalled() throws Exception {
         final String[] value = {null};
-        SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null, null) {
+        SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null) {
             @Override
             public boolean checkValidForm() {
                 value[0] = "OK";
@@ -151,7 +152,7 @@ public class SnippetDialogTest extends AbstractTest {
         assertFalse(snippetDialog.checkValidForm());
 
         snippetDialog.getTitleBox().setText("a title");
-        snippetDialog.getCodeEditorPane().setText("a code");
+        snippetDialog.getCodeEditorPane().getTextArea().setText("a code");
 
         assertTrue(snippetDialog.checkValidForm());
     }
@@ -179,6 +180,16 @@ public class SnippetDialogTest extends AbstractTest {
 
         verify(snippetDialog, times(2)).checkValidForm();
         verify(snippetDialog, times(1)).getSaveOperation();
+    }
+
+    @Test
+    public void testChangeLanguage() throws Exception {
+        Framework spyFramework = createSpyFramework();
+        when(spyFramework.getLanguageCollection()).thenReturn(resourceGenerate.aLanguageCollection());
+        SnippetDialog snippetDialog = new SnippetDialog(spyFramework, null);
+        snippetDialog.getLanguageComboBox().setSelectedIndex(0);
+
+        assertEquals(SyntaxConstants.SYNTAX_STYLE_JAVA, snippetDialog.getCodeEditorPane().getTextArea().getSyntaxEditingStyle());
     }
 
     @Test
@@ -249,6 +260,7 @@ public class SnippetDialogTest extends AbstractTest {
         snippetDialog.getDescriptionTextField().setText("description");
         assertTrue(snippetDialog.isModified());
 
+        // TODO
 //        snippetDialog = createSnippetDialog();
 //        snippetDialog.getCodeEditorPane().setText("code");
 //        assertTrue(snippetDialog.isModified());
@@ -259,7 +271,7 @@ public class SnippetDialogTest extends AbstractTest {
 
         Framework spyFramework = createSpyFramework();
         when(spyFramework.getLanguageCollection()).thenReturn(resourceGenerate.aLanguageCollection());
-        snippetDialog = new SnippetDialog(spyFramework, null, null);
+        snippetDialog = new SnippetDialog(spyFramework, null);
         snippetDialog.getLanguageComboBox().setSelectedIndex(1);
         assertTrue(snippetDialog.isModified());
 
@@ -271,7 +283,7 @@ public class SnippetDialogTest extends AbstractTest {
     @Test
     public void askToSaveIfModified() throws Exception {
         final boolean[] showConfirmDialogIsCalled = new boolean[1];
-        SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null, null) {
+        SnippetDialog snippetDialog = new SnippetDialog(createSpyFramework(), null) {
             protected void showConfirmDialog() {
                 showConfirmDialogIsCalled[0] = true;
             }
@@ -282,7 +294,7 @@ public class SnippetDialogTest extends AbstractTest {
     }
 
     private SnippetDialog createSnippetDialog() throws Exception {
-        return new SnippetDialog(createSpyFramework(), null, null);
+        return new SnippetDialog(createSpyFramework(), null);
     }
 
 }

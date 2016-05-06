@@ -18,7 +18,6 @@ import com.tagmycode.sdk.model.Snippet;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,13 +49,12 @@ public class SnippetDialog extends AbstractDialog {
     private EditSnippetOperation editSnippetOperation;
     private boolean isModified = false;
 
-    public SnippetDialog(final Framework framework, String mimeType, Frame parent) {
+    public SnippetDialog(final Framework framework, Frame parent) {
         super(framework, parent);
         codeEditorPane = new SyntaxSnippetEditor();
         snippetPane.add(codeEditorPane.getMainComponent());
         defaultInitWindow();
         initWindow();
-        setMimeType(mimeType);
     }
 
     public void setEditableSnippet(Snippet snippet) {
@@ -77,7 +75,6 @@ public class SnippetDialog extends AbstractDialog {
     @Override
     protected void initWindow() {
         snippetMarkedAsSaved();
-
 
         newSnippetOperation = new NewSnippetOperation(this);
         editSnippetOperation = new EditSnippetOperation(this);
@@ -180,6 +177,7 @@ public class SnippetDialog extends AbstractDialog {
                 try {
                     setSnippetIsModified();
                     saveLastLanguageUsed();
+                    changeLanguage(getSelectedLanguage());
                 } catch (Exception ignored) {
                 }
             }
@@ -197,6 +195,10 @@ public class SnippetDialog extends AbstractDialog {
                 }
             }
         });
+    }
+
+    protected void changeLanguage(Language language) {
+        codeEditorPane.changeLanguage(language);
     }
 
     private void savePrivateSnippetFlag(boolean selected) throws TagMyCodeStorageException {
@@ -245,20 +247,12 @@ public class SnippetDialog extends AbstractDialog {
         return languageComboBox;
     }
 
-    public void setMimeType(String mimeType) {
-        // TODO
-//        if (mimeType == null) {
-//            mimeType = "plain/text";
-//        }
-//        codeEditorPane.getTextArea().setContentType(mimeType);
-    }
-
     public JTextField getTitleBox() {
         return titleBox;
     }
 
-    public JTextComponent getCodeEditorPane() {
-        return codeEditorPane.getTextArea();
+    public SyntaxSnippetEditor getCodeEditorPane() {
+        return codeEditorPane;
     }
 
     public JTextField getTagsTextField() {
@@ -290,7 +284,7 @@ public class SnippetDialog extends AbstractDialog {
         ArrayList<AbstractFieldValidation> fieldValidations = new ArrayList<AbstractFieldValidation>();
 
         fieldValidations.add(new TitleFieldValidation(getTitleBox(), framework));
-        fieldValidations.add(new CodeFieldValidation(getCodeEditorPane(), framework));
+        fieldValidations.add(new CodeFieldValidation(getCodeEditorPane().getTextArea(), framework));
 
         return fieldValidations;
     }

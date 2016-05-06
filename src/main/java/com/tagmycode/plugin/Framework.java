@@ -79,13 +79,13 @@ public class Framework implements IOnErrorCallback {
     }
 
     public void showNewSnippetDialog(Snippet snippet, String mimeType) {
-        SnippetDialog snippetDialog = new SnippetDialog(this, mimeType, getParentFrame());
+        SnippetDialog snippetDialog = new SnippetDialog(this, getParentFrame());
         snippetDialog.populateFieldsWithSnippet(snippet);
         snippetDialog.display();
     }
 
-    public void showEditSnippetDialog(Snippet snippet, String mimeType) {
-        SnippetDialog snippetDialog = new SnippetDialog(this, mimeType, getParentFrame());
+    public void showEditSnippetDialog(Snippet snippet) {
+        SnippetDialog snippetDialog = new SnippetDialog(this, getParentFrame());
         snippetDialog.setEditableSnippet(snippet);
         snippetDialog.display();
     }
@@ -302,7 +302,7 @@ public class Framework implements IOnErrorCallback {
     }
 
     public void openSnippet(Snippet snippet) {
-        showEditSnippetDialog(snippet, null);
+        showEditSnippetDialog(snippet);
     }
 
     public JComponent getMainFrame() {
