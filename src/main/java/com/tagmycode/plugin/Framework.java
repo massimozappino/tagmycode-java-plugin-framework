@@ -20,6 +20,8 @@ import com.tagmycode.sdk.model.SnippetCollection;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.logging.Logger;
 
 public class Framework implements IOnErrorCallback {
@@ -290,7 +292,17 @@ public class Framework implements IOnErrorCallback {
     public void snippetsDataChanged() {
         getData().setLastSnippetsUpdate(tagMyCode.getLastSnippetsUpdate());
         getMainWindow().getSnippetsTab().fireSnippetsChanged();
+        sortSnippetsByUpdateDate();
         saveData();
+    }
+
+    private void sortSnippetsByUpdateDate() {
+        Comparator<Snippet> comparator = new Comparator<Snippet>() {
+            public int compare(Snippet s1, Snippet s2) {
+                return s2.getUpdateDate().compareTo(s1.getUpdateDate());
+            }
+        };
+        Collections.sort(getData().getSnippets(), comparator);
     }
 
     protected void saveData() {

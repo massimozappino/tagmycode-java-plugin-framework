@@ -20,13 +20,13 @@ public class QuickSearchDialog extends AbstractDialog {
     private JScrollPane scroll;
     private JList<Snippet> list1;
     private IDocumentInsertText documentInsertText;
-    private DefaultListModel<Snippet> model;
+    private SnippetsListModel model;
 
     public QuickSearchDialog(final Framework framework, Frame parent) {
         super(framework, parent);
         buttonOk = new JButton();
         buttonCancel = new JButton();
-        model = new DefaultListModel<>();
+        model = new SnippetsListModel(framework.getData());
         list1.setModel(model);
         list1.setCellRenderer(new SnippetRenderer());
 
@@ -134,10 +134,10 @@ public class QuickSearchDialog extends AbstractDialog {
         new GuiThread().execute(new Runnable() {
             @Override
             public void run() {
-                model.clear();
-                for (Snippet snippet : filteredSnippets) {
-                    model.addElement(snippet);
-                }
+//                model.clear();
+//                for (Snippet snippet : filteredSnippets) {
+//                    model.addElement(snippet);
+//                }
 
             }
         });
