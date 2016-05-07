@@ -301,10 +301,6 @@ public class Framework implements IOnErrorCallback {
         }
     }
 
-    public void openSnippet(Snippet snippet) {
-        showEditSnippetDialog(snippet);
-    }
-
     public JComponent getMainFrame() {
         return mainWindow.getMainComponent();
     }

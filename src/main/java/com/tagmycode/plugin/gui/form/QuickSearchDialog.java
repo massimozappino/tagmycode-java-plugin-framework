@@ -35,11 +35,11 @@ public class QuickSearchDialog extends AbstractDialog {
                 Snippet snippet = getSelectedSnippet();
 
                 if (evt.getClickCount() == 2) {
-                    framework.openSnippet(snippet);
+                    framework.showEditSnippetDialog(snippet);
                 }
             }
         });
-        list1.addKeyListener(new KeyListener() {
+        KeyListener insertCodeKeyListener = new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
 
@@ -54,10 +54,12 @@ public class QuickSearchDialog extends AbstractDialog {
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     insertCodeIntoDocument(getSelectedSnippet());
+                    hideDialog();
                 }
             }
-        });
-
+        };
+        list1.addKeyListener(insertCodeKeyListener);
+        quickFilterSnippetsTextField.addKeyListener(insertCodeKeyListener);
         defaultInitWindow();
         initWindow();
     }

@@ -87,7 +87,7 @@
               <component id="ea780" class="javax.swing.JButton" binding="settingsButton">
                 <constraints/>
                 <properties>
-                  <icon value="icons/settings.png"/>
+                  <icon value="icons/profile.png"/>
                   <text value=""/>
                   <toolTipText value="Settings..."/>
                 </properties>

@@ -27,6 +27,7 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         table.setRowSorter(sorter);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         scrollPane = new JScrollPane(table);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
         table.setIntercellSpacing(new Dimension(0, 0));
 
         table.setCellSelectionEnabled(false);
