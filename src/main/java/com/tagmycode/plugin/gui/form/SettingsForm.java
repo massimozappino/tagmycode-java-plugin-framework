@@ -26,7 +26,7 @@ public class SettingsForm extends AbstractDialog {
     public SettingsForm(final Framework framework, Frame parent) {
         super(framework, parent);
         this.framework = framework;
-
+        getDialog().setTitle("User profile");
         defaultInitWindow();
         setBold(userName);
         addClickableLink(profilePicture, "https://tagmycode.com/account");

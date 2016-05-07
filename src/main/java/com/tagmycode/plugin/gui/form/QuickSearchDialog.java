@@ -39,6 +39,24 @@ public class QuickSearchDialog extends AbstractDialog {
                 }
             }
         });
+        list1.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    insertCodeIntoDocument(getSelectedSnippet());
+                }
+            }
+        });
 
         defaultInitWindow();
         initWindow();
@@ -122,9 +140,9 @@ public class QuickSearchDialog extends AbstractDialog {
     private void createUIComponents() {
         quickFilterSnippetsTextField = new QuickFilterSnippetsTextField(this);
         quickFilterSnippetsTextField.addKeyListener(new KeyListener() {
+
             @Override
             public void keyTyped(KeyEvent e) {
-
             }
 
             @Override
@@ -132,12 +150,12 @@ public class QuickSearchDialog extends AbstractDialog {
                 int code = e.getKeyCode();
                 switch (code) {
                     case KeyEvent.VK_UP: {
-                        cycleTableSelectionUp();
+                        cycleListSelectionUp();
                         break;
                     }
 
                     case KeyEvent.VK_DOWN: {
-                        cycleTableSelectionDown();
+                        cycleListSelectionDown();
                         break;
                     }
                 }
@@ -145,29 +163,40 @@ public class QuickSearchDialog extends AbstractDialog {
 
             @Override
             public void keyReleased(KeyEvent e) {
-
             }
         });
-
     }
 
-    private void cycleTableSelectionDown() {
-        int moveMe = list1.getSelectedIndex();
-
+    private void cycleListSelectionDown() {
         ListModel<Snippet> listModel = list1.getModel();
-        if (moveMe != listModel.getSize() - 1) {
-            list1.setSelectedIndex(moveMe + 1);
-            list1.ensureIndexIsVisible(moveMe + 1);
+
+        if (listModel.getSize() > 0) {
+            int selectedIndex = list1.getSelectedIndex();
+
+            int newSelectionIndex = 0;
+            if (selectedIndex != listModel.getSize() - 1) {
+                newSelectionIndex = selectedIndex + 1;
+            }
+            selectListIndex(newSelectionIndex);
         }
     }
 
-    private void cycleTableSelectionUp() {
-        int moveMe = list1.getSelectedIndex();
+    private void cycleListSelectionUp() {
+        ListModel<Snippet> listModel = list1.getModel();
 
-        if (moveMe != 0) {
-            list1.setSelectedIndex(moveMe - 1);
-            list1.ensureIndexIsVisible(moveMe - 1);
+        if (listModel.getSize() > 0) {
+            int selectedIndex = list1.getSelectedIndex();
+            int newSelectionIndex = listModel.getSize() - 1;
+            if (selectedIndex > 0) {
+                newSelectionIndex = selectedIndex - 1;
+            }
+            selectListIndex(newSelectionIndex);
         }
+    }
+
+    private void selectListIndex(int newSelectionIndex) {
+        list1.setSelectedIndex(newSelectionIndex);
+        list1.ensureIndexIsVisible(newSelectionIndex);
     }
 
     @Override
