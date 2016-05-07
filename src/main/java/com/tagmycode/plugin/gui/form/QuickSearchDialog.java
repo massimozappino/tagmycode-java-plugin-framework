@@ -39,7 +39,15 @@ public class QuickSearchDialog extends AbstractDialog {
                 }
             }
         });
-        KeyListener insertCodeKeyListener = new KeyListener() {
+        KeyListener insertCodeKeyListener = createInsertIntoDocumentKeyListener();
+        list1.addKeyListener(insertCodeKeyListener);
+        quickFilterSnippetsTextField.addKeyListener(insertCodeKeyListener);
+        defaultInitWindow();
+        initWindow();
+    }
+
+    private KeyListener createInsertIntoDocumentKeyListener() {
+        return new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
 
@@ -58,10 +66,6 @@ public class QuickSearchDialog extends AbstractDialog {
                 }
             }
         };
-        list1.addKeyListener(insertCodeKeyListener);
-        quickFilterSnippetsTextField.addKeyListener(insertCodeKeyListener);
-        defaultInitWindow();
-        initWindow();
     }
 
     private void insertCodeIntoDocument(Snippet snippet) {
