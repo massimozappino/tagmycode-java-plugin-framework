@@ -18,6 +18,19 @@
               <text value="Quick search"/>
             </properties>
           </component>
+          <grid id="94768" binding="snippetViewPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints border-constraint="South"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="27e99" class="javax.swing.JLabel">
+                <constraints border-constraint="Center"/>
+                <properties>
+                  <text value="Label"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
         </children>
       </grid>
       <grid id="f7787" layout-manager="BorderLayout" hgap="0" vgap="0">

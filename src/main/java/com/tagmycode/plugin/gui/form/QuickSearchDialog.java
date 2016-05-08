@@ -8,6 +8,8 @@ import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -21,6 +23,7 @@ public class QuickSearchDialog extends AbstractDialog {
     private FilterSnippetsTextField quickFilterSnippetsTextField;
     private JPanel mainPanel;
     private JPanel resultsPanel;
+    private JPanel snippetViewPanel;
     private IDocumentInsertText documentInsertText;
     private SnippetsTable snippetsTable;
 
@@ -35,10 +38,34 @@ public class QuickSearchDialog extends AbstractDialog {
         jtable = snippetsTable.getSnippetsComponent();
         jtable.setTableHeader(null);
 
+        snippetsTable.getCellSelectionModel().addListSelectionListener(createSelectionListener());
+
         resultsPanel.add(snippetsTable.getMainComponent());
 
         defaultInitWindow();
         initWindow();
+    }
+
+    private ListSelectionListener createSelectionListener() {
+        return new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    snippetViewPanel.removeAll();
+
+                    Snippet snippet = snippetsTable.getSelectedSnippet();
+                    // TODO test
+                    // TODO remove duplication from SnippetsTab#createSelectionListener
+                    if (snippet != null) {
+                        JComponent snippetViewForm = new SnippetView(snippet).getSnippetEditorPane().getMainComponent();
+                        snippetViewForm.setPreferredSize(new Dimension(snippetViewForm.getWidth(), 80));
+                        snippetViewPanel.add(snippetViewForm);
+                    }
+                    snippetViewPanel.revalidate();
+                    snippetViewPanel.repaint();
+                }
+            }
+        };
     }
 
     private KeyListener createInsertIntoDocumentKeyListener() {
@@ -74,7 +101,7 @@ public class QuickSearchDialog extends AbstractDialog {
     @Override
     protected void initWindow() {
         getDialog().getRootPane().setDefaultButton(null);
-        getDialog().setSize(400, 300);
+        getDialog().setSize(400, 400);
         getDialog().setResizable(true);
         getDialog().setUndecorated(true);
         getDialog().setModal(false);
