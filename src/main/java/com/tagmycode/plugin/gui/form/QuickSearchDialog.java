@@ -130,12 +130,12 @@ public class QuickSearchDialog extends AbstractDialog {
                 int code = e.getKeyCode();
                 switch (code) {
                     case KeyEvent.VK_UP: {
-//                        cycleListSelectionUp();
+                        cycleTableSelectionRows("up");
                         break;
                     }
 
                     case KeyEvent.VK_DOWN: {
-//                        cycleListSelectionDown();
+                        cycleTableSelectionRows("down");
                         break;
                     }
                 }
@@ -147,45 +147,37 @@ public class QuickSearchDialog extends AbstractDialog {
         });
     }
 
-//    private void cycleListSelectionDown() {
-//        ListModel<Snippet> listModel = list1.getModel();
-//
-//        if (listModel.getSize() > 0) {
-//            int selectedIndex = list1.getSelectedIndex();
-//
-//            int newSelectionIndex = 0;
-//            if (selectedIndex != listModel.getSize() - 1) {
-//                newSelectionIndex = selectedIndex + 1;
-//            }
-//            selectListIndex(newSelectionIndex);
-//        }
-//    }
-//
-//    private void cycleListSelectionUp() {
-//        ListModel<Snippet> listModel = list1.getModel();
-//
-//        if (listModel.getSize() > 0) {
-//            int selectedIndex = list1.getSelectedIndex();
-//            int newSelectionIndex = listModel.getSize() - 1;
-//            if (selectedIndex > 0) {
-//                newSelectionIndex = selectedIndex - 1;
-//            }
-//            selectListIndex(newSelectionIndex);
-//        }
-//    }
-//
-//    private void selectListIndex(int newSelectionIndex) {
-//        list1.setSelectedIndex(newSelectionIndex);
-//        list1.ensureIndexIsVisible(newSelectionIndex);
-//    }
+    private void cycleTableSelectionRows(String direction) {
+        int size = jtable.getRowCount();
+        if (size > 0) {
+            int selectedIndex = jtable.getSelectedRow();
+            int newSelectionIndex = 0;
+
+            if (direction.equals("up")) {
+                newSelectionIndex = size - 1;
+                if (selectedIndex > 0) {
+                    newSelectionIndex = selectedIndex - 1;
+                }
+            } else {
+                if (selectedIndex != size - 1) {
+                    newSelectionIndex = selectedIndex + 1;
+                }
+            }
+            selectTableRow(newSelectionIndex);
+        }
+    }
+
+    private void selectTableRow(int newSelectionIndex) {
+        jtable.setRowSelectionInterval(newSelectionIndex, newSelectionIndex);
+        jtable.scrollRectToVisible(new Rectangle(jtable.getCellRect(newSelectionIndex, 0, true)));
+    }
 
     @Override
     public void display() {
         super.display();
         quickFilterSnippetsTextField.selectAll();
         quickFilterSnippetsTextField.requestFocus();
-        //TODO
-        snippetsTable.fireSnippetsChanged();
+        quickFilterSnippetsTextField.doFilter();
     }
 
     public SnippetsTable getSnippetsTable() {
