@@ -21,6 +21,8 @@ import javax.swing.event.TableModelListener;
 import java.awt.*;
 import java.awt.event.*;
 
+import static com.tagmycode.plugin.gui.GuiUtil.setPlaceholder;
+
 public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     protected JButton editSnippetButton;
     protected JButton deleteSnippetButton;
@@ -313,8 +315,9 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     public void createUIComponents() {
-        filterTextField = new FilterSnippetsTextField(this);
+        filterTextField = new FilterSnippetsTextField(framework, snippetsTable);
         filterTextField.setMinimumSize(new Dimension(200, 25));
+        setPlaceholder("Filter snippets", filterTextField);
     }
 
     public void fireSnippetsChanged() {

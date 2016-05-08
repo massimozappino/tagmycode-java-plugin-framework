@@ -25,21 +25,16 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="fc01" class="com.tagmycode.plugin.gui.QuickFilterSnippetsTextField" binding="quickFilterSnippetsTextField" custom-create="true">
+          <component id="fc01" class="com.tagmycode.plugin.gui.FilterSnippetsTextField" binding="quickFilterSnippetsTextField" custom-create="true">
             <constraints border-constraint="North"/>
             <properties/>
           </component>
-          <scrollpane id="2af80" binding="scroll">
+          <grid id="f2f9d" binding="resultsPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
             <constraints border-constraint="Center"/>
             <properties/>
             <border type="none"/>
-            <children>
-              <component id="8e564" class="javax.swing.JList" binding="list1" default-binding="true">
-                <constraints/>
-                <properties/>
-              </component>
-            </children>
-          </scrollpane>
+            <children/>
+          </grid>
         </children>
       </grid>
     </children>

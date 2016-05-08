@@ -1,27 +1,47 @@
 package com.tagmycode.plugin.gui;
 
-import com.tagmycode.plugin.gui.form.SnippetsTab;
+import com.tagmycode.plugin.Framework;
+import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.plugin.operation.FilterSnippetsOperation;
 
-import static com.tagmycode.plugin.gui.GuiUtil.setPlaceholder;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
-public class FilterSnippetsTextField extends AbstractJFilterSnippetsTextField {
+public class FilterSnippetsTextField extends JTextField {
 
-    private SnippetsTab snippetsTab;
+    private Framework framework;
+    private SnippetsTable snippetsTable;
     private FilterSnippetsOperation filterSnippetsOperation = null;
 
-    public FilterSnippetsTextField(SnippetsTab snippetsTab) {
-        this.snippetsTab = snippetsTab;
-        setPlaceholder("Filter snippets", this);
+    public FilterSnippetsTextField(Framework framework, SnippetsTable snippetsTable) {
+        this.framework = framework;
+        this.snippetsTable = snippetsTable;
+        getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                doFilter();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                doFilter();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                doFilter();
+            }
+        });
     }
+
 
     public void doFilter() {
         if (filterSnippetsOperation != null) {
             filterSnippetsOperation.stop();
         }
         String filterText = getText();
-        filterSnippetsOperation = new FilterSnippetsOperation(snippetsTab, filterText);
+        filterSnippetsOperation = new FilterSnippetsOperation(framework, snippetsTable, filterText);
         filterSnippetsOperation.run();
     }
-
 }
