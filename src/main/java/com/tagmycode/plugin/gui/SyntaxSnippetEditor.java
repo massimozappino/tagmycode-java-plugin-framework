@@ -24,6 +24,7 @@ public class SyntaxSnippetEditor implements IAbstractGUI {
         scrollPane.setLineNumbersEnabled(false);
         scrollPane.setIconRowHeaderEnabled(false);
         scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+
         if (theme != null) {
             theme.apply(textArea);
         }

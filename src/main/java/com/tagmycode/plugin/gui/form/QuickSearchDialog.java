@@ -4,6 +4,7 @@ import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.gui.FilterSnippetsTextField;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
+import com.tagmycode.plugin.gui.SyntaxSnippetEditor;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.plugin.gui.table.SnippetsTableModel;
 import com.tagmycode.sdk.model.Snippet;
@@ -54,12 +55,10 @@ public class QuickSearchDialog extends AbstractDialog {
 
         configureJTable();
 
-        snippetViewPanel = new JPanel(new BorderLayout());
         snippetViewPanel.setPreferredSize(new Dimension(-1, 130));
-        centerPanel.add(snippetViewPanel, BorderLayout.SOUTH);
 
         previewPanel = new JPanel(new GridBagLayout());
-        previewPanel.add(new JLabel("Preview..."));
+        previewPanel.add(new JLabel("Select a snippet to preview"));
         snippetViewPanel.removeAll();
         snippetViewPanel.add(previewPanel);
 
@@ -87,7 +86,6 @@ public class QuickSearchDialog extends AbstractDialog {
         jTable.addKeyListener(new KeyAdapter() {
                                   @Override
                                   public void keyPressed(KeyEvent e) {
-                                      super.keyPressed(e);
                                       if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                                           insertCodeIntoDocument();
                                       }
@@ -113,8 +111,8 @@ public class QuickSearchDialog extends AbstractDialog {
                     // TODO test
                     // TODO remove duplication from SnippetsTab#createSelectionListener
                     if (snippet != null) {
-                        JComponent snippetViewForm = new SnippetView(snippet).getSnippetEditorPane().getMainComponent();
-                        snippetViewPanel.add(snippetViewForm);
+                        SyntaxSnippetEditor snippetEditorPane = new SnippetView(snippet).getSnippetEditorPane();
+                        snippetViewPanel.add(snippetEditorPane.getMainComponent());
                         enableSnippetButtons();
                     } else {
                         snippetViewPanel.add(previewPanel);
@@ -171,7 +169,7 @@ public class QuickSearchDialog extends AbstractDialog {
     @Override
     protected void initWindow() {
         getDialog().getRootPane().setDefaultButton(null);
-        getDialog().setSize(400, 400);
+        getDialog().setSize(400, 300);
         getDialog().setResizable(true);
         getDialog().setUndecorated(true);
         getDialog().setModal(false);
