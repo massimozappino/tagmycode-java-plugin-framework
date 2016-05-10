@@ -232,8 +232,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     private void editSnippetAction() {
-        Snippet snippet = snippetsTable.getSelectedSnippet();
-        framework.showEditSnippetDialog(snippet);
+        framework.showEditSnippetDialog(snippetsTable.getSelectedSnippet());
     }
 
     private void deleteSnippetAction() {

@@ -3,6 +3,7 @@ package com.tagmycode.plugin.examples;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.FrameworkConfig;
 import com.tagmycode.plugin.examples.support.*;
+import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.sdk.authentication.TagMyCodeApiProduction;
 
 import javax.swing.*;
@@ -47,7 +48,12 @@ public class MainAppExample {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                framework.showSearchDialog(null);
+                framework.showSearchDialog(new IDocumentInsertText() {
+                    @Override
+                    public void insertText(String text) {
+                        System.out.println(text);
+                    }
+                });
             }
         });
         lastSnippetsUpdateTextField.setText(framework.getData().getLastSnippetsUpdate());

@@ -5,38 +5,63 @@ import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.gui.FilterSnippetsTextField;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
+import com.tagmycode.plugin.gui.table.SnippetsTableModel;
 import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
+import java.awt.event.*;
 
 public class QuickSearchDialog extends AbstractDialog {
     private final JButton buttonOk;
-    private final JButton buttonCancel;
-    private final JTable jtable;
-    private FilterSnippetsTextField quickFilterSnippetsTextField;
+    private final JPanel previewPanel;
+    private JButton buttonCancel;
+    private JTable jTable;
+    private FilterSnippetsTextField filterSnippetsTextField;
     private JPanel mainPanel;
     private JPanel resultsPanel;
     private JPanel snippetViewPanel;
+    private JPanel centerPanel;
+    private JButton insertAtCursorButton;
+    private JButton openButton;
     private IDocumentInsertText documentInsertText;
     private SnippetsTable snippetsTable;
 
     public QuickSearchDialog(final Framework framework, Frame parent) {
         super(framework, parent);
+
         buttonOk = new JButton();
-        buttonCancel = new JButton();
+        insertAtCursorButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                insertCodeIntoDocument();
+            }
+        });
+        openButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editSnippet();
+            }
+        });
+
+        disableSnippetButtons();
 
         KeyListener insertCodeKeyListener = createInsertIntoDocumentKeyListener();
-        quickFilterSnippetsTextField.addKeyListener(insertCodeKeyListener);
+        filterSnippetsTextField.addKeyListener(insertCodeKeyListener);
 
-        jtable = snippetsTable.getSnippetsComponent();
-        jtable.setTableHeader(null);
+        configureJTable();
+
+        snippetViewPanel = new JPanel(new BorderLayout());
+        snippetViewPanel.setPreferredSize(new Dimension(-1, 130));
+        centerPanel.add(snippetViewPanel, BorderLayout.SOUTH);
+
+        previewPanel = new JPanel(new GridBagLayout());
+        previewPanel.add(new JLabel("Preview..."));
+        snippetViewPanel.removeAll();
+        snippetViewPanel.add(previewPanel);
 
         snippetsTable.getCellSelectionModel().addListSelectionListener(createSelectionListener());
 
@@ -46,26 +71,69 @@ public class QuickSearchDialog extends AbstractDialog {
         initWindow();
     }
 
+    private void configureJTable() {
+        jTable = snippetsTable.getSnippetsComponent();
+        jTable.setTableHeader(null);
+        TableColumnModel columnModel = jTable.getColumnModel();
+        jTable.removeColumn(columnModel.getColumn(SnippetsTableModel.MODIFIED));
+        jTable.removeColumn(columnModel.getColumn(SnippetsTableModel.IS_PRIVATE));
+        jTable.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    editSnippet();
+                }
+            }
+        });
+        jTable.addKeyListener(new KeyAdapter() {
+                                  @Override
+                                  public void keyPressed(KeyEvent e) {
+                                      super.keyPressed(e);
+                                      if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                                          insertCodeIntoDocument();
+                                      }
+                                  }
+                              }
+        );
+    }
+
+    private void editSnippet() {
+        framework.showEditSnippetDialog(snippetsTable.getSelectedSnippet());
+        hideDialog();
+    }
+
     private ListSelectionListener createSelectionListener() {
         return new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
                     snippetViewPanel.removeAll();
+                    disableSnippetButtons();
 
                     Snippet snippet = snippetsTable.getSelectedSnippet();
                     // TODO test
                     // TODO remove duplication from SnippetsTab#createSelectionListener
                     if (snippet != null) {
                         JComponent snippetViewForm = new SnippetView(snippet).getSnippetEditorPane().getMainComponent();
-                        snippetViewForm.setPreferredSize(new Dimension(snippetViewForm.getWidth(), 80));
                         snippetViewPanel.add(snippetViewForm);
+                        enableSnippetButtons();
+                    } else {
+                        snippetViewPanel.add(previewPanel);
                     }
                     snippetViewPanel.revalidate();
                     snippetViewPanel.repaint();
                 }
             }
         };
+    }
+
+    private void disableSnippetButtons() {
+        openButton.setEnabled(false);
+        insertAtCursorButton.setEnabled(false);
+    }
+
+    private void enableSnippetButtons() {
+        openButton.setEnabled(true);
+        insertAtCursorButton.setEnabled(true);
     }
 
     private KeyListener createInsertIntoDocumentKeyListener() {
@@ -81,16 +149,18 @@ public class QuickSearchDialog extends AbstractDialog {
             @Override
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    insertCodeIntoDocument(getSelectedSnippet());
+                    insertCodeIntoDocument();
                     hideDialog();
                 }
             }
         };
     }
 
-    private void insertCodeIntoDocument(Snippet snippet) {
+    private void insertCodeIntoDocument() {
         if (documentInsertText != null) {
+            Snippet snippet = getSelectedSnippet();
             documentInsertText.insertText(snippet.getCode());
+            hideDialog();
         }
     }
 
@@ -141,12 +211,17 @@ public class QuickSearchDialog extends AbstractDialog {
 
     public void setDocumentInsertText(IDocumentInsertText documentInsertText) {
         this.documentInsertText = documentInsertText;
+        if (documentInsertText == null) {
+            insertAtCursorButton.setVisible(false);
+        } else {
+            insertAtCursorButton.setVisible(true);
+        }
     }
 
     private void createUIComponents() {
         snippetsTable = new SnippetsTable(framework);
-        quickFilterSnippetsTextField = new FilterSnippetsTextField(framework, getSnippetsTable());
-        quickFilterSnippetsTextField.addKeyListener(new KeyListener() {
+        filterSnippetsTextField = new FilterSnippetsTextField(framework, getSnippetsTable());
+        filterSnippetsTextField.addKeyListener(new KeyListener() {
 
             @Override
             public void keyTyped(KeyEvent e) {
@@ -175,9 +250,9 @@ public class QuickSearchDialog extends AbstractDialog {
     }
 
     private void cycleTableSelectionRows(String direction) {
-        int size = jtable.getRowCount();
+        int size = jTable.getRowCount();
         if (size > 0) {
-            int selectedIndex = jtable.getSelectedRow();
+            int selectedIndex = jTable.getSelectedRow();
             int newSelectionIndex = 0;
 
             if (direction.equals("up")) {
@@ -195,16 +270,16 @@ public class QuickSearchDialog extends AbstractDialog {
     }
 
     private void selectTableRow(int newSelectionIndex) {
-        jtable.setRowSelectionInterval(newSelectionIndex, newSelectionIndex);
-        jtable.scrollRectToVisible(new Rectangle(jtable.getCellRect(newSelectionIndex, 0, true)));
+        jTable.setRowSelectionInterval(newSelectionIndex, newSelectionIndex);
+        jTable.scrollRectToVisible(new Rectangle(jTable.getCellRect(newSelectionIndex, 0, true)));
     }
 
     @Override
     public void display() {
         super.display();
-        quickFilterSnippetsTextField.selectAll();
-        quickFilterSnippetsTextField.requestFocus();
-        quickFilterSnippetsTextField.doFilter();
+        filterSnippetsTextField.selectAll();
+        filterSnippetsTextField.requestFocus();
+        filterSnippetsTextField.doFilter();
     }
 
     public SnippetsTable getSnippetsTable() {

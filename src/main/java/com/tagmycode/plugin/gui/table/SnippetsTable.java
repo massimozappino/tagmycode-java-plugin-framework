@@ -10,6 +10,8 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class SnippetsTable extends AbstractSnippetsListGui {
@@ -34,12 +36,24 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         table.setRowSelectionAllowed(true);
         table.setShowGrid(false);
 
+        createKeybindings();
+
         cellSelectionModel = table.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         configureTableHeader();
 
         sortByColumn(SnippetsTableModel.MODIFIED);
+    }
+
+    private void createKeybindings() {
+        table.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
+        table.getActionMap().put("Enter", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                //do something on JTable enter pressed
+            }
+        });
     }
 
     private void sortByColumn(int columnIndexToSort) {
