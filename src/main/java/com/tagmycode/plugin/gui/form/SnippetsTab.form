@@ -102,17 +102,19 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="9a21" class="com.tagmycode.plugin.gui.FilterSnippetsTextField" binding="filterTextField" custom-create="true">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties/>
-                  </component>
                   <hspacer id="99761">
                     <constraints>
                       <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                   </hspacer>
+                  <grid id="15d4d" binding="filterPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </grid>
             </children>

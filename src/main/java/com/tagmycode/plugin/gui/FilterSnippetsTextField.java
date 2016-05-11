@@ -15,8 +15,11 @@ public class FilterSnippetsTextField extends JTextField {
     private FilterSnippetsOperation filterSnippetsOperation = null;
 
     public FilterSnippetsTextField(Framework framework, SnippetsTable snippetsTable) {
+        assert framework != null;
+        assert snippetsTable != null;
         this.framework = framework;
         this.snippetsTable = snippetsTable;
+
         getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {

@@ -28,11 +28,13 @@ public class QuickSearchDialog extends AbstractDialog {
     private JPanel centerPanel;
     private JButton insertAtCursorButton;
     private JButton openButton;
+    private JPanel filterPanel;
     private IDocumentInsertText documentInsertText;
     private SnippetsTable snippetsTable;
 
     public QuickSearchDialog(final Framework framework, Frame parent) {
         super(framework, parent);
+        snippetsTable = new SnippetsTable(framework);
 
         buttonOk = new JButton();
         insertAtCursorButton.addActionListener(new ActionListener() {
@@ -50,8 +52,6 @@ public class QuickSearchDialog extends AbstractDialog {
 
         disableSnippetButtons();
 
-        KeyListener insertCodeKeyListener = createInsertIntoDocumentKeyListener();
-        filterSnippetsTextField.addKeyListener(insertCodeKeyListener);
 
         configureJTable();
 
@@ -61,6 +61,11 @@ public class QuickSearchDialog extends AbstractDialog {
         previewPanel.add(new JLabel("Select a snippet to preview"));
         snippetViewPanel.removeAll();
         snippetViewPanel.add(previewPanel);
+
+        filterSnippetsTextField = new FilterSnippetsTextField(framework, snippetsTable);
+        filterSnippetsTextField.addKeyListener(createMoveUpDownFilterFieldKeyListener());
+        filterSnippetsTextField.addKeyListener(createInsertIntoDocumentKeyListener());
+        filterPanel.add(filterSnippetsTextField);
 
         snippetsTable.getCellSelectionModel().addListSelectionListener(createSelectionListener());
 
@@ -217,10 +222,8 @@ public class QuickSearchDialog extends AbstractDialog {
         }
     }
 
-    private void createUIComponents() {
-        snippetsTable = new SnippetsTable(framework);
-        filterSnippetsTextField = new FilterSnippetsTextField(framework, getSnippetsTable());
-        filterSnippetsTextField.addKeyListener(new KeyListener() {
+    private KeyListener createMoveUpDownFilterFieldKeyListener() {
+        return new KeyListener() {
 
             @Override
             public void keyTyped(KeyEvent e) {
@@ -245,7 +248,7 @@ public class QuickSearchDialog extends AbstractDialog {
             @Override
             public void keyReleased(KeyEvent e) {
             }
-        });
+        };
     }
 
     private void cycleTableSelectionRows(String direction) {
@@ -279,9 +282,5 @@ public class QuickSearchDialog extends AbstractDialog {
         filterSnippetsTextField.selectAll();
         filterSnippetsTextField.requestFocus();
         filterSnippetsTextField.doFilter();
-    }
-
-    public SnippetsTable getSnippetsTable() {
-        return snippetsTable;
     }
 }

@@ -36,6 +36,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private JPanel leftPane;
     private FilterSnippetsTextField filterTextField;
     private JButton settingsButton;
+    private JPanel filterPanel;
     private JPanel snippetListPane;
     private Framework framework;
     private JTable jTable;
@@ -50,7 +51,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         initSnippetsJTable();
 
         leftPane.add(snippetsTable.getMainComponent(), BorderLayout.CENTER);
-
+        initFilterField();
         initToolBarButtons(framework);
         initPopupMenuForJTextComponents(getMainComponent());
     }
@@ -312,10 +313,11 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         snippetViewFormPane.removeAll();
     }
 
-    public void createUIComponents() {
+    public void initFilterField() {
         filterTextField = new FilterSnippetsTextField(framework, snippetsTable);
         filterTextField.setMinimumSize(new Dimension(200, 25));
         setPlaceholder("Filter snippets", filterTextField);
+        filterPanel.add(filterTextField);
     }
 
     public void fireSnippetsChanged() {
