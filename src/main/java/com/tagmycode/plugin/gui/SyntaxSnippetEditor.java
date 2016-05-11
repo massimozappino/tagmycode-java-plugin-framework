@@ -118,4 +118,9 @@ public class SyntaxSnippetEditor implements IAbstractGUI {
     public RSyntaxTextArea getTextArea() {
         return textArea;
     }
+
+    public void setPreview() {
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+    }
 }

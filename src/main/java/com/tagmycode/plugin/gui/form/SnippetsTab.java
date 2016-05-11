@@ -240,7 +240,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
         int dialogResult = JOptionPane.showConfirmDialog(null, "Do you really want to delete the snippet:\n" + snippet.getTitle(), "Confirm", JOptionPane.YES_NO_OPTION);
         if (dialogResult == JOptionPane.YES_OPTION) {
-
             new DeleteSnippetOperation(this, snippet).runWithTask(getFramework().getTaskFactory(), "Deleting snippet");
         }
     }
@@ -258,7 +257,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                     snippetViewFormPane.removeAll();
 
                     Snippet snippet = snippetsTable.getSelectedSnippet();
-                    // TODO test
+                    // TODO duplicated
                     if (snippet != null) {
                         JComponent snippetViewForm = new SnippetView(snippet).getMainComponent();
                         snippetViewFormPane.add(snippetViewForm);
