@@ -42,7 +42,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private JTable jTable;
     private ClipboardCopy clipboardCopy = new ClipboardCopy();
     private int selectedRow;
-    private Snippet selectedSnippet = null;
     private SnippetsTableModel model;
 
     public SnippetsTab(final Framework framework) {
@@ -246,7 +245,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     private void newSnippetAction(Framework framework) {
-        framework.showNewSnippetDialog(new Snippet(), null);
+        framework.showNewSnippetDialog(new Snippet());
     }
 
     private ListSelectionListener createSelectionListener() {

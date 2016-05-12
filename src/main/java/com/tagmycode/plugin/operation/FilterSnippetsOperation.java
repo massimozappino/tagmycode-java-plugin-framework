@@ -1,6 +1,7 @@
 package com.tagmycode.plugin.operation;
 
 import com.tagmycode.plugin.Framework;
+import com.tagmycode.plugin.GuiThread;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.plugin.gui.table.SnippetsTableModel;
 import com.tagmycode.sdk.model.Snippet;
@@ -23,23 +24,34 @@ public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Void
 
     @Override
     protected Void performOperation() throws Exception {
+
         final Vector<Integer> filteredIds = filterSnippets();
 
-        RowFilter<Object, Object> filter = new RowFilter<Object, Object>() {
+        final RowFilter<SnippetsTableModel, Integer> filter = new RowFilter<SnippetsTableModel, Integer>() {
             public boolean include(Entry entry) {
-                int position = Integer.parseInt(entry.getIdentifier().toString());
+                int position = (int) entry.getIdentifier();
                 return filteredIds.contains(position);
             }
         };
 
-        TableRowSorter<SnippetsTableModel> sorter = snippetsTable.sorter;
+        final TableRowSorter<SnippetsTableModel> sorter = snippetsTable.sorter;
 
-        if (filterText.length() == 0) {
-            sorter.setRowFilter(null);
-        } else {
-            sorter.setRowFilter(filter);
-        }
+        doFilterInGuiThread(filter, sorter);
+
         return null;
+    }
+
+    private void doFilterInGuiThread(final RowFilter<SnippetsTableModel, Integer> filter, final TableRowSorter<SnippetsTableModel> sorter) {
+        new GuiThread().execute(new Runnable() {
+            @Override
+            public void run() {
+                if (filterText.length() == 0) {
+                    sorter.setRowFilter(null);
+                } else {
+                    sorter.setRowFilter(filter);
+                }
+            }
+        });
     }
 
     private Vector<Integer> filterSnippets() {

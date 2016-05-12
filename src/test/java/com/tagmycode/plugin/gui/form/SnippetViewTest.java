@@ -24,7 +24,6 @@ public class SnippetViewTest extends AbstractTest {
                 "line5", snippetEditorPane.getText());
         assertEquals(0, snippetEditorPane.getCaretPosition());
         assertEquals(false, snippetEditorPane.isEditable());
-        assertEquals("My title", snippetView.getTitle().getText());
     }
 
 }

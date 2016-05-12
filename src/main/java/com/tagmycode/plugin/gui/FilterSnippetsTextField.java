@@ -43,8 +43,7 @@ public class FilterSnippetsTextField extends JTextField {
         if (filterSnippetsOperation != null) {
             filterSnippetsOperation.stop();
         }
-        String filterText = getText();
-        filterSnippetsOperation = new FilterSnippetsOperation(framework, snippetsTable, filterText);
+        filterSnippetsOperation = new FilterSnippetsOperation(framework, snippetsTable, getText());
         filterSnippetsOperation.run();
     }
 }

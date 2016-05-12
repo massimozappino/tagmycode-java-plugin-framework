@@ -80,7 +80,7 @@ public class Framework implements IOnErrorCallback {
         return loginDialog;
     }
 
-    public void showNewSnippetDialog(Snippet snippet, String mimeType) {
+    public void showNewSnippetDialog(Snippet snippet) {
         SnippetDialog snippetDialog = new SnippetDialog(this, getParentFrame());
         snippetDialog.populateFieldsWithSnippet(snippet);
         snippetDialog.display();
