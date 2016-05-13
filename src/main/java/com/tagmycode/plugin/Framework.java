@@ -16,16 +16,22 @@ import com.tagmycode.sdk.exception.TagMyCodeUnauthorizedException;
 import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.Snippet;
 import com.tagmycode.sdk.model.SnippetCollection;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.logging.Logger;
 
 public class Framework implements IOnErrorCallback {
-    public final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    public final static Logger LOGGER = Logger.getLogger(Framework.class);
+
+    static {
+        BasicConfigurator.configure();
+    }
+
     private final MainWindow mainWindow;
     private final Wallet wallet;
     private final Client client;
@@ -39,6 +45,7 @@ public class Framework implements IOnErrorCallback {
     private SettingsForm settingsForm;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
+
         wallet = new Wallet(frameworkConfig.getPasswordKeyChain());
         client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), wallet);
         tagMyCode = new TagMyCode(client);
@@ -197,7 +204,7 @@ public class Framework implements IOnErrorCallback {
     }
 
     public void manageTagMyCodeExceptions(TagMyCodeException e) {
-        LOGGER.severe(e.getMessage());
+        LOGGER.error(e.getMessage());
         if (e instanceof TagMyCodeUnauthorizedException) {
             logoutAndAuthenticateAgain();
         } else if (e instanceof TagMyCodeConnectionException || e instanceof TagMyCodeStorageException) {
@@ -225,7 +232,7 @@ public class Framework implements IOnErrorCallback {
             loadData();
         } catch (TagMyCodeStorageException e) {
             data.clearDataAndStorage();
-            LOGGER.severe(e.getMessage());
+            LOGGER.error(e.getMessage());
         } catch (TagMyCodeException e) {
             manageTagMyCodeExceptions(e);
         }

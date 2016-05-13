@@ -130,7 +130,12 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                     public void run() {
                         // TODO test: if last row is deleted, select last row -1
                         if (selectedRow >= 0 && (model.getRowCount() - 1) > selectedRow) {
-                            jTable.setRowSelectionInterval(selectedRow, selectedRow);
+                            try {
+                                jTable.setRowSelectionInterval(selectedRow, selectedRow);
+                            } catch (IllegalArgumentException e) {
+                                Framework.LOGGER.error(selectedRow);
+                                throw new RuntimeException(e);
+                            }
                         }
                     }
                 });
