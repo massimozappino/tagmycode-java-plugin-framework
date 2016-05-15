@@ -12,6 +12,7 @@ public class SnippetView extends AbstractGui {
     private JPanel mainPanel;
     private JLabel tags;
     private JPanel snippetPane;
+    private JLabel tagsIconLabel;
 
     public SnippetView(final Snippet snippet) {
         syntaxSnippetEditor = new SyntaxSnippetEditor();
