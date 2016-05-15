@@ -2,6 +2,7 @@ package com.tagmycode.plugin;
 
 
 import com.tagmycode.plugin.gui.form.MainWindow;
+import com.tagmycode.plugin.gui.form.SnippetDialog;
 import com.tagmycode.sdk.authentication.OauthToken;
 import com.tagmycode.sdk.authentication.TagMyCodeApiDevelopment;
 import com.tagmycode.sdk.authentication.VoidOauthToken;
@@ -14,7 +15,9 @@ import org.junit.Before;
 import org.junit.Test;
 import support.FakeSecret;
 import support.FakeStorage;
+import support.ResourceGenerate;
 
+import java.awt.*;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
@@ -208,6 +211,19 @@ public class FrameworkTest extends AbstractTest {
         assertEquals(null, framework.getTagMyCode().getLastSnippetsUpdate());
         assertEquals(new VoidOauthToken(), framework.getClient().getOauthToken());
         assertEquals(null, framework.getData().getAccount());
+    }
+
+    @Test
+    public void testShowEditSnippetDialog() throws Exception {
+        SnippetDialogFactory snippetDialogFactory = mock(SnippetDialogFactory.class);
+        when(snippetDialogFactory.create(framework, null)).thenReturn(new SnippetDialog(framework, null));
+        framework.setSnippetDialogFactory(snippetDialogFactory);
+        framework.showEditSnippetDialog(null);
+
+        verify(snippetDialogFactory, times(0)).create((Framework) any(), (Frame) any());
+
+        framework.showEditSnippetDialog(new ResourceGenerate().aSnippet());
+        verify(snippetDialogFactory, times(1)).create((Framework) any(), (Frame) any());
     }
 
     protected void assertAccessTokenIs(OauthToken accessToken) {

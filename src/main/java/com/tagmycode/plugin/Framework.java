@@ -22,8 +22,6 @@ import org.apache.log4j.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class Framework implements IOnErrorCallback {
     public final static Logger LOGGER = Logger.getLogger(Framework.class);
@@ -43,6 +41,7 @@ public class Framework implements IOnErrorCallback {
     private Data data;
     private QuickSearchDialog quickSearchDialog;
     private SettingsForm settingsForm;
+    private SnippetDialogFactory snippetDialogFactory;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
 
@@ -57,6 +56,7 @@ public class Framework implements IOnErrorCallback {
         quickSearchDialog = new QuickSearchDialog(this, getParentFrame());
         polling = new SnippetsUpdatePollingProcess(this);
         settingsForm = new SettingsForm(this, getParentFrame());
+        snippetDialogFactory = new SnippetDialogFactory();
     }
 
     public void start() {
@@ -94,7 +94,11 @@ public class Framework implements IOnErrorCallback {
     }
 
     public void showEditSnippetDialog(Snippet snippet) {
-        SnippetDialog snippetDialog = new SnippetDialog(this, getParentFrame());
+        if (snippet == null) {
+            return;
+        }
+
+        SnippetDialog snippetDialog = snippetDialogFactory.create(this, getParentFrame());
         snippetDialog.setEditableSnippet(snippet);
         snippetDialog.display();
     }
@@ -299,17 +303,7 @@ public class Framework implements IOnErrorCallback {
     public void snippetsDataChanged() {
         getData().setLastSnippetsUpdate(tagMyCode.getLastSnippetsUpdate());
         getMainWindow().getSnippetsTab().fireSnippetsChanged();
-        sortSnippetsByUpdateDate();
         saveData();
-    }
-
-    private void sortSnippetsByUpdateDate() {
-        Comparator<Snippet> comparator = new Comparator<Snippet>() {
-            public int compare(Snippet s1, Snippet s2) {
-                return s2.getUpdateDate().compareTo(s1.getUpdateDate());
-            }
-        };
-        Collections.sort(getData().getSnippets(), comparator);
     }
 
     protected void saveData() {
@@ -322,6 +316,10 @@ public class Framework implements IOnErrorCallback {
 
     public JComponent getMainFrame() {
         return mainWindow.getMainComponent();
+    }
+
+    public void setSnippetDialogFactory(SnippetDialogFactory snippetDialogFactory) {
+        this.snippetDialogFactory = snippetDialogFactory;
     }
 
     @Override

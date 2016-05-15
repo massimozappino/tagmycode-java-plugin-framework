@@ -25,20 +25,19 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     protected JButton deleteSnippetButton;
     protected JButton copyButton;
     protected JButton openInBrowser;
+    protected int selectedRow = -1;
     private SnippetsTable snippetsTable;
     private JPanel snippetViewFormPane;
     private JButton newSnippetButton;
     private JPanel mainPanel;
     private JButton refreshButton;
     private JPanel leftPane;
-    private FilterSnippetsTextField filterTextField;
     private JButton settingsButton;
     private JPanel filterPanel;
     private JPanel snippetListPane;
     private Framework framework;
     private JTable jTable;
     private ClipboardCopy clipboardCopy = new ClipboardCopy();
-    private int selectedRow;
     private SnippetsTableModel model;
 
     public SnippetsTab(final Framework framework) {
@@ -105,7 +104,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         jTable = snippetsTable.getSnippetsComponent();
         model = (SnippetsTableModel) jTable.getModel();
         snippetsTable.getCellSelectionModel().addListSelectionListener(createSelectionListener());
-
+        jTable.getModel().addTableModelListener(createTableModelListener());
         jTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
@@ -114,30 +113,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
             }
         });
 
-        jTable.getModel().addTableModelListener(createTableModelListener());
         initTablePopupMenu();
-    }
-
-    private TableModelListener createTableModelListener() {
-        return new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        // TODO test: if last row is deleted, select last row -1
-                        if (selectedRow >= 0 && (model.getRowCount() - 1) > selectedRow) {
-                            try {
-                                jTable.setRowSelectionInterval(selectedRow, selectedRow);
-                            } catch (IllegalArgumentException e) {
-                                Framework.LOGGER.error(selectedRow);
-                                throw new RuntimeException(e);
-                            }
-                        }
-                    }
-                });
-            }
-        };
     }
 
     private void initTablePopupMenu() {
@@ -188,8 +164,10 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
         jTable.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                selectClickedRow(e);
-                showPopup(e);
+                if (e.isPopupTrigger()) {
+                    selectClickedRow(e);
+                    showPopup(e);
+                }
             }
 
             private void selectClickedRow(MouseEvent e) {
@@ -198,16 +176,13 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
             }
 
             private void showPopup(MouseEvent e) {
-                if (e.isPopupTrigger()) {
-                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
-                }
+                popupMenu.show(e.getComponent(), e.getX(), e.getY());
             }
         });
 
         jTable.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-
             }
 
             @Override
@@ -219,7 +194,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
             @Override
             public void keyReleased(KeyEvent e) {
-
             }
         });
     }
@@ -234,7 +208,8 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     private void editSnippetAction() {
-        framework.showEditSnippetDialog(snippetsTable.getSelectedSnippet());
+        Snippet selectedSnippet = snippetsTable.getSelectedSnippet();
+        framework.showEditSnippetDialog(selectedSnippet);
     }
 
     private void deleteSnippetAction() {
@@ -270,6 +245,28 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                     snippetViewFormPane.revalidate();
                     snippetViewFormPane.repaint();
                 }
+            }
+        };
+    }
+
+    private TableModelListener createTableModelListener() {
+        return new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TODO test: if last row is deleted, select last row -1
+                        if (selectedRow >= 0 && (model.getRowCount() - 1) > selectedRow) {
+                            try {
+                                jTable.setRowSelectionInterval(selectedRow, selectedRow);
+                            } catch (IllegalArgumentException e) {
+                                Framework.LOGGER.error(selectedRow);
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                });
             }
         };
     }
@@ -315,7 +312,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     public void initFilterField() {
-        filterTextField = new FilterSnippetsTextField(framework, snippetsTable);
+        FilterSnippetsTextField filterTextField = new FilterSnippetsTextField(framework, snippetsTable);
         filterTextField.setMinimumSize(new Dimension(200, 25));
         filterTextField.addKeyListener(new MoveUpDownFilterFieldKeyListener(jTable));
         setPlaceholder("Filter snippets", filterTextField);

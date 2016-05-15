@@ -16,12 +16,13 @@ public class SnippetsTabTest extends AbstractTest {
 
     @Test
     public void testConstructor() throws Exception {
-        new SnippetsTab(createFramework()) {
+        SnippetsTab snippetsTab = new SnippetsTab(createFramework()) {
             public void initPopupMenuForJTextComponents(Container container) {
                 actual = true;
             }
         };
         assertTrue(actual);
+        assertEquals(-1, snippetsTab.selectedRow);
     }
 
     @Test
