@@ -3,10 +3,7 @@ package com.tagmycode.plugin.gui.form;
 import com.tagmycode.plugin.Browser;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.IconResources;
-import com.tagmycode.plugin.gui.AbstractGui;
-import com.tagmycode.plugin.gui.ClipboardCopy;
-import com.tagmycode.plugin.gui.FilterSnippetsTextField;
-import com.tagmycode.plugin.gui.IOnErrorCallback;
+import com.tagmycode.plugin.gui.*;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.plugin.gui.table.SnippetsTableModel;
 import com.tagmycode.plugin.operation.DeleteSnippetOperation;
@@ -320,6 +317,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     public void initFilterField() {
         filterTextField = new FilterSnippetsTextField(framework, snippetsTable);
         filterTextField.setMinimumSize(new Dimension(200, 25));
+        filterTextField.addKeyListener(new MoveUpDownFilterFieldKeyListener(jTable));
         setPlaceholder("Filter snippets", filterTextField);
         filterPanel.add(filterTextField);
     }

@@ -2,13 +2,14 @@ package com.tagmycode.plugin.examples;
 
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.FrameworkConfig;
-import com.tagmycode.plugin.examples.support.*;
+import com.tagmycode.plugin.examples.support.MessageManager;
+import com.tagmycode.plugin.examples.support.PasswordKeyChain;
+import com.tagmycode.plugin.examples.support.Storage;
+import com.tagmycode.plugin.examples.support.TaskFactory;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.sdk.authentication.TagMyCodeApiProduction;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,8 +29,6 @@ public class MainAppExample {
         contentPane.add(comp, BorderLayout.NORTH);
 
         comp.add(lookAndFeelPanel, BorderLayout.WEST);
-        final JTextField lastSnippetsUpdateTextField = new JTextField("", 20);
-        comp.add(lastSnippetsUpdateTextField, BorderLayout.EAST);
         JButton searchButton = new JButton("Search");
         comp.add(searchButton, BorderLayout.CENTER);
 
@@ -54,27 +53,6 @@ public class MainAppExample {
                         System.out.println(text);
                     }
                 });
-            }
-        });
-        lastSnippetsUpdateTextField.setText(framework.getData().getLastSnippetsUpdate());
-        lastSnippetsUpdateTextField.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                doFilter();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                doFilter();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                doFilter();
-            }
-
-            private void doFilter() {
-                framework.getData().setLastSnippetsUpdate(lastSnippetsUpdateTextField.getText());
             }
         });
 
