@@ -10,6 +10,7 @@ import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.OauthToken;
 import com.tagmycode.sdk.authentication.TagMyCodeApi;
+import com.tagmycode.sdk.exception.TagMyCodeApiException;
 import com.tagmycode.sdk.exception.TagMyCodeConnectionException;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.exception.TagMyCodeUnauthorizedException;
@@ -211,7 +212,7 @@ public class Framework implements IOnErrorCallback {
         LOGGER.error(e.getMessage());
         if (e instanceof TagMyCodeUnauthorizedException) {
             logoutAndAuthenticateAgain();
-        } else if (e instanceof TagMyCodeConnectionException || e instanceof TagMyCodeStorageException) {
+        } else if (e instanceof TagMyCodeConnectionException || e instanceof TagMyCodeStorageException || e instanceof TagMyCodeApiException) {
             showError(e.getMessage());
         } else {
             showGenericError();
