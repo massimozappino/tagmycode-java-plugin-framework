@@ -99,4 +99,16 @@ public abstract class AbstractDialog extends AbstractGui implements IOnErrorCall
             }
         });
     }
+
+    protected void hideOnFocusLost() {
+        getDialog().setModal(false);
+        getDialog().addWindowFocusListener(new WindowFocusListener() {
+            public void windowLostFocus(WindowEvent e) {
+                hideDialog();
+            }
+
+            public void windowGainedFocus(WindowEvent e) {
+            }
+        });
+    }
 }

@@ -89,7 +89,19 @@
                 <properties>
                   <icon value="icons/profile.png"/>
                   <text value=""/>
-                  <toolTipText value="Settings..."/>
+                  <toolTipText value="User profile..."/>
+                </properties>
+              </component>
+              <component id="13543" class="javax.swing.JToolBar$Separator">
+                <constraints/>
+                <properties/>
+              </component>
+              <component id="2cddf" class="javax.swing.JButton" binding="buttonAbout">
+                <constraints/>
+                <properties>
+                  <icon value="icons/help.png"/>
+                  <text value=""/>
+                  <toolTipText value="About..."/>
                 </properties>
               </component>
               <component id="7bef6" class="javax.swing.JToolBar$Separator">

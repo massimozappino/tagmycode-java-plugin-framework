@@ -43,6 +43,7 @@ public class Framework implements IOnErrorCallback {
     private QuickSearchDialog quickSearchDialog;
     private SettingsForm settingsForm;
     private SnippetDialogFactory snippetDialogFactory;
+    private AboutDialog aboutDialog;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
 
@@ -58,6 +59,7 @@ public class Framework implements IOnErrorCallback {
         polling = new SnippetsUpdatePollingProcess(this);
         settingsForm = new SettingsForm(this, getParentFrame());
         snippetDialogFactory = new SnippetDialogFactory();
+        aboutDialog = new AboutDialog(this, getParentFrame());
     }
 
     public void start() {
@@ -326,5 +328,9 @@ public class Framework implements IOnErrorCallback {
     @Override
     public void onError(TagMyCodeException e) {
         manageTagMyCodeExceptions(e);
+    }
+
+    public void showAboutDialog() {
+        aboutDialog.display();
     }
 }

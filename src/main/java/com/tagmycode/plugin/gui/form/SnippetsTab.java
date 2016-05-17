@@ -34,6 +34,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private JPanel leftPane;
     private JButton settingsButton;
     private JPanel filterPanel;
+    private JButton buttonAbout;
     private JPanel snippetListPane;
     private Framework framework;
     private JTable jTable;
@@ -94,8 +95,17 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                 framework.showSettingsDialog();
             }
         });
-
+        buttonAbout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openAboutDialog();
+            }
+        });
         disableButtonsForSnippet();
+    }
+
+    private void openAboutDialog() {
+        framework.showAboutDialog();
     }
 
     private void initSnippetsJTable() {

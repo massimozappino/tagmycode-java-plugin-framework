@@ -175,16 +175,9 @@ public class QuickSearchDialog extends AbstractDialog {
         getDialog().setSize(400, 300);
         getDialog().setResizable(true);
         getDialog().setUndecorated(true);
-        getDialog().setModal(false);
-        getDialog().addWindowFocusListener(new WindowFocusListener() {
-            public void windowLostFocus(WindowEvent e) {
-                hideDialog();
-            }
-
-            public void windowGainedFocus(WindowEvent e) {
-            }
-        });
+        hideOnFocusLost();
     }
+
 
     @Override
     protected void onOK() {
