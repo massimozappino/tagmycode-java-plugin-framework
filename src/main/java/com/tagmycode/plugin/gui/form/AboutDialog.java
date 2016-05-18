@@ -9,11 +9,14 @@ import java.awt.*;
 public class AboutDialog extends AbstractDialog {
     private JComponent contentPane;
     private JButton buttonCancel;
+    private JTextArea textArea;
     private JButton buttonOK;
 
     public AboutDialog(Framework framework, Frame parent) {
         super(framework, parent);
         buttonOK = new JButton();
+        textArea.setEnabled(false);
+        textArea.setBackground(contentPane.getBackground());
 
         defaultInitWindow();
         initWindow();
