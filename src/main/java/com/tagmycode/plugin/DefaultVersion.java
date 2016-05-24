@@ -1,0 +1,34 @@
+package com.tagmycode.plugin;
+
+import com.tagmycode.sdk.ResourceReader;
+
+import java.io.IOException;
+import java.util.Properties;
+
+class DefaultVersion implements IVersion {
+
+    private String versionString = "";
+    private String buildDate = "";
+
+    DefaultVersion() {
+        try {
+            ResourceReader resourceReader = new ResourceReader();
+            Properties properties = resourceReader.getProperties("version.properties");
+
+            versionString = properties.getProperty("version");
+            buildDate = properties.getProperty("build_date");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String getVersionString() {
+        return versionString;
+    }
+
+    @Override
+    public String getBuildDate() {
+        return buildDate;
+    }
+}

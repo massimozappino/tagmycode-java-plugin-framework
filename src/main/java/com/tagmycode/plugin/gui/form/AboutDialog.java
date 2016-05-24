@@ -2,6 +2,7 @@ package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Browser;
 import com.tagmycode.plugin.Framework;
+import com.tagmycode.plugin.IVersion;
 import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.gui.GuiUtil;
 
@@ -16,6 +17,8 @@ public class AboutDialog extends AbstractDialog {
     private JButton licenseButton;
     private JButton reportAnIssueButton;
     private JLabel tagmycodeLinkLabel;
+    private JLabel versionLabel;
+    private JLabel buildDateLabel;
     private JButton buttonOK = new JButton();
 
     public AboutDialog(Framework framework, Frame parent) {
@@ -23,9 +26,17 @@ public class AboutDialog extends AbstractDialog {
 
         configureButtons();
         GuiUtil.addClickableLink(tagmycodeLinkLabel, "https://tagmycode.com");
+        IVersion version = framework.getVersion();
+
+        appendTextToJLabel(versionLabel, version.getVersionString());
+        appendTextToJLabel(buildDateLabel, version.getBuildDate());
 
         defaultInitWindow();
         initWindow();
+    }
+
+    private void appendTextToJLabel(JLabel jLabel, String text) {
+        jLabel.setText(jLabel.getText() + " " + text);
     }
 
     private void configureButtons() {

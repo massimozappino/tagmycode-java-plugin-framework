@@ -39,6 +39,7 @@ public class Framework implements IOnErrorCallback {
     private final IMessageManager messageManager;
     private final AbstractTaskFactory taskFactory;
     private final SnippetsUpdatePollingProcess polling;
+    private final IVersion version;
     private Data data;
     private QuickSearchDialog quickSearchDialog;
     private SettingsForm settingsForm;
@@ -59,6 +60,7 @@ public class Framework implements IOnErrorCallback {
         polling = new SnippetsUpdatePollingProcess(this);
         settingsForm = new SettingsForm(this, getParentFrame());
         snippetDialogFactory = new SnippetDialogFactory();
+        version = new DefaultVersion();
         aboutDialog = new AboutDialog(this, getParentFrame());
     }
 
@@ -332,5 +334,9 @@ public class Framework implements IOnErrorCallback {
 
     public void showAboutDialog() {
         aboutDialog.display();
+    }
+
+    public IVersion getVersion() {
+        return version;
     }
 }
