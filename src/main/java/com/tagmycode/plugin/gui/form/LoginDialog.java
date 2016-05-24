@@ -47,7 +47,7 @@ public class LoginDialog extends AbstractDialog {
 
         getDialog().setSize(380, 350);
         getDialog().setResizable(false);
-        getDialog().setTitle("TagMyCode authorization");
+        getDialog().setTitle("TagMyCode Login");
 
         authorizationUrl.addMouseListener(new MouseListener() {
             @Override
