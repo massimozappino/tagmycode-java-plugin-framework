@@ -48,9 +48,6 @@ public class SnippetsTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Snippet snippet = getSnippetAt(rowIndex);
-        if (snippet == null) {
-            return null;
-        }
         switch (columnIndex) {
             case LANGUAGE:
                 return snippet.getLanguage().toString();
