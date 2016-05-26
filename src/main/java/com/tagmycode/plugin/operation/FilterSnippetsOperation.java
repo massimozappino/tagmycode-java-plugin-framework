@@ -24,7 +24,6 @@ public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Void
 
     @Override
     protected Void performOperation() throws Exception {
-
         final Vector<Integer> filteredIds = filterSnippets();
 
         final RowFilter<SnippetsTableModel, Integer> filter = new RowFilter<SnippetsTableModel, Integer>() {

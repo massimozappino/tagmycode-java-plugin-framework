@@ -36,7 +36,7 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         table.setRowSelectionAllowed(true);
         table.setShowGrid(false);
 
-        createKeybindings();
+        createKeyBindings();
 
         cellSelectionModel = table.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -46,7 +46,7 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         sortByColumn(SnippetsTableModel.MODIFIED);
     }
 
-    private void createKeybindings() {
+    private void createKeyBindings() {
         table.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
         table.getActionMap().put("Enter", new AbstractAction() {
             @Override

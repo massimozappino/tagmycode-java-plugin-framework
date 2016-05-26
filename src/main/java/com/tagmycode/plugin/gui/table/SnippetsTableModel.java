@@ -1,6 +1,7 @@
 package com.tagmycode.plugin.gui.table;
 
 import com.tagmycode.plugin.Data;
+import com.tagmycode.sdk.model.DefaultSnippet;
 import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.table.AbstractTableModel;
@@ -39,13 +40,17 @@ public class SnippetsTableModel extends AbstractTableModel {
         try {
             return data.getSnippets().get(rowIndex);
         } catch (ArrayIndexOutOfBoundsException e) {
-            return null;
+            // TODO should return null
+            return new DefaultSnippet();
         }
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Snippet snippet = getSnippetAt(rowIndex);
+        if (snippet == null) {
+            return null;
+        }
         switch (columnIndex) {
             case LANGUAGE:
                 return snippet.getLanguage().toString();
