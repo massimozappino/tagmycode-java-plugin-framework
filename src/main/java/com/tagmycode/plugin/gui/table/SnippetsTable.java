@@ -2,6 +2,7 @@ package com.tagmycode.plugin.gui.table;
 
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.IconResources;
+import com.tagmycode.plugin.TableModelSnippetNotFoundException;
 import com.tagmycode.plugin.gui.AbstractSnippetsListGui;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -103,7 +104,11 @@ public class SnippetsTable extends AbstractSnippetsListGui {
 
     @Override
     public Snippet getSelectedSnippet() {
-        return model.getSnippetAt(getSelectedModelIndex());
+        try {
+            return model.getSnippetAt(getSelectedModelIndex());
+        } catch (TableModelSnippetNotFoundException e) {
+            throw new RuntimeException("Snippet not found");
+        }
     }
 
     private int getSelectedModelIndex() {

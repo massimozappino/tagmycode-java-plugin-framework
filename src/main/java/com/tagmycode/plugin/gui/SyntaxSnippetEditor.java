@@ -47,9 +47,13 @@ public class SyntaxSnippetEditor implements IAbstractGUI {
     }
 
     public void setTextWithSnippet(Snippet snippet) {
-        textArea.setText(snippet.getCode());
-        textArea.setCaretPosition(0);
+        setText(snippet.getCode());
         changeLanguage(snippet.getLanguage());
+    }
+
+    public void setText(String text) {
+        textArea.setText(text);
+        textArea.setCaretPosition(0);
     }
 
     private String getMimeFromLanguage(Language language) {

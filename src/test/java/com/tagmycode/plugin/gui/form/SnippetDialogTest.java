@@ -186,8 +186,13 @@ public class SnippetDialogTest extends AbstractTest {
     public void testChangeLanguage() throws Exception {
         Framework spyFramework = createSpyFramework();
         when(spyFramework.getLanguageCollection()).thenReturn(resourceGenerate.aLanguageCollection());
-        SnippetDialog snippetDialog = new SnippetDialog(spyFramework, null);
-        snippetDialog.getLanguageComboBox().setSelectedIndex(0);
+        final SnippetDialog snippetDialog = new SnippetDialog(spyFramework, null);
+        SwingUtilities.invokeAndWait(new Runnable() {
+            @Override
+            public void run() {
+                snippetDialog.getLanguageComboBox().setSelectedIndex(0);
+            }
+        });
 
         assertEquals(SyntaxConstants.SYNTAX_STYLE_JAVA, snippetDialog.getCodeEditorPane().getTextArea().getSyntaxEditingStyle());
     }
@@ -238,45 +243,97 @@ public class SnippetDialogTest extends AbstractTest {
     }
 
     @Test
+    public void isNotModifiedWithoutActions() throws Exception {
+        SnippetDialog snippetDialog = createSnippetDialog();
+        assertFalse(snippetDialog.isModified());
+        assertFalse(snippetDialog.getButtonOk().isEnabled());
+    }
+
+    @Test
     public void testSetSnippetIsModified() throws Exception {
         SnippetDialog snippetDialog = createSnippetDialog();
         snippetDialog.setSnippetIsModified();
-        assertTrue(snippetDialog.isModified());
+        assertSnippetDialogIsModified(snippetDialog);
         assertTrue(snippetDialog.getButtonOk().isEnabled());
+    }
+
+    @Test
+    public void isModifiedAfterTitleChanged() throws Exception {
+        final SnippetDialog snippetDialog = createSnippetDialog();
+        SwingUtilities.invokeAndWait(new Runnable() {
+            @Override
+            public void run() {
+                snippetDialog.getTitleBox().setText("title");
+            }
+        });
+        assertSnippetDialogIsModified(snippetDialog);
+    }
+
+    @Test
+    public void isModifiedAfterDescriptionChanged() throws Exception {
+        final SnippetDialog snippetDialog = createSnippetDialog();
+        SwingUtilities.invokeAndWait(new Runnable() {
+            @Override
+            public void run() {
+                snippetDialog.getDescriptionTextField().setText("description");
+            }
+        });
+        assertSnippetDialogIsModified(snippetDialog);
+    }
+
+    @Test
+    public void isModifiedAfterCodeChanged() throws Exception {
+        final SnippetDialog snippetDialog = createSnippetDialog();
+        SwingUtilities.invokeAndWait(new Runnable() {
+            @Override
+            public void run() {
+                snippetDialog.getCodeEditorPane().setText("code");
+            }
+        });
+        assertSnippetDialogIsModified(snippetDialog);
+    }
+
+    @Test
+    public void isModifiedAfterTagsChanged() throws Exception {
+        final SnippetDialog snippetDialog = createSnippetDialog();
+        SwingUtilities.invokeAndWait(new Runnable() {
+            @Override
+            public void run() {
+                snippetDialog.getTagsTextField().setText("tags");
+
+            }
+        });
+        assertSnippetDialogIsModified(snippetDialog);
+    }
+
+    @Test
+    public void isModifiedAfterPrivateFlagChanged() throws Exception {
+        final SnippetDialog snippetDialog = createSnippetDialog();
+        SwingUtilities.invokeAndWait(new Runnable() {
+            @Override
+            public void run() {
+                snippetDialog.getPrivateSnippetCheckBox().doClick();
+            }
+        });
+        assertSnippetDialogIsModified(snippetDialog);
     }
 
 
     @Test
-    public void testIsModified() throws Exception {
-        SnippetDialog snippetDialog = createSnippetDialog();
-        assertFalse(snippetDialog.isModified());
-        assertFalse(snippetDialog.getButtonOk().isEnabled());
-
-        snippetDialog = createSnippetDialog();
-        snippetDialog.getTitleBox().setText("title");
-        assertTrue(snippetDialog.isModified());
-
-        snippetDialog = createSnippetDialog();
-        snippetDialog.getDescriptionTextField().setText("description");
-        assertTrue(snippetDialog.isModified());
-
-        // TODO
-//        snippetDialog = createSnippetDialog();
-//        snippetDialog.getCodeEditorPane().setText("code");
-//        assertTrue(snippetDialog.isModified());
-
-        snippetDialog = createSnippetDialog();
-        snippetDialog.getTagsTextField().setText("tags");
-        assertTrue(snippetDialog.isModified());
-
+    public void isModifiedAfterLanguageChanged() throws Exception {
         Framework spyFramework = createSpyFramework();
         when(spyFramework.getLanguageCollection()).thenReturn(resourceGenerate.aLanguageCollection());
-        snippetDialog = new SnippetDialog(spyFramework, null);
-        snippetDialog.getLanguageComboBox().setSelectedIndex(1);
-        assertTrue(snippetDialog.isModified());
+        final SnippetDialog snippetDialog = new SnippetDialog(spyFramework, null);
+        SwingUtilities.invokeAndWait(new Runnable() {
+            @Override
+            public void run() {
+                snippetDialog.getLanguageComboBox().setSelectedIndex(1);
+            }
+        });
+        assertSnippetDialogIsModified(snippetDialog);
+    }
 
-        snippetDialog = createSnippetDialog();
-        snippetDialog.getPrivateSnippetCheckBox().doClick();
+    private void assertSnippetDialogIsModified(SnippetDialog snippetDialog) {
         assertTrue(snippetDialog.isModified());
     }
 

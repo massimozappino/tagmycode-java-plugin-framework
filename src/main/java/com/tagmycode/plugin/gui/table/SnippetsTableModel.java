@@ -1,6 +1,7 @@
 package com.tagmycode.plugin.gui.table;
 
 import com.tagmycode.plugin.Data;
+import com.tagmycode.plugin.TableModelSnippetNotFoundException;
 import com.tagmycode.sdk.model.DefaultSnippet;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -36,18 +37,22 @@ public class SnippetsTableModel extends AbstractTableModel {
         return columns[column];
     }
 
-    public Snippet getSnippetAt(int rowIndex) {
+    public Snippet getSnippetAt(int rowIndex) throws TableModelSnippetNotFoundException {
         try {
             return data.getSnippets().get(rowIndex);
         } catch (ArrayIndexOutOfBoundsException e) {
-            // TODO should return null
-            return new DefaultSnippet();
+            throw new TableModelSnippetNotFoundException(e);
         }
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Snippet snippet = getSnippetAt(rowIndex);
+        Snippet snippet;
+        try {
+            snippet = getSnippetAt(rowIndex);
+        } catch (TableModelSnippetNotFoundException e) {
+            snippet = new DefaultSnippet();
+        }
         switch (columnIndex) {
             case LANGUAGE:
                 return snippet.getLanguage().toString();
