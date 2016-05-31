@@ -107,7 +107,7 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         try {
             return model.getSnippetAt(getSelectedModelIndex());
         } catch (TableModelSnippetNotFoundException e) {
-            throw new RuntimeException("Snippet not found");
+            return null;
         }
     }
 

@@ -111,7 +111,6 @@ public class QuickSearchDialog extends AbstractDialog {
 
                     Snippet snippet = snippetsTable.getSelectedSnippet();
                     // TODO test
-                    // TODO remove duplication from SnippetsTab#createSelectionListener
                     if (snippet != null) {
                         SyntaxSnippetEditor snippetEditorPane = new SnippetView(snippet).getSnippetEditorPane();
                         snippetEditorPane.setPreview();
