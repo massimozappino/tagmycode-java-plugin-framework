@@ -10,8 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class LoginDialog extends AbstractDialog {
     private JPanel jPanelVerification;
@@ -21,9 +19,7 @@ public class LoginDialog extends AbstractDialog {
 
     private JTextField verificationCodeTextField;
     private JButton openLinkButton;
-    private JTextField authorizationUrl;
-    private JTextPane textHelp1;
-    private JTextPane textHelp2;
+    private JPanel verificationPanel;
     private Component JPanelVerification;
 
     public LoginDialog(Framework framework, Frame parent) {
@@ -36,41 +32,10 @@ public class LoginDialog extends AbstractDialog {
     protected void initWindow() {
         Color background = UIManager.getColor("Panel.background");
         contentPane.setBackground(background);
-        textHelp1.setBackground(background);
-        textHelp1.setForeground(SystemColor.inactiveCaption);
-        textHelp2.setBackground(background);
-        textHelp2.setForeground(SystemColor.inactiveCaption);
-        authorizationUrl.setBorder(BorderFactory.createEmptyBorder());
-        authorizationUrl.setBackground(background);
-        authorizationUrl.setForeground(SystemColor.inactiveCaption);
-        authorizationUrl.setText(framework.getClient().getAuthorizationUrl());
 
-        getDialog().setSize(380, 350);
+        getDialog().setSize(300, 300);
         getDialog().setResizable(false);
         getDialog().setTitle("TagMyCode Login");
-
-        authorizationUrl.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                authorizationUrl.selectAll();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-        });
 
         openLinkButton.addActionListener(new ActionListener() {
             @Override
@@ -111,7 +76,7 @@ public class LoginDialog extends AbstractDialog {
     }
 
     private void onOpenLink() {
-        new Browser().openUrl(authorizationUrl.getText());
+        new Browser().openUrl(framework.getClient().getAuthorizationUrl());
         verificationCodeTextField.requestFocus();
     }
 
