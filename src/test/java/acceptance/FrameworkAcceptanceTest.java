@@ -3,10 +3,12 @@ package acceptance;
 import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.form.LoginDialog;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import javax.swing.*;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class FrameworkAcceptanceTest extends AbstractTest {
@@ -22,22 +24,24 @@ public class FrameworkAcceptanceTest extends AbstractTest {
     }
 
     @Test
-    @Ignore("Wait for polling process")
-    public void afterLoginIShouldSeeMySnippets() throws Exception {
+    public void afterLoginInitializeIsCalled() throws Exception {
         Framework framework = createFramework(createFullData());
         mockClientReturningValidAccountData(framework);
         Framework frameworkSpy = spy(framework);
 
-        LoginDialog loginDialog = frameworkSpy.showLoginDialog();
+        final LoginDialog loginDialog = frameworkSpy.showLoginDialog();
         String verificationCode = "verification-code";
         loginDialog.getVerificationCodeTextField().setText(verificationCode);
 
-        loginDialog.getButtonOk().doClick();
+        SwingUtilities.invokeAndWait(new Runnable() {
+            @Override
+            public void run() {
+                loginDialog.getButtonOk().doClick();
+            }
+        });
+        Thread.sleep(200);
 
         verify(frameworkSpy, times(1)).initialize(verificationCode);
-
-        assertDataIsValid(frameworkSpy.getData());
-        assertEquals(2, frameworkSpy.getMainWindow().getSnippetsTab().getSnippetsTable().getSnippetsComponent().getRowCount());
     }
 
     @Test
