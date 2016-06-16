@@ -64,15 +64,10 @@ public class Framework implements IOnErrorCallback {
         aboutDialog = new AboutDialog(this, getParentFrame());
     }
 
-    public void start() {
-        try {
-            restoreData();
-        } catch (IOException e) {
-            // TODO
-            e.printStackTrace();
-        }
+    public void start() throws IOException {
+        restoreData();
+
         boolean initialized = isInitialized();
-        LOGGER.info("is logged: " + initialized);
 
         mainWindow.setLoggedIn(initialized);
         if (initialized) {
