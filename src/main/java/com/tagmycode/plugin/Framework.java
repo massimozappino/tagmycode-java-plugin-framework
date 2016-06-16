@@ -38,9 +38,9 @@ public class Framework implements IOnErrorCallback {
     private final Frame parentFrame;
     private final IMessageManager messageManager;
     private final AbstractTaskFactory taskFactory;
-    private final SnippetsUpdatePollingProcess polling;
+    private final SnippetsUpdatePollingProcess pollingProcess;
     private final IVersion version;
-    private Data data;
+    private final Data data;
     private QuickSearchDialog quickSearchDialog;
     private SettingsForm settingsForm;
     private SnippetDialogFactory snippetDialogFactory;
@@ -57,7 +57,7 @@ public class Framework implements IOnErrorCallback {
         this.data = new Data(new StorageEngine(frameworkConfig.getStorage()));
         this.mainWindow = new MainWindow(this);
         quickSearchDialog = new QuickSearchDialog(this, getParentFrame());
-        polling = new SnippetsUpdatePollingProcess(this);
+        pollingProcess = new SnippetsUpdatePollingProcess(this);
         settingsForm = new SettingsForm(this, getParentFrame());
         snippetDialogFactory = new SnippetDialogFactory();
         version = new DefaultVersion();
@@ -78,12 +78,12 @@ public class Framework implements IOnErrorCallback {
         if (initialized) {
             snippetsDataChanged();
             tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
-            polling.start();
+            pollingProcess.start();
         }
     }
 
     public void syncSnippets() {
-        polling.forceScheduleUpdate();
+        pollingProcess.forceScheduleUpdate();
     }
 
     public LoginDialog showLoginDialog() {
@@ -169,7 +169,7 @@ public class Framework implements IOnErrorCallback {
 
     public void logout() {
         getMainWindow().setLoggedIn(false);
-        polling.terminate();
+        pollingProcess.terminate();
         try {
             wallet.deleteAccessToken();
         } catch (TagMyCodeGuiException e) {
@@ -260,7 +260,7 @@ public class Framework implements IOnErrorCallback {
                 }
                 fetchAndStoreAllData();
                 snippetsDataChanged();
-                polling.start();
+                pollingProcess.start();
             } catch (TagMyCodeException ex) {
                 manageTagMyCodeExceptions(ex);
                 logout();
@@ -277,10 +277,6 @@ public class Framework implements IOnErrorCallback {
 
     public Data getData() {
         return data;
-    }
-
-    protected void setData(Data data) {
-        this.data = data;
     }
 
     public StorageEngine getStorageEngine() {
@@ -311,7 +307,7 @@ public class Framework implements IOnErrorCallback {
         saveData();
     }
 
-    protected void saveData() {
+    protected synchronized void saveData() {
         try {
             getData().saveAll();
         } catch (TagMyCodeStorageException e) {
@@ -339,4 +335,5 @@ public class Framework implements IOnErrorCallback {
     public IVersion getVersion() {
         return version;
     }
+
 }

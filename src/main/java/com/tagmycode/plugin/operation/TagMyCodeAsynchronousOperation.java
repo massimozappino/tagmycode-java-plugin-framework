@@ -14,7 +14,7 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
         this.onErrorCallback = onErrorCallback;
     }
 
-    public final void run() {
+    public final void start() {
         Runnable runnable = createRunnable();
         thread = new Thread(runnable);
         thread.start();
@@ -50,6 +50,7 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
                 } catch (final InterruptedException e) {
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
+                            onComplete();
                             onInterrupted();
                             e.printStackTrace();
                         }

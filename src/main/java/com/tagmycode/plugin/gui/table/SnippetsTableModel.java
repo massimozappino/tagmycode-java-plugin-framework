@@ -17,7 +17,7 @@ public class SnippetsTableModel extends AbstractTableModel {
 
     private String[] columns;
 
-    public SnippetsTableModel(Data data) {
+    public SnippetsTableModel(final Data data) {
         this.data = data;
         columns = new String[]{"Private", "Title", "Language", "Modified"};
     }

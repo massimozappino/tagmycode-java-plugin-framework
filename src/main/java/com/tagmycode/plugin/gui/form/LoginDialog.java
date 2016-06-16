@@ -19,8 +19,6 @@ public class LoginDialog extends AbstractDialog {
 
     private JTextField verificationCodeTextField;
     private JButton openLinkButton;
-    private JPanel verificationPanel;
-    private Component JPanelVerification;
 
     public LoginDialog(Framework framework, Frame parent) {
         super(framework, parent);

@@ -159,7 +159,9 @@ public class QuickSearchDialog extends AbstractDialog {
     private void insertCodeIntoDocument() {
         if (documentInsertText != null) {
             Snippet snippet = getSelectedSnippet();
-            documentInsertText.insertText(snippet.getCode());
+            if (snippet != null) {
+                documentInsertText.insertText(snippet.getCode());
+            }
             hideDialog();
         }
     }

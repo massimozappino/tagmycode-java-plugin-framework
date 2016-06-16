@@ -18,7 +18,6 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
     @Override
     protected Void performOperation() throws Exception {
         TagMyCode tagMyCode = framework.getTagMyCode();
-
         if (tagMyCode.isServiceAvailable()) {
             syncProcess.setNetworkAvailable(true);
             Framework.LOGGER.info(String.format("Fetching snippets since: %s", tagMyCode.getLastSnippetsUpdate()));
@@ -27,7 +26,6 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
             Framework.LOGGER.info(String.format("Last snippets update: %s", tagMyCode.getLastSnippetsUpdate()));
         } else {
             syncProcess.setNetworkAvailable(false);
-
             Framework.LOGGER.info("Fetching snippets: Network unreachable");
         }
         return null;
@@ -35,7 +33,11 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
 
     @Override
     protected void onSuccess(Void ignored) {
-        syncProcess.syncCompleted();
         framework.snippetsDataChanged();
+    }
+
+    @Override
+    protected void onComplete() {
+        syncProcess.syncCompleted();
     }
 }

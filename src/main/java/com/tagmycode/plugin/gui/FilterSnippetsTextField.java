@@ -44,6 +44,6 @@ public class FilterSnippetsTextField extends JTextField {
             filterSnippetsOperation.stop();
         }
         filterSnippetsOperation = new FilterSnippetsOperation(framework, snippetsTable, getText());
-        filterSnippetsOperation.run();
+        filterSnippetsOperation.start();
     }
 }

@@ -30,6 +30,17 @@ public class AbstractTest {
         resourceGenerate = new ResourceGenerate();
     }
 
+    public static void waitForCondition(Condition condition, int attempts) throws Exception {
+        while (attempts-- > 0) {
+            if (condition.eval()) {
+                return;
+            }
+            Thread.sleep(100);
+        }
+
+        Assert.fail("condition was false");
+    }
+
     public Framework createFramework() throws Exception {
         Data data = new Data(new StorageEngine(new FakeStorage()));
         data.setAccount(resourceGenerate.aUser());
@@ -40,14 +51,19 @@ public class AbstractTest {
     public Framework createFramework(Data data) throws Exception {
         FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), new FakeStorage(), new FakeMessageManager(), new FakeTaskFactory(), null);
         Framework framework = new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret());
-        framework.setData(data);
+
+        // TODO move to a tested method
+        framework.getData().setSnippets(data.getSnippets());
+        framework.getData().setAccount(data.getAccount());
+        framework.getData().setLanguages(data.getLanguages());
+        framework.getData().setLastSnippetsUpdate(data.getLastSnippetsUpdate());
+
         return framework;
     }
 
     protected Framework createSpyFramework() throws Exception {
         return Mockito.spy(createFramework());
     }
-
 
     public Data createFullData() throws Exception {
         Data data = new Data(new StorageEngine(new FakeStorage()));
@@ -112,18 +128,7 @@ public class AbstractTest {
         assertFalse(storageEngine.loadPrivateSnippetFlag());
     }
 
-    public static void waitForCondition(Condition condition, int attempts) throws Exception {
-        while (attempts-- > 0) {
-            if (condition.eval()) {
-                return;
-            }
-            Thread.sleep(100);
-        }
-
-        Assert.fail("condition was false");
-    }
-
-    protected interface Condition {
+    private interface Condition {
         boolean eval();
     }
 }

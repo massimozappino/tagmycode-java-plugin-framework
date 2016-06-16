@@ -30,7 +30,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private JPanel snippetViewFormPane;
     private JButton newSnippetButton;
     private JPanel mainPanel;
-    private JButton refreshButton;
+    private JButton syncButton;
     private JPanel leftPane;
     private JButton settingsButton;
     private JPanel filterPanel;
@@ -83,7 +83,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                 openSnippetInBrowser();
             }
         });
-        refreshButton.addActionListener(new AbstractAction() {
+        syncButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 framework.syncSnippets();

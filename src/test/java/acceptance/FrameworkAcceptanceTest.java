@@ -7,8 +7,7 @@ import org.junit.Test;
 
 import javax.swing.*;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class FrameworkAcceptanceTest extends AbstractTest {
@@ -54,5 +53,28 @@ public class FrameworkAcceptanceTest extends AbstractTest {
 
         framework.logout();
         assertDataIsReset(framework.getData());
+    }
+
+    @Test
+    public void selectASnippetAndSeeDetailsOnRightPanel() throws Exception {
+        Framework framework = createFramework(createFullData());
+        mockClientReturningValidAccountData(framework);
+        framework.getData().setAccount(resourceGenerate.aUser());
+        framework.getData().setSnippets(resourceGenerate.aSnippetCollection());
+        framework.getData().saveAll();
+
+        framework.start();
+
+        JFrame jFrame = new JFrame();
+        jFrame.add(framework.getMainWindow().getMainComponent());
+        jFrame.setVisible(true);
+        jFrame.pack();
+
+        JPanel snippetViewFormPane = framework.getMainWindow().getSnippetsTab().getSnippetViewFormPane();
+        assertEquals(0, snippetViewFormPane.getComponentCount());
+
+        framework.getMainWindow().getSnippetsTab().getSnippetsTable().getSnippetsComponent().setRowSelectionInterval(1, 1);
+
+        assertEquals(1, snippetViewFormPane.getComponentCount());
     }
 }

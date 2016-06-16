@@ -72,7 +72,7 @@
                 <constraints/>
                 <properties/>
               </component>
-              <component id="a458a" class="javax.swing.JButton" binding="refreshButton">
+              <component id="a458a" class="javax.swing.JButton" binding="syncButton">
                 <constraints/>
                 <properties>
                   <icon value="icons/sync.png"/>
