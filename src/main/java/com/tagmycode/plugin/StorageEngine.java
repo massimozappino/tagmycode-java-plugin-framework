@@ -7,11 +7,12 @@ import com.tagmycode.sdk.model.*;
 import java.io.IOException;
 
 public class StorageEngine {
-    protected static final String SNIPPETS = "snippets";
-    protected static final String LANGUAGES = "languages";
-    protected static final String PRIVATE_SNIPPET = "private_snippet";
-    protected static final String LAST_LANGUAGE = "last_language";
-    protected static final String ACCOUNT = "account";
+    private static final String SNIPPETS = "snippets";
+    private static final String LANGUAGES = "languages";
+    private static final String PRIVATE_SNIPPET = "private_snippet";
+    private static final String NETWORKING_ENABLED = "networking_enabled";
+    private static final String LAST_LANGUAGE = "last_language";
+    private static final String ACCOUNT = "account";
     private static final String SNIPPETS_LAST_UPDATE = "snippets_last_update";
     private final IStorage storage;
 
@@ -70,7 +71,6 @@ public class StorageEngine {
         try {
             read = read(PRIVATE_SNIPPET);
         } catch (IOException ignored) {
-
         }
         return stringToBoolean(read);
     }
@@ -78,6 +78,26 @@ public class StorageEngine {
     public void savePrivateSnippetFlag(boolean flag) throws TagMyCodeStorageException {
         try {
             write(PRIVATE_SNIPPET, booleanToString(flag));
+        } catch (IOException e) {
+            throw new TagMyCodeStorageException(e);
+        }
+    }
+
+
+    public boolean loadNetworkingEnabledFlag() {
+        String read = "1";
+        try {
+            read = read(NETWORKING_ENABLED);
+        } catch (IOException ignored) {
+
+        }
+        if (read == null) read = "1";
+        return stringToBoolean(read);
+    }
+
+    public void saveNetworkingEnabledFlag(boolean flag) throws TagMyCodeStorageException {
+        try {
+            write(NETWORKING_ENABLED, booleanToString(flag));
         } catch (IOException e) {
             throw new TagMyCodeStorageException(e);
         }
@@ -154,6 +174,7 @@ public class StorageEngine {
         unset(PRIVATE_SNIPPET);
         unset(LAST_LANGUAGE);
         unset(SNIPPETS);
+        unset(NETWORKING_ENABLED);
     }
 
     private void unset(String key) throws IOException {
@@ -180,7 +201,7 @@ public class StorageEngine {
         return b ? "1" : "0";
     }
 
-    protected IStorage getStorage() {
+    IStorage getStorage() {
         return storage;
     }
 

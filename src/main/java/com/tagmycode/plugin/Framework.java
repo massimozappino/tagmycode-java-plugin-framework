@@ -31,7 +31,6 @@ public class Framework implements IOnErrorCallback {
         BasicConfigurator.configure();
     }
 
-    private final MainWindow mainWindow;
     private final Wallet wallet;
     private final Client client;
     private final TagMyCode tagMyCode;
@@ -41,13 +40,13 @@ public class Framework implements IOnErrorCallback {
     private final SnippetsUpdatePollingProcess pollingProcess;
     private final IVersion version;
     private final Data data;
+    private MainWindow mainWindow;
     private QuickSearchDialog quickSearchDialog;
     private SettingsForm settingsForm;
     private SnippetDialogFactory snippetDialogFactory;
     private AboutDialog aboutDialog;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
-
         wallet = new Wallet(frameworkConfig.getPasswordKeyChain());
         client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), wallet);
         tagMyCode = new TagMyCode(client);
@@ -55,22 +54,22 @@ public class Framework implements IOnErrorCallback {
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
         this.data = new Data(new StorageEngine(frameworkConfig.getStorage()));
-        this.mainWindow = new MainWindow(this);
         quickSearchDialog = new QuickSearchDialog(this, getParentFrame());
         pollingProcess = new SnippetsUpdatePollingProcess(this);
         settingsForm = new SettingsForm(this, getParentFrame());
         snippetDialogFactory = new SnippetDialogFactory();
         version = new DefaultVersion();
         aboutDialog = new AboutDialog(this, getParentFrame());
+        this.mainWindow = new MainWindow(this);
     }
 
     public void start() throws IOException {
         restoreData();
 
         boolean initialized = isInitialized();
-
         mainWindow.setLoggedIn(initialized);
         if (initialized) {
+            mainWindow.getSnippetsTab().setNetworkingEnabled(isNetworkingEnabled());
             snippetsDataChanged();
             tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
             pollingProcess.start();
@@ -181,8 +180,8 @@ public class Framework implements IOnErrorCallback {
     }
 
     public void reset() throws TagMyCodeException, IOException {
-        client.revokeAccess();
         data.clearDataAndStorage();
+        client.revokeAccess();
         tagMyCode.setLastSnippetsUpdate(null);
     }
 
@@ -331,4 +330,17 @@ public class Framework implements IOnErrorCallback {
         return version;
     }
 
+    public boolean isNetworkingEnabled() {
+        return data.isNetworkingEnabled();
+    }
+
+    public synchronized void setNetworkingEnabled(boolean flag) {
+        data.setNetworkingEnabled(flag);
+    }
+
+    public void closeFramework() throws TagMyCodeStorageException {
+        data.saveAll();
+        System.out.println(getStorageEngine().loadNetworkingEnabledFlag());
+        LOGGER.info("Exiting TagMyCode");
+    }
 }

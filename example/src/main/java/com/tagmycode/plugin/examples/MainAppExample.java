@@ -6,6 +6,7 @@ import com.tagmycode.plugin.examples.support.MessageManager;
 import com.tagmycode.plugin.examples.support.PasswordKeyChain;
 import com.tagmycode.plugin.examples.support.Storage;
 import com.tagmycode.plugin.examples.support.TaskFactory;
+import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.sdk.authentication.TagMyCodeApiProduction;
 
@@ -65,6 +66,16 @@ public class MainAppExample {
                 System.exit(0);
             }
         });
+
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            public void run() {
+                try {
+                    framework.closeFramework();
+                } catch (TagMyCodeStorageException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, "Shutdown-thread"));
     }
 
     private static JPanel getLookAndFeelPanel(final Frame frame) {

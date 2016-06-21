@@ -12,11 +12,10 @@ import static org.mockito.Mockito.spy;
 public class StorageEngineTest extends AbstractTest {
 
     private StorageEngine storageEngine;
-    private FakeStorage storageSpy;
 
     @Before
     public void init() {
-        storageSpy = spy(new FakeStorage());
+        FakeStorage storageSpy = spy(new FakeStorage());
         storageEngine = new StorageEngine(storageSpy);
     }
 
@@ -50,6 +49,17 @@ public class StorageEngineTest extends AbstractTest {
 
         storageEngine.savePrivateSnippetFlag(false);
         assertFalse(storageEngine.loadPrivateSnippetFlag());
+    }
+
+    @Test
+    public void testSetNetworkingEnabled() throws Exception {
+        assertTrue(storageEngine.loadNetworkingEnabledFlag());
+
+        storageEngine.saveNetworkingEnabledFlag(true);
+        assertTrue(storageEngine.loadNetworkingEnabledFlag());
+
+        storageEngine.saveNetworkingEnabledFlag(false);
+        assertFalse(storageEngine.loadNetworkingEnabledFlag());
     }
 
     @Test
@@ -95,6 +105,7 @@ public class StorageEngineTest extends AbstractTest {
         storageEngine.saveLanguageCollection(resourceGenerate.aLanguageCollection());
         storageEngine.saveLastLanguageUsed(new DefaultLanguage());
         storageEngine.savePrivateSnippetFlag(true);
+        storageEngine.saveNetworkingEnabledFlag(false);
         storageEngine.saveSnippets(resourceGenerate.aSnippetCollection());
         storageEngine.clearAll();
         assertStorageDataIsCleared(storageEngine);

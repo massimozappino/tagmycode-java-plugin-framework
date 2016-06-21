@@ -42,22 +42,12 @@ public class AbstractTest {
     }
 
     public Framework createFramework() throws Exception {
-        Data data = new Data(new StorageEngine(new FakeStorage()));
-        data.setAccount(resourceGenerate.aUser());
-        data.setSnippets(new SnippetCollection());
-        return createFramework(data);
+        return createFramework(createStorage());
     }
 
-    public Framework createFramework(Data data) throws Exception {
-        FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), new FakeStorage(), new FakeMessageManager(), new FakeTaskFactory(), null);
+    public Framework createFramework(StorageEngine storage) throws Exception {
+        FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), storage.getStorage(), new FakeMessageManager(), new FakeTaskFactory(), null);
         Framework framework = new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret());
-
-        // TODO move to a tested method
-        framework.getData().setSnippets(data.getSnippets());
-        framework.getData().setAccount(data.getAccount());
-        framework.getData().setLanguages(data.getLanguages());
-        framework.getData().setLastSnippetsUpdate(data.getLastSnippetsUpdate());
-
         return framework;
     }
 
@@ -65,13 +55,15 @@ public class AbstractTest {
         return Mockito.spy(createFramework());
     }
 
-    public Data createFullData() throws Exception {
-        Data data = new Data(new StorageEngine(new FakeStorage()));
-        data.setAccount(resourceGenerate.aUser());
-        data.setSnippets(resourceGenerate.aSnippetCollection());
-        data.setLastSnippetsUpdate(resourceGenerate.aSnippetsLastUpdate());
-        data.setLanguages(resourceGenerate.aLanguageCollection());
-        return data;
+    public StorageEngine createStorage() throws Exception {
+        StorageEngine storage = new StorageEngine(new FakeStorage());
+        storage.saveAccount(resourceGenerate.aUser());
+        storage.saveSnippets(resourceGenerate.aSnippetCollection());
+        storage.saveLastSnippetsUpdate(resourceGenerate.aSnippetsLastUpdate());
+        storage.saveLanguageCollection(resourceGenerate.aLanguageCollection());
+        storage.saveNetworkingEnabledFlag(true);
+
+        return storage;
     }
 
     protected void mockClientReturningValidAccountData(Framework framework) throws Exception {
@@ -109,6 +101,7 @@ public class AbstractTest {
         assertEquals(new DefaultLanguageCollection(), data.getLanguages());
         assertEquals(new SnippetCollection(), data.getSnippets());
         assertEquals(null, data.getLastSnippetsUpdate());
+        assertTrue(data.isNetworkingEnabled());
     }
 
     protected void assertDataIsValid(Data data) throws IOException, TagMyCodeJsonException {
@@ -116,9 +109,10 @@ public class AbstractTest {
         assertEquals(resourceGenerate.aLanguageCollection(), data.getLanguages());
         assertEquals(resourceGenerate.aSnippetCollection(), data.getSnippets());
         assertEquals(resourceGenerate.aSnippetsLastUpdate(), data.getLastSnippetsUpdate());
+        assertEquals(true, data.isNetworkingEnabled());
     }
 
-    protected void assertStorageDataIsCleared(StorageEngine storageEngine) throws IOException, TagMyCodeJsonException, TagMyCodeStorageException {
+    void assertStorageDataIsCleared(StorageEngine storageEngine) throws IOException, TagMyCodeJsonException, TagMyCodeStorageException {
         assertNull(storageEngine.loadAccount());
         LanguageCollection languageCollection = new LanguageCollection();
         languageCollection.add(new DefaultLanguage());
@@ -126,6 +120,7 @@ public class AbstractTest {
         assertEquals(new DefaultLanguage(), storageEngine.loadLastLanguageUsed());
         assertEquals(new SnippetCollection(), storageEngine.loadSnippets());
         assertFalse(storageEngine.loadPrivateSnippetFlag());
+        assertTrue(storageEngine.loadNetworkingEnabledFlag());
     }
 
     private interface Condition {

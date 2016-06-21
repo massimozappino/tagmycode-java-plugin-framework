@@ -2,6 +2,7 @@ package acceptance;
 
 import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
+import com.tagmycode.plugin.StorageEngine;
 import com.tagmycode.plugin.gui.form.LoginDialog;
 import org.junit.Test;
 
@@ -24,7 +25,7 @@ public class FrameworkAcceptanceTest extends AbstractTest {
 
     @Test
     public void afterLoginInitializeIsCalled() throws Exception {
-        Framework framework = createFramework(createFullData());
+        Framework framework = createFramework(createStorage());
         mockClientReturningValidAccountData(framework);
         Framework frameworkSpy = spy(framework);
 
@@ -45,7 +46,8 @@ public class FrameworkAcceptanceTest extends AbstractTest {
 
     @Test
     public void afterLogoutLSetLastSnippetsUpdateIsCleared() throws Exception {
-        Framework framework = createFramework(createFullData());
+        Framework framework = createFramework(createStorage());
+        framework.start();
         mockClientReturningValidAccountData(framework);
         Framework frameworkSpy = spy(framework);
         assertTrue(frameworkSpy.isInitialized());
@@ -57,7 +59,7 @@ public class FrameworkAcceptanceTest extends AbstractTest {
 
     @Test
     public void selectASnippetAndSeeDetailsOnRightPanel() throws Exception {
-        Framework framework = createFramework(createFullData());
+        Framework framework = createFramework(createStorage());
         mockClientReturningValidAccountData(framework);
         framework.getData().setAccount(resourceGenerate.aUser());
         framework.getData().setSnippets(resourceGenerate.aSnippetCollection());
@@ -76,5 +78,31 @@ public class FrameworkAcceptanceTest extends AbstractTest {
         framework.getMainWindow().getSnippetsTab().getSnippetsTable().getSnippetsComponent().setRowSelectionInterval(1, 1);
 
         assertEquals(1, snippetViewFormPane.getComponentCount());
+    }
+
+    @Test
+    public void networkingEnabledAfterRestart() throws Exception {
+        StorageEngine storage = createStorage();
+        storage.saveNetworkingEnabledFlag(true);
+        Framework framework = createFramework(storage);
+        mockClientReturningValidAccountData(framework);
+
+        framework.start();
+
+        assertTrue(framework.getData().isNetworkingEnabled());
+        assertTrue(framework.getMainWindow().getSnippetsTab().getButtonNetworking().getIcon().toString().contains("/icons/connected.png"));
+    }
+
+    @Test
+    public void networkingDisabledAfterRestart() throws Exception {
+        StorageEngine storage = createStorage();
+        storage.saveNetworkingEnabledFlag(false);
+        Framework framework = createFramework(storage);
+        mockClientReturningValidAccountData(framework);
+
+        framework.start();
+
+        assertFalse(framework.getData().isNetworkingEnabled());
+        assertTrue(framework.getMainWindow().getSnippetsTab().getButtonNetworking().getIcon().toString().contains("/icons/disconnected.png"));
     }
 }

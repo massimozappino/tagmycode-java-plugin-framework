@@ -16,6 +16,7 @@ public class Data {
     private LanguageCollection languages;
     private SnippetCollection snippets;
     private String lastSnippetsUpdate;
+    private boolean networkingEnabled;
 
     public Data(StorageEngine storage) {
         this.storage = storage;
@@ -32,6 +33,7 @@ public class Data {
         languages = new DefaultLanguageCollection();
         snippets = new SnippetCollection();
         lastSnippetsUpdate = null;
+        networkingEnabled = true;
     }
 
     public User getAccount() {
@@ -64,13 +66,15 @@ public class Data {
         String lastSnippetsUpdate = storage.loadLastSnippetsUpdate();
         setLastSnippetsUpdate(lastSnippetsUpdate);
         setSnippets(storage.loadSnippets());
+        setNetworkingEnabled(storage.loadNetworkingEnabledFlag());
     }
 
-    public void saveAll() throws TagMyCodeStorageException {
+    public synchronized void saveAll() throws TagMyCodeStorageException {
         storage.saveAccount(getAccount());
         storage.saveLanguageCollection(getLanguages());
         storage.saveSnippets(getSnippets());
         storage.saveLastSnippetsUpdate(getLastSnippetsUpdate());
+        storage.saveNetworkingEnabledFlag(isNetworkingEnabled());
     }
 
     public String getLastSnippetsUpdate() {
@@ -83,5 +87,13 @@ public class Data {
 
     public StorageEngine getStorageEngine() {
         return storage;
+    }
+
+    public boolean isNetworkingEnabled() {
+        return networkingEnabled;
+    }
+
+    public void setNetworkingEnabled(boolean networkingEnabled) {
+        this.networkingEnabled = networkingEnabled;
     }
 }

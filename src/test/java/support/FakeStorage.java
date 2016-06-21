@@ -9,7 +9,7 @@ public class FakeStorage implements IStorage {
     private HashMap<String, String> resource;
 
     public FakeStorage() {
-        resource = new HashMap<String, String>();
+        resource = new HashMap<>();
     }
 
     public void generateExceptionForLanguageCollection() {

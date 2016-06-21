@@ -191,9 +191,9 @@ public class FrameworkTest extends AbstractTest {
 
     @Test
     public void testLoadData() throws Exception {
-        Data data = mock(Data.class);
-        when(data.getLastSnippetsUpdate()).thenReturn(resourceGenerate.aSnippetsLastUpdate());
-        Framework framework = spy(createFramework(data));
+        StorageEngine storage = createStorage();
+        storage.saveLastSnippetsUpdate(resourceGenerate.aSnippetsLastUpdate());
+        Framework framework = spy(createFramework(storage));
 
         framework.loadData();
 

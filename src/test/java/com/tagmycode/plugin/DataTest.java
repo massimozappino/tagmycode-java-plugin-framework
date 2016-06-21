@@ -8,7 +8,6 @@ import static org.mockito.Mockito.spy;
 
 public class DataTest extends AbstractTest {
 
-
     @Test
     public void testLoadLanguageCollection() throws Exception {
         StorageEngine storageSpy = spy(new StorageEngine(new FakeStorage()));
@@ -16,7 +15,7 @@ public class DataTest extends AbstractTest {
         data.setAccount(resourceGenerate.aUser());
         data.setLanguages(resourceGenerate.aLanguageCollection());
         data.setSnippets(resourceGenerate.aSnippetCollection());
-
+        data.setNetworkingEnabled(true);
         data.clearDataAndStorage();
 
         assertDataIsReset(data);
@@ -24,12 +23,7 @@ public class DataTest extends AbstractTest {
 
     @Test
     public void testLoadFromStorage() throws Exception {
-        StorageEngine storage = new StorageEngine(new FakeStorage());
-        storage.saveAccount(resourceGenerate.aUser());
-        storage.saveLanguageCollection(resourceGenerate.aLanguageCollection());
-        storage.saveSnippets(resourceGenerate.aSnippetCollection());
-        storage.saveLastSnippetsUpdate(resourceGenerate.aSnippetsLastUpdate());
-        Data data = new Data(storage);
+        Data data = new Data(createStorage());
 
         data.loadAll();
 
@@ -44,6 +38,7 @@ public class DataTest extends AbstractTest {
         data.setLanguages(resourceGenerate.aLanguageCollection());
         data.setSnippets(resourceGenerate.aSnippetCollection());
         data.setLastSnippetsUpdate(resourceGenerate.aSnippetsLastUpdate());
+        data.setNetworkingEnabled(false);
 
         data.reset();
 
@@ -59,7 +54,7 @@ public class DataTest extends AbstractTest {
         data.setLanguages(resourceGenerate.aLanguageCollection());
         data.setSnippets(resourceGenerate.aSnippetCollection());
         data.setLastSnippetsUpdate(resourceGenerate.aSnippetsLastUpdate());
-
+        data.setNetworkingEnabled(true);
         data.saveAll();
 
         data.reset();

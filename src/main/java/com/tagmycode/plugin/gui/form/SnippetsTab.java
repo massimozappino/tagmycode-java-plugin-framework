@@ -35,11 +35,13 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private JButton settingsButton;
     private JPanel filterPanel;
     private JButton buttonAbout;
+    private JButton buttonNetworking;
     private JPanel snippetListPane;
     private Framework framework;
     private JTable jTable;
     private ClipboardCopy clipboardCopy = new ClipboardCopy();
     private SnippetsTableModel model;
+    private boolean networkingEnabled;
 
     public SnippetsTab(final Framework framework) {
         this.framework = framework;
@@ -101,7 +103,23 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                 openAboutDialog();
             }
         });
+
+        boolean networkingEnabled = framework.isNetworkingEnabled();
+        setNetworkIcon(networkingEnabled);
+        buttonNetworking.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean newStatus = !framework.isNetworkingEnabled();
+                setNetworkIcon(newStatus);
+                framework.setNetworkingEnabled(newStatus);
+            }
+        });
         disableButtonsForSnippet();
+    }
+
+    public void setNetworkIcon(boolean status) {
+        String icon = status ? "connected" : "disconnected";
+        buttonNetworking.setIcon(IconResources.createImageIcon(icon + ".png"));
     }
 
     private void openAboutDialog() {
@@ -331,5 +349,13 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
     public void fireSnippetsChanged() {
         snippetsTable.fireSnippetsChanged();
+    }
+
+    public JButton getButtonNetworking() {
+        return buttonNetworking;
+    }
+
+    public void setNetworkingEnabled(boolean networkingEnabled) {
+        setNetworkIcon(networkingEnabled);
     }
 }

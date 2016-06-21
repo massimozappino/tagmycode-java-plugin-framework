@@ -1,6 +1,7 @@
 package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.AbstractTest;
+import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import org.junit.Test;
 
@@ -27,7 +28,9 @@ public class SnippetsTabTest extends AbstractTest {
 
     @Test
     public void testSelection() throws Exception {
-        SnippetsTab snippetsTab = new SnippetsTab(createFramework(createFullData()));
+        Framework framework = createFramework(createStorage());
+        framework.getData().loadAll();
+        SnippetsTab snippetsTab = new SnippetsTab(framework);
         SnippetsTable snippetsTable = snippetsTab.getSnippetsTable();
         snippetsTable.fireSnippetsChanged();
         JPanel snippetViewFormPanel = snippetsTab.getSnippetViewFormPane();
@@ -47,7 +50,7 @@ public class SnippetsTabTest extends AbstractTest {
 
     @Test
     public void disableEnableButtonsForSnippet() throws Exception {
-        SnippetsTab snippetsTab = new SnippetsTab(createFramework(createFullData()));
+        SnippetsTab snippetsTab = new SnippetsTab(createFramework(createStorage()));
         snippetsTab.disableButtonsForSnippet();
         assertSnippetButtonsEnabledAre(snippetsTab, false);
         snippetsTab.enableButtonsForSnippet();

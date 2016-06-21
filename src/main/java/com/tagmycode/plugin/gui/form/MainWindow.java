@@ -10,6 +10,7 @@ public class MainWindow implements IAbstractGUI {
     private final SnippetsTab snippetsTab;
     private final LoginPanel loginPanel;
     private JPanel mainPanel;
+    private boolean networkingEnabled;
 
     public MainWindow(final Framework framework) {
         snippetsTab = new SnippetsTab(framework);
@@ -35,4 +36,5 @@ public class MainWindow implements IAbstractGUI {
     public SnippetsTab getSnippetsTab() {
         return snippetsTab;
     }
+
 }

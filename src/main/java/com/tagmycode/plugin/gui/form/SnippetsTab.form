@@ -80,6 +80,14 @@
                   <toolTipText value="Sync snippets"/>
                 </properties>
               </component>
+              <component id="62afd" class="javax.swing.JButton" binding="buttonNetworking">
+                <constraints/>
+                <properties>
+                  <icon value="icons/connected.png"/>
+                  <text value=""/>
+                  <toolTipText value="Enable/disable networking"/>
+                </properties>
+              </component>
               <component id="f8afd" class="javax.swing.JToolBar$Separator">
                 <constraints/>
                 <properties/>
