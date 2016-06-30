@@ -10,7 +10,7 @@ public class SnippetsUpdatePollingProcess {
 
     private static final int SYNC_NEVER = -1;
     private static final int SYNC_FORCE = 0;
-    private long lastSync = -1;
+    private long lastSync = SYNC_NEVER;
     private boolean exitStatus = false;
     private Thread thread = null;
     private Framework framework;

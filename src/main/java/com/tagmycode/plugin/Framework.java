@@ -72,7 +72,9 @@ public class Framework implements IOnErrorCallback {
             mainWindow.getSnippetsTab().setNetworkingEnabled(isNetworkingEnabled());
             snippetsDataChanged();
             tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
-            pollingProcess.start();
+            if (isNetworkingEnabled()) {
+                pollingProcess.start();
+            }
         }
     }
 
@@ -254,7 +256,9 @@ public class Framework implements IOnErrorCallback {
                 }
                 fetchAndStoreAllData();
                 snippetsDataChanged();
-                pollingProcess.start();
+                if (isNetworkingEnabled()) {
+                    pollingProcess.start();
+                }
             } catch (TagMyCodeException ex) {
                 manageTagMyCodeExceptions(ex);
                 logout();
@@ -336,11 +340,15 @@ public class Framework implements IOnErrorCallback {
 
     public synchronized void setNetworkingEnabled(boolean flag) {
         data.setNetworkingEnabled(flag);
+        if (flag) {
+            pollingProcess.start();
+        } else {
+            pollingProcess.terminate();
+        }
     }
 
     public void closeFramework() throws TagMyCodeStorageException {
         data.saveAll();
-        System.out.println(getStorageEngine().loadNetworkingEnabledFlag());
         LOGGER.info("Exiting TagMyCode");
     }
 }

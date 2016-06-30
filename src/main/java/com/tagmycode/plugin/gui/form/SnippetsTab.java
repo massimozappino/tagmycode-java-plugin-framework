@@ -109,9 +109,15 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         buttonNetworking.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean newStatus = !framework.isNetworkingEnabled();
-                setNetworkIcon(newStatus);
-                framework.setNetworkingEnabled(newStatus);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean newStatus = !framework.isNetworkingEnabled();
+                        setNetworkIcon(newStatus);
+                        syncButton.setEnabled(newStatus);
+                        framework.setNetworkingEnabled(newStatus);
+                    }
+                }).start();
             }
         });
         disableButtonsForSnippet();

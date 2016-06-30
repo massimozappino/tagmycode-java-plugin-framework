@@ -95,14 +95,19 @@ public class FrameworkAcceptanceTest extends AbstractTest {
 
     @Test
     public void networkingDisabledAfterRestart() throws Exception {
-        StorageEngine storage = createStorage();
-        storage.saveNetworkingEnabledFlag(false);
-        Framework framework = createFramework(storage);
-        mockClientReturningValidAccountData(framework);
+        Framework framework = acceptanceFramework();
 
         framework.start();
 
         assertFalse(framework.getData().isNetworkingEnabled());
         assertTrue(framework.getMainWindow().getSnippetsTab().getButtonNetworking().getIcon().toString().contains("/icons/disconnected.png"));
+    }
+
+    public Framework acceptanceFramework() throws Exception {
+        StorageEngine storage = createStorage();
+        storage.saveNetworkingEnabledFlag(false);
+        Framework framework = createFramework(storage);
+        mockClientReturningValidAccountData(framework);
+        return framework;
     }
 }
