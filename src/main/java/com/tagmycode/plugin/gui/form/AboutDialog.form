@@ -137,7 +137,7 @@
         </constraints>
         <properties>
           <horizontalAlignment value="0"/>
-          <text value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;https://www.tagmycode.com&lt;/a&gt;"/>
+          <text value="&lt;html&gt;&lt;a href=&quot;&quot;&gt;www.tagmycode.com&lt;/a&gt;"/>
         </properties>
       </component>
       <vspacer id="afb99">

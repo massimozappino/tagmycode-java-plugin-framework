@@ -176,7 +176,7 @@ public class Framework implements IOnErrorCallback {
             } catch (TagMyCodeException e) {
                 manageTagMyCodeExceptions(e);
             } catch (IOException e) {
-                manageTagMyCodeExceptions(new TagMyCodeException());
+                manageTagMyCodeExceptions(new TagMyCodeException(e));
             }
         }
     }

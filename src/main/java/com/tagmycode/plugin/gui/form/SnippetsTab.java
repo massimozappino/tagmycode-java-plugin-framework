@@ -104,8 +104,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
             }
         });
 
-        boolean networkingEnabled = framework.isNetworkingEnabled();
-        setNetworkIcon(networkingEnabled);
         buttonNetworking.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -113,8 +111,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                     @Override
                     public void run() {
                         boolean newStatus = !framework.isNetworkingEnabled();
-                        setNetworkIcon(newStatus);
-                        syncButton.setEnabled(newStatus);
+                        setNetworkingEnabled(newStatus);
                         framework.setNetworkingEnabled(newStatus);
                     }
                 }).start();
@@ -363,5 +360,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
     public void setNetworkingEnabled(boolean networkingEnabled) {
         setNetworkIcon(networkingEnabled);
+        syncButton.setEnabled(networkingEnabled);
     }
 }

@@ -10,19 +10,23 @@ import javax.swing.*;
 public class SnippetView extends AbstractGui {
     private final SyntaxSnippetEditor syntaxSnippetEditor;
     private JPanel mainPanel;
-    private JLabel tags;
     private JPanel snippetPane;
     private JLabel tagsIconLabel;
+    private JPanel tagsContainer;
 
     public SnippetView(final Snippet snippet) {
         syntaxSnippetEditor = new SyntaxSnippetEditor();
         syntaxSnippetEditor.setEditable(false);
         syntaxSnippetEditor.setTextWithSnippet(snippet);
         snippetPane.add(syntaxSnippetEditor.getMainComponent());
+        tagsContainer.removeAll();
         if (snippet.getTags().length() == 0) {
-            tags.setText("no tags");
+            tagsContainer.add(new JLabel("<html><i>no tags</i></html>"));
         } else {
-            tags.setText(snippet.getTags());
+            for (String tag : snippet.getTags().split(" ")) {
+                JLabel tagLabel = new JLabel("<html><b><u>" + tag + "</u></b></html>");
+                tagsContainer.add(tagLabel);
+            }
         }
         initPopupMenuForJTextComponents(getMainComponent());
     }
