@@ -110,7 +110,7 @@ public class QuickSearchDialog extends AbstractDialog {
                     disableSnippetButtons();
 
                     Snippet snippet = snippetsTable.getSelectedSnippet();
-                    // TODO test
+
                     if (snippet != null) {
                         SyntaxSnippetEditor snippetEditorPane = new SnippetView(snippet).getSnippetEditorPane();
                         snippetEditorPane.setPreview();

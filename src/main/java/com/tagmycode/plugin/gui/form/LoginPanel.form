@@ -21,7 +21,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="56a0b" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+          <grid id="56a0b" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -31,6 +31,7 @@
               <component id="25c8d" class="javax.swing.JButton" binding="loginButton">
                 <constraints/>
                 <properties>
+                  <horizontalAlignment value="2"/>
                   <icon value="icons/signin.png"/>
                   <text value="Login"/>
                 </properties>

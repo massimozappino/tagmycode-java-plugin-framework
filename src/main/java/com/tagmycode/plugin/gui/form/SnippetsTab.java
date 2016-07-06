@@ -265,7 +265,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                     snippetViewFormPane.removeAll();
 
                     Snippet snippet = snippetsTable.getSelectedSnippet();
-                    // TODO duplicated
+
                     if (snippet != null) {
                         JComponent snippetViewForm = new SnippetView(snippet).getMainComponent();
                         snippetViewFormPane.add(snippetViewForm);

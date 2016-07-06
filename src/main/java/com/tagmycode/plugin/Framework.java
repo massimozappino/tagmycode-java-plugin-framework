@@ -182,9 +182,9 @@ public class Framework implements IOnErrorCallback {
     }
 
     public void reset() throws TagMyCodeException, IOException {
+        tagMyCode.setLastSnippetsUpdate(null);
         data.clearDataAndStorage();
         client.revokeAccess();
-        tagMyCode.setLastSnippetsUpdate(null);
     }
 
     public boolean isInitialized() {
