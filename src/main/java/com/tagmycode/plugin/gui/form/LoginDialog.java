@@ -11,6 +11,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static com.tagmycode.plugin.gui.GuiUtil.addClickableLink;
+
 public class LoginDialog extends AbstractDialog {
     private JPanel jPanelVerification;
     private JButton buttonCancel;
@@ -19,6 +21,7 @@ public class LoginDialog extends AbstractDialog {
 
     private JTextField verificationCodeTextField;
     private JButton openLinkButton;
+    private JLabel signupLabel;
 
     public LoginDialog(Framework framework, Frame parent) {
         super(framework, parent);
@@ -30,8 +33,9 @@ public class LoginDialog extends AbstractDialog {
     protected void initWindow() {
         Color background = UIManager.getColor("Panel.background");
         contentPane.setBackground(background);
+        addClickableLink(signupLabel, "https://tagmycode.com/account/signup");
 
-        getDialog().setSize(300, 300);
+        getDialog().setSize(350, 300);
         getDialog().setResizable(false);
         getDialog().setTitle("TagMyCode Login");
 

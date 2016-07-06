@@ -348,7 +348,9 @@ public class Framework implements IOnErrorCallback {
     }
 
     public void closeFramework() throws TagMyCodeStorageException {
-        data.saveAll();
+        if (isInitialized()) {
+            data.saveAll();
+        }
         LOGGER.info("Exiting TagMyCode");
     }
 }

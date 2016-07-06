@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 public class LoginPanel extends AbstractGui {
     private JButton loginButton;
     private JPanel mainPanel;
+    private JButton aboutButton;
 
     public LoginPanel(final Framework framework) {
         loginButton.addActionListener(new ActionListener() {
@@ -18,6 +19,13 @@ public class LoginPanel extends AbstractGui {
                 framework.showLoginDialog();
             }
         });
+        aboutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                framework.showAboutDialog();
+            }
+        });
+
     }
 
     @Override
