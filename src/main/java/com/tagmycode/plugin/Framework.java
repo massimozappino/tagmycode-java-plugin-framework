@@ -63,14 +63,14 @@ public class Framework implements IOnErrorCallback {
         this.mainWindow = new MainWindow(this);
     }
 
-    public void start() throws IOException {
+    public void start() throws IOException, TagMyCodeException {
         restoreData();
 
         boolean initialized = isInitialized();
         mainWindow.setLoggedIn(initialized);
         if (initialized) {
             mainWindow.getSnippetsTab().setNetworkingEnabled(isNetworkingEnabled());
-            snippetsDataChanged();
+            saveSnippetsDataChanged();
             tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
             if (isNetworkingEnabled()) {
                 pollingProcess.start();
@@ -185,6 +185,7 @@ public class Framework implements IOnErrorCallback {
         tagMyCode.setLastSnippetsUpdate(null);
         data.clearDataAndStorage();
         client.revokeAccess();
+        snippetsDataChanged();
     }
 
     public boolean isInitialized() {
@@ -255,7 +256,7 @@ public class Framework implements IOnErrorCallback {
                     throw new TagMyCodeGuiException("Unable to authenticate");
                 }
                 fetchAndStoreAllData();
-                snippetsDataChanged();
+                saveSnippetsDataChanged();
                 if (isNetworkingEnabled()) {
                     pollingProcess.start();
                 }
@@ -283,26 +284,30 @@ public class Framework implements IOnErrorCallback {
 
     public void addSnippet(Snippet snippet) {
         getData().getSnippets().add(snippet);
-        snippetsDataChanged();
+        saveSnippetsDataChanged();
         saveData();
     }
 
     public void updateSnippet(Snippet snippet) {
         SnippetCollection snippets = getData().getSnippets();
         snippets.updateSnippet(snippet);
-        snippetsDataChanged();
+        saveSnippetsDataChanged();
     }
 
     public void deleteSnippet(Snippet snippetToDelete) {
         SnippetCollection snippets = getData().getSnippets();
         snippets.deleteById(snippetToDelete.getId());
+        saveSnippetsDataChanged();
+    }
+
+    public void saveSnippetsDataChanged() {
         snippetsDataChanged();
+        saveData();
     }
 
     public void snippetsDataChanged() {
         getData().setLastSnippetsUpdate(tagMyCode.getLastSnippetsUpdate());
         getMainWindow().getSnippetsTab().fireSnippetsChanged();
-        saveData();
     }
 
     protected synchronized void saveData() {

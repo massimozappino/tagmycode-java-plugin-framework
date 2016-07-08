@@ -32,6 +32,6 @@ public class SyncSnippetOperationTest extends AbstractTest {
 
         syncSnippetsOperation.onSuccess(null);
 
-        verify(frameworkMock, times(1)).snippetsDataChanged();
+        verify(frameworkMock, times(1)).saveSnippetsDataChanged();
     }
 }

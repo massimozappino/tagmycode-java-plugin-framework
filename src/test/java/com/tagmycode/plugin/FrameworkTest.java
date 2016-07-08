@@ -3,6 +3,7 @@ package com.tagmycode.plugin;
 
 import com.tagmycode.plugin.gui.form.MainWindow;
 import com.tagmycode.plugin.gui.form.SnippetDialog;
+import com.tagmycode.plugin.gui.form.SnippetsTab;
 import com.tagmycode.sdk.authentication.OauthToken;
 import com.tagmycode.sdk.authentication.TagMyCodeApiDevelopment;
 import com.tagmycode.sdk.authentication.VoidOauthToken;
@@ -77,7 +78,7 @@ public class FrameworkTest extends AbstractTest {
 
         reloadedFramework.start();
 
-        verify(reloadedFramework, times(1)).snippetsDataChanged();
+        verify(reloadedFramework, times(1)).saveSnippetsDataChanged();
         assertEquals(newOauthToken, reloadedFramework.getClient().getOauthToken());
         assertEquals("fakeUsername", reloadedFramework.getStorageEngine().loadAccount().getUsername());
         assertEquals(1, reloadedFramework.getLanguageCollection().size());
@@ -91,7 +92,7 @@ public class FrameworkTest extends AbstractTest {
 
         frameworkSpy.start();
 
-        verify(frameworkSpy, times(1)).snippetsDataChanged();
+        verify(frameworkSpy, times(1)).saveSnippetsDataChanged();
     }
 
     @Test
@@ -128,6 +129,7 @@ public class FrameworkTest extends AbstractTest {
         Framework frameworkSpy = createSpyFramework();
         MainWindow mainWindowMock = mock(MainWindow.class);
         when(frameworkSpy.getMainWindow()).thenReturn(mainWindowMock);
+        when(mainWindowMock.getSnippetsTab()).thenReturn(mock(SnippetsTab.class));
         setValuesForWalletAndData();
         setAccessToken();
 
@@ -174,7 +176,7 @@ public class FrameworkTest extends AbstractTest {
 
         framework.updateSnippet(resourceGenerate.aSnippet());
 
-        verify(framework, times(1)).snippetsDataChanged();
+        verify(framework, times(1)).saveSnippetsDataChanged();
     }
 
     @Test
@@ -182,7 +184,7 @@ public class FrameworkTest extends AbstractTest {
         Framework framework = createSpyFramework();
         framework.getTagMyCode().setLastSnippetsUpdate("changed GMT string");
 
-        framework.snippetsDataChanged();
+        framework.saveSnippetsDataChanged();
 
         assertEquals("changed GMT string", framework.getData().getLastSnippetsUpdate());
         verify(framework, times(1)).saveData();
@@ -202,12 +204,14 @@ public class FrameworkTest extends AbstractTest {
 
     @Test
     public void testReset() throws Exception {
+        framework = spy(framework);
         framework.getTagMyCode().setLastSnippetsUpdate("a custom date");
         framework.getClient().setOauthToken(new OauthToken("aaa", "bbb"));
         framework.getData().setAccount(resourceGenerate.aUser());
 
         framework.reset();
 
+        verify(framework, times(1)).snippetsDataChanged();
         assertEquals(null, framework.getTagMyCode().getLastSnippetsUpdate());
         assertEquals(new VoidOauthToken(), framework.getClient().getOauthToken());
         assertEquals(null, framework.getData().getAccount());

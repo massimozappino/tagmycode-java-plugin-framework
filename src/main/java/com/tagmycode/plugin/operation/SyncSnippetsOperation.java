@@ -33,7 +33,7 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
 
     @Override
     protected void onSuccess(Void ignored) {
-        framework.snippetsDataChanged();
+        framework.saveSnippetsDataChanged();
     }
 
     @Override

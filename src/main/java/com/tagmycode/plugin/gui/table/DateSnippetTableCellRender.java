@@ -8,8 +8,10 @@ public class DateSnippetTableCellRender extends DefaultSnippetTableCellRender {
     protected void customLabel(Object value) {
         label.setText("");
 
-        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
-        String formattedDate = df.format((Date) value);
-        label.setText(formattedDate);
+        if (value != null) {
+            DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+            String formattedDate = df.format((Date) value);
+            label.setText(formattedDate);
+        }
     }
 }

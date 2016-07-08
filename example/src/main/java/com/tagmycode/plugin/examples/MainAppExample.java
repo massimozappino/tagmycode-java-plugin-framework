@@ -9,6 +9,7 @@ import com.tagmycode.plugin.examples.support.TaskFactory;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.sdk.authentication.TagMyCodeApiProduction;
+import com.tagmycode.sdk.exception.TagMyCodeException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +20,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 public class MainAppExample {
-    public static void main(String args[]) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
+    public static void main(String args[]) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, TagMyCodeException {
         JFrame frame = new JFrame("TagMyCode Plugin Example");
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.setBounds(200, 200, 600, 200);
