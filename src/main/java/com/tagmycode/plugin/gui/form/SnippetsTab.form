@@ -85,7 +85,7 @@
                 <properties>
                   <icon value="icons/connected.png"/>
                   <text value=""/>
-                  <toolTipText value="Enable/disable networking"/>
+                  <toolTipText value="Enable/disable auto sync"/>
                 </properties>
               </component>
               <component id="f8afd" class="javax.swing.JToolBar$Separator">
