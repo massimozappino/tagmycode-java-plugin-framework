@@ -252,8 +252,14 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         }
     }
 
-    private void newSnippetAction(Framework framework) {
-        framework.showNewSnippetDialog(new Snippet());
+    protected void newSnippetAction(Framework framework) {
+        framework.showNewSnippetDialog(createEmptySnippet(framework));
+    }
+
+    protected Snippet createEmptySnippet(Framework framework) {
+        Snippet snippet = new Snippet();
+        snippet.setLanguage(framework.getStorageEngine().loadLastLanguageUsed());
+        return snippet;
     }
 
     private ListSelectionListener createSelectionListener() {
@@ -292,7 +298,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                             try {
                                 jTable.setRowSelectionInterval(selectedRow, selectedRow);
                             } catch (IllegalArgumentException e) {
-                                Framework.LOGGER.error(selectedRow);
+                                framework.logError(e);
                                 throw new RuntimeException(e);
                             }
                         }

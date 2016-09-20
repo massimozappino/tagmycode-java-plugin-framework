@@ -210,7 +210,7 @@ public class Framework implements IOnErrorCallback {
     }
 
     public void manageTagMyCodeExceptions(TagMyCodeException e) {
-        LOGGER.error(e.getMessage());
+        logError(e);
         if (e instanceof TagMyCodeUnauthorizedException) {
             logoutAndAuthenticateAgain();
         } else if (e instanceof TagMyCodeConnectionException || e instanceof TagMyCodeStorageException || e instanceof TagMyCodeApiException) {
@@ -218,6 +218,10 @@ public class Framework implements IOnErrorCallback {
         } else {
             showGenericError();
         }
+    }
+
+    public void logError(Exception e) {
+        LOGGER.error("TagMyCode Error", e);
     }
 
     public void logoutAndAuthenticateAgain() {
@@ -238,7 +242,7 @@ public class Framework implements IOnErrorCallback {
             loadData();
         } catch (TagMyCodeStorageException e) {
             data.clearDataAndStorage();
-            LOGGER.error(e.getMessage());
+            logError(e);
         } catch (TagMyCodeException e) {
             manageTagMyCodeExceptions(e);
         }

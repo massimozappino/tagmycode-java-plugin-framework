@@ -11,7 +11,6 @@ import com.tagmycode.sdk.model.DefaultLanguage;
 import com.tagmycode.sdk.model.DefaultLanguageCollection;
 import com.tagmycode.sdk.model.LanguageCollection;
 import com.tagmycode.sdk.model.SnippetCollection;
-import org.junit.Assert;
 import org.mockito.Mockito;
 import support.*;
 
@@ -28,17 +27,6 @@ public class AbstractTest {
 
     public AbstractTest() {
         resourceGenerate = new ResourceGenerate();
-    }
-
-    public static void waitForCondition(Condition condition, int attempts) throws Exception {
-        while (attempts-- > 0) {
-            if (condition.eval()) {
-                return;
-            }
-            Thread.sleep(100);
-        }
-
-        Assert.fail("condition was false");
     }
 
     public Framework createFramework() throws Exception {
@@ -122,7 +110,4 @@ public class AbstractTest {
         assertTrue(storageEngine.loadNetworkingEnabledFlag());
     }
 
-    private interface Condition {
-        boolean eval();
-    }
 }

@@ -2,7 +2,9 @@ package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
+import com.tagmycode.plugin.StorageEngine;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
+import com.tagmycode.sdk.model.Snippet;
 import org.junit.Test;
 
 import javax.swing.*;
@@ -10,6 +12,7 @@ import java.awt.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
 public class SnippetsTabTest extends AbstractTest {
 
@@ -55,6 +58,28 @@ public class SnippetsTabTest extends AbstractTest {
         assertSnippetButtonsEnabledAre(snippetsTab, false);
         snippetsTab.enableButtonsForSnippet();
         assertSnippetButtonsEnabledAre(snippetsTab, true);
+    }
+
+    @Test
+    public void testNewSnippetAction() throws Exception {
+        Framework framework = createFramework(createStorage());
+        SnippetsTab snippetsTab = spy(new SnippetsTab(framework));
+
+        snippetsTab.newSnippetAction(framework);
+
+        verify(snippetsTab, times(1)).createEmptySnippet(framework);
+    }
+
+    @Test
+    public void testCreateEmptySnippet() throws Exception {
+        StorageEngine storage = createStorage();
+        storage.saveLastLanguageUsed(resourceGenerate.anotherLanguage());
+        Framework framework = spy(createFramework(storage));
+        SnippetsTab snippetsTab = new SnippetsTab(framework);
+
+        Snippet expectedSnippet = new Snippet();
+        expectedSnippet.setLanguage(resourceGenerate.anotherLanguage());
+        assertEquals(expectedSnippet, snippetsTab.createEmptySnippet(framework));
     }
 
     private void assertSnippetButtonsEnabledAre(SnippetsTab snippetsTab, boolean flag) {
