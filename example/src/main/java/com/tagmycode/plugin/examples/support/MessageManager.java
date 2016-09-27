@@ -11,7 +11,7 @@ public class MessageManager implements IMessageManager {
         new GuiThread().execute(new Runnable() {
             @Override
             public void run() {
-                JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, message, "TagMyCode Error", JOptionPane.ERROR_MESSAGE);
             }
         });
         System.err.println(message);
