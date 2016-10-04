@@ -3,11 +3,6 @@ package com.tagmycode.plugin.gui;
 import javax.swing.*;
 import java.awt.*;
 
-enum CenterLocationType {
-    CENTER_FRAME,
-    CENTER_SCREEN
-}
-
 public class CenterLocation {
     private static CenterLocationType centerType = CenterLocationType.CENTER_FRAME;
     private int x;
