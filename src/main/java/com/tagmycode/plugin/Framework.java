@@ -40,6 +40,7 @@ public class Framework implements IOnErrorCallback {
     private final SnippetsUpdatePollingProcess pollingProcess;
     private final IVersion version;
     private final Data data;
+    private IBrowser browser;
     private MainWindow mainWindow;
     private QuickSearchDialog quickSearchDialog;
     private SettingsForm settingsForm;
@@ -47,6 +48,7 @@ public class Framework implements IOnErrorCallback {
     private AboutDialog aboutDialog;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
+        this.browser = frameworkConfig.getBrowser();
         wallet = new Wallet(frameworkConfig.getPasswordKeyChain());
         client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), wallet);
         tagMyCode = new TagMyCode(client);
@@ -361,5 +363,9 @@ public class Framework implements IOnErrorCallback {
             data.saveAll();
         }
         LOGGER.info("Exiting TagMyCode");
+    }
+
+    public IBrowser getBrowser() {
+        return browser;
     }
 }

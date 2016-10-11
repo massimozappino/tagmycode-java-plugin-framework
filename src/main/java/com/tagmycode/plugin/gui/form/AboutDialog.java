@@ -1,7 +1,7 @@
 package com.tagmycode.plugin.gui.form;
 
-import com.tagmycode.plugin.Browser;
 import com.tagmycode.plugin.Framework;
+import com.tagmycode.plugin.IBrowser;
 import com.tagmycode.plugin.IVersion;
 import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.gui.GuiUtil;
@@ -25,7 +25,7 @@ public class AboutDialog extends AbstractDialog {
         super(framework, parent);
 
         configureButtons();
-        GuiUtil.addClickableLink(tagmycodeLinkLabel, "https://tagmycode.com");
+        GuiUtil.addClickableLink(framework.getBrowser(), tagmycodeLinkLabel, "https://tagmycode.com");
         IVersion version = framework.getVersion();
 
         appendTextToJLabel(versionLabel, version.getVersionString());
@@ -40,16 +40,17 @@ public class AboutDialog extends AbstractDialog {
     }
 
     private void configureButtons() {
+        final IBrowser browser = framework.getBrowser();
         licenseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Browser().openUrl("http://www.apache.org/licenses/LICENSE-2.0");
+                browser.openUrl("http://www.apache.org/licenses/LICENSE-2.0");
             }
         });
         reportAnIssueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Browser().openUrl("https://tagmycode.com/about/contact");
+                browser.openUrl("https://tagmycode.com/about/contact");
             }
         });
     }

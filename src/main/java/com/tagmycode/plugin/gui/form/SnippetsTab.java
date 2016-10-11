@@ -1,6 +1,5 @@
 package com.tagmycode.plugin.gui.form;
 
-import com.tagmycode.plugin.Browser;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.IconResources;
 import com.tagmycode.plugin.gui.*;
@@ -230,7 +229,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     private void openSnippetInBrowser() {
-        new Browser().openUrl(snippetsTable.getSelectedSnippet().getUrl());
+        framework.getBrowser().openUrl(snippetsTable.getSelectedSnippet().getUrl());
     }
 
     private void copyCodeAction() {

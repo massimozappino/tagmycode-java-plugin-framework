@@ -6,7 +6,26 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-public class Browser {
+enum EnumOS {
+    linux, macos, solaris, unknown, windows;
+
+    public boolean isLinux() {
+
+        return this == linux || this == solaris;
+    }
+
+    public boolean isMac() {
+
+        return this == macos;
+    }
+
+    public boolean isWindows() {
+
+        return this == windows;
+    }
+}
+
+public class Browser implements IBrowser {
 
     private final EnumOS os;
 
@@ -14,6 +33,7 @@ public class Browser {
         os = guessOS();
     }
 
+    @Override
     public boolean openUrl(String url) {
         try {
             return openUrl(new URI(url));
@@ -22,7 +42,7 @@ public class Browser {
         }
     }
 
-    public boolean openUrl(URI uri) {
+    private boolean openUrl(URI uri) {
         if (Desktop.isDesktopSupported()) {
             try {
                 Desktop.getDesktop().browse(uri);
@@ -113,26 +133,6 @@ public class Browser {
         }
     }
 }
-
-enum EnumOS {
-    linux, macos, solaris, unknown, windows;
-
-    public boolean isLinux() {
-
-        return this == linux || this == solaris;
-    }
-
-    public boolean isMac() {
-
-        return this == macos;
-    }
-
-    public boolean isWindows() {
-
-        return this == windows;
-    }
-}
-
 
 abstract class Rule {
     public abstract boolean browse(URI uri);

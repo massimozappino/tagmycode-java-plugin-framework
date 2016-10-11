@@ -1,6 +1,5 @@
 package com.tagmycode.plugin.gui.form;
 
-import com.tagmycode.plugin.Browser;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.gui.AbstractDialog;
@@ -33,7 +32,7 @@ public class LoginDialog extends AbstractDialog {
     protected void initWindow() {
         Color background = UIManager.getColor("Panel.background");
         contentPane.setBackground(background);
-        addClickableLink(signupLabel, "https://tagmycode.com/account/signup");
+        addClickableLink(framework.getBrowser(), signupLabel, "https://tagmycode.com/account/signup");
 
         getDialog().setSize(350, 300);
         getDialog().setResizable(false);
@@ -78,7 +77,7 @@ public class LoginDialog extends AbstractDialog {
     }
 
     private void onOpenLink() {
-        new Browser().openUrl(framework.getClient().getAuthorizationUrl());
+        framework.getBrowser().openUrl(framework.getClient().getAuthorizationUrl());
         verificationCodeTextField.requestFocus();
     }
 

@@ -1,5 +1,6 @@
 package com.tagmycode.plugin.examples;
 
+import com.tagmycode.plugin.Browser;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.FrameworkConfig;
 import com.tagmycode.plugin.examples.support.MessageManager;
@@ -41,8 +42,10 @@ public class MainAppExample {
                 new Storage(),
                 new MessageManager(),
                 new TaskFactory(),
+                new Browser(),
                 frame);
         final Framework framework = new Framework(new TagMyCodeApiProduction(), frameworkConfig, new Secret());
+
         framework.start();
         contentPane.add(framework.getMainFrame(), BorderLayout.CENTER);
 
