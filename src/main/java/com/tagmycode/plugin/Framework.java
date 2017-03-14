@@ -1,14 +1,12 @@
 package com.tagmycode.plugin;
 
 
-import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.plugin.gui.IOnErrorCallback;
 import com.tagmycode.plugin.gui.form.*;
 import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.TagMyCode;
-import com.tagmycode.sdk.authentication.OauthToken;
 import com.tagmycode.sdk.authentication.TagMyCodeApi;
 import com.tagmycode.sdk.exception.TagMyCodeApiException;
 import com.tagmycode.sdk.exception.TagMyCodeConnectionException;
@@ -23,6 +21,7 @@ import org.apache.log4j.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class Framework implements IOnErrorCallback {
     public final static Logger LOGGER = Logger.getLogger(Framework.class);
@@ -31,8 +30,6 @@ public class Framework implements IOnErrorCallback {
         BasicConfigurator.configure();
     }
 
-    private final Wallet wallet;
-    private final Client client;
     private final TagMyCode tagMyCode;
     private final Frame parentFrame;
     private final IMessageManager messageManager;
@@ -46,16 +43,19 @@ public class Framework implements IOnErrorCallback {
     private SettingsForm settingsForm;
     private SnippetDialogFactory snippetDialogFactory;
     private AboutDialog aboutDialog;
+    private FrameworkConfig frameworkConfig;
 
-    public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) {
+    public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret, String namespace) throws SQLException {
+        this.frameworkConfig = frameworkConfig;
         this.browser = frameworkConfig.getBrowser();
-        wallet = new Wallet(frameworkConfig.getPasswordKeyChain());
-        client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), wallet);
+        Client client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), new Wallet(frameworkConfig.getPasswordKeyChain()));
         tagMyCode = new TagMyCode(client);
         this.messageManager = frameworkConfig.getMessageManager();
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
-        this.data = new Data(new StorageEngine(frameworkConfig.getStorage()));
+        StorageEngine storageEngine = new StorageEngine(frameworkConfig.getStorage(), frameworkConfig.getDbService());
+        frameworkConfig.getDbService().initialize();
+        this.data = new Data(storageEngine);
         quickSearchDialog = new QuickSearchDialog(this, getParentFrame());
         pollingProcess = new SnippetsUpdatePollingProcess(this);
         settingsForm = new SettingsForm(this, getParentFrame());
@@ -65,7 +65,7 @@ public class Framework implements IOnErrorCallback {
         this.mainWindow = new MainWindow(this);
     }
 
-    public void start() throws IOException, TagMyCodeException {
+    public void start() throws IOException, TagMyCodeException, SQLException {
         restoreData();
 
         boolean initialized = isInitialized();
@@ -120,34 +120,16 @@ public class Framework implements IOnErrorCallback {
         return mainWindow;
     }
 
-    public LanguageCollection getLanguageCollection() {
-        return data.getLanguages();
-    }
-
-    public void setLanguageCollection(LanguageCollection languageCollection) {
-        data.setLanguages(languageCollection);
+    public void setLanguageCollection(LanguageCollection languageCollection) throws TagMyCodeStorageException {
+        getStorageEngine().saveLanguageCollection(languageCollection);
     }
 
     public AbstractTaskFactory getTaskFactory() {
         return taskFactory;
     }
 
-    public Wallet getWallet() {
-        return wallet;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
     public IMessageManager getMessageManager() {
         return messageManager;
-    }
-
-    public OauthToken loadAccessTokenFormWallet() throws TagMyCodeException {
-        OauthToken oauthToken = wallet.loadOauthToken();
-        client.setOauthToken(oauthToken);
-        return oauthToken;
     }
 
     public void fetchAndStoreAllData() throws TagMyCodeException {
@@ -169,29 +151,25 @@ public class Framework implements IOnErrorCallback {
         getMainWindow().setLoggedIn(false);
         pollingProcess.terminate();
         try {
-            wallet.deleteAccessToken();
-        } catch (TagMyCodeGuiException e) {
+            reset();
+        } catch (TagMyCodeException e) {
             manageTagMyCodeExceptions(e);
-        } finally {
-            try {
-                reset();
-            } catch (TagMyCodeException e) {
-                manageTagMyCodeExceptions(e);
-            } catch (IOException e) {
-                manageTagMyCodeExceptions(new TagMyCodeException(e));
-            }
         }
     }
 
-    public void reset() throws TagMyCodeException, IOException {
+    void reset() throws TagMyCodeException {
+        try {
+            data.clearDataAndStorage();
+        } catch (SQLException | IOException e) {
+           throw new TagMyCodeException(e);
+        }
         tagMyCode.setLastSnippetsUpdate(null);
-        data.clearDataAndStorage();
-        client.revokeAccess();
+        tagMyCode.revokeAccessToken();
         snippetsDataChanged();
     }
 
     public boolean isInitialized() {
-        return client.isAuthenticated() && data.getAccount() != null && data.getLanguages() != null;
+        return tagMyCode.isAuthenticated() && data.getAccount() != null && data.getLanguages() != null;
     }
 
     public Frame getParentFrame() {
@@ -238,9 +216,9 @@ public class Framework implements IOnErrorCallback {
         return isInitialized();
     }
 
-    public void restoreData() throws IOException {
+    public void restoreData() throws IOException, SQLException {
         try {
-            loadAccessTokenFormWallet();
+            tagMyCode.loadOauthToken();
             loadData();
         } catch (TagMyCodeStorageException e) {
             data.clearDataAndStorage();
@@ -252,27 +230,17 @@ public class Framework implements IOnErrorCallback {
 
     public void initialize(final String verificationCode) {
         mainWindow.setLoggedIn(true);
-
         try {
-            getWallet().saveOauthToken(client.getOauthToken());
-            try {
-                try {
-                    getClient().fetchOauthToken(verificationCode);
-                } catch (TagMyCodeConnectionException e) {
-                    throw new TagMyCodeGuiException("Unable to authenticate");
-                }
-                fetchAndStoreAllData();
-                saveSnippetsDataChanged();
-                if (isNetworkingEnabled()) {
-                    pollingProcess.start();
-                }
-            } catch (TagMyCodeException ex) {
-                manageTagMyCodeExceptions(ex);
-                logout();
+            tagMyCode.authenticate(verificationCode);
+
+            fetchAndStoreAllData();
+            saveSnippetsDataChanged();
+            if (isNetworkingEnabled()) {
+                pollingProcess.start();
             }
-        } catch (TagMyCodeGuiException e) {
-            manageTagMyCodeExceptions(e);
-            logoutAndAuthenticateAgain();
+        } catch (TagMyCodeException ex) {
+            manageTagMyCodeExceptions(ex);
+            logout();
         }
     }
 
@@ -358,14 +326,21 @@ public class Framework implements IOnErrorCallback {
         }
     }
 
-    public void closeFramework() throws TagMyCodeStorageException {
+    public void closeFramework() throws TagMyCodeStorageException, IOException {
+        // TODO wait for all pending tasks
         if (isInitialized()) {
             data.saveAll();
         }
+        // TODO test close db connection
+        getStorageEngine().getDbService().close();
         LOGGER.info("Exiting TagMyCode");
     }
 
     public IBrowser getBrowser() {
         return browser;
+    }
+
+    public FrameworkConfig getFrameworkConfig() {
+        return frameworkConfig;
     }
 }

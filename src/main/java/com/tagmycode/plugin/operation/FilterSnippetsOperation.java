@@ -8,6 +8,7 @@ import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
 import javax.swing.table.TableRowSorter;
+import java.sql.SQLException;
 import java.util.Vector;
 
 public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> {
@@ -53,10 +54,10 @@ public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Void
         });
     }
 
-    private Vector<Integer> filterSnippets() {
+    private Vector<Integer> filterSnippets() throws SQLException {
         final Vector<Integer> filteredIds = new Vector<>();
         int position = 0;
-        for (Snippet snippet : framework.getData().getSnippets()) {
+        for (Snippet snippet : framework.getStorageEngine().getDbService().snippetDao().queryForAll()) {
             if (search(filterText, snippet.getCode())
                     || search(filterText, snippet.getTitle())
                     || search(filterText, snippet.getDescription())

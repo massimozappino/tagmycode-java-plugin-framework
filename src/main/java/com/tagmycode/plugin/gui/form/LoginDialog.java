@@ -77,7 +77,7 @@ public class LoginDialog extends AbstractDialog {
     }
 
     private void onOpenLink() {
-        framework.getBrowser().openUrl(framework.getClient().getAuthorizationUrl());
+        framework.getBrowser().openUrl(framework.getTagMyCode().getAuthorizationUrl());
         verificationCodeTextField.requestFocus();
     }
 

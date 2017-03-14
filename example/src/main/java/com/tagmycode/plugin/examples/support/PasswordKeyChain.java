@@ -1,11 +1,13 @@
 package com.tagmycode.plugin.examples.support;
 
 import com.tagmycode.plugin.IPasswordKeyChain;
+import com.tagmycode.sdk.SaveFilePath;
+
+import java.io.File;
 
 
 public class PasswordKeyChain extends HashMapToFile implements IPasswordKeyChain {
-    public PasswordKeyChain()
-    {
-        super(new SaveFilePath().getPath("tagmycode_secrets.ser"));
+    public PasswordKeyChain(SaveFilePath saveFilePath) {
+        super(saveFilePath.getPath() + File.separator + "keychain");
     }
 }

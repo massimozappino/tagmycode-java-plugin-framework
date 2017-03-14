@@ -1,9 +1,17 @@
 package com.tagmycode.plugin;
 
+import com.tagmycode.plugin.exception.TagMyCodeStorageException;
+import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.*;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 import support.FakeStorage;
+import support.MemDbService;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.spy;
@@ -14,9 +22,11 @@ public class StorageEngineTest extends AbstractTest {
     private StorageEngine storageEngine;
 
     @Before
-    public void init() {
+    public void init() throws SQLException {
         FakeStorage storageSpy = spy(new FakeStorage());
-        storageEngine = new StorageEngine(storageSpy);
+        MemDbService dbService = new MemDbService();
+        dbService.initialize();
+        storageEngine = new StorageEngine(storageSpy, dbService);
     }
 
     @Test
@@ -39,7 +49,7 @@ public class StorageEngineTest extends AbstractTest {
         LanguageCollection newLanguageCollection = resourceGenerate.aLanguageCollection();
         newLanguageCollection.add(new DefaultLanguage());
         storageEngine.saveLanguageCollection(newLanguageCollection);
-        assertEquals(newLanguageCollection, storageEngine.loadLanguageCollection());
+        assertCollectionsAreEquals(newLanguageCollection, storageEngine.loadLanguageCollection());
     }
 
     @Test
@@ -75,16 +85,18 @@ public class StorageEngineTest extends AbstractTest {
 
     @Test
     public void testSaveAndLoadSnippets() throws Exception {
+        storageEngine.saveLanguageCollection(resourceGenerate.aLanguageCollection());
+
         SnippetCollection snippetCollection = resourceGenerate.aSnippetCollection();
         storageEngine.saveSnippets(snippetCollection);
-        assertEquals(snippetCollection, storageEngine.loadSnippets());
+        assertCollectionsAreEquals(snippetCollection, storageEngine.loadSnippets());
 
         SnippetCollection newSnippetCollection = resourceGenerate.aSnippetCollection();
-        newSnippetCollection.add(resourceGenerate.anotherSnippet());
+        newSnippetCollection.add(resourceGenerate.anotherSnippet().setId(3));
         assertEquals(3, newSnippetCollection.size());
 
         storageEngine.saveSnippets(newSnippetCollection);
-        assertEquals(newSnippetCollection, storageEngine.loadSnippets());
+        assertCollectionsAreEquals(newSnippetCollection, storageEngine.loadSnippets());
     }
 
     @Test
@@ -109,5 +121,34 @@ public class StorageEngineTest extends AbstractTest {
         storageEngine.saveSnippets(resourceGenerate.aSnippetCollection());
         storageEngine.clearAll();
         assertStorageDataIsCleared(storageEngine);
+    }
+
+    private void assertStorageDataIsCleared(StorageEngine storageEngine) throws IOException, TagMyCodeJsonException, TagMyCodeStorageException {
+        assertNull(storageEngine.loadAccount());
+        LanguageCollection languageCollection = new LanguageCollection();
+        languageCollection.add(new DefaultLanguage());
+        assertEquals(languageCollection, storageEngine.loadLanguageCollection());
+        assertEquals(new DefaultLanguage(), storageEngine.loadLastLanguageUsed());
+        assertEquals(new SnippetCollection(), storageEngine.loadSnippets());
+        assertFalse(storageEngine.loadPrivateSnippetFlag());
+        assertTrue(storageEngine.loadNetworkingEnabledFlag());
+    }
+
+    private void assertCollectionsAreEquals(List expectedList, List actualList) throws JSONException {
+        assertEquals(expectedList.size(), actualList.size());
+
+        boolean found;
+        for (Object expectedElement : expectedList) {
+            found = false;
+            for (Object actualElement : actualList) {
+                if (expectedElement.equals(actualElement)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                fail("Actual element not found: " + ((ModelAbstract)expectedElement).toJson());
+            }
+        }
     }
 }

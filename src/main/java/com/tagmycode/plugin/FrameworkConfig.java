@@ -1,22 +1,26 @@
 package com.tagmycode.plugin;
 
+import com.tagmycode.sdk.DbService;
+
 import java.awt.*;
 
 public class FrameworkConfig {
     private final IPasswordKeyChain passwordManager;
     private final IStorage storage;
+    private final DbService dbService;
     private final IMessageManager messageManager;
     private final IBrowser browser;
     private final Frame parentFrame;
     private AbstractTaskFactory task;
 
-    public FrameworkConfig(IPasswordKeyChain passwordManager, IStorage storage, IMessageManager messageManager, AbstractTaskFactory task, Frame parentFrame) {
-        this(passwordManager, storage, messageManager, task, new Browser(), parentFrame);
+    public FrameworkConfig(IPasswordKeyChain passwordManager, IStorage storage, DbService dbService, IMessageManager messageManager, AbstractTaskFactory task, Frame parentFrame) {
+        this(passwordManager, storage, dbService, messageManager, task, new Browser(), parentFrame);
     }
 
-    public FrameworkConfig(IPasswordKeyChain passwordManager, IStorage storage, IMessageManager messageManager, AbstractTaskFactory task, IBrowser browser, Frame parentFrame) {
+    public FrameworkConfig(IPasswordKeyChain passwordManager, IStorage storage, DbService dbService, IMessageManager messageManager, AbstractTaskFactory task, IBrowser browser, Frame parentFrame) {
         this.passwordManager = passwordManager;
         this.storage = storage;
+        this.dbService = dbService;
         this.messageManager = messageManager;
         this.task = task;
         this.browser = browser;
@@ -29,6 +33,10 @@ public class FrameworkConfig {
 
     public IStorage getStorage() {
         return storage;
+    }
+
+    public DbService getDbService() {
+        return dbService;
     }
 
     public IMessageManager getMessageManager() {
@@ -46,5 +54,4 @@ public class FrameworkConfig {
     public Frame getParentFrame() {
         return parentFrame;
     }
-
 }

@@ -2,9 +2,12 @@ package com.tagmycode.plugin;
 
 
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
+import com.tagmycode.sdk.DbService;
 import com.tagmycode.sdk.model.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 public class StorageEngine {
     private static final String SNIPPETS = "snippets";
@@ -15,9 +18,15 @@ public class StorageEngine {
     private static final String ACCOUNT = "account";
     private static final String SNIPPETS_LAST_UPDATE = "snippets_last_update";
     private final IStorage storage;
+    private final DbService dbService;
 
-    public StorageEngine(IStorage storage) {
+    public StorageEngine(IStorage storage, DbService dbService) throws SQLException {
         this.storage = storage;
+        this.dbService = dbService;
+    }
+
+    public DbService getDbService() {
+        return dbService;
     }
 
     public User loadAccount() throws TagMyCodeStorageException {
@@ -37,32 +46,53 @@ public class StorageEngine {
         }
     }
 
-    public LanguageCollection loadLanguageCollection() {
-        LanguageCollection languageCollection;
+    public List<Language> loadLanguageCollection() {
         try {
-            String jsonLanguages = read(LANGUAGES);
-            languageCollection = new LanguageCollection(jsonLanguages);
-        } catch (Exception e) {
-            languageCollection = createDefaultLanguageCollection();
-        }
+            List<Language> languages = dbService.languageDao().queryForAll();
 
-        return languageCollection;
+            if (languages.size() == 0) {
+                languages.add(new DefaultLanguage());
+            }
+            return languages;
+        } catch (Exception e) {
+            return createDefaultLanguageCollection();
+        }
+// TODO
+
+//        LanguageCollection languageCollection;
+//        try {
+//            String jsonLanguages = read(LANGUAGES);
+//            languageCollection = new LanguageCollection(jsonLanguages);
+//        } catch (Exception e) {
+//            languageCollection = createDefaultLanguageCollection();
+//        }
+//
+//        return languageCollection;
     }
 
     private LanguageCollection createDefaultLanguageCollection() {
         return new DefaultLanguageCollection();
     }
 
-    public void saveLanguageCollection(LanguageCollection languageCollection) throws TagMyCodeStorageException {
-        try {
-            String languageCollectionJson = "";
-            if (languageCollection != null) {
-                languageCollectionJson = languageCollection.toJson();
+    public void saveLanguageCollection(List<Language> languageCollection) throws TagMyCodeStorageException {
+        for (Language language : languageCollection) {
+            try {
+                //TODO check for null languageList
+                dbService.languageDao().createOrUpdate(language);
+            } catch (SQLException e) {
+                throw new TagMyCodeStorageException(e);
             }
-            write(LANGUAGES, languageCollectionJson);
-        } catch (Exception e) {
-            throw new TagMyCodeStorageException(e);
         }
+// TODO
+//        try {
+//            String languageCollectionJson = "";
+//            if (languageCollection != null) {
+//                languageCollectionJson = languageCollection.toJson();
+//            }
+//            write(LANGUAGES, languageCollectionJson);
+//        } catch (Exception e) {
+//            throw new TagMyCodeStorageException(e);
+//        }
 
     }
 
@@ -129,21 +159,26 @@ public class StorageEngine {
     }
 
     public SnippetCollection loadSnippets() {
-        SnippetCollection snippets;
+        SnippetCollection snippets = createDefaultSnippetCollection();
         try {
-            snippets = new SnippetCollection(read(SNIPPETS));
+            for (Snippet snippet : dbService.snippetDao().queryForAll()) {
+                snippets.add(snippet);
+            }
         } catch (Exception e) {
             snippets = createDefaultSnippetCollection();
         }
         return snippets;
     }
 
-    public void saveSnippets(SnippetCollection snippetCollection) throws TagMyCodeStorageException {
+    public void saveSnippets(List<Snippet> snippetCollection) throws TagMyCodeStorageException {
         try {
             if (snippetCollection == null) {
                 snippetCollection = createDefaultSnippetCollection();
             }
-            write(SNIPPETS, snippetCollection.toJson());
+            for (Snippet snippet : snippetCollection) {
+                dbService.snippetDao().createOrUpdate(snippet);
+            }
+
         } catch (Exception e) {
             throw new TagMyCodeStorageException(e);
         }
@@ -168,7 +203,7 @@ public class StorageEngine {
         }
     }
 
-    public void clearAll() throws IOException {
+    public void clearAll() throws IOException, SQLException {
         unset(ACCOUNT);
         unset(LANGUAGES);
         unset(PRIVATE_SNIPPET);
@@ -177,8 +212,9 @@ public class StorageEngine {
         unset(NETWORKING_ENABLED);
     }
 
-    private void unset(String key) throws IOException {
+    private void unset(String key) throws IOException, SQLException {
         storage.unset(key);
+        dbService.clearAllTables();
     }
 
     private String read(String value) throws IOException {

@@ -112,7 +112,7 @@ public class SnippetDialogTest extends AbstractTest {
     public void lastSelectedLanguageWillBeDefaultAfterShowingDialog() throws Exception {
         final Framework framework = createFramework();
 
-        mockClientReturningValidAccountData(framework);
+        mockTagMyCodeReturningValidAccountData(framework);
         framework.fetchAndStoreAllData();
         framework.getStorageEngine().saveLastLanguageUsed(resourceGenerate.aLanguage());
         framework.getStorageEngine().savePrivateSnippetFlag(true);
@@ -184,9 +184,9 @@ public class SnippetDialogTest extends AbstractTest {
 
     @Test
     public void testChangeLanguage() throws Exception {
-        Framework spyFramework = createSpyFramework();
-        when(spyFramework.getLanguageCollection()).thenReturn(resourceGenerate.aLanguageCollection());
-        final SnippetDialog snippetDialog = new SnippetDialog(spyFramework, null);
+        Framework framework = createFramework();
+        framework.restoreData();
+        final SnippetDialog snippetDialog = new SnippetDialog(framework, null);
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override
             public void run() {
@@ -318,12 +318,12 @@ public class SnippetDialogTest extends AbstractTest {
         assertSnippetDialogIsModified(snippetDialog);
     }
 
-
     @Test
     public void isModifiedAfterLanguageChanged() throws Exception {
-        Framework spyFramework = createSpyFramework();
-        when(spyFramework.getLanguageCollection()).thenReturn(resourceGenerate.aLanguageCollection());
-        final SnippetDialog snippetDialog = new SnippetDialog(spyFramework, null);
+        Framework framework = createFramework(createStorageEngineWithData());
+        framework.restoreData();
+        final SnippetDialog snippetDialog = new SnippetDialog(framework, null);
+        snippetDialog.display();
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override
             public void run() {

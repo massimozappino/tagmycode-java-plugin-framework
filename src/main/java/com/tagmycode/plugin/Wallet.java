@@ -19,6 +19,7 @@ public class Wallet implements IOauthWallet {
         return passwordKeyChain;
     }
 
+    @Override
     public OauthToken loadOauthToken() throws TagMyCodeGuiException {
         String accessTokenString = passwordKeyChain.loadValue(ACCESS_TOKEN);
         String refreshTokenString = passwordKeyChain.loadValue(REFRESH_TOKEN);
@@ -37,7 +38,8 @@ public class Wallet implements IOauthWallet {
         passwordKeyChain.saveValue(REFRESH_TOKEN, accessToken.getRefreshToken().getToken());
     }
 
-    public void deleteAccessToken() throws TagMyCodeGuiException {
+    @Override
+    public void deleteOauthToken() throws TagMyCodeGuiException {
         passwordKeyChain.deleteValue(ACCESS_TOKEN);
         passwordKeyChain.deleteValue(REFRESH_TOKEN);
     }

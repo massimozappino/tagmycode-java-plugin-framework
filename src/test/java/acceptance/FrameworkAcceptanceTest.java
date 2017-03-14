@@ -25,8 +25,7 @@ public class FrameworkAcceptanceTest extends AbstractTest {
 
     @Test
     public void afterLoginInitializeIsCalled() throws Exception {
-        Framework framework = createFramework(createStorage());
-        mockClientReturningValidAccountData(framework);
+        Framework framework = createFramework(createStorageEngineWithData());
         Framework frameworkSpy = spy(framework);
 
         final LoginDialog loginDialog = frameworkSpy.showLoginDialog();
@@ -46,9 +45,9 @@ public class FrameworkAcceptanceTest extends AbstractTest {
 
     @Test
     public void afterLogoutLSetLastSnippetsUpdateIsCleared() throws Exception {
-        Framework framework = createFramework(createStorage());
+        Framework framework = createFramework(createStorageEngineWithData());
         framework.start();
-        mockClientReturningValidAccountData(framework);
+        mockTagMyCodeReturningValidAccountData(framework);
         Framework frameworkSpy = spy(framework);
         assertTrue(frameworkSpy.isInitialized());
         assertDataIsValid(framework.getData());
@@ -59,8 +58,8 @@ public class FrameworkAcceptanceTest extends AbstractTest {
 
     @Test
     public void selectASnippetAndSeeDetailsOnRightPanel() throws Exception {
-        Framework framework = createFramework(createStorage());
-        mockClientReturningValidAccountData(framework);
+        Framework framework = createFramework(createStorageEngineWithData());
+        mockTagMyCodeReturningValidAccountData(framework);
         framework.getData().setAccount(resourceGenerate.aUser());
         framework.getData().setSnippets(resourceGenerate.aSnippetCollection());
         framework.getData().saveAll();
@@ -82,10 +81,10 @@ public class FrameworkAcceptanceTest extends AbstractTest {
 
     @Test
     public void networkingEnabledAfterRestart() throws Exception {
-        StorageEngine storage = createStorage();
+        StorageEngine storage = createStorageEngineWithData();
         storage.saveNetworkingEnabledFlag(true);
         Framework framework = createFramework(storage);
-        mockClientReturningValidAccountData(framework);
+        mockTagMyCodeReturningValidAccountData(framework);
 
         framework.start();
 
@@ -103,11 +102,11 @@ public class FrameworkAcceptanceTest extends AbstractTest {
         assertTrue(framework.getMainWindow().getSnippetsTab().getButtonNetworking().getIcon().toString().contains("/icons/disconnected.png"));
     }
 
-    public Framework acceptanceFramework() throws Exception {
-        StorageEngine storage = createStorage();
+    private Framework acceptanceFramework() throws Exception {
+        StorageEngine storage = createStorageEngineWithData();
         storage.saveNetworkingEnabledFlag(false);
         Framework framework = createFramework(storage);
-        mockClientReturningValidAccountData(framework);
+        mockTagMyCodeReturningValidAccountData(framework);
         return framework;
     }
 }

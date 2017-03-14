@@ -30,7 +30,7 @@ public class WalletTest {
     @Test
     public void saveAndDeleteAccessToken() throws Exception {
         wallet.saveOauthToken(oauthToken);
-        wallet.deleteAccessToken();
+        wallet.deleteOauthToken();
         assertEquals(null, wallet.loadOauthToken());
     }
 

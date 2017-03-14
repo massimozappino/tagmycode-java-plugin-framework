@@ -2,18 +2,17 @@ package com.tagmycode.plugin;
 
 
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
-import com.tagmycode.sdk.model.DefaultLanguageCollection;
-import com.tagmycode.sdk.model.LanguageCollection;
-import com.tagmycode.sdk.model.SnippetCollection;
-import com.tagmycode.sdk.model.User;
+import com.tagmycode.sdk.model.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 public class Data {
 
     private StorageEngine storage;
     private User account;
-    private LanguageCollection languages;
+    private List<Language> languages;
     private SnippetCollection snippets;
     private String lastSnippetsUpdate;
     private boolean networkingEnabled;
@@ -23,7 +22,7 @@ public class Data {
         reset();
     }
 
-    public void clearDataAndStorage() throws IOException {
+    public void clearDataAndStorage() throws IOException, SQLException {
         reset();
         storage.clearAll();
     }
@@ -44,11 +43,11 @@ public class Data {
         this.account = account;
     }
 
-    public LanguageCollection getLanguages() {
+    public List<Language> getLanguages() {
         return languages;
     }
 
-    public void setLanguages(LanguageCollection languages) {
+    public void setLanguages(List<Language> languages) {
         this.languages = languages;
     }
 

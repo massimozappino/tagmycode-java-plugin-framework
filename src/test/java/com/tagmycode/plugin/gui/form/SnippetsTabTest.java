@@ -31,16 +31,16 @@ public class SnippetsTabTest extends AbstractTest {
 
     @Test
     public void testSelection() throws Exception {
-        Framework framework = createFramework(createStorage());
-        framework.getData().loadAll();
+        Framework framework = createFramework();
+        framework.restoreData();
+
         SnippetsTab snippetsTab = new SnippetsTab(framework);
         SnippetsTable snippetsTable = snippetsTab.getSnippetsTable();
         snippetsTable.fireSnippetsChanged();
         JPanel snippetViewFormPanel = snippetsTab.getSnippetViewFormPane();
+        JTable jTable = snippetsTable.getSnippetsComponent();
 
         assertEquals(0, snippetViewFormPanel.getComponentCount());
-
-        JTable jTable = snippetsTable.getSnippetsComponent();
         assertEquals(2, jTable.getRowCount());
 
         jTable.setRowSelectionInterval(0, 0);
@@ -53,7 +53,7 @@ public class SnippetsTabTest extends AbstractTest {
 
     @Test
     public void disableEnableButtonsForSnippet() throws Exception {
-        SnippetsTab snippetsTab = new SnippetsTab(createFramework(createStorage()));
+        SnippetsTab snippetsTab = new SnippetsTab(createFramework(createStorageEngineWithData()));
         snippetsTab.disableButtonsForSnippet();
         assertSnippetButtonsEnabledAre(snippetsTab, false);
         snippetsTab.enableButtonsForSnippet();
@@ -62,7 +62,7 @@ public class SnippetsTabTest extends AbstractTest {
 
     @Test
     public void testNewSnippetAction() throws Exception {
-        Framework framework = createFramework(createStorage());
+        Framework framework = createFramework(createStorageEngineWithData());
         SnippetsTab snippetsTab = spy(new SnippetsTab(framework));
 
         snippetsTab.newSnippetAction(framework);
@@ -72,7 +72,7 @@ public class SnippetsTabTest extends AbstractTest {
 
     @Test
     public void testCreateEmptySnippet() throws Exception {
-        StorageEngine storage = createStorage();
+        StorageEngine storage = createStorageEngineWithData();
         storage.saveLastLanguageUsed(resourceGenerate.anotherLanguage());
         Framework framework = spy(createFramework(storage));
         SnippetsTab snippetsTab = new SnippetsTab(framework);

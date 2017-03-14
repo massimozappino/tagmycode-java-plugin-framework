@@ -1,7 +1,6 @@
 package com.tagmycode.plugin;
 
 import org.junit.Test;
-import support.FakeStorage;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -10,7 +9,7 @@ public class DataTest extends AbstractTest {
 
     @Test
     public void testLoadLanguageCollection() throws Exception {
-        StorageEngine storageSpy = spy(new StorageEngine(new FakeStorage()));
+        StorageEngine storageSpy = spy(createStorageEngine());
         Data data = new Data(storageSpy);
         data.setAccount(resourceGenerate.aUser());
         data.setLanguages(resourceGenerate.aLanguageCollection());
@@ -23,7 +22,7 @@ public class DataTest extends AbstractTest {
 
     @Test
     public void testLoadFromStorage() throws Exception {
-        Data data = new Data(createStorage());
+        Data data = new Data(createStorageEngineWithData());
 
         data.loadAll();
 
@@ -47,7 +46,7 @@ public class DataTest extends AbstractTest {
 
     @Test
     public void testSaveAll() throws Exception {
-        StorageEngine storage = new StorageEngine(new FakeStorage());
+        StorageEngine storage = createStorageEngine();
         Data data = new Data(storage);
 
         data.setAccount(resourceGenerate.aUser());

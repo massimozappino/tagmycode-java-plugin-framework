@@ -1,15 +1,17 @@
 package com.tagmycode.plugin.examples.support;
 
 import com.tagmycode.plugin.IStorage;
+import com.tagmycode.sdk.SaveFilePath;
 
+import java.io.File;
 import java.io.IOException;
 
 public class Storage implements IStorage {
 
     private HashMapToFile hashMapToFile;
 
-    public Storage() {
-        this.hashMapToFile = new HashMapToFile(new SaveFilePath().getPath("tagmycode_storage.ser"));
+    public Storage(SaveFilePath saveFilePath) {
+        this.hashMapToFile = new HashMapToFile(saveFilePath.getPath() + File.separator + "hashmap");
     }
 
     @Override

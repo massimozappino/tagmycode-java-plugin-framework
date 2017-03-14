@@ -15,7 +15,7 @@ public class CodeFieldValidationTest extends AbstractTest {
     @Test
     public void testValidate() throws Exception {
         Framework framework = createFramework();
-        mockClientReturningValidAccountData(framework);
+        mockTagMyCodeReturningValidAccountData(framework);
         JEditorPane field = spy(new JEditorPane());
         CodeFieldValidation codeFieldValidation = new CodeFieldValidation(field, framework);
 

@@ -146,8 +146,8 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     private void populateLanguages() {
-        for (Language l : framework.getLanguageCollection()) {
-            defaultComboBoxModel.addElement(l);
+        for (Language language : framework.getData().getLanguages()) {
+            defaultComboBoxModel.addElement(language);
         }
     }
 

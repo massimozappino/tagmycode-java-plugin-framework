@@ -9,6 +9,8 @@ import com.tagmycode.plugin.examples.support.Storage;
 import com.tagmycode.plugin.examples.support.TaskFactory;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
+import com.tagmycode.sdk.DbService;
+import com.tagmycode.sdk.SaveFilePath;
 import com.tagmycode.sdk.authentication.TagMyCodeApiProduction;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 
@@ -19,9 +21,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class MainAppExample {
-    public static void main(String args[]) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, TagMyCodeException {
+    public static void main(String args[]) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, TagMyCodeException, SQLException {
         JFrame frame = new JFrame("TagMyCode Plugin Example");
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.setBounds(200, 200, 600, 200);
@@ -36,15 +39,14 @@ public class MainAppExample {
         JButton searchButton = new JButton("Search");
         comp.add(searchButton, BorderLayout.CENTER);
 
-
+        SaveFilePath saveFilePath = new SaveFilePath("tagmycode_framework_example");
         FrameworkConfig frameworkConfig = new FrameworkConfig(
-                new PasswordKeyChain(),
-                new Storage(),
+                new PasswordKeyChain(saveFilePath),
+                new Storage(saveFilePath), new DbService(saveFilePath),
                 new MessageManager(),
                 new TaskFactory(),
-                new Browser(),
-                frame);
-        final Framework framework = new Framework(new TagMyCodeApiProduction(), frameworkConfig, new Secret());
+                new Browser(), frame);
+        final Framework framework = new Framework(new TagMyCodeApiProduction(), frameworkConfig, new Secret(), "demo-example");
 
         framework.start();
         contentPane.add(framework.getMainFrame(), BorderLayout.CENTER);
@@ -66,20 +68,15 @@ public class MainAppExample {
         frame.setVisible(true);
 
         frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
+            public void windowClosing(WindowEvent event) {
+                try {
+                    framework.closeFramework();
+                } catch (TagMyCodeStorageException | IOException e) {
+                    e.printStackTrace();
+                }
                 System.exit(0);
             }
         });
-
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            public void run() {
-                try {
-                    framework.closeFramework();
-                } catch (TagMyCodeStorageException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, "Shutdown-thread"));
     }
 
     private static JPanel getLookAndFeelPanel(final Frame frame) {
