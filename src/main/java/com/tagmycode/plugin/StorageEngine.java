@@ -57,17 +57,6 @@ public class StorageEngine {
         } catch (Exception e) {
             return createDefaultLanguageCollection();
         }
-// TODO
-
-//        LanguageCollection languageCollection;
-//        try {
-//            String jsonLanguages = read(LANGUAGES);
-//            languageCollection = new LanguageCollection(jsonLanguages);
-//        } catch (Exception e) {
-//            languageCollection = createDefaultLanguageCollection();
-//        }
-//
-//        return languageCollection;
     }
 
     private LanguageCollection createDefaultLanguageCollection() {
@@ -75,25 +64,16 @@ public class StorageEngine {
     }
 
     public void saveLanguageCollection(List<Language> languageCollection) throws TagMyCodeStorageException {
+        if (languageCollection == null) {
+            languageCollection = new LanguageCollection();
+        }
         for (Language language : languageCollection) {
             try {
-                //TODO check for null languageList
                 dbService.languageDao().createOrUpdate(language);
             } catch (SQLException e) {
                 throw new TagMyCodeStorageException(e);
             }
         }
-// TODO
-//        try {
-//            String languageCollectionJson = "";
-//            if (languageCollection != null) {
-//                languageCollectionJson = languageCollection.toJson();
-//            }
-//            write(LANGUAGES, languageCollectionJson);
-//        } catch (Exception e) {
-//            throw new TagMyCodeStorageException(e);
-//        }
-
     }
 
     public boolean loadPrivateSnippetFlag() {
