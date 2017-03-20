@@ -6,7 +6,7 @@ import com.tagmycode.sdk.model.*;
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
-import support.FakeStorage;
+
 import support.MemDbService;
 
 import java.io.IOException;
@@ -14,7 +14,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.spy;
 
 
 public class StorageEngineTest extends AbstractTest {
@@ -23,10 +22,9 @@ public class StorageEngineTest extends AbstractTest {
 
     @Before
     public void init() throws SQLException {
-        FakeStorage storageSpy = spy(new FakeStorage());
         MemDbService dbService = new MemDbService();
         dbService.initialize();
-        storageEngine = new StorageEngine(storageSpy, dbService);
+        storageEngine = new StorageEngine(dbService);
     }
 
     @Test

@@ -6,20 +6,18 @@ import java.awt.*;
 
 public class FrameworkConfig {
     private final IPasswordKeyChain passwordManager;
-    private final IStorage storage;
     private final DbService dbService;
     private final IMessageManager messageManager;
     private final IBrowser browser;
     private final Frame parentFrame;
     private AbstractTaskFactory task;
 
-    public FrameworkConfig(IPasswordKeyChain passwordManager, IStorage storage, DbService dbService, IMessageManager messageManager, AbstractTaskFactory task, Frame parentFrame) {
-        this(passwordManager, storage, dbService, messageManager, task, new Browser(), parentFrame);
+    public FrameworkConfig(IPasswordKeyChain passwordManager, DbService dbService, IMessageManager messageManager, AbstractTaskFactory task, Frame parentFrame) {
+        this(passwordManager, dbService, messageManager, task, new Browser(), parentFrame);
     }
 
-    public FrameworkConfig(IPasswordKeyChain passwordManager, IStorage storage, DbService dbService, IMessageManager messageManager, AbstractTaskFactory task, IBrowser browser, Frame parentFrame) {
+    public FrameworkConfig(IPasswordKeyChain passwordManager, DbService dbService, IMessageManager messageManager, AbstractTaskFactory task, IBrowser browser, Frame parentFrame) {
         this.passwordManager = passwordManager;
-        this.storage = storage;
         this.dbService = dbService;
         this.messageManager = messageManager;
         this.task = task;
@@ -29,10 +27,6 @@ public class FrameworkConfig {
 
     public IPasswordKeyChain getPasswordKeyChain() {
         return passwordManager;
-    }
-
-    public IStorage getStorage() {
-        return storage;
     }
 
     public DbService getDbService() {

@@ -53,7 +53,7 @@ public class Framework implements IOnErrorCallback {
         this.messageManager = frameworkConfig.getMessageManager();
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
-        StorageEngine storageEngine = new StorageEngine(frameworkConfig.getStorage(), frameworkConfig.getDbService());
+        StorageEngine storageEngine = new StorageEngine(frameworkConfig.getDbService());
         frameworkConfig.getDbService().initialize();
         this.data = new Data(storageEngine);
         quickSearchDialog = new QuickSearchDialog(this, getParentFrame());

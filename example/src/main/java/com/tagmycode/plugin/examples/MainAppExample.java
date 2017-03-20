@@ -5,7 +5,6 @@ import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.FrameworkConfig;
 import com.tagmycode.plugin.examples.support.MessageManager;
 import com.tagmycode.plugin.examples.support.PasswordKeyChain;
-import com.tagmycode.plugin.examples.support.Storage;
 import com.tagmycode.plugin.examples.support.TaskFactory;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
@@ -42,7 +41,7 @@ public class MainAppExample {
         SaveFilePath saveFilePath = new SaveFilePath("tagmycode_framework_example");
         FrameworkConfig frameworkConfig = new FrameworkConfig(
                 new PasswordKeyChain(saveFilePath),
-                new Storage(saveFilePath), new DbService(saveFilePath),
+                new DbService(saveFilePath),
                 new MessageManager(),
                 new TaskFactory(),
                 new Browser(), frame);

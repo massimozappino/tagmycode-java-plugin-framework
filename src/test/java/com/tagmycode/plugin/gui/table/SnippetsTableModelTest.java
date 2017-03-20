@@ -6,7 +6,6 @@ import com.tagmycode.plugin.StorageEngine;
 import com.tagmycode.plugin.TableModelSnippetNotFoundException;
 import com.tagmycode.sdk.model.SnippetCollection;
 import org.junit.Test;
-import support.FakeStorage;
 import support.ResourceGenerate;
 
 import static org.junit.Assert.*;

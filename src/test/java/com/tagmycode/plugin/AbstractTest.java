@@ -30,7 +30,7 @@ public class AbstractTest {
     }
 
     public Framework createFramework(StorageEngine storageEngine) throws Exception {
-        FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), storageEngine.getStorage(), storageEngine.getDbService(), new FakeMessageManager(), new FakeTaskFactory(), null);
+        FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), storageEngine.getDbService(), new FakeMessageManager(), new FakeTaskFactory(), null);
         return new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret(), "test");
     }
 
@@ -41,7 +41,7 @@ public class AbstractTest {
     protected StorageEngine createStorageEngine() throws SQLException {
         MemDbService dbService = new MemDbService();
         dbService.initialize();
-        return new StorageEngine(new FakeStorage(), dbService);
+        return new StorageEngine(dbService);
     }
 
     public StorageEngine createStorageEngineWithData() throws Exception {

@@ -10,18 +10,14 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class StorageEngine {
-    private static final String SNIPPETS = "snippets";
-    private static final String LANGUAGES = "languages";
     private static final String PRIVATE_SNIPPET = "private_snippet";
     private static final String NETWORKING_ENABLED = "networking_enabled";
     private static final String LAST_LANGUAGE = "last_language";
     private static final String ACCOUNT = "account";
     private static final String SNIPPETS_LAST_UPDATE = "snippets_last_update";
-    private final IStorage storage;
     private final DbService dbService;
 
-    public StorageEngine(IStorage storage, DbService dbService) throws SQLException {
-        this.storage = storage;
+    public StorageEngine(DbService dbService) throws SQLException {
         this.dbService = dbService;
     }
 
@@ -31,7 +27,7 @@ public class StorageEngine {
 
     public User loadAccount() throws TagMyCodeStorageException {
         try {
-            String jsonAccount = read(ACCOUNT);
+            String jsonAccount = readProperty(ACCOUNT).getValue();
             return jsonAccount != null ? new User(jsonAccount) : null;
         } catch (Exception e) {
             throw new TagMyCodeStorageException(e);
@@ -40,7 +36,7 @@ public class StorageEngine {
 
     public void saveAccount(User user) throws TagMyCodeStorageException {
         try {
-            write(ACCOUNT, user.toJson());
+            writeProperty(ACCOUNT, user.toJson());
         } catch (Exception e) {
             throw new TagMyCodeStorageException(e);
         }
@@ -79,16 +75,16 @@ public class StorageEngine {
     public boolean loadPrivateSnippetFlag() {
         String read = null;
         try {
-            read = read(PRIVATE_SNIPPET);
-        } catch (IOException ignored) {
+            read = readProperty(PRIVATE_SNIPPET).getValue();
+        } catch (SQLException ignored) {
         }
         return stringToBoolean(read);
     }
 
     public void savePrivateSnippetFlag(boolean flag) throws TagMyCodeStorageException {
         try {
-            write(PRIVATE_SNIPPET, booleanToString(flag));
-        } catch (IOException e) {
+            writeProperty(PRIVATE_SNIPPET, booleanToString(flag));
+        } catch (SQLException e) {
             throw new TagMyCodeStorageException(e);
         }
     }
@@ -97,8 +93,8 @@ public class StorageEngine {
     public boolean loadNetworkingEnabledFlag() {
         String read = "1";
         try {
-            read = read(NETWORKING_ENABLED);
-        } catch (IOException ignored) {
+            read = readProperty(NETWORKING_ENABLED).getValue();
+        } catch (SQLException ignored) {
 
         }
         if (read == null) read = "1";
@@ -107,8 +103,8 @@ public class StorageEngine {
 
     public void saveNetworkingEnabledFlag(boolean flag) throws TagMyCodeStorageException {
         try {
-            write(NETWORKING_ENABLED, booleanToString(flag));
-        } catch (IOException e) {
+            writeProperty(NETWORKING_ENABLED, booleanToString(flag));
+        } catch (SQLException e) {
             throw new TagMyCodeStorageException(e);
         }
     }
@@ -116,10 +112,15 @@ public class StorageEngine {
     public Language loadLastLanguageUsed() {
         Language lastLanguageUsed;
         try {
-            lastLanguageUsed = new Language(read(LAST_LANGUAGE));
+            String value = readProperty(LAST_LANGUAGE).getValue();
+            if (value == null) {
+                throw  new Exception("Property value is null");
+            }
+            lastLanguageUsed = new Language(value);
         } catch (Exception e) {
             lastLanguageUsed = new DefaultLanguage();
         }
+
         return lastLanguageUsed;
     }
 
@@ -128,15 +129,12 @@ public class StorageEngine {
             if (lastLanguage == null) {
                 lastLanguage = createDefaultLanguage();
             }
-            write(LAST_LANGUAGE, lastLanguage.toJson());
+            writeProperty(LAST_LANGUAGE, lastLanguage.toJson());
         } catch (Exception e) {
             throw new TagMyCodeStorageException(e);
         }
     }
 
-    private Language createDefaultLanguage() {
-        return new DefaultLanguage();
-    }
 
     public SnippetCollection loadSnippets() {
         SnippetCollection snippets = createDefaultSnippetCollection();
@@ -166,47 +164,34 @@ public class StorageEngine {
 
     public void saveLastSnippetsUpdate(String snippetsLastUpdate) throws TagMyCodeStorageException {
         try {
-            if (snippetsLastUpdate == null) {
-                snippetsLastUpdate = "";
-            }
-            write(SNIPPETS_LAST_UPDATE, snippetsLastUpdate);
-        } catch (IOException e) {
+            writeProperty(SNIPPETS_LAST_UPDATE, snippetsLastUpdate);
+        } catch (SQLException e) {
             throw new TagMyCodeStorageException(e);
         }
     }
 
     public String loadLastSnippetsUpdate() throws TagMyCodeStorageException {
         try {
-            return read(SNIPPETS_LAST_UPDATE);
-        } catch (IOException e) {
+            return readProperty(SNIPPETS_LAST_UPDATE).getValue();
+        } catch (SQLException e) {
             throw new TagMyCodeStorageException(e);
         }
     }
 
     public void clearAll() throws IOException, SQLException {
-        unset(ACCOUNT);
-        unset(LANGUAGES);
-        unset(PRIVATE_SNIPPET);
-        unset(LAST_LANGUAGE);
-        unset(SNIPPETS);
-        unset(NETWORKING_ENABLED);
-    }
-
-    private void unset(String key) throws IOException, SQLException {
-        storage.unset(key);
         dbService.clearAllTables();
     }
 
-    private String read(String value) throws IOException {
-        return storage.read(value);
+    private Property readProperty(String key) throws SQLException {
+        Property property = dbService.propertyDao().queryForId(key);
+        if (property == null) {
+           property = new Property();
+        }
+        return property;
     }
 
-    private void write(String key, String value) throws IOException {
-        // Compatibility with other storage engines
-        if (value == null) {
-            throw new NullPointerException();
-        }
-        storage.write(key, value);
+    private void writeProperty(String key, String value) throws SQLException {
+        dbService.propertyDao().createOrUpdate(new Property(key, value));
     }
 
     private boolean stringToBoolean(String s) {
@@ -217,11 +202,11 @@ public class StorageEngine {
         return b ? "1" : "0";
     }
 
-    IStorage getStorage() {
-        return storage;
-    }
-
     private SnippetCollection createDefaultSnippetCollection() {
         return new SnippetCollection();
     }
+    private Language createDefaultLanguage() {
+        return new DefaultLanguage();
+    }
+
 }
