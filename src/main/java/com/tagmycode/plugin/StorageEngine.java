@@ -5,7 +5,6 @@ import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.sdk.DbService;
 import com.tagmycode.sdk.model.*;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -47,16 +46,12 @@ public class StorageEngine {
             List<Language> languages = dbService.languageDao().queryForAll();
 
             if (languages.size() == 0) {
-                languages.add(new DefaultLanguage());
+                throw new Exception("Language size is 0");
             }
             return languages;
         } catch (Exception e) {
-            return createDefaultLanguageCollection();
+            return new DefaultLanguageCollection();
         }
-    }
-
-    private LanguageCollection createDefaultLanguageCollection() {
-        return new DefaultLanguageCollection();
     }
 
     public void saveLanguageCollection(List<Language> languageCollection) throws TagMyCodeStorageException {
@@ -135,7 +130,6 @@ public class StorageEngine {
         }
     }
 
-
     public SnippetCollection loadSnippets() {
         SnippetCollection snippets = createDefaultSnippetCollection();
         try {
@@ -178,7 +172,7 @@ public class StorageEngine {
         }
     }
 
-    public void clearAll() throws IOException, SQLException {
+    public void clearAll() throws SQLException {
         dbService.clearAllTables();
     }
 
