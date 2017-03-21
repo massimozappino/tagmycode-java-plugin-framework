@@ -14,7 +14,7 @@ class DefaultVersion implements IVersion {
             Properties properties = propertiesReader.getProperties("version.properties");
 
             versionString = properties.getProperty("version");
-            buildDate = properties.getProperty("build_date");
+            buildDate = properties.getProperty("buildDate");
         } catch (IOException e) {
             e.printStackTrace();
         }
