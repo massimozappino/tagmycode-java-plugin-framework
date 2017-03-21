@@ -5,6 +5,7 @@ import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.sdk.DbService;
 import com.tagmycode.sdk.model.*;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -203,4 +204,7 @@ public class StorageEngine {
         return new DefaultLanguage();
     }
 
+    public void close() throws IOException {
+        dbService.close();
+    }
 }

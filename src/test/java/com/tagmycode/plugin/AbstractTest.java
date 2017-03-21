@@ -39,9 +39,14 @@ public class AbstractTest {
     }
 
     protected StorageEngine createStorageEngine() throws SQLException {
+        MemDbService dbService = createMemDb();
+        return new StorageEngine(dbService);
+    }
+
+    protected MemDbService createMemDb() throws SQLException {
         MemDbService dbService = new MemDbService();
         dbService.initialize();
-        return new StorageEngine(dbService);
+        return dbService;
     }
 
     public StorageEngine createStorageEngineWithData() throws Exception {

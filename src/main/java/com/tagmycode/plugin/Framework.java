@@ -331,8 +331,8 @@ public class Framework implements IOnErrorCallback {
         if (isInitialized()) {
             data.saveAll();
         }
-        // TODO test close db connection
-        getStorageEngine().getDbService().close();
+
+        getStorageEngine().close();
         LOGGER.info("Exiting TagMyCode");
     }
 

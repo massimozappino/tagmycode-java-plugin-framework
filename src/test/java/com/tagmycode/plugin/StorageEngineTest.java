@@ -1,12 +1,12 @@
 package com.tagmycode.plugin;
 
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
+import com.tagmycode.sdk.DbService;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.*;
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
-
 import support.MemDbService;
 
 import java.io.IOException;
@@ -14,10 +14,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 
 public class StorageEngineTest extends AbstractTest {
-
     private StorageEngine storageEngine;
 
     @Before
@@ -25,6 +25,14 @@ public class StorageEngineTest extends AbstractTest {
         MemDbService dbService = new MemDbService();
         dbService.initialize();
         storageEngine = new StorageEngine(dbService);
+    }
+
+    @Test
+    public void close() throws Exception {
+        DbService dbService = mock(DbService.class);
+        StorageEngine storageEngine = new StorageEngine(dbService);
+        storageEngine.close();
+        verify(dbService, times(1)).close();
     }
 
     @Test
@@ -145,7 +153,7 @@ public class StorageEngineTest extends AbstractTest {
                 }
             }
             if (!found) {
-                fail("Actual element not found: " + ((ModelAbstract)expectedElement).toJson());
+                fail("Actual element not found: " + ((ModelAbstract) expectedElement).toJson());
             }
         }
     }
