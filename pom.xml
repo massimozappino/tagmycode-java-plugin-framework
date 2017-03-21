@@ -13,8 +13,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <tagmycode-sdk.version>1.0.0</tagmycode-sdk.version>
-        <timestamp>${maven.build.timestamp}</timestamp>
-        <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+        <buildDate>${maven.build.timestamp}</buildDate>
         <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
     </properties>
 
@@ -98,9 +97,15 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <doCheck>true</doCheck>
-                    <doUpdate>true</doUpdate>
+                    <format>{0,number}</format>
+                    <items>
+                        <item>buildNumber</item>
+                    </items>
                 </configuration>
+                <!--<configuration>-->
+                    <!--<doCheck>true</doCheck>-->
+                    <!--<doUpdate>true</doUpdate>-->
+                <!--</configuration>-->
             </plugin>
         </plugins>
     </build>
