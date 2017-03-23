@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Storage is based on internal db [Ormlite](http://ormlite.com/)
 
+### Removed
+- removed IStorage
+
 ## 2.0.0 - 2016-07-11
 ### Added
 - new user interface
@@ -38,4 +41,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - First release with feature "Create snippet"
 
 
-[Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/massimozappino/tagmycode-java-plugin-framework/compare/v2.0.0...HEAD
