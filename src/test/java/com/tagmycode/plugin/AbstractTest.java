@@ -31,7 +31,7 @@ public class AbstractTest {
 
     public Framework createFramework(StorageEngine storageEngine) throws Exception {
         FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), storageEngine.getDbService(), new FakeMessageManager(), new FakeTaskFactory(), null);
-        return new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret(), "test");
+        return new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret());
     }
 
     protected Framework createSpyFramework() throws Exception {

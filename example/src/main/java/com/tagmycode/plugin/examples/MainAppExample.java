@@ -45,7 +45,7 @@ public class MainAppExample {
                 new MessageManager(),
                 new TaskFactory(),
                 new Browser(), frame);
-        final Framework framework = new Framework(new TagMyCodeApiProduction(), frameworkConfig, new Secret(), "demo-example");
+        final Framework framework = new Framework(new TagMyCodeApiProduction(), frameworkConfig, new Secret());
 
         framework.start();
         contentPane.add(framework.getMainFrame(), BorderLayout.CENTER);

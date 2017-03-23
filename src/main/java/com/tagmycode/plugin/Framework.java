@@ -45,7 +45,7 @@ public class Framework implements IOnErrorCallback {
     private AboutDialog aboutDialog;
     private FrameworkConfig frameworkConfig;
 
-    public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret, String namespace) throws SQLException {
+    public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) throws SQLException {
         this.frameworkConfig = frameworkConfig;
         this.browser = frameworkConfig.getBrowser();
         Client client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), new Wallet(frameworkConfig.getPasswordKeyChain()));
@@ -221,10 +221,16 @@ public class Framework implements IOnErrorCallback {
             tagMyCode.loadOauthToken();
             loadData();
         } catch (TagMyCodeStorageException e) {
+            // TODO show error and do not clear data
             data.clearDataAndStorage();
             logError(e);
         } catch (TagMyCodeException e) {
             manageTagMyCodeExceptions(e);
+        }
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

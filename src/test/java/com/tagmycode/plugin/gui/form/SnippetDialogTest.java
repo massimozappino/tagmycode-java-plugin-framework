@@ -193,7 +193,6 @@ public class SnippetDialogTest extends AbstractTest {
                 snippetDialog.getLanguageComboBox().setSelectedIndex(0);
             }
         });
-
         assertEquals(SyntaxConstants.SYNTAX_STYLE_JAVA, snippetDialog.getCodeEditorPane().getTextArea().getSyntaxEditingStyle());
     }
 
