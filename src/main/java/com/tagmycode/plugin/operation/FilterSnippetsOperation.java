@@ -57,7 +57,7 @@ public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Void
     private Vector<Integer> filterSnippets() throws SQLException {
         final Vector<Integer> filteredIds = new Vector<>();
         int position = 0;
-        for (Snippet snippet : framework.getStorageEngine().getDbService().snippetDao().queryForAll()) {
+        for (Snippet snippet : framework.getData().getSnippets()) {
             if (search(filterText, snippet.getCode())
                     || search(filterText, snippet.getTitle())
                     || search(filterText, snippet.getDescription())
