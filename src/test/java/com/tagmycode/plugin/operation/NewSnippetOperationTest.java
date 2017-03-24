@@ -1,14 +1,14 @@
 package com.tagmycode.plugin.operation;
 
-import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.form.SnippetDialog;
 import com.tagmycode.sdk.model.Snippet;
 import org.junit.Test;
+import support.AbstractTestBase;
 
 import static org.mockito.Mockito.*;
 
-public class NewSnippetOperationTest extends AbstractTest {
+public class NewSnippetOperationTest extends AbstractTestBase {
 
     @Test
     public void testOnSuccess() throws Exception {

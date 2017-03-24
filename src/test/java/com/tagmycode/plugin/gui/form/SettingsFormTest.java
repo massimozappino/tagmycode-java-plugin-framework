@@ -1,12 +1,12 @@
 package com.tagmycode.plugin.gui.form;
 
-import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
 import org.junit.Test;
+import support.AbstractTestBase;
 
 import static org.junit.Assert.assertEquals;
 
-public class SettingsFormTest extends AbstractTest {
+public class SettingsFormTest extends AbstractTestBase {
 
     @Test
     public void fillData() throws Exception {

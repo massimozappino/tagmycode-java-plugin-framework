@@ -1,13 +1,18 @@
-package com.tagmycode.plugin;
+package support;
 
 
+import com.tagmycode.plugin.Data;
+import com.tagmycode.plugin.Framework;
+import com.tagmycode.plugin.FrameworkConfig;
+import com.tagmycode.plugin.StorageEngine;
+import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.TagMyCodeApiDevelopment;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.DefaultLanguageCollection;
 import com.tagmycode.sdk.model.SnippetCollection;
+import org.junit.After;
 import org.mockito.Mockito;
-import support.*;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -18,10 +23,18 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AbstractTest {
+public class AbstractTestBase {
     protected ResourceGenerate resourceGenerate;
+    private MemDbService memDbService;
 
-    public AbstractTest() {
+    @After
+    public void closeConnections() throws TagMyCodeStorageException, IOException {
+        if (memDbService != null) {
+            memDbService.close();
+        }
+    }
+
+    public AbstractTestBase() {
         resourceGenerate = new ResourceGenerate();
     }
 
@@ -39,14 +52,16 @@ public class AbstractTest {
     }
 
     protected StorageEngine createStorageEngine() throws SQLException {
-        MemDbService dbService = createMemDb();
+        MemDbService dbService = getSingleInstanceOfMemDb();
         return new StorageEngine(dbService);
     }
 
-    protected MemDbService createMemDb() throws SQLException {
-        MemDbService dbService = new MemDbService();
-        dbService.initialize();
-        return dbService;
+    protected MemDbService getSingleInstanceOfMemDb() throws SQLException {
+        if (memDbService == null) {
+            memDbService = new MemDbService();
+            memDbService.initialize();
+        }
+        return memDbService;
     }
 
     public StorageEngine createStorageEngineWithData() throws Exception {

@@ -1,11 +1,11 @@
 package com.tagmycode.plugin.gui.form;
 
-import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.StorageEngine;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.sdk.model.Snippet;
 import org.junit.Test;
+import support.AbstractTestBase;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class SnippetsTabTest extends AbstractTest {
+public class SnippetsTabTest extends AbstractTestBase {
 
     private boolean actual;
 

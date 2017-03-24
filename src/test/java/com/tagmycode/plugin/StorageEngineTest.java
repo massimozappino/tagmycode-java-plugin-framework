@@ -7,6 +7,7 @@ import com.tagmycode.sdk.model.*;
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
+import support.AbstractTestBase;
 import support.MemDbService;
 
 import java.io.IOException;
@@ -16,13 +17,12 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-
-public class StorageEngineTest extends AbstractTest {
+public class StorageEngineTest extends AbstractTestBase {
     private StorageEngine storageEngine;
 
     @Before
     public void init() throws SQLException {
-        MemDbService dbService = new MemDbService();
+        MemDbService dbService = new MemDbService(getClass().getCanonicalName());
         dbService.initialize();
         storageEngine = new StorageEngine(dbService);
     }

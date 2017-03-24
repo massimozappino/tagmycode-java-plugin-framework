@@ -1,16 +1,16 @@
 package com.tagmycode.plugin.operation;
 
-import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.form.SnippetsTab;
 import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.model.Snippet;
 import org.junit.Test;
+import support.AbstractTestBase;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class DeleteSnippetOperationTest extends AbstractTest {
+public class DeleteSnippetOperationTest extends AbstractTestBase {
 
     @Test
     public void testOnSuccess() throws Exception {

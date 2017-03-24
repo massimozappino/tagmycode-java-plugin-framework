@@ -11,6 +11,7 @@ import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.DefaultLanguageCollection;
 import org.junit.Before;
 import org.junit.Test;
+import support.AbstractTestBase;
 import support.ResourceGenerate;
 
 import java.awt.*;
@@ -19,7 +20,7 @@ import java.io.IOException;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class FrameworkTest extends AbstractTest {
+public class FrameworkTest extends AbstractTestBase {
 
     private Framework framework;
     private OauthToken oauthToken;

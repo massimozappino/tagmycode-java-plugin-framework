@@ -1,13 +1,13 @@
 package com.tagmycode.plugin.gui.field;
 
-import com.tagmycode.plugin.AbstractTest;
 import org.junit.Test;
+import support.AbstractTestBase;
 
 import javax.swing.*;
 
 import static org.junit.Assert.assertEquals;
 
-public class TitleFieldValidationTest extends AbstractTest {
+public class TitleFieldValidationTest extends AbstractTestBase {
 
     @Test
     public void testValidate() throws Exception {

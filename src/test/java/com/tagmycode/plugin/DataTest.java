@@ -1,11 +1,12 @@
 package com.tagmycode.plugin;
 
 import org.junit.Test;
+import support.AbstractTestBase;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
-public class DataTest extends AbstractTest {
+public class DataTest extends AbstractTestBase {
 
     @Test
     public void testClearDataAndStorage() throws Exception {

@@ -1,17 +1,17 @@
 package acceptance;
 
-import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.StorageEngine;
 import com.tagmycode.plugin.gui.form.LoginDialog;
 import org.junit.Test;
+import support.AbstractTestBase;
 
 import javax.swing.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class FrameworkAcceptanceTest extends AbstractTest {
+public class FrameworkAcceptanceTest extends AbstractTestBase {
 
 
     @Test

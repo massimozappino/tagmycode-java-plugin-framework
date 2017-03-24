@@ -1,8 +1,8 @@
 package com.tagmycode.plugin.gui.field;
 
-import com.tagmycode.plugin.AbstractTest;
 import com.tagmycode.plugin.Framework;
 import org.junit.Test;
+import support.AbstractTestBase;
 
 import javax.swing.*;
 
@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
-public class AbstractFieldValidationTest extends AbstractTest {
+public class AbstractFieldValidationTest extends AbstractTestBase {
 
     @Test
     public void testPerformValidation() throws Exception {
