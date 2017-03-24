@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Storage is based on internal db [Ormlite](http://ormlite.com/)
 
+### Fixed
+- Fixed logout on IDE restart
+
 ### Removed
 - removed IStorage
 
