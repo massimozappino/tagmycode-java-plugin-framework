@@ -17,9 +17,10 @@ public class FrameworkAcceptanceTest extends AbstractTest {
     @Test
     public void notAuthenticatedUserShouldSeeAuthorizationDialog() throws Exception {
         Framework frameworkSpy = createSpyFramework();
-        frameworkSpy.canOperate();
-        assertFalse(frameworkSpy.isInitialized());
 
+        frameworkSpy.canOperate();
+
+        assertFalse(frameworkSpy.isInitialized());
         verify(frameworkSpy, times(1)).showLoginDialog();
     }
 

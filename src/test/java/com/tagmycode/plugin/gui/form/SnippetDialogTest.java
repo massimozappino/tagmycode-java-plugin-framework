@@ -322,7 +322,7 @@ public class SnippetDialogTest extends AbstractTest {
         Framework framework = createFramework(createStorageEngineWithData());
         framework.restoreData();
         final SnippetDialog snippetDialog = new SnippetDialog(framework, null);
-        snippetDialog.display();
+
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override
             public void run() {

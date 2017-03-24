@@ -36,6 +36,7 @@ public class SnippetsTabTest extends AbstractTest {
 
         SnippetsTab snippetsTab = new SnippetsTab(framework);
         SnippetsTable snippetsTable = snippetsTab.getSnippetsTable();
+
         snippetsTable.fireSnippetsChanged();
         JPanel snippetViewFormPanel = snippetsTab.getSnippetViewFormPane();
         JTable jTable = snippetsTable.getSnippetsComponent();
