@@ -8,16 +8,18 @@ import static org.mockito.Mockito.spy;
 public class DataTest extends AbstractTest {
 
     @Test
-    public void testLoadLanguageCollection() throws Exception {
+    public void testClearDataAndStorage() throws Exception {
         StorageEngine storageSpy = spy(createStorageEngine());
         Data data = new Data(storageSpy);
         data.setAccount(resourceGenerate.aUser());
         data.setLanguages(resourceGenerate.aLanguageCollection());
         data.setSnippets(resourceGenerate.aSnippetCollection());
         data.setNetworkingEnabled(true);
+
         data.clearDataAndStorage();
 
-        assertDataIsReset(data);
+        assertDataIsCleared(data);
+        assertStorageIsCleared(data.getStorageEngine());
     }
 
     @Test
@@ -41,7 +43,7 @@ public class DataTest extends AbstractTest {
 
         data.reset();
 
-        assertDataIsReset(data);
+        assertDataIsCleared(data);
     }
 
     @Test

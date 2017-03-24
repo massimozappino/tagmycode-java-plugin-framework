@@ -158,11 +158,7 @@ public class Framework implements IOnErrorCallback {
     }
 
     void reset() throws TagMyCodeException {
-        try {
-            data.clearDataAndStorage();
-        } catch (SQLException | IOException e) {
-           throw new TagMyCodeException(e);
-        }
+        data.clearDataAndStorage();
         tagMyCode.setLastSnippetsUpdate(null);
         tagMyCode.revokeAccessToken();
         snippetsDataChanged();
@@ -216,7 +212,7 @@ public class Framework implements IOnErrorCallback {
         return isInitialized();
     }
 
-    public void restoreData() throws IOException, SQLException {
+    public void restoreData() throws TagMyCodeStorageException {
         try {
             tagMyCode.loadOauthToken();
             loadData();

@@ -83,11 +83,10 @@ public class FrameworkTest extends AbstractTest {
         frameworkSpy.logout();
 
         verify(mainWindowMock, times(1)).setLoggedIn(false);
-        assertDataIsReset(frameworkSpy.getData());
+        assertDataIsCleared(frameworkSpy.getData());
         assertTrue(frameworkSpy.getTagMyCode().getClient().getOauthToken() instanceof VoidOauthToken);
         assertEquals(null, frameworkSpy.getTagMyCode().loadOauthToken());
-        // TODO
-//        assertStorageDataIsCleared(frameworkSpy.getStorageEngine());
+        assertDataIsCleared(frameworkSpy.getData());
     }
 
     @Test
@@ -152,18 +151,18 @@ public class FrameworkTest extends AbstractTest {
 
     @Test
     public void testReset() throws Exception {
-        //TODO
-//        framework = spy(framework);
-//        framework.getTagMyCode().setLastSnippetsUpdate("a custom date");
-//        framework.getTagMyCode().(new OauthToken("aaa", "bbb"));
-//        framework.getData().setAccount(resourceGenerate.aUser());
-//
-//        framework.reset();
-//
-//        verify(framework, times(1)).snippetsDataChanged();
-//        assertEquals(null, framework.getTagMyCode().getLastSnippetsUpdate());
-//        assertEquals(new VoidOauthToken(), framework.getClient().getOauthToken());
-//        assertEquals(null, framework.getData().getAccount());
+        framework = spy(framework);
+        framework.getTagMyCode().setLastSnippetsUpdate("a custom date");
+        framework.getTagMyCode().getClient().setOauthToken(new OauthToken("aaa", "bbb"));
+        framework.getData().setAccount(resourceGenerate.aUser());
+
+        framework.reset();
+
+        verify(framework, times(1)).snippetsDataChanged();
+        assertEquals(null, framework.getTagMyCode().getLastSnippetsUpdate());
+        assertEquals(new VoidOauthToken(), framework.getTagMyCode().getClient().getOauthToken());
+        assertEquals(null, framework.getData().getAccount());
+        assertAccountAndLanguageCollectionFromFrameworkAreNull();
     }
 
     @Test

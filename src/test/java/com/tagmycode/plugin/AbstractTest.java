@@ -78,12 +78,18 @@ public class AbstractTest {
         return mockedTagMyCode;
     }
 
-    protected void assertDataIsReset(Data data) {
+    protected void assertDataIsCleared(Data data) throws SQLException {
         assertEquals(null, data.getAccount());
         assertEquals(new DefaultLanguageCollection(), data.getLanguages());
         assertEquals(new SnippetCollection(), data.getSnippets());
         assertEquals(null, data.getLastSnippetsUpdate());
         assertTrue(data.isNetworkingEnabled());
+    }
+
+    protected void assertStorageIsCleared(StorageEngine storageEngine) throws SQLException {
+        assertEquals(0, storageEngine.getDbService().languageDao().countOf());
+        assertEquals(0, storageEngine.getDbService().snippetDao().countOf());
+        assertEquals(0, storageEngine.getDbService().propertyDao().countOf());
     }
 
     protected void assertDataIsValid(Data data) throws IOException, TagMyCodeJsonException {

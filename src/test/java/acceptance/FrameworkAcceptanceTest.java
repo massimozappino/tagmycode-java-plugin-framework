@@ -53,7 +53,7 @@ public class FrameworkAcceptanceTest extends AbstractTest {
         assertDataIsValid(framework.getData());
 
         framework.logout();
-        assertDataIsReset(framework.getData());
+        assertDataIsCleared(framework.getData());
     }
 
     @Test

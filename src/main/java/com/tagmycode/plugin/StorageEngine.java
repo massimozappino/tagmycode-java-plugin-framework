@@ -110,7 +110,7 @@ public class StorageEngine {
         try {
             String value = readProperty(LAST_LANGUAGE).getValue();
             if (value == null) {
-                throw  new Exception("Property value is null");
+                throw new Exception("Property value is null");
             }
             lastLanguageUsed = new Language(value);
         } catch (Exception e) {
@@ -173,14 +173,18 @@ public class StorageEngine {
         }
     }
 
-    public void clearAll() throws SQLException {
-        dbService.clearAllTables();
+    public void clearAll() throws TagMyCodeStorageException {
+        try {
+            dbService.clearAllTables();
+        } catch (SQLException e) {
+            throw new TagMyCodeStorageException(e);
+        }
     }
 
     private Property readProperty(String key) throws SQLException {
         Property property = dbService.propertyDao().queryForId(key);
         if (property == null) {
-           property = new Property();
+            property = new Property();
         }
         return property;
     }
@@ -200,11 +204,16 @@ public class StorageEngine {
     private SnippetCollection createDefaultSnippetCollection() {
         return new SnippetCollection();
     }
+
     private Language createDefaultLanguage() {
         return new DefaultLanguage();
     }
 
-    public void close() throws IOException {
-        dbService.close();
+    public void close() throws TagMyCodeStorageException {
+        try {
+            dbService.close();
+        } catch (IOException e) {
+            throw new TagMyCodeStorageException(e);
+        }
     }
 }

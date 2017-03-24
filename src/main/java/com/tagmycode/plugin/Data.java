@@ -22,7 +22,7 @@ public class Data {
         reset();
     }
 
-    public void clearDataAndStorage() throws IOException, SQLException {
+    public void clearDataAndStorage() throws TagMyCodeStorageException {
         reset();
         storage.clearAll();
     }
