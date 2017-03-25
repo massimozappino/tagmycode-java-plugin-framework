@@ -4,12 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [2.1.0] - 2017-03-25
 ### Added
 - new CHANGELOG.md file
 
 ### Changed
-- Storage is based on internal db [Ormlite](http://ormlite.com/)
+- Storage is based on internal db with [Ormlite](http://ormlite.com/) and [H2](http://www.h2database.com)
 
 ### Fixed
 - Fixed logout on IDE restart
@@ -44,4 +44,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - First release with feature "Create snippet"
 
 
-[Unreleased]: https://github.com/massimozappino/tagmycode-java-plugin-framework/compare/v2.0.0...HEAD
+[2.1.0]: https://github.com/massimozappino/tagmycode-java-plugin-framework/compare/2.0.0...v2.1.0
