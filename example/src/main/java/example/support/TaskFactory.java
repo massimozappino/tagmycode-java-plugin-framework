@@ -1,4 +1,4 @@
-package com.tagmycode.plugin.examples.support;
+package example.support;
 
 import com.tagmycode.plugin.AbstractTaskFactory;
 
