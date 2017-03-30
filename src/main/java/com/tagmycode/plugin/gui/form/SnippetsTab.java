@@ -41,6 +41,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private ClipboardCopy clipboardCopy = new ClipboardCopy();
     private SnippetsTableModel model;
     private boolean networkingEnabled;
+    private FilterSnippetsTextField filterTextField;
 
     public SnippetsTab(final Framework framework) {
         this.framework = framework;
@@ -143,7 +144,18 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
             }
         });
 
+        addKeyStroke(this.jTable, KeyEvent.VK_F, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                filterTextField.requestFocus();
+            }
+        });
+
         initTablePopupMenu();
+    }
+
+    private void addKeyStroke(JComponent jComponent, int keyEvent, ActionListener actionListener) {
+        KeyStroke stroke = KeyStroke.getKeyStroke(keyEvent, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+        jComponent.registerKeyboardAction(actionListener, stroke, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
     private void initTablePopupMenu() {
@@ -348,7 +360,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     public void initFilterField() {
-        FilterSnippetsTextField filterTextField = new FilterSnippetsTextField(framework, snippetsTable);
+        filterTextField = new FilterSnippetsTextField(framework, snippetsTable);
         filterTextField.setMinimumSize(new Dimension(200, 25));
         filterTextField.addKeyListener(new MoveUpDownFilterFieldKeyListener(jTable));
         setPlaceholder("Filter snippets", filterTextField);

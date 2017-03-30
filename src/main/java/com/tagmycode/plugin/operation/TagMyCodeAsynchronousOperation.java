@@ -88,8 +88,10 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
     protected void onFailure(Throwable e) {
         if (e instanceof TagMyCodeException) {
             onErrorCallback.onError((TagMyCodeException) e);
-        } else {
-            onErrorCallback.onError(new TagMyCodeException());
+        } else if (e instanceof Exception) {
+            onErrorCallback.onError(new TagMyCodeException((Exception) e));
+        }else {
+            onErrorCallback.onError(new TagMyCodeException(e.getMessage()));
         }
     }
 }
