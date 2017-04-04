@@ -20,6 +20,7 @@ import java.awt.event.*;
 import static com.tagmycode.plugin.gui.GuiUtil.setPlaceholder;
 
 public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
+    private final WelcomeView welcomeView;
     protected JButton editSnippetButton;
     protected JButton deleteSnippetButton;
     protected JButton copyButton;
@@ -45,13 +46,14 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
 
     public SnippetsTab(final Framework framework) {
         this.framework = framework;
-        reset();
         initSnippetsJTable();
+        welcomeView = new WelcomeView(this);
 
         leftPane.add(snippetsTable.getMainComponent(), BorderLayout.CENTER);
         initFilterField();
         initToolBarButtons(framework);
         initPopupMenuForJTextComponents(getMainComponent());
+        reset();
     }
 
     private void initToolBarButtons(final Framework framework) {
@@ -279,22 +281,28 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
             public void valueChanged(ListSelectionEvent e) {
                 selectedRow = e.getFirstIndex();
                 if (!e.getValueIsAdjusting()) {
-                    snippetViewFormPane.removeAll();
-
                     Snippet snippet = snippetsTable.getSelectedSnippet();
-
-                    if (snippet != null) {
-                        JComponent snippetViewForm = new SnippetView(snippet).getMainComponent();
-                        snippetViewFormPane.add(snippetViewForm);
-                        enableButtonsForSnippet();
-                    } else {
-                        disableButtonsForSnippet();
-                    }
-                    snippetViewFormPane.revalidate();
-                    snippetViewFormPane.repaint();
+                    changeViewBasedOnSnippet(snippet);
                 }
             }
         };
+    }
+
+    private void changeViewBasedOnSnippet(Snippet snippet) {
+        snippetViewFormPane.removeAll();
+
+        if (snippet != null) {
+            JComponent snippetViewForm = new SnippetView(snippet).getMainComponent();
+            snippetViewFormPane.add(snippetViewForm);
+            enableButtonsForSnippet();
+        } else {
+            snippetViewFormPane.add(welcomeView.getMainComponent());
+            disableButtonsForSnippet();
+        }
+        snippetViewFormPane.revalidate();
+        snippetViewFormPane.repaint();
+        getMainComponent().revalidate();
+        getMainComponent().repaint();
     }
 
     private TableModelListener createTableModelListener() {
@@ -355,9 +363,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         return framework;
     }
 
-    public void reset() {
-        snippetViewFormPane.removeAll();
-    }
 
     public void initFilterField() {
         filterTextField = new FilterSnippetsTextField(framework, snippetsTable);
@@ -378,5 +383,9 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     public void setNetworkingEnabled(boolean networkingEnabled) {
         setNetworkIcon(networkingEnabled);
         syncButton.setEnabled(networkingEnabled);
+    }
+
+    public void reset() {
+        changeViewBasedOnSnippet(null);
     }
 }
