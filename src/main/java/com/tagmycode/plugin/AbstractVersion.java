@@ -3,12 +3,12 @@ package com.tagmycode.plugin;
 import java.io.IOException;
 import java.util.Properties;
 
-class DefaultVersion implements IVersion {
+public abstract class AbstractVersion {
 
     private String versionString = "";
     private String buildDate = "";
 
-    DefaultVersion() {
+    public AbstractVersion() {
         try {
             PropertiesReader propertiesReader = new PropertiesReader();
             Properties properties = propertiesReader.getProperties("version.properties");
@@ -20,13 +20,17 @@ class DefaultVersion implements IVersion {
         }
     }
 
-    @Override
-    public String getVersionString() {
+    public String getFrameworkVersion() {
         return versionString;
     }
 
-    @Override
-    public String getBuildDate() {
+    public String getFrameworkBuildDate() {
         return buildDate;
+    }
+
+    public abstract String getPluginVersion();
+
+    public String getPluginTitle() {
+        return "";
     }
 }

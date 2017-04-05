@@ -1,5 +1,6 @@
 package example;
 
+import com.tagmycode.plugin.AbstractVersion;
 import com.tagmycode.plugin.Browser;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.FrameworkConfig;
@@ -44,7 +45,19 @@ public class MainAppExample {
                 new DbService(saveFilePath),
                 new MessageManager(),
                 new TaskFactory(),
-                new Browser(), frame);
+                new Browser(),
+                new AbstractVersion() {
+                    @Override
+                    public String getPluginVersion() {
+                        return "1.0.0";
+                    }
+
+                    @Override
+                    public String getPluginTitle() {
+                        return "TagMyCode Plugin Example";
+                    }
+                },
+                frame);
         final Framework framework = new Framework(new TagMyCodeApiProduction(), frameworkConfig, new Secret());
 
         framework.start();
