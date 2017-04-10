@@ -33,7 +33,6 @@ public class AboutDialog extends AbstractDialog {
         if (version.getPluginTitle().length() > 0) {
             title.setText(version.getPluginTitle());
         }
-        appendTextToJLabel(title, version.getPluginVersion());
         appendTextToJLabel(pluginVersionLabel, version.getPluginVersion());
         appendTextToJLabel(frameworkVersionLabel, version.getFrameworkVersion());
         appendTextToJLabel(frameworkBuildDateLabel, version.getFrameworkBuildDate());
