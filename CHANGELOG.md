@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - key shortcut to get focus on filter snippets box
+- added welcome panel
+- about dialog shows plugin version and framework version
 
 ## [2.1.0] - 2017-03-25
 ### Added
