@@ -63,7 +63,7 @@ public class AboutDialog extends AbstractDialog {
 
     @Override
     protected void initWindow() {
-        getDialog().setSize(340, 250);
+        getDialog().setSize(400, 300);
         getDialog().setResizable(false);
         getDialog().setTitle("About TagMyCode");
         getDialog().setUndecorated(true);
