@@ -15,6 +15,7 @@ public class SnippetView extends AbstractGui {
     private JPanel tagsContainer;
 
     public SnippetView(final Snippet snippet) {
+        getMainComponent().setName("snippet view");
         syntaxSnippetEditor = new SyntaxSnippetEditor();
         syntaxSnippetEditor.setEditable(false);
         syntaxSnippetEditor.setTextWithSnippet(snippet);

@@ -16,6 +16,7 @@ public class WelcomeView extends AbstractGui {
 
     public WelcomeView(final SnippetsTab snippetsTab) {
         this.framework = snippetsTab.getFramework();
+        getMainComponent().setName("welcome view");
 
         GuiUtil.makeTransparentButton(searchSnippetButton);
         GuiUtil.makeTransparentButton(addNewSnippetButton);

@@ -69,15 +69,14 @@ public class FrameworkAcceptanceTest extends AbstractTestBase {
 
         JFrame jFrame = new JFrame();
         jFrame.add(framework.getMainWindow().getMainComponent());
-        jFrame.setVisible(true);
         jFrame.pack();
 
         JPanel snippetViewFormPane = framework.getMainWindow().getSnippetsTab().getSnippetViewFormPane();
-        assertEquals(0, snippetViewFormPane.getComponentCount());
+        assertEquals("welcome view", snippetViewFormPane.getComponent(0).getName());
 
         framework.getMainWindow().getSnippetsTab().getSnippetsTable().getSnippetsComponent().setRowSelectionInterval(1, 1);
 
-        assertEquals(1, snippetViewFormPane.getComponentCount());
+        assertEquals("snippet view", snippetViewFormPane.getComponent(0).getName());
     }
 
     @Test
