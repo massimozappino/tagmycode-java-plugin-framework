@@ -41,7 +41,7 @@ public class SnippetsTabTest extends AbstractTestBase {
         JPanel snippetViewFormPanel = snippetsTab.getSnippetViewFormPane();
         JTable jTable = snippetsTable.getSnippetsComponent();
 
-        assertEquals(0, snippetViewFormPanel.getComponentCount());
+        assertEquals(1, snippetViewFormPanel.getComponentCount());
         assertEquals(2, jTable.getRowCount());
 
         jTable.setRowSelectionInterval(0, 0);

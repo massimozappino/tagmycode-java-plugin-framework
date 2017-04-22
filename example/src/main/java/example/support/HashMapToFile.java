@@ -1,4 +1,4 @@
-package com.tagmycode.plugin.examples.support;
+package example.support;
 
 import java.io.*;
 import java.util.HashMap;

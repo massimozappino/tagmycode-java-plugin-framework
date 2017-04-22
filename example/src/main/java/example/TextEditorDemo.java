@@ -1,4 +1,4 @@
-package com.tagmycode.plugin.examples;
+package example;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;

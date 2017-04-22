@@ -8,8 +8,6 @@ import com.tagmycode.plugin.gui.form.*;
 import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.TagMyCodeApi;
-import com.tagmycode.sdk.exception.TagMyCodeApiException;
-import com.tagmycode.sdk.exception.TagMyCodeConnectionException;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.exception.TagMyCodeUnauthorizedException;
 import com.tagmycode.sdk.model.LanguageCollection;
@@ -35,7 +33,7 @@ public class Framework implements IOnErrorCallback {
     private final IMessageManager messageManager;
     private final AbstractTaskFactory taskFactory;
     private final SnippetsUpdatePollingProcess pollingProcess;
-    private final IVersion version;
+    private final AbstractVersion version;
     private final Data data;
     private IBrowser browser;
     private MainWindow mainWindow;
@@ -60,7 +58,7 @@ public class Framework implements IOnErrorCallback {
         pollingProcess = new SnippetsUpdatePollingProcess(this);
         settingsForm = new SettingsForm(this, getParentFrame());
         snippetDialogFactory = new SnippetDialogFactory();
-        version = new DefaultVersion();
+        version = frameworkConfig.getVersionObject();
         aboutDialog = new AboutDialog(this, getParentFrame());
         this.mainWindow = new MainWindow(this);
     }
@@ -181,18 +179,12 @@ public class Framework implements IOnErrorCallback {
         });
     }
 
-    public void showGenericError() {
-        showError(new TagMyCodeException().getMessage());
-    }
-
     public void manageTagMyCodeExceptions(TagMyCodeException e) {
         logError(e);
         if (e instanceof TagMyCodeUnauthorizedException) {
             logoutAndAuthenticateAgain();
-        } else if (e instanceof TagMyCodeConnectionException || e instanceof TagMyCodeStorageException || e instanceof TagMyCodeApiException) {
-            showError(e.getMessage());
         } else {
-            showGenericError();
+            showError(e.getMessage());
         }
     }
 
@@ -217,7 +209,6 @@ public class Framework implements IOnErrorCallback {
             tagMyCode.loadOauthToken();
             loadData();
         } catch (TagMyCodeStorageException e) {
-            // TODO show error and do not clear data
             data.clearDataAndStorage();
             logError(e);
         } catch (TagMyCodeException e) {
@@ -311,7 +302,7 @@ public class Framework implements IOnErrorCallback {
         aboutDialog.display();
     }
 
-    public IVersion getVersion() {
+    public AbstractVersion getVersion() {
         return version;
     }
 

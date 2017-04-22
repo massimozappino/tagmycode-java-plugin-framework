@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.0] - 2017-04-22
+### Added
+- added key shortcut to get focus on filter snippets box
+- added welcome panel
+- about dialog shows plugin version, framework version and data storage directory
+
 ## [2.1.0] - 2017-03-25
 ### Added
 - new CHANGELOG.md file
@@ -44,4 +50,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - First release with feature "Create snippet"
 
 
-[2.1.0]: https://github.com/massimozappino/tagmycode-java-plugin-framework/compare/2.0.0...v2.1.0
+[2.2.0]: https://github.com/massimozappino/tagmycode-java-plugin-framework/compare/v2.1.0...v2.2.0
+[2.1.0]: https://github.com/massimozappino/tagmycode-java-plugin-framework/compare/v2.0.0...v2.1.0

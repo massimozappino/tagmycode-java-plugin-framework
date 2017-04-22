@@ -43,7 +43,7 @@ public class AbstractTestBase {
     }
 
     public Framework createFramework(StorageEngine storageEngine) throws Exception {
-        FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), storageEngine.getDbService(), new FakeMessageManager(), new FakeTaskFactory(), null);
+        FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), storageEngine.getDbService(), new FakeMessageManager(), new FakeTaskFactory(), new FakeVersion(), null);
         return new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret());
     }
 

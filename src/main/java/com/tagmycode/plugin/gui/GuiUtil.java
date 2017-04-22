@@ -27,4 +27,10 @@ public class GuiUtil {
     public static void setPlaceholder(String placeholder, JTextComponent component) {
         new TextPrompt(placeholder, component, TextPrompt.Show.FOCUS_LOST).changeAlpha(0.5f);
     }
+
+    public static void makeTransparentButton(JButton button) {
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+    }
 }

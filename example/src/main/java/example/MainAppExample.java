@@ -1,17 +1,18 @@
-package com.tagmycode.plugin.examples;
+package example;
 
+import com.tagmycode.plugin.AbstractVersion;
 import com.tagmycode.plugin.Browser;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.FrameworkConfig;
-import com.tagmycode.plugin.examples.support.MessageManager;
-import com.tagmycode.plugin.examples.support.PasswordKeyChain;
-import com.tagmycode.plugin.examples.support.TaskFactory;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.sdk.DbService;
 import com.tagmycode.sdk.SaveFilePath;
 import com.tagmycode.sdk.authentication.TagMyCodeApiProduction;
 import com.tagmycode.sdk.exception.TagMyCodeException;
+import example.support.MessageManager;
+import example.support.PasswordKeyChain;
+import example.support.TaskFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,7 +45,19 @@ public class MainAppExample {
                 new DbService(saveFilePath),
                 new MessageManager(),
                 new TaskFactory(),
-                new Browser(), frame);
+                new Browser(),
+                new AbstractVersion() {
+                    @Override
+                    public String getPluginVersion() {
+                        return "1.0.0";
+                    }
+
+                    @Override
+                    public String getPluginTitle() {
+                        return "TagMyCode Plugin Example";
+                    }
+                },
+                frame);
         final Framework framework = new Framework(new TagMyCodeApiProduction(), frameworkConfig, new Secret());
 
         framework.start();

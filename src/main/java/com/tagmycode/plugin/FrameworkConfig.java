@@ -11,18 +11,20 @@ public class FrameworkConfig {
     private final IBrowser browser;
     private final Frame parentFrame;
     private AbstractTaskFactory task;
+    private AbstractVersion versionObject;
 
-    public FrameworkConfig(IPasswordKeyChain passwordManager, DbService dbService, IMessageManager messageManager, AbstractTaskFactory task, Frame parentFrame) {
-        this(passwordManager, dbService, messageManager, task, new Browser(), parentFrame);
+    public FrameworkConfig(IPasswordKeyChain passwordManager, DbService dbService, IMessageManager messageManager, AbstractTaskFactory task, AbstractVersion versionObject, Frame parentFrame) {
+        this(passwordManager, dbService, messageManager, task, new Browser(), versionObject, parentFrame);
     }
 
-    public FrameworkConfig(IPasswordKeyChain passwordManager, DbService dbService, IMessageManager messageManager, AbstractTaskFactory task, IBrowser browser, Frame parentFrame) {
+    public FrameworkConfig(IPasswordKeyChain passwordManager, DbService dbService, IMessageManager messageManager, AbstractTaskFactory task, IBrowser browser, AbstractVersion versionObject, Frame parentFrame) {
         this.passwordManager = passwordManager;
         this.dbService = dbService;
         this.messageManager = messageManager;
         this.task = task;
         this.browser = browser;
         this.parentFrame = parentFrame;
+        this.versionObject = versionObject;
     }
 
     public IPasswordKeyChain getPasswordKeyChain() {
@@ -47,5 +49,9 @@ public class FrameworkConfig {
 
     public Frame getParentFrame() {
         return parentFrame;
+    }
+
+    public AbstractVersion getVersionObject() {
+        return versionObject;
     }
 }

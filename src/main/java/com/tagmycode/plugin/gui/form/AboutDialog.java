@@ -1,8 +1,8 @@
 package com.tagmycode.plugin.gui.form;
 
+import com.tagmycode.plugin.AbstractVersion;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.IBrowser;
-import com.tagmycode.plugin.IVersion;
 import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.gui.GuiUtil;
 
@@ -17,8 +17,10 @@ public class AboutDialog extends AbstractDialog {
     private JButton licenseButton;
     private JButton reportAnIssueButton;
     private JLabel tagmycodeLinkLabel;
-    private JLabel versionLabel;
-    private JLabel buildDateLabel;
+    private JLabel pluginVersionLabel;
+    private JLabel frameworkBuildDateLabel;
+    private JLabel frameworkVersionLabel;
+    private JLabel title;
     private JButton buttonOK = new JButton();
 
     public AboutDialog(Framework framework, Frame parent) {
@@ -26,10 +28,14 @@ public class AboutDialog extends AbstractDialog {
 
         configureButtons();
         GuiUtil.addClickableLink(framework.getBrowser(), tagmycodeLinkLabel, "https://tagmycode.com");
-        IVersion version = framework.getVersion();
+        AbstractVersion version = framework.getVersion();
 
-        appendTextToJLabel(versionLabel, version.getVersionString());
-        appendTextToJLabel(buildDateLabel, version.getBuildDate());
+        if (version.getPluginTitle().length() > 0) {
+            title.setText(version.getPluginTitle());
+        }
+        appendTextToJLabel(pluginVersionLabel, version.getPluginVersion());
+        appendTextToJLabel(frameworkVersionLabel, version.getFrameworkVersion());
+        appendTextToJLabel(frameworkBuildDateLabel, version.getFrameworkBuildDate());
 
         defaultInitWindow();
         initWindow();
@@ -57,7 +63,7 @@ public class AboutDialog extends AbstractDialog {
 
     @Override
     protected void initWindow() {
-        getDialog().setSize(340, 250);
+        getDialog().setSize(400, 300);
         getDialog().setResizable(false);
         getDialog().setTitle("About TagMyCode");
         getDialog().setUndecorated(true);
@@ -83,5 +89,4 @@ public class AboutDialog extends AbstractDialog {
     protected void onOK() {
 
     }
-
 }
