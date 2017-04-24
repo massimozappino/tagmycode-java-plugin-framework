@@ -97,7 +97,7 @@ public class FrameworkAcceptanceTest extends AbstractTestBase {
         Framework framework = acceptanceFramework();
 
         framework.start();
-
+        Thread.sleep(300);
         assertFalse(framework.getData().isNetworkingEnabled());
         assertTrue(framework.getMainWindow().getSnippetsTab().getButtonNetworking().getIcon().toString().contains("/icons/disconnected.png"));
     }
