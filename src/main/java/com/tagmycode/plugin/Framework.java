@@ -70,8 +70,6 @@ public class Framework implements IOnErrorCallback {
         mainWindow.setLoggedIn(initialized);
         if (initialized) {
             mainWindow.getSnippetsTab().setNetworkingEnabled(isNetworkingEnabled());
-            saveSnippetsDataChanged();
-            tagMyCode.setLastSnippetsUpdate(data.getLastSnippetsUpdate());
             if (isNetworkingEnabled()) {
                 pollingProcess.start();
             }

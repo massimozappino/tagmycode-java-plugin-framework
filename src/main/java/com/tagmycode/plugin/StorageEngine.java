@@ -42,14 +42,16 @@ public class StorageEngine {
         }
     }
 
-    public List<Language> loadLanguageCollection() {
+    public LanguageCollection loadLanguageCollection() {
         try {
             List<Language> languages = dbService.languageDao().queryForAll();
 
             if (languages.size() == 0) {
                 throw new Exception("Language size is 0");
             }
-            return languages;
+            LanguageCollection languageCollection = new LanguageCollection();
+            languageCollection.addAll(languages);
+            return languageCollection;
         } catch (Exception e) {
             return new DefaultLanguageCollection();
         }
