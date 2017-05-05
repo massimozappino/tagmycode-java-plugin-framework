@@ -3,16 +3,16 @@ package com.tagmycode.plugin;
 
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.sdk.model.DefaultLanguageCollection;
-import com.tagmycode.sdk.model.LanguageCollection;
-import com.tagmycode.sdk.model.SnippetCollection;
+import com.tagmycode.sdk.model.LanguagesCollection;
+import com.tagmycode.sdk.model.SnippetsCollection;
 import com.tagmycode.sdk.model.User;
 
 public class Data {
 
     private StorageEngine storage;
     private User account;
-    private LanguageCollection languages;
-    private SnippetCollection snippets;
+    private LanguagesCollection languages;
+    private SnippetsCollection snippets;
     private String lastSnippetsUpdate;
     private boolean networkingEnabled;
 
@@ -29,7 +29,7 @@ public class Data {
     protected void reset() {
         account = null;
         languages = new DefaultLanguageCollection();
-        snippets = new SnippetCollection();
+        snippets = new SnippetsCollection();
         lastSnippetsUpdate = null;
         networkingEnabled = true;
     }
@@ -42,19 +42,19 @@ public class Data {
         this.account = account;
     }
 
-    public LanguageCollection getLanguages() {
+    public LanguagesCollection getLanguages() {
         return languages;
     }
 
-    public void setLanguages(LanguageCollection languages) {
+    public void setLanguages(LanguagesCollection languages) {
         this.languages = languages;
     }
 
-    public SnippetCollection getSnippets() {
+    public SnippetsCollection getSnippets() {
         return snippets;
     }
 
-    public void setSnippets(SnippetCollection snippets) {
+    public void setSnippets(SnippetsCollection snippets) {
         this.snippets = snippets;
     }
 

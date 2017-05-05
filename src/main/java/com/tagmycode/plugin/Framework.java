@@ -10,9 +10,9 @@ import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.TagMyCodeApi;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.exception.TagMyCodeUnauthorizedException;
-import com.tagmycode.sdk.model.LanguageCollection;
+import com.tagmycode.sdk.model.LanguagesCollection;
 import com.tagmycode.sdk.model.Snippet;
-import com.tagmycode.sdk.model.SnippetCollection;
+import com.tagmycode.sdk.model.SnippetsCollection;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
@@ -116,7 +116,7 @@ public class Framework implements IOnErrorCallback {
         return mainWindow;
     }
 
-    public void setLanguageCollection(LanguageCollection languageCollection) throws TagMyCodeStorageException {
+    public void setLanguageCollection(LanguagesCollection languageCollection) throws TagMyCodeStorageException {
         getStorageEngine().saveLanguageCollection(languageCollection);
     }
 
@@ -254,13 +254,13 @@ public class Framework implements IOnErrorCallback {
     }
 
     public void updateSnippet(Snippet snippet) {
-        SnippetCollection snippets = getData().getSnippets();
+        SnippetsCollection snippets = getData().getSnippets();
         snippets.updateSnippet(snippet);
         saveSnippetsDataChanged();
     }
 
     public void deleteSnippet(Snippet snippetToDelete) {
-        SnippetCollection snippets = getData().getSnippets();
+        SnippetsCollection snippets = getData().getSnippets();
         snippets.deleteById(snippetToDelete.getId());
         saveSnippetsDataChanged();
     }

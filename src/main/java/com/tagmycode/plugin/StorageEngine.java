@@ -42,14 +42,14 @@ public class StorageEngine {
         }
     }
 
-    public LanguageCollection loadLanguageCollection() {
+    public LanguagesCollection loadLanguageCollection() {
         try {
             List<Language> languages = dbService.languageDao().queryForAll();
 
             if (languages.size() == 0) {
                 throw new Exception("Language size is 0");
             }
-            LanguageCollection languageCollection = new LanguageCollection();
+            LanguagesCollection languageCollection = new LanguagesCollection();
             languageCollection.addAll(languages);
             return languageCollection;
         } catch (Exception e) {
@@ -59,7 +59,7 @@ public class StorageEngine {
 
     public void saveLanguageCollection(List<Language> languageCollection) throws TagMyCodeStorageException {
         if (languageCollection == null) {
-            languageCollection = new LanguageCollection();
+            languageCollection = new LanguagesCollection();
         }
         for (Language language : languageCollection) {
             try {
@@ -133,8 +133,8 @@ public class StorageEngine {
         }
     }
 
-    public SnippetCollection loadSnippets() {
-        SnippetCollection snippets = createDefaultSnippetCollection();
+    public SnippetsCollection loadSnippets() {
+        SnippetsCollection snippets = createDefaultSnippetCollection();
         try {
             for (Snippet snippet : dbService.snippetDao().queryForAll()) {
                 snippets.add(snippet);
@@ -203,8 +203,8 @@ public class StorageEngine {
         return b ? "1" : "0";
     }
 
-    private SnippetCollection createDefaultSnippetCollection() {
-        return new SnippetCollection();
+    private SnippetsCollection createDefaultSnippetCollection() {
+        return new SnippetsCollection();
     }
 
     private Language createDefaultLanguage() {

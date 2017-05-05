@@ -48,11 +48,11 @@ public class StorageEngineTest extends AbstractTestBase {
 
     @Test
     public void testSaveAndLoadLanguageCollection() throws Exception {
-        LanguageCollection languageCollection = resourceGenerate.aLanguageCollection();
+        LanguagesCollection languageCollection = resourceGenerate.aLanguageCollection();
         storageEngine.saveLanguageCollection(languageCollection);
         assertEquals(languageCollection, storageEngine.loadLanguageCollection());
 
-        LanguageCollection newLanguageCollection = resourceGenerate.aLanguageCollection();
+        LanguagesCollection newLanguageCollection = resourceGenerate.aLanguageCollection();
         newLanguageCollection.add(new DefaultLanguage());
         storageEngine.saveLanguageCollection(newLanguageCollection);
         assertCollectionsAreEquals(newLanguageCollection, storageEngine.loadLanguageCollection());
@@ -93,11 +93,11 @@ public class StorageEngineTest extends AbstractTestBase {
     public void testSaveAndLoadSnippets() throws Exception {
         storageEngine.saveLanguageCollection(resourceGenerate.aLanguageCollection());
 
-        SnippetCollection snippetCollection = resourceGenerate.aSnippetCollection();
+        SnippetsCollection snippetCollection = resourceGenerate.aSnippetCollection();
         storageEngine.saveSnippets(snippetCollection);
         assertCollectionsAreEquals(snippetCollection, storageEngine.loadSnippets());
 
-        SnippetCollection newSnippetCollection = resourceGenerate.aSnippetCollection();
+        SnippetsCollection newSnippetCollection = resourceGenerate.aSnippetCollection();
         newSnippetCollection.add(resourceGenerate.anotherSnippet().setId(3));
         assertEquals(3, newSnippetCollection.size());
 
@@ -131,11 +131,11 @@ public class StorageEngineTest extends AbstractTestBase {
 
     private void assertStorageDataIsCleared(StorageEngine storageEngine) throws IOException, TagMyCodeJsonException, TagMyCodeStorageException {
         assertNull(storageEngine.loadAccount());
-        LanguageCollection languageCollection = new LanguageCollection();
+        LanguagesCollection languageCollection = new LanguagesCollection();
         languageCollection.add(new DefaultLanguage());
         assertEquals(languageCollection, storageEngine.loadLanguageCollection());
         assertEquals(new DefaultLanguage(), storageEngine.loadLastLanguageUsed());
-        assertEquals(new SnippetCollection(), storageEngine.loadSnippets());
+        assertEquals(new SnippetsCollection(), storageEngine.loadSnippets());
         assertFalse(storageEngine.loadPrivateSnippetFlag());
         assertTrue(storageEngine.loadNetworkingEnabledFlag());
     }

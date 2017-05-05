@@ -8,7 +8,7 @@ import com.tagmycode.plugin.operation.EditSnippetOperation;
 import com.tagmycode.plugin.operation.NewSnippetOperation;
 import com.tagmycode.sdk.model.DefaultLanguage;
 import com.tagmycode.sdk.model.Language;
-import com.tagmycode.sdk.model.LanguageCollection;
+import com.tagmycode.sdk.model.LanguagesCollection;
 import com.tagmycode.sdk.model.Snippet;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.junit.Test;
@@ -88,7 +88,7 @@ public class SnippetDialogTest extends AbstractTestBase {
     public void populateSnippetDialogWithExistentLanguageOverridePreferredLanguage() throws Exception {
         final Framework framework = createFramework();
 
-        LanguageCollection languageCollection = resourceGenerate.aLanguageCollection();
+        LanguagesCollection languageCollection = resourceGenerate.aLanguageCollection();
         Language customLanguage = new Language();
         customLanguage.setId(88);
         customLanguage.setName("Custom");

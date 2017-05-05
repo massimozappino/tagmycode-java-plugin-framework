@@ -54,7 +54,7 @@ public class FrameworkTest extends AbstractTestBase {
 
         frameworkSpy.start();
 
-        verify(frameworkSpy, times(1)).saveSnippetsDataChanged();
+        verify(frameworkSpy, times(1)).restoreData();
     }
 
     @Test

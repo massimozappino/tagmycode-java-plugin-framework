@@ -2,7 +2,7 @@ package com.tagmycode.plugin.gui.table;
 
 import com.tagmycode.plugin.Data;
 import com.tagmycode.plugin.TableModelSnippetNotFoundException;
-import com.tagmycode.sdk.model.SnippetCollection;
+import com.tagmycode.sdk.model.SnippetsCollection;
 import org.junit.Test;
 import support.AbstractTestBase;
 import support.ResourceGenerate;
@@ -13,7 +13,7 @@ public class SnippetsTableModelTest extends AbstractTestBase {
     @Test
     public void testGetSnippetAt() throws Exception {
         Data data = new Data(createStorageEngine());
-        SnippetCollection snippets = new SnippetCollection();
+        SnippetsCollection snippets = new SnippetsCollection();
         data.setSnippets(snippets);
 
         SnippetsTableModel snippetsTableModel = new SnippetsTableModel(data);

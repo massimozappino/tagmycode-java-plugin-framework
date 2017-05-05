@@ -10,7 +10,7 @@ import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.TagMyCodeApiDevelopment;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.DefaultLanguageCollection;
-import com.tagmycode.sdk.model.SnippetCollection;
+import com.tagmycode.sdk.model.SnippetsCollection;
 import org.junit.After;
 import org.mockito.Mockito;
 
@@ -96,7 +96,7 @@ public class AbstractTestBase {
     protected void assertDataIsCleared(Data data) throws SQLException {
         assertEquals(null, data.getAccount());
         assertEquals(new DefaultLanguageCollection(), data.getLanguages());
-        assertEquals(new SnippetCollection(), data.getSnippets());
+        assertEquals(new SnippetsCollection(), data.getSnippets());
         assertEquals(null, data.getLastSnippetsUpdate());
         assertTrue(data.isNetworkingEnabled());
     }
