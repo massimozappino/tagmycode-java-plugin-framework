@@ -23,7 +23,7 @@ public class Data {
 
     public void clearDataAndStorage() throws TagMyCodeStorageException {
         reset();
-        storage.clearAll();
+        storage.recreateTables();
     }
 
     protected void reset() {

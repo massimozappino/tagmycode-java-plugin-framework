@@ -175,9 +175,10 @@ public class StorageEngine {
         }
     }
 
-    public void clearAll() throws TagMyCodeStorageException {
+    public void recreateTables() throws TagMyCodeStorageException {
         try {
-            dbService.clearAllTables();
+            dbService.dropAllTables();
+            dbService.createAllTables();
         } catch (SQLException e) {
             throw new TagMyCodeStorageException(e);
         }

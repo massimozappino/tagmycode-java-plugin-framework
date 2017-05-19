@@ -125,8 +125,15 @@ public class StorageEngineTest extends AbstractTestBase {
         storageEngine.savePrivateSnippetFlag(true);
         storageEngine.saveNetworkingEnabledFlag(false);
         storageEngine.saveSnippets(resourceGenerate.aSnippetCollection());
-        storageEngine.clearAll();
+        storageEngine.recreateTables();
         assertStorageDataIsCleared(storageEngine);
+    }
+
+    @Test
+    public void recreateTables() throws TagMyCodeStorageException, SQLException, IOException, TagMyCodeJsonException {
+        storageEngine.saveLanguageCollection(resourceGenerate.aLanguageCollection());
+        storageEngine.recreateTables();
+        assertEquals(0, storageEngine.getDbService().languageDao().queryForAll().size());
     }
 
     private void assertStorageDataIsCleared(StorageEngine storageEngine) throws IOException, TagMyCodeJsonException, TagMyCodeStorageException {
