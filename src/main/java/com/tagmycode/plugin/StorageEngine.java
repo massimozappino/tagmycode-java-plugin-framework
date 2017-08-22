@@ -16,9 +16,12 @@ public class StorageEngine {
     private static final String ACCOUNT = "account";
     private static final String SNIPPETS_LAST_UPDATE = "snippets_last_update";
     private final DbService dbService;
+    private final SnippetsStorage snippetsStorage;
 
     public StorageEngine(DbService dbService) throws SQLException {
         this.dbService = dbService;
+        dbService.initialize();
+        this.snippetsStorage = new SnippetsStorage(dbService);
     }
 
     public DbService getDbService() {
@@ -136,9 +139,7 @@ public class StorageEngine {
     public SnippetsCollection loadSnippets() {
         SnippetsCollection snippets = createDefaultSnippetCollection();
         try {
-            for (Snippet snippet : dbService.snippetDao().queryForAll()) {
-                snippets.add(snippet);
-            }
+            snippets.addAll(dbService.snippetDao().queryForAll());
         } catch (Exception e) {
             snippets = createDefaultSnippetCollection();
         }
@@ -147,13 +148,13 @@ public class StorageEngine {
 
     public void saveSnippets(List<Snippet> snippetCollection) throws TagMyCodeStorageException {
         try {
+            dbService.snippetDao().deleteBuilder().delete();
             if (snippetCollection == null) {
                 snippetCollection = createDefaultSnippetCollection();
             }
             for (Snippet snippet : snippetCollection) {
                 dbService.snippetDao().createOrUpdate(snippet);
             }
-
         } catch (Exception e) {
             throw new TagMyCodeStorageException(e);
         }
@@ -218,5 +219,9 @@ public class StorageEngine {
         } catch (IOException e) {
             throw new TagMyCodeStorageException(e);
         }
+    }
+
+    public SnippetsStorage getSnippetsStorage() {
+        return snippetsStorage;
     }
 }

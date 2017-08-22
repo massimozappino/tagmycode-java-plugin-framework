@@ -8,7 +8,6 @@ import com.tagmycode.sdk.model.SnippetsCollection;
 import com.tagmycode.sdk.model.User;
 
 public class Data {
-
     private StorageEngine storage;
     private User account;
     private LanguagesCollection languages;

@@ -58,7 +58,7 @@ public class AbstractTestBase {
 
     protected MemDbService getSingleInstanceOfMemDb() throws SQLException {
         if (memDbService == null) {
-            memDbService = new MemDbService();
+            memDbService = new MemDbService("test");
             memDbService.initialize();
         }
         return memDbService;

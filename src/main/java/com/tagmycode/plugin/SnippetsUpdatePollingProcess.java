@@ -98,14 +98,10 @@ public class SnippetsUpdatePollingProcess {
         syncingFlag = false;
     }
 
-    private SyncSnippetsOperation createSyncSnippetsOperation() {
-        return new SyncSnippetsOperation(this);
-    }
-
     private synchronized void executeTask() {
         syncingFlag = true;
         lastSync = SYNC_NEVER;
-        createSyncSnippetsOperation().runWithTask(framework.getTaskFactory(), "Syncing snippets");
+        new SyncSnippetsOperation(this).runWithTask(framework.getTaskFactory(), "Syncing snippets");
     }
 
     public Framework getFramework() {

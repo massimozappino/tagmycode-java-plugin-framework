@@ -4,15 +4,13 @@ import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.StorageEngine;
 import com.tagmycode.plugin.gui.form.LoginDialog;
 import org.junit.Test;
-import support.AbstractTestBase;
 
 import javax.swing.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class FrameworkAcceptanceTest extends AbstractTestBase {
-
+public class FrameworkAcceptanceTest extends AcceptanceTestBase {
 
     @Test
     public void notAuthenticatedUserShouldSeeAuthorizationDialog() throws Exception {
@@ -102,11 +100,4 @@ public class FrameworkAcceptanceTest extends AbstractTestBase {
         assertTrue(framework.getMainWindow().getSnippetsTab().getButtonNetworking().getIcon().toString().contains("/icons/disconnected.png"));
     }
 
-    private Framework acceptanceFramework() throws Exception {
-        StorageEngine storage = createStorageEngineWithData();
-        storage.saveNetworkingEnabledFlag(false);
-        Framework framework = createFramework(storage);
-        mockTagMyCodeReturningValidAccountData(framework);
-        return framework;
-    }
 }

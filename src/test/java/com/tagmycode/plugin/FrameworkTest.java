@@ -119,15 +119,6 @@ public class FrameworkTest extends AbstractTestBase {
     }
 
     @Test
-    public void testUpdateSnippet() throws Exception {
-        Framework framework = createSpyFramework();
-
-        framework.updateSnippet(resourceGenerate.aSnippet());
-
-        verify(framework, times(1)).saveSnippetsDataChanged();
-    }
-
-    @Test
     public void testSnippetsDataChanged() throws Exception {
         Framework framework = createSpyFramework();
         framework.getTagMyCode().setLastSnippetsUpdate("changed GMT string");

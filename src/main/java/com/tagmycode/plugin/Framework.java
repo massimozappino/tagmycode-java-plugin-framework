@@ -12,7 +12,6 @@ import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.exception.TagMyCodeUnauthorizedException;
 import com.tagmycode.sdk.model.LanguagesCollection;
 import com.tagmycode.sdk.model.Snippet;
-import com.tagmycode.sdk.model.SnippetsCollection;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
@@ -52,7 +51,7 @@ public class Framework implements IOnErrorCallback {
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
         StorageEngine storageEngine = new StorageEngine(frameworkConfig.getDbService());
-        frameworkConfig.getDbService().initialize();
+
         this.data = new Data(storageEngine);
         quickSearchDialog = new QuickSearchDialog(this, getParentFrame());
         pollingProcess = new SnippetsUpdatePollingProcess(this);
@@ -206,6 +205,7 @@ public class Framework implements IOnErrorCallback {
         try {
             tagMyCode.loadOauthToken();
             loadData();
+            snippetsDataChanged();
         } catch (TagMyCodeStorageException e) {
             data.clearDataAndStorage();
             logError(e);
@@ -245,24 +245,6 @@ public class Framework implements IOnErrorCallback {
 
     public StorageEngine getStorageEngine() {
         return data.getStorageEngine();
-    }
-
-    public void addSnippet(Snippet snippet) {
-        getData().getSnippets().add(snippet);
-        saveSnippetsDataChanged();
-        saveData();
-    }
-
-    public void updateSnippet(Snippet snippet) {
-        SnippetsCollection snippets = getData().getSnippets();
-        snippets.updateSnippet(snippet);
-        saveSnippetsDataChanged();
-    }
-
-    public void deleteSnippet(Snippet snippetToDelete) {
-        SnippetsCollection snippets = getData().getSnippets();
-        snippets.deleteById(snippetToDelete.getId());
-        saveSnippetsDataChanged();
     }
 
     public void saveSnippetsDataChanged() {
@@ -333,5 +315,9 @@ public class Framework implements IOnErrorCallback {
 
     public FrameworkConfig getFrameworkConfig() {
         return frameworkConfig;
+    }
+
+    public SnippetsUpdatePollingProcess getPollingProcess() {
+        return pollingProcess;
     }
 }

@@ -9,9 +9,7 @@ import com.tagmycode.plugin.gui.SyntaxSnippetEditor;
 import com.tagmycode.plugin.gui.field.AbstractFieldValidation;
 import com.tagmycode.plugin.gui.field.CodeFieldValidation;
 import com.tagmycode.plugin.gui.field.TitleFieldValidation;
-import com.tagmycode.plugin.operation.EditSnippetOperation;
-import com.tagmycode.plugin.operation.NewSnippetOperation;
-import com.tagmycode.plugin.operation.TagMyCodeAsynchronousOperation;
+import com.tagmycode.plugin.operation.CreateAndEditSnippetOperation;
 import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -45,8 +43,7 @@ public class SnippetDialog extends AbstractDialog {
     private JScrollPane scrollPane;
     private DefaultComboBoxModel<Language> defaultComboBoxModel;
     private Snippet editableSnippet;
-    private NewSnippetOperation newSnippetOperation;
-    private EditSnippetOperation editSnippetOperation;
+    private CreateAndEditSnippetOperation createAndEditSnippetOperation;
     private boolean isModified = false;
 
     public SnippetDialog(final Framework framework, Frame parent) {
@@ -76,8 +73,7 @@ public class SnippetDialog extends AbstractDialog {
     protected void initWindow() {
         snippetMarkedAsSaved();
 
-        newSnippetOperation = new NewSnippetOperation(this);
-        editSnippetOperation = new EditSnippetOperation(this);
+        createAndEditSnippetOperation = new CreateAndEditSnippetOperation(this);
         defaultComboBoxModel = new DefaultComboBoxModel<>();
         languageComboBox.setModel(defaultComboBoxModel);
         descriptionTextField.requestFocus();
@@ -126,7 +122,7 @@ public class SnippetDialog extends AbstractDialog {
     @Override
     protected void onOK() {
         if (checkValidForm()) {
-            getSaveOperation().runWithTask(framework.getTaskFactory(), "Saving snippet");
+            getCreateAndEditSnippetOperation().runWithTask(framework.getTaskFactory(), "Saving snippet");
         }
     }
 
@@ -154,15 +150,15 @@ public class SnippetDialog extends AbstractDialog {
     private void listenForChanges() {
         DocumentListener listener = new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
-                setSnippetIsModified();
+                snippetMarkedAsModified();
             }
 
             public void removeUpdate(DocumentEvent e) {
-                setSnippetIsModified();
+                snippetMarkedAsModified();
             }
 
             public void insertUpdate(DocumentEvent e) {
-                setSnippetIsModified();
+                snippetMarkedAsModified();
             }
         };
         titleBox.getDocument().addDocumentListener(listener);
@@ -175,7 +171,7 @@ public class SnippetDialog extends AbstractDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    setSnippetIsModified();
+                    snippetMarkedAsModified();
                     saveLastLanguageUsed();
                     changeLanguage(getSelectedLanguage());
                 } catch (Exception ignored) {
@@ -189,7 +185,7 @@ public class SnippetDialog extends AbstractDialog {
                 boolean selected = privateSnippetCheckBox.isSelected();
 
                 try {
-                    setSnippetIsModified();
+                    snippetMarkedAsModified();
                     savePrivateSnippetFlag(selected);
                 } catch (TagMyCodeStorageException ignored) {
                 }
@@ -233,12 +229,14 @@ public class SnippetDialog extends AbstractDialog {
         Date creationDate = null;
         Date updateDate = null;
         if (editableSnippet != null) {
+            snippet.setLocalId(editableSnippet.getLocalId());
             snippet.setId(editableSnippet.getId());
             creationDate = editableSnippet.getCreationDate();
             updateDate = editableSnippet.getUpdateDate();
         }
         snippet.setCreationDate(creationDate == null ? now : creationDate);
         snippet.setUpdateDate(updateDate == null ? now : updateDate);
+        snippet.setDirty(true);
 
         return snippet;
     }
@@ -289,18 +287,6 @@ public class SnippetDialog extends AbstractDialog {
         return fieldValidations;
     }
 
-    public boolean isNewSnippet() {
-        return !(editableSnippet != null && editableSnippet.getId() > 0);
-    }
-
-    public TagMyCodeAsynchronousOperation<Snippet> getSaveOperation() {
-        if (isNewSnippet()) {
-            return newSnippetOperation;
-        } else {
-            return editSnippetOperation;
-        }
-    }
-
     public boolean isModified() {
         return isModified;
     }
@@ -310,8 +296,12 @@ public class SnippetDialog extends AbstractDialog {
         getButtonOk().setEnabled(false);
     }
 
-    public void setSnippetIsModified() {
+    public void snippetMarkedAsModified() {
         this.isModified = true;
         getButtonOk().setEnabled(true);
+    }
+
+    public CreateAndEditSnippetOperation getCreateAndEditSnippetOperation() {
+        return createAndEditSnippetOperation;
     }
 }
