@@ -4,6 +4,7 @@ import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.StorageEngine;
 import com.tagmycode.plugin.gui.form.LoginDialog;
 import org.junit.Test;
+import support.FrameworkBuilder;
 
 import javax.swing.*;
 
@@ -79,7 +80,7 @@ public class FrameworkAcceptanceTest extends AcceptanceTestBase {
 
     @Test
     public void networkingEnabledAfterRestart() throws Exception {
-        StorageEngine storage = createStorageEngineWithData();
+        StorageEngine storage = createStorageEngine();
         storage.saveNetworkingEnabledFlag(true);
         Framework framework = createFramework(storage);
         mockTagMyCodeReturningValidAccountData(framework);
@@ -92,12 +93,14 @@ public class FrameworkAcceptanceTest extends AcceptanceTestBase {
 
     @Test
     public void networkingDisabledAfterRestart() throws Exception {
-        Framework framework = acceptanceFramework();
+        StorageEngine storageEngineWithData = createStorageEngineWithData();
+        storageEngineWithData.saveNetworkingEnabledFlag(false);
+        final Framework framework = new FrameworkBuilder().setStorageEngine(storageEngineWithData).build();
+        mockTagMyCodeReturningValidAccountData(framework);
 
         framework.start();
-        Thread.sleep(300);
-        assertFalse(framework.getData().isNetworkingEnabled());
-        assertTrue(framework.getMainWindow().getSnippetsTab().getButtonNetworking().getIcon().toString().contains("/icons/disconnected.png"));
-    }
 
+        waitForFalse(framework.getData().isNetworkingEnabled());
+        waitForTrue(framework.getMainWindow().getSnippetsTab().getButtonNetworking().getIcon().toString().contains("/icons/disconnected.png"));
+    }
 }

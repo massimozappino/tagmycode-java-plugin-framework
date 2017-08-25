@@ -1,6 +1,7 @@
 package example.support;
 
 import com.tagmycode.plugin.AbstractTaskFactory;
+import com.tagmycode.plugin.Framework;
 
 public class TaskFactory extends AbstractTaskFactory {
     @Override
@@ -8,9 +9,9 @@ public class TaskFactory extends AbstractTaskFactory {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.print(title + "...");
+                Framework.LOGGER.info(title + "... START");
                 runnable.run();
-                System.out.println("OK");
+                Framework.LOGGER.info(title + "... END");
             }
         });
         thread.start();

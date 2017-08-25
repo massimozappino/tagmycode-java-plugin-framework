@@ -12,7 +12,6 @@ import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.exception.TagMyCodeUnauthorizedException;
 import com.tagmycode.sdk.model.LanguagesCollection;
 import com.tagmycode.sdk.model.Snippet;
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -22,10 +21,6 @@ import java.sql.SQLException;
 
 public class Framework implements IOnErrorCallback {
     public final static Logger LOGGER = Logger.getLogger(Framework.class);
-
-    static {
-        BasicConfigurator.configure();
-    }
 
     private final TagMyCode tagMyCode;
     private final Frame parentFrame;
@@ -91,14 +86,15 @@ public class Framework implements IOnErrorCallback {
         snippetDialog.display();
     }
 
-    public void showEditSnippetDialog(Snippet snippet) {
+    public SnippetDialog showEditSnippetDialog(Snippet snippet) {
         if (snippet == null) {
-            return;
+            return null;
         }
 
         SnippetDialog snippetDialog = snippetDialogFactory.create(this, getParentFrame());
         snippetDialog.setEditableSnippet(snippet);
         snippetDialog.display();
+        return snippetDialog;
     }
 
     public void showSettingsDialog() {

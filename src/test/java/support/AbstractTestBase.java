@@ -3,36 +3,26 @@ package support;
 
 import com.tagmycode.plugin.Data;
 import com.tagmycode.plugin.Framework;
-import com.tagmycode.plugin.FrameworkConfig;
 import com.tagmycode.plugin.StorageEngine;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
-import com.tagmycode.sdk.TagMyCode;
-import com.tagmycode.sdk.authentication.TagMyCodeApiDevelopment;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.DefaultLanguageCollection;
 import com.tagmycode.sdk.model.SnippetsCollection;
-import org.junit.After;
-import org.mockito.Mockito;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.sql.SQLException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.spy;
 
 public class AbstractTestBase {
-    protected ResourceGenerate resourceGenerate;
-    private MemDbService memDbService;
 
-    @After
-    public void closeConnections() throws TagMyCodeStorageException, IOException {
-        if (memDbService != null) {
-            memDbService.close();
-        }
-    }
+    protected ResourceGenerate resourceGenerate;
 
     public AbstractTestBase() {
         resourceGenerate = new ResourceGenerate();
@@ -43,25 +33,15 @@ public class AbstractTestBase {
     }
 
     public Framework createFramework(StorageEngine storageEngine) throws Exception {
-        FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), storageEngine.getDbService(), new FakeMessageManager(), new FakeTaskFactory(), new FakeVersion(), null);
-        return new Framework(new TagMyCodeApiDevelopment(), frameworkConfig, new FakeSecret());
+        return new FrameworkBuilder().setStorageEngine(storageEngine).build();
     }
 
     protected Framework createSpyFramework() throws Exception {
-        return Mockito.spy(createFramework());
+        return spy(createFramework());
     }
 
-    protected StorageEngine createStorageEngine() throws SQLException {
-        MemDbService dbService = getSingleInstanceOfMemDb();
-        return new StorageEngine(dbService);
-    }
-
-    protected MemDbService getSingleInstanceOfMemDb() throws SQLException {
-        if (memDbService == null) {
-            memDbService = new MemDbService("test");
-            memDbService.initialize();
-        }
-        return memDbService;
+    protected StorageEngine createStorageEngine() throws SQLException, TagMyCodeJsonException, TagMyCodeStorageException, IOException {
+        return new StorageEngineBuilder().build();
     }
 
     public StorageEngine createStorageEngineWithData() throws Exception {
@@ -76,21 +56,7 @@ public class AbstractTestBase {
     }
 
     protected void mockTagMyCodeReturningValidAccountData(Framework framework) throws Exception {
-        TagMyCode mockTagMyCode = getMockedTagMyCode(framework);
-        when(mockTagMyCode.isAuthenticated()).thenReturn(true);
-
-        when(mockTagMyCode.fetchAccount()).thenReturn(resourceGenerate.aUser());
-        when(mockTagMyCode.fetchLanguages()).thenReturn(resourceGenerate.aLanguageCollection());
-        when(mockTagMyCode.fetchSnippetsCollection()).thenReturn(resourceGenerate.aSnippetCollection());
-    }
-
-    protected TagMyCode getMockedTagMyCode(Framework framework) throws NoSuchFieldException, IllegalAccessException {
-        TagMyCode mockedTagMyCode = mock(TagMyCode.class);
-
-        Field field = framework.getClass().getDeclaredField("tagMyCode");
-        field.setAccessible(true);
-        field.set(framework, mockedTagMyCode);
-        return mockedTagMyCode;
+        new TagMyCodeMockBuilder(framework).setSnippets(resourceGenerate.aSnippetCollection());
     }
 
     protected void assertDataIsCleared(Data data) throws SQLException {
@@ -115,4 +81,21 @@ public class AbstractTestBase {
         assertEquals(true, data.isNetworkingEnabled());
     }
 
+    protected void waitForEquals(final Object expected, final Object actual) {
+        await().atMost(2, SECONDS).until(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                return expected.equals(actual);
+            }
+        });
+    }
+
+    protected void waitForFalse(final boolean condition) {
+        await().atMost(2, SECONDS).untilFalse(new AtomicBoolean(condition));
+    }
+
+    protected void waitForTrue(final boolean condition) {
+        await().atMost(2, SECONDS).untilTrue(new AtomicBoolean(condition));
+
+    }
 }

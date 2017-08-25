@@ -34,6 +34,7 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
 
             SnippetsCollection dirtySnippets = snippetsStorage.findDirty();
 
+            // TODO can throws "Invalid snippet_id"
             SyncSnippets syncSnippets = tagMyCode.syncSnippets(dirtySnippets, snippetsDeletions);
 
             for (Integer deletion : syncSnippets.getDeletedSnippets()) {
@@ -42,6 +43,7 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
 
             SnippetsCollection changedSnippets = syncSnippets.getChangedSnippets();
             for (Snippet snippet : changedSnippets) {
+                // TODO refactor
                 Snippet foundSnippet = snippetsStorage.findBySnippetId(snippet.getId());
                 if (foundSnippet == null) {
                     Snippet newSnippetWithLocalId = dbService.snippetDao().queryForId(String.valueOf(snippet.getLocalId()));
@@ -60,7 +62,7 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
             Framework.LOGGER.info(String.format("Last snippets update: %s", tagMyCode.getLastSnippetsUpdate()));
         } else {
             syncProcess.setNetworkAvailable(false);
-            Framework.LOGGER.info("Fetching snippets: Network unreachable");
+            Framework.LOGGER.warn("Fetching snippets: Network unreachable");
         }
         return null;
     }
