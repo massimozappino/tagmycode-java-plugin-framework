@@ -11,7 +11,6 @@ import com.tagmycode.sdk.model.SnippetsCollection;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -79,15 +78,6 @@ public class AbstractTestBase {
         assertEquals(resourceGenerate.aSnippetCollection(), data.getSnippets());
         assertEquals(resourceGenerate.aSnippetsLastUpdate(), data.getLastSnippetsUpdate());
         assertEquals(true, data.isNetworkingEnabled());
-    }
-
-    protected void waitForEquals(final Object expected, final Object actual) {
-        await().atMost(2, SECONDS).until(new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception {
-                return expected.equals(actual);
-            }
-        });
     }
 
     protected void waitForFalse(final boolean condition) {

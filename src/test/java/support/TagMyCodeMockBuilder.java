@@ -27,11 +27,12 @@ public class TagMyCodeMockBuilder {
         initDefaultValues();
     }
 
-    private void initDefaultValues() throws IOException, TagMyCodeException {
+    public void initDefaultValues() throws IOException, TagMyCodeException {
         setAuthenticated(true)
                 .setServiceAvailable(true)
                 .setAccount(resourceGenerate.aUser())
-                .setLanguages(resourceGenerate.aLanguageCollection());
+                .setLanguages(resourceGenerate.aLanguageCollection())
+                .setSyncSnippets(new SyncSnippets(new SnippetsCollection(), new SnippetsDeletions()));
     }
 
     private TagMyCodeMockBuilder setAccount(User user) throws TagMyCodeException {
@@ -70,5 +71,9 @@ public class TagMyCodeMockBuilder {
     public TagMyCodeMockBuilder setSyncSnippets(SyncSnippets syncSnippets) throws TagMyCodeException {
         when(mockTagMyCode.syncSnippets((SnippetsCollection) any(), (SnippetsDeletions) any())).thenReturn(syncSnippets);
         return this;
+    }
+
+    public TagMyCode getMock() {
+        return mockTagMyCode;
     }
 }

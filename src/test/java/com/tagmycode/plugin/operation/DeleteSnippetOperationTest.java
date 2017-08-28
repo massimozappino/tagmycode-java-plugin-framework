@@ -1,26 +1,30 @@
 package com.tagmycode.plugin.operation;
 
+import com.j256.ormlite.dao.Dao;
+import com.tagmycode.plugin.gui.form.SnippetsTab;
+import com.tagmycode.sdk.model.Snippet;
 import org.junit.Test;
 import support.AbstractTestBase;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
 public class DeleteSnippetOperationTest extends AbstractTestBase {
 
     @Test
-    public void testOnSuccess() throws Exception {
-        // TODO
-//        SnippetsTab snippetsTabMock = mock(SnippetsTab.class);
-//        Snippet snippetToDelete = resourceGenerate.aSnippet();
-//        DeleteSnippetOperation deleteSnippetOperation = new DeleteSnippetOperation(snippetsTabMock, snippetToDelete);
-//
-//        Framework frameworkMock = mock(Framework.class);
-//        TagMyCode tagMyCodeMock = mock(TagMyCode.class);
-//        when(frameworkMock.getTagMyCode()).thenReturn(tagMyCodeMock);
-//        when(snippetsTabMock.getFramework()).thenReturn(frameworkMock);
-//
-//        assertEquals(snippetToDelete, deleteSnippetOperation.performOperation());
-//        verify(tagMyCodeMock, times(1)).deleteSnippet(snippetToDelete.getId());
-//
-//        deleteSnippetOperation.onSuccess(snippetToDelete);
-//        verify(frameworkMock, times(1)).deleteSnippet(snippetToDelete);
+    public void testPerformOperation() throws Exception {
+
+        SnippetsTab snippetsTabMock = mock(SnippetsTab.class);
+        Snippet snippetToDelete = resourceGenerate.aSnippet();
+        DeleteSnippetOperation deleteSnippetOperation = spy(new DeleteSnippetOperation(snippetsTabMock, snippetToDelete));
+        doReturn(mock(Dao.class)).when(deleteSnippetOperation).getSnippetDao();
+        doNothing().when(deleteSnippetOperation).fireDataChanged(anyInt());
+
+        assertFalse(snippetToDelete.isDeleted());
+
+        deleteSnippetOperation.performOperation();
+
+        assertTrue(snippetToDelete.isDeleted());
     }
 }

@@ -137,9 +137,9 @@ public class StorageEngine {
     }
 
     public SnippetsCollection loadSnippets() {
-        SnippetsCollection snippets = createDefaultSnippetCollection();
+        SnippetsCollection snippets;
         try {
-            snippets.addAll(dbService.snippetDao().queryForAll());
+            snippets = snippetsStorage.findVisible();
         } catch (Exception e) {
             snippets = createDefaultSnippetCollection();
         }

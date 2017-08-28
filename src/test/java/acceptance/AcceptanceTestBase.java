@@ -1,13 +1,17 @@
 package acceptance;
 
 import com.tagmycode.plugin.Framework;
+import com.tagmycode.plugin.TableModelSnippetNotFoundException;
+import com.tagmycode.plugin.gui.form.SnippetsTab;
+import com.tagmycode.plugin.gui.table.SnippetsTableModel;
+import com.tagmycode.sdk.model.Snippet;
 import support.AbstractTestBase;
 
 import javax.swing.*;
-import javax.swing.table.TableModel;
 import java.awt.*;
 
 public class AcceptanceTestBase extends AbstractTestBase {
+    protected Framework framework;
 
     protected void showComponentInFrame(Component component, int milliseconds) throws Exception {
         JFrame jFrame = new JFrame();
@@ -19,14 +23,29 @@ public class AcceptanceTestBase extends AbstractTestBase {
     }
 
     protected void showComponentInFrame(Component component) throws Exception {
-        showComponentInFrame(component, 2000);
+        showComponentInFrame(component, 3000);
     }
 
-    protected void clickOnButton(JButton button) {
+    protected void clickOnButton(JButton button) throws InterruptedException {
         button.doClick();
+        Thread.sleep(400);
     }
 
-    protected TableModel getTableModel(Framework framework) {
-        return framework.getMainWindow().getSnippetsTab().getSnippetsTable().getSnippetsComponent().getModel();
+    protected SnippetsTableModel getTableModel() {
+        return framework.getMainWindow().getSnippetsTab().getSnippetsModel();
+    }
+    protected Snippet getSnippetAtRow(int row) throws TableModelSnippetNotFoundException {
+        Snippet snippet = null;
+        try {
+            snippet = getTableModel().getSnippetAt(row);
+        } catch (TableModelSnippetNotFoundException ignore) {
+        }
+        return snippet;
+    }
+
+    protected void selectTableRow(int index) {
+        SnippetsTab snippetsTab = framework.getMainWindow().getSnippetsTab();
+        JTable snippetsComponent = snippetsTab.getSnippetsTable().getSnippetsComponent();
+        snippetsComponent.setRowSelectionInterval(index, index);
     }
 }

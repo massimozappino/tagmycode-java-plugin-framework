@@ -62,7 +62,7 @@ public class SnippetDialogTest extends AbstractTestBase {
         assertTrue(snippetObject.isDirty());
         assertEquals(snippet.getCreationDate(), snippetObject.getCreationDate());
         assertEquals(snippet.getCreationDate(), snippetObject.getCreationDate());
-        assertEquals(snippet.getUpdateDate(), snippetObject.getUpdateDate());
+        assertTrue(snippetObject.getUpdateDate().getTime() > snippet.getUpdateDate().getTime());
 
         snippet.setCreationDate(null);
         snippet.setUpdateDate(null);

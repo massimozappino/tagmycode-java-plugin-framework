@@ -14,10 +14,11 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
         this.onErrorCallback = onErrorCallback;
     }
 
-    public final void start() {
+    public final Thread start() {
         Runnable runnable = createRunnable();
         thread = new Thread(runnable);
         thread.start();
+        return thread;
     }
 
     public void stop() {

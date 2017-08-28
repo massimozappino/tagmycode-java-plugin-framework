@@ -114,7 +114,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
                     public void run() {
                         boolean newStatus = !framework.isNetworkingEnabled();
                         setNetworkingEnabled(newStatus);
-                        framework.setNetworkingEnabled(newStatus);
                     }
                 }).start();
             }
@@ -363,7 +362,6 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         return framework;
     }
 
-
     public void initFilterField() {
         filterTextField = new FilterSnippetsTextField(framework, snippetsTable);
         filterTextField.setMinimumSize(new Dimension(200, 25));
@@ -383,9 +381,14 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     public void setNetworkingEnabled(boolean networkingEnabled) {
         setNetworkIcon(networkingEnabled);
         syncButton.setEnabled(networkingEnabled);
+        framework.setNetworkingEnabled(networkingEnabled);
     }
 
     public void reset() {
         changeViewBasedOnSnippet(null);
+    }
+
+    public SnippetsTableModel getSnippetsModel() {
+        return model;
     }
 }

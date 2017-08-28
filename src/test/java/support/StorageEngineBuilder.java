@@ -5,6 +5,7 @@ import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.sdk.DbService;
 import com.tagmycode.sdk.exception.TagMyCodeJsonException;
 import com.tagmycode.sdk.model.LanguagesCollection;
+import com.tagmycode.sdk.model.SnippetsCollection;
 import com.tagmycode.sdk.model.User;
 
 import java.io.IOException;
@@ -51,4 +52,8 @@ public class StorageEngineBuilder {
         return this;
     }
 
+    public StorageEngineBuilder withSnippetsCollection(SnippetsCollection snippetsCollection) throws TagMyCodeStorageException {
+        storageEngine.saveSnippets(snippetsCollection);
+        return this;
+    }
 }

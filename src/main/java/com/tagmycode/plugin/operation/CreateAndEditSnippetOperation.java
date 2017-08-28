@@ -1,20 +1,15 @@
 package com.tagmycode.plugin.operation;
 
-import com.j256.ormlite.dao.Dao;
-import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.form.SnippetDialog;
-import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.Snippet;
 
-import java.sql.SQLException;
+public class CreateAndEditSnippetOperation extends AbstractSnippetOperation {
 
-public class CreateAndEditSnippetOperation extends AbstractSaveSnippetOperation {
-
-    private final Framework framework;
+    private SnippetDialog snippetDialog;
 
     public CreateAndEditSnippetOperation(SnippetDialog snippetDialog) {
-        super(snippetDialog);
-        this.framework = snippetDialog.getFramework();
+        super(snippetDialog.getFramework(), snippetDialog);
+        this.snippetDialog = snippetDialog;
     }
 
     @Override
@@ -29,31 +24,25 @@ public class CreateAndEditSnippetOperation extends AbstractSaveSnippetOperation 
         return snippetObject;
     }
 
-    public void addSnippet(Snippet snippet) throws SQLException, TagMyCodeException {
-        fireDataChanged(framework.getData().getStorageEngine().getDbService().snippetDao().create(snippet));
+    @Override
+    protected void beforePerformOperation() {
+        snippetDialog.getButtonOk().setEnabled(false);
     }
 
-    public void updateSnippet(Snippet snippet) throws SQLException, TagMyCodeException {
-        fireDataChanged(getSnippetDao().update(snippet));
-    }
-
-    private Dao<Snippet, String> getSnippetDao() {
-        return framework.getData().getStorageEngine().getDbService().snippetDao();
-    }
-
-    private void fireDataChanged(int rowSaved) throws TagMyCodeException {
-        if (rowSaved == 1) {
-            framework.getData().loadAll();
-            framework.snippetsDataChanged();
-        } else {
-            throw new TagMyCodeException("Error saving snippet");
-        }
+    @Override
+    protected void onComplete() {
+        snippetDialog.getButtonOk().setEnabled(true);
     }
 
     @Override
     protected void onSuccess(Snippet snippet) {
+        snippetDialog.snippetMarkedAsSaved();
+        snippetDialog.closeDialog();
         super.onSuccess(snippet);
-        framework.getPollingProcess().forceScheduleUpdate();
+    }
+
+    private Snippet getSnippetObject() {
+        return snippetDialog.createSnippetObject();
     }
 
 }

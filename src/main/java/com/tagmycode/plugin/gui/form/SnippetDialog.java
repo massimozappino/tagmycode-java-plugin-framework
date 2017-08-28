@@ -227,15 +227,13 @@ public class SnippetDialog extends AbstractDialog {
         snippet.setPrivate(privateSnippetCheckBox.isSelected());
         Date now = new Date();
         Date creationDate = null;
-        Date updateDate = null;
         if (editableSnippet != null) {
             snippet.setLocalId(editableSnippet.getLocalId());
             snippet.setId(editableSnippet.getId());
             creationDate = editableSnippet.getCreationDate();
-            updateDate = editableSnippet.getUpdateDate();
         }
         snippet.setCreationDate(creationDate == null ? now : creationDate);
-        snippet.setUpdateDate(updateDate == null ? now : updateDate);
+        snippet.setUpdateDate(now);
         snippet.setDirty(true);
 
         return snippet;
