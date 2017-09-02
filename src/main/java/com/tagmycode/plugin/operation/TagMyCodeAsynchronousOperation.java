@@ -9,6 +9,7 @@ import javax.swing.*;
 public abstract class TagMyCodeAsynchronousOperation<T> {
     protected IOnErrorCallback onErrorCallback;
     private Thread thread;
+    private boolean isRunning;
 
     public TagMyCodeAsynchronousOperation(IOnErrorCallback onErrorCallback) {
         this.onErrorCallback = onErrorCallback;
@@ -27,14 +28,15 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
         }
     }
 
-    public void runWithTask(AbstractTaskFactory task, String title) {
-        task.create(createRunnable(), title);
+    public void runWithTask(AbstractTaskFactory abstractTaskFactory, String title) {
+        abstractTaskFactory.create(createRunnable(), title);
     }
 
     private Runnable createRunnable() {
         return new Runnable() {
             @Override
             public void run() {
+                isRunning = true;
                 try {
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
@@ -46,6 +48,7 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
                         public void run() {
                             onComplete();
                             onSuccess(result);
+                            isRunning = false;
                         }
                     });
                 } catch (final InterruptedException e) {
@@ -53,6 +56,7 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
                         public void run() {
                             onComplete();
                             onInterrupted();
+                            isRunning = false;
                             e.printStackTrace();
                         }
                     });
@@ -61,6 +65,7 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
                         public void run() {
                             onComplete();
                             onFailure(e);
+                            isRunning = false;
                             e.printStackTrace();
                         }
                     });
@@ -80,6 +85,7 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
     protected abstract T performOperation() throws Exception;
 
     protected void onComplete() {
+
     }
 
     protected void onSuccess(T result) {
@@ -91,8 +97,12 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
             onErrorCallback.onError((TagMyCodeException) e);
         } else if (e instanceof Exception) {
             onErrorCallback.onError(new TagMyCodeException((Exception) e));
-        }else {
+        } else {
             onErrorCallback.onError(new TagMyCodeException(e.getMessage()));
         }
+    }
+
+    public boolean isRunning() {
+        return isRunning;
     }
 }

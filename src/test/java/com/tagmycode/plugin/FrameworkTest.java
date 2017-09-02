@@ -123,7 +123,7 @@ public class FrameworkTest extends AbstractTestBase {
         Framework framework = createSpyFramework();
         framework.getTagMyCode().setLastSnippetsUpdate("changed GMT string");
 
-        framework.saveSnippetsDataChanged();
+        framework.saveAndTellThatSnippetsDataAreChanged();
 
         assertEquals("changed GMT string", framework.getData().getLastSnippetsUpdate());
         verify(framework, times(1)).saveData();

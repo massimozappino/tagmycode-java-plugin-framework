@@ -17,12 +17,14 @@ public class SnippetsUpdatePollingProcess {
     private boolean syncingFlag = false;
     private boolean networkAvailable = true;
     private long lastNetworkConnection = 0;
+    private SyncSnippetsOperation syncSnippetsOperation;
 
     public SnippetsUpdatePollingProcess(final Framework framework) {
         this.framework = framework;
     }
 
     public void start() {
+        syncSnippetsOperation = new SyncSnippetsOperation(this);
         exitStatus = false;
         scheduleUpdate();
         createThread();
@@ -101,7 +103,7 @@ public class SnippetsUpdatePollingProcess {
     private synchronized void executeTask() {
         syncingFlag = true;
         lastSync = SYNC_NEVER;
-        new SyncSnippetsOperation(this).runWithTask(framework.getTaskFactory(), "Syncing snippets");
+        syncSnippetsOperation.runWithTask(framework.getTaskFactory(), "Syncing snippets");
     }
 
     public Framework getFramework() {
@@ -113,5 +115,9 @@ public class SnippetsUpdatePollingProcess {
         if (!networkAvailable) {
             lastNetworkConnection = now();
         }
+    }
+
+    public boolean isRunningTask() {
+        return syncSnippetsOperation.isRunning();
     }
 }

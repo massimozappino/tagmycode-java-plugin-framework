@@ -17,7 +17,7 @@ public class AcceptanceTestBase extends AbstractTestBase {
         JFrame jFrame = new JFrame();
         jFrame.add(component);
         jFrame.pack();
-        jFrame.setMinimumSize(new Dimension(200, 200));
+        jFrame.setMinimumSize(new Dimension(900, 200));
         jFrame.setVisible(true);
         Thread.sleep(milliseconds);
     }

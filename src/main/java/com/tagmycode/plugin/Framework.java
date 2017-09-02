@@ -221,7 +221,7 @@ public class Framework implements IOnErrorCallback {
             tagMyCode.authenticate(verificationCode);
 
             fetchAndStoreAllData();
-            saveSnippetsDataChanged();
+            saveAndTellThatSnippetsDataAreChanged();
             if (isNetworkingEnabled()) {
                 pollingProcess.start();
             }
@@ -243,9 +243,9 @@ public class Framework implements IOnErrorCallback {
         return data.getStorageEngine();
     }
 
-    public void saveSnippetsDataChanged() {
-        snippetsDataChanged();
+    public void saveAndTellThatSnippetsDataAreChanged() {
         saveData();
+        snippetsDataChanged();
     }
 
     public void snippetsDataChanged() {

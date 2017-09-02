@@ -13,8 +13,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class TagMyCodeMockBuilder {
 
@@ -27,12 +26,13 @@ public class TagMyCodeMockBuilder {
         initDefaultValues();
     }
 
-    public void initDefaultValues() throws IOException, TagMyCodeException {
+    public TagMyCodeMockBuilder initDefaultValues() throws IOException, TagMyCodeException {
         setAuthenticated(true)
                 .setServiceAvailable(true)
                 .setAccount(resourceGenerate.aUser())
                 .setLanguages(resourceGenerate.aLanguageCollection())
                 .setSyncSnippets(new SyncSnippets(new SnippetsCollection(), new SnippetsDeletions()));
+        return this;
     }
 
     private TagMyCodeMockBuilder setAccount(User user) throws TagMyCodeException {
@@ -69,7 +69,7 @@ public class TagMyCodeMockBuilder {
     }
 
     public TagMyCodeMockBuilder setSyncSnippets(SyncSnippets syncSnippets) throws TagMyCodeException {
-        when(mockTagMyCode.syncSnippets((SnippetsCollection) any(), (SnippetsDeletions) any())).thenReturn(syncSnippets);
+        doReturn(syncSnippets).when(mockTagMyCode).syncSnippets((SnippetsCollection) any(), (SnippetsDeletions) any());
         return this;
     }
 

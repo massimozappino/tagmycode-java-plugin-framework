@@ -6,6 +6,7 @@ import com.tagmycode.sdk.DbService;
 import com.tagmycode.sdk.SyncSnippets;
 import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.exception.TagMyCodeApiException;
+import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.Snippet;
 import com.tagmycode.sdk.model.SnippetsCollection;
 import com.tagmycode.sdk.model.SnippetsDeletions;
@@ -19,33 +20,31 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
     private SnippetsUpdatePollingProcess syncProcess;
     private SnippetsStorage snippetsStorage;
     private DbService dbService;
+    private TagMyCode tagMyCode;
 
     public SyncSnippetsOperation(SnippetsUpdatePollingProcess syncProcess) {
         super(syncProcess.getFramework());
         this.syncProcess = syncProcess;
         this.framework = syncProcess.getFramework();
+        tagMyCode = framework.getTagMyCode();
         this.dbService = framework.getStorageEngine().getDbService();
         this.snippetsStorage = framework.getStorageEngine().getSnippetsStorage();
     }
 
     @Override
-    protected Void performOperation() throws Exception {
-        TagMyCode tagMyCode = framework.getTagMyCode();
+    public Void performOperation() throws Exception {
         if (tagMyCode.isServiceAvailable()) {
             syncProcess.setNetworkAvailable(true);
             Framework.LOGGER.info(String.format("Fetching snippets since: %s", tagMyCode.getLastSnippetsUpdate()));
 
-            SnippetsCollection dirtySnippets = snippetsStorage.findDirtyNotDeleted();
             try {
-                SyncSnippets syncSnippets = tagMyCode.syncSnippets(dirtySnippets, snippetsStorage.findDeletedIds());
-                manageDeletions(syncSnippets.getDeletedSnippets());
-                manageChangedSnippets(syncSnippets.getChangedSnippets());
+                processSync();
             } catch (TagMyCodeApiException apiException) {
                 Framework.LOGGER.error(apiException.getMessage());
-                //TODO  Reload all snippets
-                // keep all dirty snippets
+                snippetsStorage.deleteNonDirty();
+                processSync();
             }
-            framework.getData().loadAll();
+
 
             Framework.LOGGER.info(String.format("Last snippets update: %s", tagMyCode.getLastSnippetsUpdate()));
         } else {
@@ -53,6 +52,18 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
             Framework.LOGGER.warn("Fetching snippets: Network unreachable");
         }
         return null;
+    }
+
+    private void processSync() throws SQLException, TagMyCodeException, JSONException {
+        deleteLocalDeletions(snippetsStorage.findDeleted());
+        SyncSnippets syncSnippets = tagMyCode.syncSnippets(snippetsStorage.findDirtyNotDeleted(), snippetsStorage.findDeletedIds());
+        manageDeletions(syncSnippets.getDeletedSnippets());
+        manageChangedSnippets(syncSnippets.getChangedSnippets());
+        framework.getData().loadAll();
+    }
+
+    private void deleteLocalDeletions(SnippetsCollection deleted) throws SQLException {
+        framework.getStorageEngine().getDbService().snippetDao().delete(deleted);
     }
 
     private void manageDeletions(SnippetsDeletions snippetsDeletions) throws SQLException, JSONException {
@@ -97,11 +108,11 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
 
     @Override
     protected void onSuccess(Void ignored) {
-        framework.saveSnippetsDataChanged();
+        framework.snippetsDataChanged();
     }
 
     @Override
-    protected void onComplete() {
+    public void onComplete() {
         syncProcess.syncCompleted();
     }
 }

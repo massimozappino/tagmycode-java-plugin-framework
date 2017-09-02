@@ -21,5 +21,4 @@ public class SyncSnippetsOperationTest extends BaseTest {
 
         verify(syncProcessMock, times(1)).syncCompleted();
     }
-
 }
