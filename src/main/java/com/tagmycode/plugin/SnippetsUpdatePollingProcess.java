@@ -11,7 +11,7 @@ public class SnippetsUpdatePollingProcess {
     private static final int SYNC_NEVER = -1;
     private static final int SYNC_FORCE = 0;
     private long lastSync = SYNC_NEVER;
-    private boolean exitStatus = false;
+    protected boolean exitStatus = false;
     private Thread thread = null;
     private Framework framework;
     private boolean syncingFlag = false;
@@ -25,8 +25,12 @@ public class SnippetsUpdatePollingProcess {
 
     public void start() {
         syncSnippetsOperation = new SyncSnippetsOperation(this);
-        exitStatus = false;
+
         scheduleUpdate();
+        if (thread != null) {
+            terminate();
+        }
+        exitStatus = false;
         createThread();
         thread.start();
     }
@@ -57,9 +61,6 @@ public class SnippetsUpdatePollingProcess {
     }
 
     private void createThread() {
-        if (thread != null) {
-            terminate();
-        }
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -119,5 +120,9 @@ public class SnippetsUpdatePollingProcess {
 
     public boolean isRunningTask() {
         return syncSnippetsOperation.isRunning();
+    }
+
+    public Thread getThread() {
+        return thread;
     }
 }

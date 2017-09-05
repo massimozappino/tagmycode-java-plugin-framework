@@ -6,8 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## UNRELEASED
 ### Added
-- log4j.properties configuration
-
+- added support to handle snippets in offline mode
+- added log4j.properties configuration
 
 ## [2.2.0] - 2017-04-22
 ### Added

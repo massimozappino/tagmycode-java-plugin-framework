@@ -54,9 +54,12 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
         return null;
     }
 
-    private void processSync() throws SQLException, TagMyCodeException, JSONException {
+    protected void processSync() throws SQLException, TagMyCodeException, JSONException {
+        SnippetsDeletions deletedIds = snippetsStorage.findDeletedIds();
+        SnippetsCollection dirtyNotDeleted = snippetsStorage.findDirtyNotDeleted();
+
         deleteLocalDeletions(snippetsStorage.findDeleted());
-        SyncSnippets syncSnippets = tagMyCode.syncSnippets(snippetsStorage.findDirtyNotDeleted(), snippetsStorage.findDeletedIds());
+        SyncSnippets syncSnippets = tagMyCode.syncSnippets(dirtyNotDeleted, deletedIds);
         manageDeletions(syncSnippets.getDeletedSnippets());
         manageChangedSnippets(syncSnippets.getChangedSnippets());
         framework.getData().loadAll();

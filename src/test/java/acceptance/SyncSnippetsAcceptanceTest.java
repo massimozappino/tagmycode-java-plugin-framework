@@ -23,7 +23,8 @@ import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.*;
+
 
 public class SyncSnippetsAcceptanceTest extends AcceptanceTestBase {
 
@@ -105,6 +106,24 @@ public class SyncSnippetsAcceptanceTest extends AcceptanceTestBase {
 
         assertEquals(0, framework.getStorageEngine().getSnippetsStorage().findDeleted().size());
         assertEquals(1, framework.getData().getSnippets().size());
+    }
+
+    @Test
+    public void localDeletionWorksAlsoForServer() throws Exception {
+        framework = new FrameworkBuilder(
+                createStorageEngineWithoutNetworking()
+                        .withSnippetsCollection(
+                                new SnippetsCollection(resourceGenerate.aSnippet().setTitle("sync snippet").setId(99)))
+        ).build();
+
+        TagMyCode mock = mockTagMyCode().getMock();
+
+        framework.start();
+        softDeleteSnippet(getSnippetAtRow(0));
+
+        forceSync();
+
+        verify(mock, times(1)).syncSnippets(new SnippetsCollection(), new SnippetsDeletions(99));
     }
 
     @Test

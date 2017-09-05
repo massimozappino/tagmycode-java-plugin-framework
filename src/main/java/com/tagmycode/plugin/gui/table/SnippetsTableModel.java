@@ -9,19 +9,17 @@ import javax.swing.table.AbstractTableModel;
 import java.util.Date;
 
 public class SnippetsTableModel extends AbstractTableModel {
-    public static final int LOCAL_ID = 0;
-    public static final int SNIPPET_ID = 1;
-    public static final int IS_PRIVATE = 2;
-    public final static int TITLE = 3;
-    public final static int LANGUAGE = 4;
-    public static final int MODIFIED = 5;
+    public static final int IS_PRIVATE = 0;
+    public final static int TITLE = 1;
+    public final static int LANGUAGE = 2;
+    public static final int MODIFIED = 3;
     private final Data data;
 
     private String[] columns;
 
     public SnippetsTableModel(final Data data) {
         this.data = data;
-        columns = new String[]{"LOCAL_ID", "SNIPPET_ID", "Private", "Title", "Language", "Modified"};
+        columns = new String[]{"Private", "Title", "Language", "Modified"};
     }
 
     @Override
@@ -56,10 +54,6 @@ public class SnippetsTableModel extends AbstractTableModel {
             snippet = new DefaultSnippet();
         }
         switch (columnIndex) {
-            case SNIPPET_ID:
-                return snippet.getId();
-            case LOCAL_ID:
-                return snippet.getLocalId();
             case LANGUAGE:
                 return snippet.getLanguage().toString();
             case TITLE:
