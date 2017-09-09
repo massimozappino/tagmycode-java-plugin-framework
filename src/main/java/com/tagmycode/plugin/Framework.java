@@ -1,6 +1,7 @@
 package com.tagmycode.plugin;
 
 
+import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.plugin.gui.IOnErrorCallback;
@@ -160,11 +161,20 @@ public class Framework implements IOnErrorCallback {
         return parentFrame;
     }
 
-    public void showError(final String message) {
+    public void showErrorDialog(final String message) {
         new GuiThread().execute(new Runnable() {
             @Override
             public void run() {
-                messageManager.error(message);
+                messageManager.errorDialog(message);
+            }
+        });
+    }
+
+    public void writeErrorLog(final String message) {
+        new GuiThread().execute(new Runnable() {
+            @Override
+            public void run() {
+                messageManager.errorLog(message);
             }
         });
     }
@@ -173,8 +183,10 @@ public class Framework implements IOnErrorCallback {
         logError(e);
         if (e instanceof TagMyCodeUnauthorizedException) {
             logoutAndAuthenticateAgain();
+        } else if (e instanceof TagMyCodeGuiException) {
+            showErrorDialog(e.getMessage());
         } else {
-            showError(e.getMessage());
+            writeErrorLog(e.getMessage());
         }
     }
 

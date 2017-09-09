@@ -19,7 +19,7 @@ public abstract class AbstractFieldValidation {
 
     public boolean performValidation() {
         if (!validate()) {
-            framework.showError(getMessageError());
+            framework.showErrorDialog(getMessageError());
             field.requestFocus();
             return false;
         }

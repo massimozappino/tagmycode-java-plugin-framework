@@ -7,13 +7,17 @@ import javax.swing.*;
 
 public class MessageManager implements IMessageManager {
     @Override
-    public void error(final String message) {
+    public void errorLog(final String message) {
+        System.err.println(message);
+    }
+
+    @Override
+    public void errorDialog(final String message) {
         new GuiThread().execute(new Runnable() {
             @Override
             public void run() {
                 JOptionPane.showMessageDialog(null, message, "TagMyCode Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-        System.err.println(message);
     }
 }

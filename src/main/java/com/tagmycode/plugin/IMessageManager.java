@@ -1,5 +1,7 @@
 package com.tagmycode.plugin;
 
 public interface IMessageManager {
-    public void error(String message);
+    void errorLog(String message);
+
+    void errorDialog(String message);
 }

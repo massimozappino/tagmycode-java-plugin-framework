@@ -4,15 +4,13 @@ import com.tagmycode.plugin.IMessageManager;
 
 public class FakeMessageManager implements IMessageManager {
 
-    private String currentMessage;
-
     @Override
-    public void error(String message) {
-        System.err.println("ERROR: " + message);
-        currentMessage = message;
+    public void errorLog(String message) {
+        System.err.println("ERROR LOG: " + message);
     }
 
-    public String getCurrentMessage() {
-        return currentMessage;
+    @Override
+    public void errorDialog(String message) {
+        System.err.println("ERROR DIALOG: " + message);
     }
 }

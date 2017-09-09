@@ -37,7 +37,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - filter snippets
 - quick search feature
 - insert selected snippet at cursor in document 
- 
+ ### Changed
+- Error messages with log and dialog
+
 ## 1.1.2 - 2014-10-03
 ### Added
 - Console write also snippet title when new snippet is created (thanks to bejoy)

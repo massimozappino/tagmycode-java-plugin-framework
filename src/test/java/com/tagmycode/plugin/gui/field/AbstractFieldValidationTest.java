@@ -21,12 +21,12 @@ public class AbstractFieldValidationTest extends AbstractTestBase {
 
         abstractFieldValidation = createAbstractFieldValidation(fieldMock, spyFramework, true);
         assertTrue(abstractFieldValidation.performValidation());
-        verify(spyFramework, times(0)).showError(eq("Message error"));
+        verify(spyFramework, times(0)).showErrorDialog(eq("Message error"));
         verify(fieldMock, times(0)).requestFocus();
 
         abstractFieldValidation = createAbstractFieldValidation(fieldMock, spyFramework, false);
         assertFalse(abstractFieldValidation.performValidation());
-        verify(spyFramework, times(1)).showError(eq("Message error"));
+        verify(spyFramework, times(1)).showErrorDialog(eq("Message error"));
         verify(fieldMock, times(1)).requestFocus();
     }
 
