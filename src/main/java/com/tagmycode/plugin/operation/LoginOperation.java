@@ -1,7 +1,9 @@
 package com.tagmycode.plugin.operation;
 
 
+import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.form.LoginDialog;
+import com.tagmycode.sdk.exception.TagMyCodeException;
 
 public class LoginOperation extends TagMyCodeAsynchronousOperation {
     private LoginDialog loginDialog;
@@ -15,7 +17,13 @@ public class LoginOperation extends TagMyCodeAsynchronousOperation {
 
     @Override
     protected Object performOperation() throws Exception {
-        loginDialog.getFramework().initialize(verificationCode);
+        Framework framework = loginDialog.getFramework();
+        try {
+            framework.initialize(verificationCode);
+        } catch (TagMyCodeException e) {
+            framework.showErrorDialog("Verification code is not valid");
+            throw e;
+        }
         return null;
     }
 

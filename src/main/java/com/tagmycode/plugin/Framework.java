@@ -224,11 +224,11 @@ public class Framework implements IOnErrorCallback {
         }
     }
 
-    public void initialize(final String verificationCode) {
-        mainWindow.setLoggedIn(true);
-        try {
-            tagMyCode.authenticate(verificationCode);
+    public void initialize(final String verificationCode) throws TagMyCodeException {
+        tagMyCode.authenticate(verificationCode);
 
+        try {
+            mainWindow.setLoggedIn(true);
             fetchAndStoreAllData();
             saveAndTellThatSnippetsDataAreChanged();
             if (isNetworkingEnabled()) {

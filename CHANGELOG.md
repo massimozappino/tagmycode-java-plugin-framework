@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - added support to handle snippets in offline mode
 - added log4j.properties configuration
 
+### Fixed
+- show a dialog error if verification code is not correct
+
 ## [2.2.0] - 2017-04-22
 ### Added
 - added key shortcut to get focus on filter snippets box
