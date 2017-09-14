@@ -32,7 +32,7 @@ public class LoginDialog extends AbstractDialog {
     protected void initWindow() {
         Color background = UIManager.getColor("Panel.background");
         contentPane.setBackground(background);
-        addClickableLink(framework.getBrowser(), signupLabel, "https://tagmycode.com/account/signup");
+        addClickableLink(framework, signupLabel, "https://tagmycode.com/account/signup");
 
         getDialog().setSize(350, 300);
         getDialog().setResizable(false);
@@ -77,7 +77,7 @@ public class LoginDialog extends AbstractDialog {
     }
 
     private void onOpenLink() {
-        framework.getBrowser().openUrl(framework.getTagMyCode().getAuthorizationUrl());
+        framework.openUrlInBrowser(framework.getTagMyCode().getAuthorizationUrl());
         verificationCodeTextField.requestFocus();
     }
 

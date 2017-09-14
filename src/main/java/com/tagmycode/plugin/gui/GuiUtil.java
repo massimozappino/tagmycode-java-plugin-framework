@@ -1,6 +1,6 @@
 package com.tagmycode.plugin.gui;
 
-import com.tagmycode.plugin.IBrowser;
+import com.tagmycode.plugin.Framework;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
@@ -9,10 +9,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class GuiUtil {
-    public static void addClickableLink(final IBrowser browser, JLabel label, final String url) {
+    public static void addClickableLink(final Framework framework, JLabel label, final String url) {
         label.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                browser.openUrl(url);
+                framework.openUrlInBrowser(url);
             }
         });
 

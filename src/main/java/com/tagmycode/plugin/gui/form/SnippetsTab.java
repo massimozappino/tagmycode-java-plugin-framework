@@ -242,7 +242,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     }
 
     private void openSnippetInBrowser() {
-        framework.getBrowser().openUrl(snippetsTable.getSelectedSnippet().getUrl());
+        framework.openUrlInBrowser(snippetsTable.getSelectedSnippet().getUrl());
     }
 
     private void copyCodeAction() {

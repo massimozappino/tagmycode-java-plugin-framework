@@ -314,8 +314,11 @@ public class Framework implements IOnErrorCallback {
         LOGGER.info("Exiting TagMyCode");
     }
 
-    public IBrowser getBrowser() {
-        return browser;
+    public void openUrlInBrowser(String url) {
+        boolean urlOpened = browser.openUrl(url);
+        if (!urlOpened) {
+            logError(new TagMyCodeException("Unable to open link in browser, please open it manually: " + url));
+        }
     }
 
     public FrameworkConfig getFrameworkConfig() {

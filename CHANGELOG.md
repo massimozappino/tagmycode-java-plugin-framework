@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - added support to handle snippets in offline mode
 - added log4j.properties configuration
+- log error if can't open web browser
 
 ### Fixed
 - show a dialog error if verification code is not correct

@@ -29,7 +29,7 @@ public class SettingsForm extends AbstractDialog {
         getDialog().setTitle("User profile");
         defaultInitWindow();
         setBold(userName);
-        addClickableLink(framework.getBrowser(), profilePicture, "https://tagmycode.com/account");
+        addClickableLink(framework, profilePicture, "https://tagmycode.com/account");
     }
 
     private void fillData() {

@@ -36,16 +36,17 @@ public class Browser implements IBrowser {
     @Override
     public boolean openUrl(String url) {
         try {
-            return openUrl(new URI(url));
+            return openURI(new URI(url));
         } catch (URISyntaxException e) {
             return false;
         }
     }
 
-    private boolean openUrl(URI uri) {
+    private boolean openURI(URI uri) {
         if (Desktop.isDesktopSupported()) {
             try {
                 Desktop.getDesktop().browse(uri);
+                return true;
             } catch (IOException e) {
                 return false;
             }
@@ -53,9 +54,7 @@ public class Browser implements IBrowser {
             Rule rule = getOsBasedRule();
             return rule.browse(uri);
         }
-        return false;
     }
-
 
     private Rule getOsBasedRule() {
         if (os.isLinux()) {
