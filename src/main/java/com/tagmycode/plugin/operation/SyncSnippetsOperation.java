@@ -45,7 +45,6 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
                 processSync();
             }
 
-
             Framework.LOGGER.info(String.format("Last snippets update: %s", tagMyCode.getLastSnippetsUpdate()));
         } else {
             syncProcess.setNetworkAvailable(false);
@@ -54,14 +53,20 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
         return null;
     }
 
-    protected void processSync() throws SQLException, TagMyCodeException, JSONException {
+    protected void processSync() throws SQLException, TagMyCodeException, JSONException, InterruptedException {
         SnippetsDeletions deletedIds = snippetsStorage.findDeletedIds();
         SnippetsCollection dirtyNotDeleted = snippetsStorage.findDirtyNotDeleted();
-
         deleteLocalDeletions(snippetsStorage.findDeleted());
+
+        allowStopTask();
+
         SyncSnippets syncSnippets = tagMyCode.syncSnippets(dirtyNotDeleted, deletedIds);
+
+        allowStopTask();
+
         manageDeletions(syncSnippets.getDeletedSnippets());
         manageChangedSnippets(syncSnippets.getChangedSnippets());
+
         framework.getData().loadAll();
     }
 
@@ -97,7 +102,7 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
                 updateSnippet(snippet);
             }
         }
-        Framework.LOGGER.debug("Changed: " + changedSnippets.size()+ " snippets");
+        Framework.LOGGER.debug("Changed: " + changedSnippets.size() + " snippets");
 
     }
 

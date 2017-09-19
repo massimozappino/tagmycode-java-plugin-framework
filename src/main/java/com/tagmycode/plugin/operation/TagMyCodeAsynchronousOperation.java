@@ -4,8 +4,6 @@ import com.tagmycode.plugin.AbstractTaskFactory;
 import com.tagmycode.plugin.gui.IOnErrorCallback;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 
-import javax.swing.*;
-
 public abstract class TagMyCodeAsynchronousOperation<T> {
     protected IOnErrorCallback onErrorCallback;
     private Thread thread;
@@ -32,43 +30,31 @@ public abstract class TagMyCodeAsynchronousOperation<T> {
         abstractTaskFactory.create(createRunnable(), title);
     }
 
+    public void allowStopTask() throws InterruptedException {
+        Thread.sleep(0);
+    }
+
     private Runnable createRunnable() {
         return new Runnable() {
             @Override
             public void run() {
                 isRunning = true;
                 try {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            beforePerformOperation();
-                        }
-                    });
+                    beforePerformOperation();
                     final T result = performOperation();
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            onComplete();
-                            onSuccess(result);
-                            isRunning = false;
-                        }
-                    });
+                    onComplete();
+                    onSuccess(result);
+                    isRunning = false;
                 } catch (final InterruptedException e) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            onComplete();
-                            onInterrupted();
-                            isRunning = false;
-                            e.printStackTrace();
-                        }
-                    });
+                    onComplete();
+                    onInterrupted();
+                    isRunning = false;
+                    e.printStackTrace();
                 } catch (final Throwable e) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            onComplete();
-                            onFailure(e);
-                            isRunning = false;
-                            e.printStackTrace();
-                        }
-                    });
+                    onComplete();
+                    onFailure(e);
+                    isRunning = false;
+                    e.printStackTrace();
                 }
             }
         };
