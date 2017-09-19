@@ -34,6 +34,7 @@ public class AcceptanceTestBase extends AbstractTestBase {
     protected SnippetsTableModel getTableModel() {
         return framework.getMainWindow().getSnippetsTab().getSnippetsModel();
     }
+
     protected Snippet getSnippetAtRow(int row) throws TableModelSnippetNotFoundException {
         Snippet snippet = null;
         try {

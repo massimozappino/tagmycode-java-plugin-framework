@@ -37,6 +37,7 @@ public class Framework implements IOnErrorCallback {
     private SnippetDialogFactory snippetDialogFactory;
     private AboutDialog aboutDialog;
     private FrameworkConfig frameworkConfig;
+    private SnippetDialog snippetDialog;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) throws SQLException {
         this.frameworkConfig = frameworkConfig;
@@ -55,6 +56,7 @@ public class Framework implements IOnErrorCallback {
         snippetDialogFactory = new SnippetDialogFactory();
         version = frameworkConfig.getVersionObject();
         aboutDialog = new AboutDialog(this, getParentFrame());
+        snippetDialog = new SnippetDialog(this, getParentFrame());
         this.mainWindow = new MainWindow(this);
     }
 
@@ -79,7 +81,6 @@ public class Framework implements IOnErrorCallback {
     }
 
     public void showNewSnippetDialog(Snippet snippet) {
-        SnippetDialog snippetDialog = new SnippetDialog(this, getParentFrame());
         snippetDialog.populateFieldsWithSnippet(snippet);
         snippetDialog.display();
     }

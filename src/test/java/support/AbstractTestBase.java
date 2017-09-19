@@ -86,6 +86,5 @@ public class AbstractTestBase {
 
     protected void waitForTrue(final boolean condition) {
         await().atMost(2, SECONDS).untilTrue(new AtomicBoolean(condition));
-
     }
 }

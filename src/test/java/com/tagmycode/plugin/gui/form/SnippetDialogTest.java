@@ -1,5 +1,6 @@
 package com.tagmycode.plugin.gui.form;
 
+import acceptance.AcceptanceTestBase;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.gui.field.AbstractFieldValidation;
 import com.tagmycode.plugin.gui.field.CodeFieldValidation;
@@ -10,7 +11,6 @@ import com.tagmycode.sdk.model.LanguagesCollection;
 import com.tagmycode.sdk.model.Snippet;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.junit.Test;
-import support.AbstractTestBase;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class SnippetDialogTest extends AbstractTestBase {
+public class SnippetDialogTest extends AcceptanceTestBase {
 
     @Test
     public void populateSnippetDialog() throws Exception {
