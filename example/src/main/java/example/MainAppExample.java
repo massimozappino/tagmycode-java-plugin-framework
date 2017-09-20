@@ -67,12 +67,14 @@ public class MainAppExample {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                framework.showSearchDialog(new IDocumentInsertText() {
-                    @Override
-                    public void insertText(String text) {
-                        System.out.println(text);
-                    }
-                });
+                if (framework.canOperate()) {
+                    framework.showSearchDialog(new IDocumentInsertText() {
+                        @Override
+                        public void insertText(String text) {
+                            System.out.println(text);
+                        }
+                    });
+                }
             }
         });
 

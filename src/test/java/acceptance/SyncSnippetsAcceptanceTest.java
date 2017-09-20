@@ -158,7 +158,6 @@ public class SyncSnippetsAcceptanceTest extends AcceptanceTestBase {
         Framework framework = new FrameworkBuilder().
                 setStorageEngine(createStorageEngineWithData())
                 .build();
-        clearSnippets(framework);
 
         SnippetsCollection snippetCollection = new SnippetsCollection();
         Snippet originalSnippet = resourceGenerate.aSnippet().setId(0).setTitle("original title");
@@ -180,23 +179,27 @@ public class SyncSnippetsAcceptanceTest extends AcceptanceTestBase {
     @Test
     public void reSyncAfterApiError() throws Exception {
         SnippetsCollection actualSnippets = new SnippetsCollection(
-                resourceGenerate.aSnippet().setId(1).setLocalId(1).setTitle("visible synced"),
-                resourceGenerate.aSnippet().setId(0).setLocalId(2).setTitle("visible dirty not synced").setDirty(true),
-                resourceGenerate.aSnippet().setId(2).setLocalId(3).setTitle("deleted").setDeleted(true)
+                resourceGenerate.aSnippet().setId(1).setLocalId(1).setTitle("visible synced 1"),
+                resourceGenerate.aSnippet().setId(0).setLocalId(2).setTitle("visible dirty not synced 0").setDirty(true),
+                resourceGenerate.aSnippet().setId(2).setLocalId(3).setTitle("deleted 2").setDeleted(true)
         );
         framework = new FrameworkBuilder(createStorageEngineWithoutNetworking()
                 .withSnippetsCollection(actualSnippets))
                 .build();
 
-        SyncSnippets syncSnippets = new SyncSnippets(
+        SyncSnippets syncSnippetsAllData = new SyncSnippets(
                 new SnippetsCollection(
-                        resourceGenerate.aSnippet().setId(99).setTitle("new from server"),
-                        resourceGenerate.aSnippet().setId(100).setLocalId(2).setTitle("updated dirty from server")),
+                        resourceGenerate.aSnippet().setId(1).setLocalId(1).setTitle("visible synced 1"),
+                        resourceGenerate.aSnippet().setId(99).setTitle("new from server 99"),
+                        resourceGenerate.aSnippet().setId(100).setLocalId(2).setTitle("updated dirty from server 100")),
                 new SnippetsDeletions());
-        TagMyCodeMockBuilder tagMyCodeMockBuilder = mockTagMyCode().setSyncSnippets(syncSnippets);
+        TagMyCodeMockBuilder tagMyCodeMockBuilder = mockTagMyCode().setSyncSnippets(syncSnippetsAllData);
         TagMyCode tagMyCode = tagMyCodeMockBuilder.getMock();
         SnippetsStorage snippetsStorage = framework.getStorageEngine().getSnippetsStorage();
-        doThrow(new TagMyCodeApiException()).when(tagMyCode).syncSnippets(snippetsStorage.findDirtyNotDeleted(), snippetsStorage.findDeletedIds());
+        doThrow(new TagMyCodeApiException()).when(tagMyCode)
+                .syncSnippets(snippetsStorage.findDirtyNotDeleted(), snippetsStorage.findDeletedIds());
+
+        framework.getStorageEngine().saveLastSnippetsUpdate("assert that last update is not null");
 
         framework.start();
 
@@ -207,13 +210,11 @@ public class SyncSnippetsAcceptanceTest extends AcceptanceTestBase {
 
         forceSync();
 
+        verify(tagMyCode, times(1)).setLastSnippetsUpdate(null);
+
         assertEquals(0, framework.getStorageEngine().getSnippetsStorage().findDirtyNotDeleted().size());
         assertEquals(3, framework.getStorageEngine().getSnippetsStorage().findVisible().size());
         assertEquals(0, framework.getStorageEngine().getSnippetsStorage().findDeleted().size());
-    }
-
-    private void clearSnippets(Framework framework) throws java.sql.SQLException {
-        framework.getData().getStorageEngine().getDbService().snippetDao().deleteBuilder().delete();
     }
 
     private TagMyCodeMockBuilder mockTagMyCode() throws Exception {

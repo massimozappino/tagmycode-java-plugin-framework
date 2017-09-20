@@ -41,6 +41,7 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
                 processSync();
             } catch (TagMyCodeApiException apiException) {
                 Framework.LOGGER.error(apiException.getMessage());
+                framework.resetLastSnippetsUpdate();
                 snippetsStorage.deleteNonDirty();
                 processSync();
             }

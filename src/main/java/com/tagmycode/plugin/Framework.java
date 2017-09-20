@@ -34,7 +34,6 @@ public class Framework implements IOnErrorCallback {
     private MainWindow mainWindow;
     private QuickSearchDialog quickSearchDialog;
     private SettingsForm settingsForm;
-    private SnippetDialogFactory snippetDialogFactory;
     private AboutDialog aboutDialog;
     private FrameworkConfig frameworkConfig;
     private SnippetDialog snippetDialog;
@@ -53,7 +52,6 @@ public class Framework implements IOnErrorCallback {
         quickSearchDialog = new QuickSearchDialog(this, getParentFrame());
         pollingProcess = new SnippetsUpdatePollingProcess(this);
         settingsForm = new SettingsForm(this, getParentFrame());
-        snippetDialogFactory = new SnippetDialogFactory();
         version = frameworkConfig.getVersionObject();
         aboutDialog = new AboutDialog(this, getParentFrame());
         snippetDialog = new SnippetDialog(this, getParentFrame());
@@ -82,6 +80,7 @@ public class Framework implements IOnErrorCallback {
 
     public void showNewSnippetDialog(Snippet snippet) {
         snippetDialog.populateFieldsWithSnippet(snippet);
+        snippetDialog.snippetMarkedAsSaved();
         snippetDialog.display();
     }
 
@@ -90,7 +89,6 @@ public class Framework implements IOnErrorCallback {
             return null;
         }
 
-        SnippetDialog snippetDialog = snippetDialogFactory.create(this, getParentFrame());
         snippetDialog.setEditableSnippet(snippet);
         snippetDialog.display();
         return snippetDialog;
@@ -149,9 +147,13 @@ public class Framework implements IOnErrorCallback {
 
     void reset() throws TagMyCodeException {
         data.clearDataAndStorage();
-        tagMyCode.setLastSnippetsUpdate(null);
+        resetLastSnippetsUpdate();
         tagMyCode.revokeAccessToken();
         snippetsDataChanged();
+    }
+
+    public void resetLastSnippetsUpdate() {
+        tagMyCode.setLastSnippetsUpdate(null);
     }
 
     public boolean isInitialized() {
@@ -273,10 +275,6 @@ public class Framework implements IOnErrorCallback {
 
     public JComponent getMainFrame() {
         return mainWindow.getMainComponent();
-    }
-
-    public void setSnippetDialogFactory(SnippetDialogFactory snippetDialogFactory) {
-        this.snippetDialogFactory = snippetDialogFactory;
     }
 
     @Override
