@@ -48,14 +48,16 @@ public class StorageEngineTest extends AbstractTestBase {
 
     @Test
     public void testSaveAndLoadLanguageCollection() throws Exception {
-        LanguagesCollection languageCollection = resourceGenerate.aLanguageCollection();
+        Language languageToRemove = resourceGenerate.anotherLanguage();
+        LanguagesCollection languageCollection = new LanguagesCollection(languageToRemove);
         storageEngine.saveLanguageCollection(languageCollection);
         assertEquals(languageCollection, storageEngine.loadLanguageCollection());
 
-        LanguagesCollection newLanguageCollection = resourceGenerate.aLanguageCollection();
-        newLanguageCollection.add(new DefaultLanguage());
-        storageEngine.saveLanguageCollection(newLanguageCollection);
-        assertCollectionsAreEquals(newLanguageCollection, storageEngine.loadLanguageCollection());
+        LanguagesCollection languagesToOverride = new LanguagesCollection();
+        languagesToOverride.add(resourceGenerate.aLanguage());
+        languagesToOverride.add(new DefaultLanguage());
+        storageEngine.saveLanguageCollection(languagesToOverride);
+        assertCollectionsAreEquals(languagesToOverride, storageEngine.loadLanguageCollection());
     }
 
     @Test

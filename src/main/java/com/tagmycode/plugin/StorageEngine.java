@@ -64,12 +64,18 @@ public class StorageEngine {
         if (languageCollection == null) {
             languageCollection = new LanguagesCollection();
         }
-        for (Language language : languageCollection) {
-            try {
-                dbService.languageDao().createOrUpdate(language);
-            } catch (SQLException e) {
-                throw new TagMyCodeStorageException(e);
+        try {
+            dbService.languageDao().deleteBuilder().delete();
+
+            for (Language language : languageCollection) {
+                try {
+                    dbService.languageDao().createOrUpdate(language);
+                } catch (SQLException e) {
+                    throw new TagMyCodeStorageException(e);
+                }
             }
+        } catch (Exception e) {
+            throw new TagMyCodeStorageException(e);
         }
     }
 

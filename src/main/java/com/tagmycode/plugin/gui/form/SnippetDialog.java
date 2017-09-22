@@ -67,6 +67,7 @@ public class SnippetDialog extends AbstractDialog {
         tagsTextField.setText(snippet.getTags());
         codeEditorPane.setTextWithSnippet(snippet);
         privateSnippetCheckBox.setSelected(snippet.isPrivate());
+        populateLanguages();
         selectLanguage(snippet.getLanguage());
     }
 
@@ -143,6 +144,7 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     private void populateLanguages() {
+        defaultComboBoxModel.removeAllElements();
         for (Language language : framework.getData().getLanguages()) {
             defaultComboBoxModel.addElement(language);
         }

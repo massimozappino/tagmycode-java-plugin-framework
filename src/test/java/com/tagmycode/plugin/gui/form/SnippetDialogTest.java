@@ -84,6 +84,22 @@ public class SnippetDialogTest extends AcceptanceTestBase {
     }
 
     @Test
+    public void languagesArePopulatedAfterLogin() throws Exception {
+        Framework framework = createFramework();
+        framework.getStorageEngine().saveLanguageCollection(new LanguagesCollection());
+        framework.start();
+
+        framework.getStorageEngine().saveLanguageCollection(resourceGenerate.aLanguageCollection());
+
+        SnippetDialog snippetDialog = createSnippetDialog(framework);
+        framework.getData().loadAll();
+        snippetDialog.setEditableSnippet(resourceGenerate.aSnippet());
+
+        assertEquals(2, framework.getData().getLanguages().size());
+        assertEquals(2, snippetDialog.getLanguageComboBox().getItemCount());
+    }
+
+    @Test
     public void editSnippetAndCloseImmediatelyDoesNotAskForSave() throws Exception {
         Framework framework = createFramework();
         SnippetDialog snippetDialog = createSnippetDialog(framework);
