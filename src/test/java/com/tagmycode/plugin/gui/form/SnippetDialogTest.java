@@ -84,6 +84,17 @@ public class SnippetDialogTest extends AcceptanceTestBase {
     }
 
     @Test
+    public void editSnippetAndCloseImmediatelyDoesNotAskForSave() throws Exception {
+        Framework framework = createFramework();
+        SnippetDialog snippetDialog = createSnippetDialog(framework);
+        Snippet snippet = resourceGenerate.aSnippet().setLocalId(100).setId(0);
+
+        snippetDialog.setEditableSnippet(snippet);
+
+        assertFalse(snippetDialog.getButtonOk().isEnabled());
+    }
+
+    @Test
     public void populateSnippetDialogWithExistentLanguageOverridePreferredLanguage() throws Exception {
         final Framework framework = createFramework();
 

@@ -58,6 +58,7 @@ public class SnippetDialog extends AbstractDialog {
         getDialog().setTitle(EDIT_SNIPPET_TITLE);
         editableSnippet = snippet;
         populateFieldsWithSnippet(snippet);
+        snippetMarkedAsSaved();
     }
 
     public void populateFieldsWithSnippet(Snippet snippet) {

@@ -38,9 +38,9 @@ public class SyncSnippetsAcceptanceTest extends AcceptanceTestBase {
 
         framework.start();
 
-        SnippetDialog snippetDialog = framework.showEditSnippetDialog(
-                resourceGenerate.aSnippet().setId(0).setTitle("The title")
-        );
+        SnippetDialog snippetDialog = framework.showEditSnippetDialog(resourceGenerate.aSnippet());
+        snippetDialog.getTitleBox().setText("The title");
+
         clickOnButton(snippetDialog.getButtonOk());
 
         assertEquals("(*) The title", getTableModel().getValueAt(0, SnippetsTableModel.TITLE));
