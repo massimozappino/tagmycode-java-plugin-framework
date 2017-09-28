@@ -3,6 +3,7 @@ package com.tagmycode.plugin.gui;
 import com.tagmycode.plugin.Framework;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -32,5 +33,9 @@ public class GuiUtil {
         button.setOpaque(false);
         button.setContentAreaFilled(false);
         button.setBorderPainted(false);
+    }
+
+    public static void removeBorder(JComponent component) {
+        component.setBorder(new EmptyBorder(component.getInsets()));
     }
 }

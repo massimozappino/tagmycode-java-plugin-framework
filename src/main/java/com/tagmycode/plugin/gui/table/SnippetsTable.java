@@ -4,6 +4,7 @@ import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.IconResources;
 import com.tagmycode.plugin.TableModelSnippetNotFoundException;
 import com.tagmycode.plugin.gui.AbstractSnippetsListGui;
+import com.tagmycode.plugin.gui.GuiUtil;
 import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
@@ -32,7 +33,7 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         table.setRowSelectionAllowed(true);
         table.setShowGrid(false);
         scrollPane = new JScrollPane(table);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        GuiUtil.removeBorder(scrollPane);
 
         cellSelectionModel = table.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -84,7 +85,17 @@ public class SnippetsTable extends AbstractSnippetsListGui {
 
     @Override
     public void fireSnippetsChanged() {
+        Snippet selectedSnippet = getSelectedSnippet();
         model.fireSnippetsChanged();
+        if (selectedSnippet != null) {
+            int positionOfSnippet = getSnippetViewIndex(selectedSnippet);
+            table.setRowSelectionInterval(positionOfSnippet, positionOfSnippet);
+        }
+    }
+
+    private int getSnippetViewIndex(Snippet selectedSnippet) {
+        int positionOfSnippet = model.getPositionOfSnippet(selectedSnippet);
+        return table.convertRowIndexToView(positionOfSnippet);
     }
 
     @Override

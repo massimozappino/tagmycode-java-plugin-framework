@@ -1,7 +1,6 @@
 package com.tagmycode.plugin.gui;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
@@ -39,7 +38,7 @@ public class TextPrompt extends JLabel
         setText(text);
         setFont(component.getFont());
         setForeground(component.getForeground());
-        setBorder(new EmptyBorder(component.getInsets()));
+        GuiUtil.removeBorder(this);
         setHorizontalAlignment(JLabel.LEADING);
 
         component.addFocusListener(this);

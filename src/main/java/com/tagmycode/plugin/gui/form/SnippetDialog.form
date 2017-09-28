@@ -137,42 +137,52 @@
           </grid>
         </children>
       </grid>
-      <splitpane id="1a2fe">
+      <grid id="9fa92" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="200" height="200"/>
-          </grid>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties>
-          <dividerLocation value="35"/>
-          <enabled value="true"/>
-          <orientation value="0"/>
-        </properties>
+        <properties/>
         <border type="none"/>
         <children>
-          <scrollpane id="b9098">
+          <splitpane id="1a2fe">
             <constraints>
-              <splitpane position="left"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="200" height="200"/>
+              </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <dividerLocation value="35"/>
+              <enabled value="true"/>
+              <orientation value="0"/>
+            </properties>
             <border type="none"/>
             <children>
-              <component id="6c3fe" class="javax.swing.JTextArea" binding="descriptionTextField">
-                <constraints/>
+              <scrollpane id="b9098">
+                <constraints>
+                  <splitpane position="left"/>
+                </constraints>
                 <properties/>
-              </component>
+                <border type="none"/>
+                <children>
+                  <component id="6c3fe" class="javax.swing.JTextArea" binding="descriptionTextField">
+                    <constraints/>
+                    <properties/>
+                  </component>
+                </children>
+              </scrollpane>
+              <grid id="7c9f4" binding="snippetPane" layout-manager="BorderLayout" hgap="0" vgap="0">
+                <constraints>
+                  <splitpane position="right"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children/>
+              </grid>
             </children>
-          </scrollpane>
-          <grid id="7c9f4" binding="snippetPane" layout-manager="BorderLayout" hgap="0" vgap="0">
-            <constraints>
-              <splitpane position="right"/>
-            </constraints>
-            <properties/>
-            <border type="none"/>
-            <children/>
-          </grid>
+          </splitpane>
         </children>
-      </splitpane>
+      </grid>
     </children>
   </grid>
 </form>

@@ -104,7 +104,6 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
             }
         }
         Framework.LOGGER.debug("Changed: " + changedSnippets.size() + " snippets");
-
     }
 
     private int createSnippet(Snippet snippet) throws java.sql.SQLException {

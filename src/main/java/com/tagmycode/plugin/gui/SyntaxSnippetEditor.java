@@ -8,7 +8,6 @@ import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.io.IOException;
 
 public class SyntaxSnippetEditor implements IAbstractGUI {
@@ -23,7 +22,7 @@ public class SyntaxSnippetEditor implements IAbstractGUI {
         scrollPane = new RTextScrollPane(textArea);
         scrollPane.setLineNumbersEnabled(false);
         scrollPane.setIconRowHeaderEnabled(false);
-        scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+        GuiUtil.removeBorder(scrollPane);
 
         if (theme != null) {
             theme.apply(textArea);

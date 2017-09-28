@@ -4,6 +4,7 @@ import com.tagmycode.plugin.Data;
 import com.tagmycode.plugin.TableModelSnippetNotFoundException;
 import com.tagmycode.sdk.model.DefaultSnippet;
 import com.tagmycode.sdk.model.Snippet;
+import com.tagmycode.sdk.model.SnippetsCollection;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Date;
@@ -20,6 +21,16 @@ public class SnippetsTableModel extends AbstractTableModel {
     public SnippetsTableModel(final Data data) {
         this.data = data;
         columns = new String[]{"Private", "Title", "Language", "Modified"};
+    }
+
+    public int getPositionOfSnippet(Snippet snippet) {
+        SnippetsCollection snippets = data.getSnippets();
+        for (int i = 0; i < snippets.size(); i++) {
+            if (snippets.get(i) == snippet) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override

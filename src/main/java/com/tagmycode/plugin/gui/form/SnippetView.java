@@ -1,6 +1,7 @@
 package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.gui.AbstractGui;
+import com.tagmycode.plugin.gui.GuiUtil;
 import com.tagmycode.plugin.gui.SyntaxSnippetEditor;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -13,13 +14,31 @@ public class SnippetView extends AbstractGui {
     private JPanel snippetPane;
     private JLabel tagsIconLabel;
     private JPanel tagsContainer;
+    private JTextField titleTextField;
+    private JTextArea descriptionTextArea;
+    private JSplitPane splitPane;
 
-    public SnippetView(final Snippet snippet) {
+    public SnippetView() {
         getMainComponent().setName("snippet view");
+        splitPane.setResizeWeight(.85);
         syntaxSnippetEditor = new SyntaxSnippetEditor();
         syntaxSnippetEditor.setEditable(false);
-        syntaxSnippetEditor.setTextWithSnippet(snippet);
         snippetPane.add(syntaxSnippetEditor.getMainComponent());
+        titleTextField.setEditable(false);
+        GuiUtil.removeBorder(titleTextField);
+        titleTextField.setOpaque(false);
+        descriptionTextArea.setEditable(false);
+        descriptionTextArea.setWrapStyleWord(true);
+        descriptionTextArea.setLineWrap(true);
+        GuiUtil.setPlaceholder("Description", descriptionTextArea);
+        initPopupMenuForJTextComponents(getMainComponent());
+    }
+
+    public SnippetView setSnippet(Snippet snippet) {
+        syntaxSnippetEditor.setTextWithSnippet(snippet);
+        titleTextField.setText(snippet.getTitle());
+        descriptionTextArea.setText(snippet.getDescription());
+        descriptionTextArea.setCaretPosition(0);
         tagsContainer.removeAll();
         if (snippet.getTags().length() == 0) {
             tagsContainer.add(new JLabel("<html><i>no tags</i></html>"));
@@ -29,7 +48,7 @@ public class SnippetView extends AbstractGui {
                 tagsContainer.add(tagLabel);
             }
         }
-        initPopupMenuForJTextComponents(getMainComponent());
+        return this;
     }
 
     public SyntaxSnippetEditor getSnippetEditorPane() {

@@ -28,6 +28,7 @@ public class QuickSearchDialog extends AbstractDialog {
     private JPanel filterPanel;
     private IDocumentInsertText documentInsertText;
     private SnippetsTable snippetsTable;
+    private SnippetView snippetView = new SnippetView();
 
     public QuickSearchDialog(final Framework framework, Frame parent) {
         super(framework, parent);
@@ -112,7 +113,8 @@ public class QuickSearchDialog extends AbstractDialog {
                     Snippet snippet = snippetsTable.getSelectedSnippet();
 
                     if (snippet != null) {
-                        SyntaxSnippetEditor snippetEditorPane = new SnippetView(snippet).getSnippetEditorPane();
+                        snippetView.setSnippet(snippet);
+                        SyntaxSnippetEditor snippetEditorPane = snippetView.getSnippetEditorPane();
                         snippetEditorPane.setPreview();
                         snippetViewPanel.add(snippetEditorPane.getMainComponent());
                         enableSnippetButtons();

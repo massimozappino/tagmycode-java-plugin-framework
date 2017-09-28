@@ -43,6 +43,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private SnippetsTableModel model;
     private boolean networkingEnabled;
     private FilterSnippetsTextField filterTextField;
+    private SnippetView snippetView = new SnippetView();
 
     public SnippetsTab(final Framework framework) {
         this.framework = framework;
@@ -291,8 +292,8 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         snippetViewFormPane.removeAll();
 
         if (snippet != null) {
-            JComponent snippetViewForm = new SnippetView(snippet).getMainComponent();
-            snippetViewFormPane.add(snippetViewForm);
+            snippetView.setSnippet(snippet);
+            snippetViewFormPane.add(snippetView.getMainComponent());
             enableButtonsForSnippet();
         } else {
             snippetViewFormPane.add(welcomeView.getMainComponent());
