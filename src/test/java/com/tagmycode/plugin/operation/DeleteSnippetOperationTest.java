@@ -1,7 +1,7 @@
 package com.tagmycode.plugin.operation;
 
 import com.j256.ormlite.dao.Dao;
-import com.tagmycode.plugin.gui.form.SnippetsTab;
+import com.tagmycode.plugin.gui.form.SnippetsPanel;
 import com.tagmycode.sdk.model.Snippet;
 import org.junit.Test;
 import support.AbstractTestBase;
@@ -15,7 +15,7 @@ public class DeleteSnippetOperationTest extends AbstractTestBase {
     @Test
     public void testPerformOperation() throws Exception {
 
-        SnippetsTab snippetsTabMock = mock(SnippetsTab.class);
+        SnippetsPanel snippetsTabMock = mock(SnippetsPanel.class);
         Snippet snippetToDelete = resourceGenerate.aSnippet();
         DeleteSnippetOperation deleteSnippetOperation = spy(new DeleteSnippetOperation(snippetsTabMock, snippetToDelete));
         doReturn(mock(Dao.class)).when(deleteSnippetOperation).getSnippetDao();

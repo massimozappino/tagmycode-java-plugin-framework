@@ -5,6 +5,7 @@ import com.tagmycode.plugin.IconResources;
 import com.tagmycode.plugin.gui.*;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.plugin.gui.table.SnippetsTableModel;
+import com.tagmycode.plugin.gui.table.TableRowTransferHandler;
 import com.tagmycode.plugin.operation.DeleteSnippetOperation;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.Snippet;
@@ -19,7 +20,7 @@ import java.awt.event.*;
 
 import static com.tagmycode.plugin.gui.GuiUtil.setPlaceholder;
 
-public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
+public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     private final WelcomeView welcomeView;
     protected JButton editSnippetButton;
     protected JButton deleteSnippetButton;
@@ -45,7 +46,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private FilterSnippetsTextField filterTextField;
     private SnippetView snippetView = new SnippetView();
 
-    public SnippetsTab(final Framework framework) {
+    public SnippetsPanel(final Framework framework) {
         this.framework = framework;
         initSnippetsJTable();
         welcomeView = new WelcomeView(this);
@@ -54,7 +55,22 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         initFilterField();
         initToolBarButtons(framework);
         initPopupMenuForJTextComponents(getMainComponent());
+        configureDragAndDrop();
         reset();
+    }
+
+    private void configureDragAndDrop() {
+        jTable.setDragEnabled(true);
+        jTable.setDropMode(DropMode.INSERT_ROWS);
+        jTable.setTransferHandler(new TableRowTransferHandler(this));
+        jTable.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                JComponent c = (JComponent) e.getSource();
+                TransferHandler handler = c.getTransferHandler();
+                handler.exportAsDrag(c, e, TransferHandler.COPY);
+            }
+        });
     }
 
     private void initToolBarButtons(final Framework framework) {
@@ -73,7 +89,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         newSnippetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                newSnippetAction(framework);
+                newSnippetAction();
             }
         });
         copyButton.addActionListener(new ActionListener() {
@@ -134,7 +150,7 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
     private void initSnippetsJTable() {
         snippetsTable = new SnippetsTable(framework);
 
-        jTable = snippetsTable.getSnippetsComponent();
+        jTable = snippetsTable.getJTable();
         model = (SnippetsTableModel) jTable.getModel();
         snippetsTable.getCellSelectionModel().addListSelectionListener(createSelectionListener());
         jTable.getModel().addTableModelListener(createTableModelListener());
@@ -265,8 +281,16 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         }
     }
 
-    protected void newSnippetAction(Framework framework) {
-        framework.showNewSnippetDialog(createEmptySnippet(framework));
+    public void newSnippetAction(String code) {
+        Snippet emptySnippet = createEmptySnippet(framework);
+        if (code != null) {
+            emptySnippet.setCode(code);
+        }
+        framework.showNewSnippetDialog(emptySnippet);
+    }
+
+    public void newSnippetAction() {
+        newSnippetAction(null);
     }
 
     protected Snippet createEmptySnippet(Framework framework) {
@@ -393,3 +417,4 @@ public class SnippetsTab extends AbstractGui implements IOnErrorCallback {
         return model;
     }
 }
+

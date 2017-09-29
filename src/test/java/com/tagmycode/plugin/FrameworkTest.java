@@ -2,7 +2,7 @@ package com.tagmycode.plugin;
 
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.form.MainWindow;
-import com.tagmycode.plugin.gui.form.SnippetsTab;
+import com.tagmycode.plugin.gui.form.SnippetsPanel;
 import com.tagmycode.sdk.authentication.OauthToken;
 import com.tagmycode.sdk.authentication.VoidOauthToken;
 import com.tagmycode.sdk.exception.TagMyCodeException;
@@ -74,7 +74,7 @@ public class FrameworkTest extends AbstractTestBase {
         Framework frameworkSpy = createSpyFramework();
         MainWindow mainWindowMock = mock(MainWindow.class);
         when(frameworkSpy.getMainWindow()).thenReturn(mainWindowMock);
-        when(mainWindowMock.getSnippetsTab()).thenReturn(mock(SnippetsTab.class));
+        when(mainWindowMock.getSnippetsPanel()).thenReturn(mock(SnippetsPanel.class));
         setValuesForWalletAndData();
         setAccessToken();
 

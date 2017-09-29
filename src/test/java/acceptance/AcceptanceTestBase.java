@@ -2,7 +2,7 @@ package acceptance;
 
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.TableModelSnippetNotFoundException;
-import com.tagmycode.plugin.gui.form.SnippetsTab;
+import com.tagmycode.plugin.gui.form.SnippetsPanel;
 import com.tagmycode.plugin.gui.table.SnippetsTableModel;
 import com.tagmycode.sdk.model.Snippet;
 import support.AbstractTestBase;
@@ -32,7 +32,7 @@ public class AcceptanceTestBase extends AbstractTestBase {
     }
 
     protected SnippetsTableModel getTableModel() {
-        return framework.getMainWindow().getSnippetsTab().getSnippetsModel();
+        return framework.getMainWindow().getSnippetsPanel().getSnippetsModel();
     }
 
     protected Snippet getSnippetAtRow(int row) throws TableModelSnippetNotFoundException {
@@ -45,8 +45,8 @@ public class AcceptanceTestBase extends AbstractTestBase {
     }
 
     protected void selectTableRow(int index) {
-        SnippetsTab snippetsTab = framework.getMainWindow().getSnippetsTab();
-        JTable snippetsComponent = snippetsTab.getSnippetsTable().getSnippetsComponent();
+        SnippetsPanel snippetsTab = framework.getMainWindow().getSnippetsPanel();
+        JTable snippetsComponent = snippetsTab.getSnippetsTable().getJTable();
         snippetsComponent.setRowSelectionInterval(index, index);
     }
 }

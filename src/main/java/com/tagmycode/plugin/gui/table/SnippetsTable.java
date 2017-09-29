@@ -18,28 +18,29 @@ public class SnippetsTable extends AbstractSnippetsListGui {
 
     public final TableRowSorter<SnippetsTableModel> sorter;
     private final JScrollPane scrollPane;
-    private JTable table;
+    private final Framework framework;
+    private JTable jTable;
     private SnippetsTableModel model;
     private ListSelectionModel cellSelectionModel;
 
     public SnippetsTable(Framework framework) {
+        this.framework = framework;
         model = new SnippetsTableModel(framework.getData());
-        table = new JTable(model);
+        jTable = new JTable(model);
         sorter = new TableRowSorter<>(model);
-        table.setRowSorter(sorter);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-        table.setIntercellSpacing(new Dimension(0, 0));
-        table.setCellSelectionEnabled(false);
-        table.setRowSelectionAllowed(true);
-        table.setShowGrid(false);
-        scrollPane = new JScrollPane(table);
+        jTable.setRowSorter(sorter);
+        jTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        jTable.setIntercellSpacing(new Dimension(0, 0));
+        jTable.setCellSelectionEnabled(false);
+        jTable.setRowSelectionAllowed(true);
+        jTable.setShowGrid(false);
+        scrollPane = new JScrollPane(jTable);
         GuiUtil.removeBorder(scrollPane);
 
-        cellSelectionModel = table.getSelectionModel();
+        cellSelectionModel = jTable.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         configureTableHeader();
-
         sortByColumn(SnippetsTableModel.MODIFIED);
     }
 
@@ -52,26 +53,26 @@ public class SnippetsTable extends AbstractSnippetsListGui {
     }
 
     private void configureTableHeader() {
-        JTableHeader header = table.getTableHeader();
+        JTableHeader header = jTable.getTableHeader();
         header.setDefaultRenderer(new KeepSortIconHeaderRenderer(header.getDefaultRenderer()));
         header.setReorderingAllowed(false);
 
-        TableColumn columnIsPrivate = table.getColumnModel().getColumn(SnippetsTableModel.IS_PRIVATE);
+        TableColumn columnIsPrivate = jTable.getColumnModel().getColumn(SnippetsTableModel.IS_PRIVATE);
         columnIsPrivate.setHeaderValue(IconResources.createImageIcon("private.png"));
         columnIsPrivate.setHeaderRenderer(new IconTableHeaderCellRender(header.getDefaultRenderer()));
         columnIsPrivate.setMaxWidth(32);
         columnIsPrivate.setMinWidth(32);
         columnIsPrivate.setResizable(false);
 
-        TableColumn columnLanguage = table.getColumnModel().getColumn(SnippetsTableModel.LANGUAGE);
+        TableColumn columnLanguage = jTable.getColumnModel().getColumn(SnippetsTableModel.LANGUAGE);
         columnLanguage.setPreferredWidth(80);
 
-        TableColumn columnTitle = table.getColumnModel().getColumn(SnippetsTableModel.TITLE);
+        TableColumn columnTitle = jTable.getColumnModel().getColumn(SnippetsTableModel.TITLE);
         columnTitle.setPreferredWidth(200);
         columnTitle.setCellRenderer(new TitleSnippetTableCellRender());
         columnLanguage.setCellRenderer(new DefaultSnippetTableCellRender());
         columnIsPrivate.setCellRenderer(new PrivateSnippetTableCellRender());
-        table.getColumnModel().getColumn(SnippetsTableModel.MODIFIED).setCellRenderer(new DateSnippetTableCellRender());
+        jTable.getColumnModel().getColumn(SnippetsTableModel.MODIFIED).setCellRenderer(new DateSnippetTableCellRender());
     }
 
     public ListSelectionModel getCellSelectionModel() {
@@ -89,13 +90,13 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         model.fireSnippetsChanged();
         if (selectedSnippet != null) {
             int positionOfSnippet = getSnippetViewIndex(selectedSnippet);
-            table.setRowSelectionInterval(positionOfSnippet, positionOfSnippet);
+            jTable.setRowSelectionInterval(positionOfSnippet, positionOfSnippet);
         }
     }
 
     private int getSnippetViewIndex(Snippet selectedSnippet) {
         int positionOfSnippet = model.getPositionOfSnippet(selectedSnippet);
-        return table.convertRowIndexToView(positionOfSnippet);
+        return jTable.convertRowIndexToView(positionOfSnippet);
     }
 
     @Override
@@ -108,18 +109,21 @@ public class SnippetsTable extends AbstractSnippetsListGui {
     }
 
     private int getSelectedModelIndex() {
-        int selectedRow = table.getSelectedRow();
+        int selectedRow = jTable.getSelectedRow();
         if (selectedRow >= 0) {
-            return table.convertRowIndexToModel(selectedRow);
+            return jTable.convertRowIndexToModel(selectedRow);
         } else {
             return -1;
         }
     }
 
     @Override
-    public JTable getSnippetsComponent() {
-        return table;
+    public JTable getJTable() {
+        return jTable;
     }
 
+    public Framework getFramework() {
+        return framework;
+    }
 }
 

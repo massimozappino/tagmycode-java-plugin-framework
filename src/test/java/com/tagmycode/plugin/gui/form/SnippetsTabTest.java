@@ -20,7 +20,7 @@ public class SnippetsTabTest extends AbstractTestBase {
 
     @Test
     public void testConstructor() throws Exception {
-        SnippetsTab snippetsTab = new SnippetsTab(createFramework()) {
+        SnippetsPanel snippetsTab = new SnippetsPanel(createFramework()) {
             public void initPopupMenuForJTextComponents(Container container) {
                 actual = true;
             }
@@ -34,12 +34,12 @@ public class SnippetsTabTest extends AbstractTestBase {
         Framework framework = createFramework();
         framework.restoreData();
 
-        SnippetsTab snippetsTab = new SnippetsTab(framework);
+        SnippetsPanel snippetsTab = new SnippetsPanel(framework);
         SnippetsTable snippetsTable = snippetsTab.getSnippetsTable();
 
         snippetsTable.fireSnippetsChanged();
         JPanel snippetViewFormPanel = snippetsTab.getSnippetViewFormPane();
-        JTable jTable = snippetsTable.getSnippetsComponent();
+        JTable jTable = snippetsTable.getJTable();
 
         assertEquals(1, snippetViewFormPanel.getComponentCount());
         assertEquals(2, jTable.getRowCount());
@@ -54,7 +54,7 @@ public class SnippetsTabTest extends AbstractTestBase {
 
     @Test
     public void disableEnableButtonsForSnippet() throws Exception {
-        SnippetsTab snippetsTab = new SnippetsTab(createFramework(createStorageEngineWithData()));
+        SnippetsPanel snippetsTab = new SnippetsPanel(createFramework(createStorageEngineWithData()));
         snippetsTab.disableButtonsForSnippet();
         assertSnippetButtonsEnabledAre(snippetsTab, false);
         snippetsTab.enableButtonsForSnippet();
@@ -64,9 +64,9 @@ public class SnippetsTabTest extends AbstractTestBase {
     @Test
     public void testNewSnippetAction() throws Exception {
         Framework framework = createFramework(createStorageEngineWithData());
-        SnippetsTab snippetsTab = spy(new SnippetsTab(framework));
+        SnippetsPanel snippetsTab = spy(new SnippetsPanel(framework));
 
-        snippetsTab.newSnippetAction(framework);
+        snippetsTab.newSnippetAction();
 
         verify(snippetsTab, times(1)).createEmptySnippet(framework);
     }
@@ -76,14 +76,14 @@ public class SnippetsTabTest extends AbstractTestBase {
         StorageEngine storage = createStorageEngineWithData();
         storage.saveLastLanguageUsed(resourceGenerate.anotherLanguage());
         Framework framework = spy(createFramework(storage));
-        SnippetsTab snippetsTab = new SnippetsTab(framework);
+        SnippetsPanel snippetsTab = new SnippetsPanel(framework);
 
         Snippet expectedSnippet = new Snippet();
         expectedSnippet.setLanguage(resourceGenerate.anotherLanguage());
         assertEquals(expectedSnippet, snippetsTab.createEmptySnippet(framework));
     }
 
-    private void assertSnippetButtonsEnabledAre(SnippetsTab snippetsTab, boolean flag) {
+    private void assertSnippetButtonsEnabledAre(SnippetsPanel snippetsTab, boolean flag) {
         assertEquals(flag, snippetsTab.editSnippetButton.isEnabled());
         assertEquals(flag, snippetsTab.deleteSnippetButton.isEnabled());
         assertEquals(flag, snippetsTab.copyButton.isEnabled());

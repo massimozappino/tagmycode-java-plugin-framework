@@ -14,7 +14,7 @@ public class WelcomeView extends AbstractGui {
     private JButton searchSnippetButton;
     private Framework framework;
 
-    public WelcomeView(final SnippetsTab snippetsTab) {
+    public WelcomeView(final SnippetsPanel snippetsTab) {
         this.framework = snippetsTab.getFramework();
         getMainComponent().setName("welcome view");
 
@@ -24,7 +24,7 @@ public class WelcomeView extends AbstractGui {
         addNewSnippetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                snippetsTab.newSnippetAction(framework);
+                snippetsTab.newSnippetAction();
             }
         });
         searchSnippetButton.addActionListener(new ActionListener() {

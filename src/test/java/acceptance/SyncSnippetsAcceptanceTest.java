@@ -226,7 +226,7 @@ public class SyncSnippetsAcceptanceTest extends AcceptanceTestBase {
     }
 
     private void softDeleteSnippet(Snippet snippet) throws InterruptedException {
-        Thread start = new DeleteSnippetOperation(framework.getMainWindow().getSnippetsTab(), snippet).start();
+        Thread start = new DeleteSnippetOperation(framework.getMainWindow().getSnippetsPanel(), snippet).start();
         start.join();
     }
 
@@ -246,7 +246,7 @@ public class SyncSnippetsAcceptanceTest extends AcceptanceTestBase {
     }
 
     private void enableNetworking() {
-        framework.getMainWindow().getSnippetsTab().setNetworkingEnabled(true);
+        framework.getMainWindow().getSnippetsPanel().setNetworkingEnabled(true);
     }
 
     private void showFrameworkGui() throws Exception {

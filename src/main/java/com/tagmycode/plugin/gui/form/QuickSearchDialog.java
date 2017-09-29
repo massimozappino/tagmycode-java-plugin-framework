@@ -74,7 +74,7 @@ public class QuickSearchDialog extends AbstractDialog {
     }
 
     private void configureJTable() {
-        jTable = snippetsTable.getSnippetsComponent();
+        jTable = snippetsTable.getJTable();
         jTable.setTableHeader(null);
         TableColumnModel columnModel = jTable.getColumnModel();
         jTable.removeColumn(columnModel.getColumn(SnippetsTableModel.MODIFIED));

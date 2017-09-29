@@ -64,7 +64,7 @@ public class Framework implements IOnErrorCallback {
         boolean initialized = isInitialized();
         mainWindow.setLoggedIn(initialized);
         if (initialized) {
-            mainWindow.getSnippetsTab().setNetworkingEnabled(isNetworkingEnabled());
+            mainWindow.getSnippetsPanel().setNetworkingEnabled(isNetworkingEnabled());
         }
     }
 
@@ -263,7 +263,7 @@ public class Framework implements IOnErrorCallback {
 
     public void snippetsDataChanged() {
         getData().setLastSnippetsUpdate(tagMyCode.getLastSnippetsUpdate());
-        getMainWindow().getSnippetsTab().fireSnippetsChanged();
+        getMainWindow().getSnippetsPanel().fireSnippetsChanged();
     }
 
     protected synchronized void saveData() {

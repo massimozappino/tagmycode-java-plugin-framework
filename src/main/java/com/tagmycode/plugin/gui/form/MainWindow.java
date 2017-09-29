@@ -7,21 +7,21 @@ import com.tagmycode.plugin.gui.IAbstractGUI;
 import javax.swing.*;
 
 public class MainWindow implements IAbstractGUI {
-    private final SnippetsTab snippetsTab;
+    private final SnippetsPanel snippetsPanel;
     private final LoginPanel loginPanel;
     private JPanel mainPanel;
     private boolean networkingEnabled;
 
     public MainWindow(final Framework framework) {
-        snippetsTab = new SnippetsTab(framework);
+        snippetsPanel = new SnippetsPanel(framework);
         loginPanel = new LoginPanel(framework);
     }
 
     public void setLoggedIn(boolean flag) {
         getMainComponent().removeAll();
-        AbstractGui component = flag ? snippetsTab : loginPanel;
-        if (component instanceof SnippetsTab) {
-            ((SnippetsTab) component).reset();
+        AbstractGui component = flag ? snippetsPanel : loginPanel;
+        if (component instanceof SnippetsPanel) {
+            ((SnippetsPanel) component).reset();
         }
         getMainComponent().add(component.getMainComponent());
         getMainComponent().revalidate();
@@ -33,8 +33,8 @@ public class MainWindow implements IAbstractGUI {
         return mainPanel;
     }
 
-    public SnippetsTab getSnippetsTab() {
-        return snippetsTab;
+    public SnippetsPanel getSnippetsPanel() {
+        return snippetsPanel;
     }
 
 }

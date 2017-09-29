@@ -70,10 +70,10 @@ public class FrameworkAcceptanceTest extends AcceptanceTestBase {
         jFrame.add(framework.getMainWindow().getMainComponent());
         jFrame.pack();
 
-        JPanel snippetViewFormPane = framework.getMainWindow().getSnippetsTab().getSnippetViewFormPane();
+        JPanel snippetViewFormPane = framework.getMainWindow().getSnippetsPanel().getSnippetViewFormPane();
         assertEquals("welcome view", snippetViewFormPane.getComponent(0).getName());
 
-        framework.getMainWindow().getSnippetsTab().getSnippetsTable().getSnippetsComponent().setRowSelectionInterval(1, 1);
+        framework.getMainWindow().getSnippetsPanel().getSnippetsTable().getJTable().setRowSelectionInterval(1, 1);
 
         assertEquals("snippet view", snippetViewFormPane.getComponent(0).getName());
     }
@@ -88,7 +88,7 @@ public class FrameworkAcceptanceTest extends AcceptanceTestBase {
         framework.start();
 
         assertTrue(framework.getData().isNetworkingEnabled());
-        assertTrue(framework.getMainWindow().getSnippetsTab().getButtonNetworking().getIcon().toString().contains("/icons/connected.png"));
+        assertTrue(framework.getMainWindow().getSnippetsPanel().getButtonNetworking().getIcon().toString().contains("/icons/connected.png"));
     }
 
     @Test
@@ -101,6 +101,6 @@ public class FrameworkAcceptanceTest extends AcceptanceTestBase {
         framework.start();
 
         waitForFalse(framework.getData().isNetworkingEnabled());
-        waitForTrue(framework.getMainWindow().getSnippetsTab().getButtonNetworking().getIcon().toString().contains("/icons/disconnected.png"));
+        waitForTrue(framework.getMainWindow().getSnippetsPanel().getButtonNetworking().getIcon().toString().contains("/icons/disconnected.png"));
     }
 }
