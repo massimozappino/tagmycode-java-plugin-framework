@@ -2,27 +2,30 @@ package com.tagmycode.plugin;
 
 
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
-import com.tagmycode.sdk.model.DefaultLanguageCollection;
-import com.tagmycode.sdk.model.LanguagesCollection;
-import com.tagmycode.sdk.model.SnippetsCollection;
-import com.tagmycode.sdk.model.User;
+import com.tagmycode.sdk.model.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Data {
-    private StorageEngine storage;
+    private StorageEngine storageEngine;
     private User account;
     private LanguagesCollection languages;
     private SnippetsCollection snippets;
     private String lastSnippetsUpdate;
     private boolean networkingEnabled;
 
-    public Data(StorageEngine storage) {
-        this.storage = storage;
+    public Data(StorageEngine storageEngine) {
+        this.storageEngine = storageEngine;
         reset();
     }
 
     public void clearDataAndStorage() throws TagMyCodeStorageException {
         reset();
-        storage.recreateTables();
+        storageEngine.recreateTables();
     }
 
     protected void reset() {
@@ -58,20 +61,20 @@ public class Data {
     }
 
     public void loadAll() throws TagMyCodeStorageException {
-        setAccount(storage.loadAccount());
-        setLanguages(storage.loadLanguageCollection());
-        String lastSnippetsUpdate = storage.loadLastSnippetsUpdate();
+        setAccount(storageEngine.loadAccount());
+        setLanguages(storageEngine.loadLanguageCollection());
+        String lastSnippetsUpdate = storageEngine.loadLastSnippetsUpdate();
         setLastSnippetsUpdate(lastSnippetsUpdate);
-        setSnippets(storage.loadSnippets());
-        setNetworkingEnabled(storage.loadNetworkingEnabledFlag());
+        setSnippets(storageEngine.loadSnippets());
+        setNetworkingEnabled(storageEngine.loadNetworkingEnabledFlag());
     }
 
     public synchronized void saveAll() throws TagMyCodeStorageException {
-        storage.saveAccount(getAccount());
-        storage.saveLanguageCollection(getLanguages());
-        storage.saveSnippets(getSnippets());
-        storage.saveLastSnippetsUpdate(getLastSnippetsUpdate());
-        storage.saveNetworkingEnabledFlag(isNetworkingEnabled());
+        storageEngine.saveAccount(getAccount());
+        storageEngine.saveLanguageCollection(getLanguages());
+        storageEngine.saveSnippets(getSnippets());
+        storageEngine.saveLastSnippetsUpdate(getLastSnippetsUpdate());
+        storageEngine.saveNetworkingEnabledFlag(isNetworkingEnabled());
     }
 
     public String getLastSnippetsUpdate() {
@@ -83,7 +86,7 @@ public class Data {
     }
 
     public StorageEngine getStorageEngine() {
-        return storage;
+        return storageEngine;
     }
 
     public boolean isNetworkingEnabled() {
@@ -92,5 +95,38 @@ public class Data {
 
     public void setNetworkingEnabled(boolean networkingEnabled) {
         this.networkingEnabled = networkingEnabled;
+    }
+
+    public Snippet createSnippet(String title, String code, Language language) {
+        Snippet snippet = createEmptySnippetWithLastLanguage();
+        if (language != null) {
+            snippet.setLanguage(language);
+        }
+        snippet.setCode(code);
+        snippet.setTitle(title);
+        return snippet;
+    }
+
+    public Snippet createEmptySnippetWithLastLanguage() {
+        Snippet snippet = new Snippet();
+        snippet.setLanguage(storageEngine.loadLastLanguageUsed());
+        return snippet;
+    }
+
+    public Snippet createSnippetFromFile(File file) throws IOException {
+        String code;
+        String fileName = file.getName();
+        int allowedKB = 512;
+        if (file.length() > allowedKB * 1024) {
+            code = String.format("File \"%s\" is larger than %dKB", fileName, allowedKB);
+        } else {
+            code = readFile(file);
+        }
+        return createSnippet(fileName, code, getLanguages().findByFileName(fileName));
+    }
+
+    private String readFile(File file) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(file.getPath()));
+        return new String(encoded, Charset.defaultCharset());
     }
 }

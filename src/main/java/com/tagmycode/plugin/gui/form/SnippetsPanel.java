@@ -282,21 +282,15 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     }
 
     public void newSnippetAction(String code) {
-        Snippet emptySnippet = createEmptySnippet(framework);
-        if (code != null) {
-            emptySnippet.setCode(code);
-        }
-        framework.showNewSnippetDialog(emptySnippet);
+        framework.showNewSnippetDialog(framework.getData().createSnippet("", code, null));
     }
 
     public void newSnippetAction() {
-        newSnippetAction(null);
+        newSnippetAction("");
     }
 
-    protected Snippet createEmptySnippet(Framework framework) {
-        Snippet snippet = new Snippet();
-        snippet.setLanguage(framework.getStorageEngine().loadLastLanguageUsed());
-        return snippet;
+    public void newSnippetAction(Snippet snippet) {
+        framework.showNewSnippetDialog(snippet);
     }
 
     private ListSelectionListener createSelectionListener() {

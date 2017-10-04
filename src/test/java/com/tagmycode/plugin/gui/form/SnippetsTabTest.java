@@ -12,7 +12,7 @@ import java.awt.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.spy;
 
 public class SnippetsTabTest extends AbstractTestBase {
 
@@ -62,25 +62,14 @@ public class SnippetsTabTest extends AbstractTestBase {
     }
 
     @Test
-    public void testNewSnippetAction() throws Exception {
-        Framework framework = createFramework(createStorageEngineWithData());
-        SnippetsPanel snippetsTab = spy(new SnippetsPanel(framework));
-
-        snippetsTab.newSnippetAction();
-
-        verify(snippetsTab, times(1)).createEmptySnippet(framework);
-    }
-
-    @Test
     public void testCreateEmptySnippet() throws Exception {
         StorageEngine storage = createStorageEngineWithData();
         storage.saveLastLanguageUsed(resourceGenerate.anotherLanguage());
         Framework framework = spy(createFramework(storage));
-        SnippetsPanel snippetsTab = new SnippetsPanel(framework);
 
         Snippet expectedSnippet = new Snippet();
         expectedSnippet.setLanguage(resourceGenerate.anotherLanguage());
-        assertEquals(expectedSnippet, snippetsTab.createEmptySnippet(framework));
+        assertEquals(expectedSnippet, framework.getData().createEmptySnippetWithLastLanguage());
     }
 
     private void assertSnippetButtonsEnabledAre(SnippetsPanel snippetsTab, boolean flag) {

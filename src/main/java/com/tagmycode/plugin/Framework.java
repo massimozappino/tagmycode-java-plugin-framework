@@ -80,7 +80,9 @@ public class Framework implements IOnErrorCallback {
 
     public SnippetDialog showNewSnippetDialog(Snippet snippet) {
         snippetDialog.populateFieldsWithSnippet(snippet);
-        snippetDialog.snippetMarkedAsSaved();
+        if (snippet.getCode().length() == 0) {
+            snippetDialog.snippetMarkedAsSaved();
+        }
         snippetDialog.display();
         return snippetDialog;
     }
