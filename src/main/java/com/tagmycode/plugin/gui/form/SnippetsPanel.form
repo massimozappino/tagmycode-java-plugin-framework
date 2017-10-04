@@ -68,6 +68,14 @@
                   <toolTipText value="Open snippet in browser..."/>
                 </properties>
               </component>
+              <component id="ee3a0" class="javax.swing.JButton" binding="saveAsButton">
+                <constraints/>
+                <properties>
+                  <icon value="icons/save.png"/>
+                  <text value=""/>
+                  <toolTipText value="Save As..."/>
+                </properties>
+              </component>
               <component id="5b6d4" class="javax.swing.JToolBar$Separator">
                 <constraints/>
                 <properties/>

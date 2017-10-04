@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - log error if can't open web browser
 - text can be dragged into table to create a new snippet
 - snippets can be dragged directly into editor and the code are copied
+- added "save as file" feature
 
 ### Fixed
 - show a dialog error if verification code is not correct

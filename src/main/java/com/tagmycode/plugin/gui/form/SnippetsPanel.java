@@ -17,6 +17,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 
 import static com.tagmycode.plugin.gui.GuiUtil.setPlaceholder;
 
@@ -37,6 +39,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     private JPanel filterPanel;
     private JButton buttonAbout;
     private JButton buttonNetworking;
+    private JButton saveAsButton;
     private JPanel snippetListPane;
     private Framework framework;
     private JTable jTable;
@@ -102,6 +105,12 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
             @Override
             public void actionPerformed(ActionEvent e) {
                 openSnippetInBrowser();
+            }
+        });
+        saveAsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveAsAction();
             }
         });
         syncButton.addActionListener(new AbstractAction() {
@@ -222,6 +231,17 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
         openInBrowserMenuItem.setIcon(IconResources.createImageIcon("link.png"));
         popupMenu.add(openInBrowserMenuItem);
 
+
+        JMenuItem saveAsMenuItem = new JMenuItem("Save as...");
+        saveAsMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveAsAction();
+            }
+        });
+        saveAsMenuItem.setIcon(IconResources.createImageIcon("save.png"));
+        popupMenu.add(saveAsMenuItem);
+
         jTable.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if (e.isPopupTrigger()) {
@@ -256,6 +276,20 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
             public void keyReleased(KeyEvent e) {
             }
         });
+    }
+
+    private void saveAsAction() {
+        Snippet selectedSnippet = snippetsTable.getSelectedSnippet();
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setSelectedFile(new File(selectedSnippet.getTitle()));
+        if (fileChooser.showSaveDialog(framework.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            try {
+                framework.getData().saveSnippetToFile(file, selectedSnippet);
+            } catch (IOException e) {
+                framework.logError(e);
+            }
+        }
     }
 
     private void openSnippetInBrowser() {
@@ -350,6 +384,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
         deleteSnippetButton.setEnabled(true);
         copyButton.setEnabled(true);
         openInBrowser.setEnabled(true);
+        saveAsButton.setEnabled(true);
     }
 
     protected void disableButtonsForSnippet() {
@@ -357,6 +392,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
         deleteSnippetButton.setEnabled(false);
         copyButton.setEnabled(false);
         openInBrowser.setEnabled(false);
+        saveAsButton.setEnabled(false);
     }
 
     public SnippetsTable getSnippetsTable() {

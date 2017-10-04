@@ -5,6 +5,7 @@ import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.sdk.model.*;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -128,5 +129,11 @@ public class Data {
     private String readFile(File file) throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(file.getPath()));
         return new String(encoded, Charset.defaultCharset());
+    }
+
+    public void saveSnippetToFile(File file, Snippet snippet) throws IOException {
+        FileOutputStream out = new FileOutputStream(file);
+        out.write(snippet.getCode().getBytes());
+        out.close();
     }
 }

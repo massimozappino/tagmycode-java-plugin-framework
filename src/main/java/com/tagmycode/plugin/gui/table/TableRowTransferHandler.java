@@ -10,7 +10,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,11 +57,9 @@ public class TableRowTransferHandler extends TransferHandler {
                 } else if (flavor.equals(DataFlavor.javaFileListFlavor)) {
                     List<File> list = new ArrayList<>();
                     if (tempDir != null) {
-                        File temp = new File(tempDir, selectedSnippet.getTitle());
-                        FileOutputStream out = new FileOutputStream(temp);
-                        out.write(code.getBytes());
-                        out.close();
-                        list.add(temp);
+                        File file = new File(tempDir, selectedSnippet.getTitle());
+                        framework.getData().saveSnippetToFile(file, selectedSnippet);
+                        list.add(file);
                     }
                     return list;
                 } else {
