@@ -45,7 +45,6 @@ public class SnippetDialogTest extends AcceptanceTestBase {
         assertEquals(0, snippetObject.getId());
         assertTrue(snippetObject.isDirty());
         assertTrue(snippetObject.toJson().length() > 0);
-        assertEquals("New snippet", snippetDialog.getDialog().getTitle());
     }
 
     @Test
@@ -53,7 +52,7 @@ public class SnippetDialogTest extends AcceptanceTestBase {
         SnippetDialog snippetDialog = createSnippetDialog(createFramework());
         Snippet snippet = resourceGenerate.aSnippet().setLocalId(100).setId(0);
 
-        snippetDialog.setEditableSnippet(snippet);
+        snippetDialog.setSnippet(snippet);
         Snippet snippetObject;
 
         snippetObject = snippetDialog.createSnippetObject();
@@ -67,7 +66,7 @@ public class SnippetDialogTest extends AcceptanceTestBase {
         snippet.setCreationDate(null);
         snippet.setUpdateDate(null);
 
-        snippetDialog.setEditableSnippet(snippet);
+        snippetDialog.setSnippet(snippet);
         snippetObject = snippetDialog.createSnippetObject();
         assertNotNull(snippetObject.getCreationDate());
         assertNotNull(snippetObject.getUpdateDate());
@@ -93,7 +92,7 @@ public class SnippetDialogTest extends AcceptanceTestBase {
 
         SnippetDialog snippetDialog = createSnippetDialog(framework);
         framework.getData().loadAll();
-        snippetDialog.setEditableSnippet(resourceGenerate.aSnippet());
+        snippetDialog.setSnippet(resourceGenerate.aSnippet());
 
         assertEquals(2, framework.getData().getLanguages().size());
         assertEquals(2, snippetDialog.getLanguageComboBox().getItemCount());
@@ -105,9 +104,9 @@ public class SnippetDialogTest extends AcceptanceTestBase {
         SnippetDialog snippetDialog = createSnippetDialog(framework);
         Snippet snippet = resourceGenerate.aSnippet().setLocalId(100).setId(0);
 
-        snippetDialog.setEditableSnippet(snippet);
+        snippetDialog.setSnippet(snippet);
 
-        assertFalse(snippetDialog.getButtonOk().isEnabled());
+        assertTrue(snippetDialog.getButtonOk().isEnabled());
     }
 
     @Test
@@ -164,7 +163,7 @@ public class SnippetDialogTest extends AcceptanceTestBase {
             }
         };
         JButton buttonOk = snippetDialog.getButtonOk();
-        assertEquals(false, buttonOk.isEnabled());
+        assertTrue(buttonOk.isEnabled());
 
         snippetDialog.snippetMarkedAsModified();
         buttonOk.doClick();
@@ -227,14 +226,14 @@ public class SnippetDialogTest extends AcceptanceTestBase {
         SnippetDialog snippetDialog = createSnippetDialog();
         snippetDialog.snippetMarkedAsSaved();
         assertFalse(snippetDialog.isModified());
-        assertFalse(snippetDialog.getButtonOk().isEnabled());
+        assertTrue(snippetDialog.getButtonOk().isEnabled());
     }
 
     @Test
     public void isNotModifiedWithoutActions() throws Exception {
         SnippetDialog snippetDialog = createSnippetDialog();
         assertFalse(snippetDialog.isModified());
-        assertFalse(snippetDialog.getButtonOk().isEnabled());
+        assertTrue(snippetDialog.getButtonOk().isEnabled());
     }
 
     @Test

@@ -98,7 +98,7 @@ public class QuickSearchDialog extends AbstractDialog {
     }
 
     private void editSnippet() {
-        framework.showEditSnippetDialog(snippetsTable.getSelectedSnippet());
+        framework.showSnippetDialog(snippetsTable.getSelectedSnippet());
         hideDialog();
     }
 

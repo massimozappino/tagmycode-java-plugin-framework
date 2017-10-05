@@ -189,58 +189,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
         final JPopupMenu popupMenu = new JPopupMenu();
         popupMenu.setFocusable(false);
 
-        final JMenuItem editMenuItem = new JMenuItem("Edit");
-        editMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                editSnippetAction();
-            }
-        });
-        editMenuItem.setIcon(IconResources.createImageIcon("edit.png"));
-        popupMenu.add(editMenuItem);
-
-        JMenuItem deleteMenuItem = new JMenuItem("Delete");
-        deleteMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                deleteSnippetAction();
-            }
-        });
-        deleteMenuItem.setIcon(IconResources.createImageIcon("delete.png"));
-        popupMenu.add(deleteMenuItem);
-
-        popupMenu.addSeparator();
-
-        JMenuItem copyCodeMenuItem = new JMenuItem("Copy Code");
-        copyCodeMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                copyCodeAction();
-            }
-        });
-        copyCodeMenuItem.setIcon(IconResources.createImageIcon("copy.png"));
-        popupMenu.add(copyCodeMenuItem);
-
-        JMenuItem openInBrowserMenuItem = new JMenuItem("Open in browser");
-        openInBrowserMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                openSnippetInBrowser();
-            }
-        });
-        openInBrowserMenuItem.setIcon(IconResources.createImageIcon("link.png"));
-        popupMenu.add(openInBrowserMenuItem);
-
-
-        JMenuItem saveAsMenuItem = new JMenuItem("Save as...");
-        saveAsMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                saveAsAction();
-            }
-        });
-        saveAsMenuItem.setIcon(IconResources.createImageIcon("save.png"));
-        popupMenu.add(saveAsMenuItem);
+        createMenu(popupMenu);
 
         jTable.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -278,6 +227,83 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
         });
     }
 
+    private void createMenu(JPopupMenu popupMenu) {
+        createMenuItem(popupMenu, "Edit", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editSnippetAction();
+            }
+        }, "edit.png");
+
+        createMenuItem(popupMenu, "Delete", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteSnippetAction();
+            }
+        }, "delete.png");
+
+        createMenuItem(popupMenu, "Clone snippet...", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cloneSnippetAction();
+            }
+        }, "clone.png");
+        popupMenu.addSeparator();
+
+        createMenuItem(popupMenu, "Copy code", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                copyCodeAction();
+            }
+        }, "copy.png");
+
+        createMenuItem(popupMenu, "Copy link address", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                copyLinkAddressAction();
+            }
+        }, "copy-link.png");
+
+        createMenuItem(popupMenu, "Open in browser", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openSnippetInBrowser();
+            }
+        }, "link.png");
+
+        popupMenu.addSeparator();
+
+        createMenuItem(popupMenu, "Save as...", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveAsAction();
+            }
+        }, "save.png");
+    }
+
+    private void cloneSnippetAction() {
+        Snippet snippet = snippetsTable.getSelectedSnippet();
+        removeIdsFromSnippet(snippet);
+        framework.showSnippetDialog(snippet);
+    }
+
+    private void removeIdsFromSnippet(Snippet snippet) {
+        snippet.setId(0);
+        snippet.setLocalId(0);
+    }
+
+    private void createMenuItem(JPopupMenu popupMenu, String text, ActionListener actionListener, String iconName) {
+        JMenuItem menuItem = new JMenuItem(text);
+        menuItem.addActionListener(actionListener);
+        menuItem.setIcon(IconResources.createImageIcon(iconName));
+        popupMenu.add(menuItem);
+    }
+
+    private void copyLinkAddressAction() {
+        Snippet snippet = snippetsTable.getSelectedSnippet();
+        clipboardCopy.copy(snippet.getUrl());
+    }
+
     private void saveAsAction() {
         Snippet selectedSnippet = snippetsTable.getSelectedSnippet();
         JFileChooser fileChooser = new JFileChooser();
@@ -303,7 +329,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
 
     private void editSnippetAction() {
         Snippet selectedSnippet = snippetsTable.getSelectedSnippet();
-        framework.showEditSnippetDialog(selectedSnippet);
+        framework.showSnippetDialog(selectedSnippet);
     }
 
     private void deleteSnippetAction() {
@@ -316,7 +342,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     }
 
     public void newSnippetAction(String code) {
-        framework.showNewSnippetDialog(framework.getData().createSnippet("", code, null));
+        framework.showSnippetDialog(framework.getData().createSnippet("", code, null));
     }
 
     public void newSnippetAction() {
@@ -324,7 +350,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     }
 
     public void newSnippetAction(Snippet snippet) {
-        framework.showNewSnippetDialog(snippet);
+        framework.showSnippetDialog(snippet);
     }
 
     private ListSelectionListener createSelectionListener() {
@@ -370,7 +396,6 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
                                 jTable.setRowSelectionInterval(selectedRow, selectedRow);
                             } catch (IllegalArgumentException e) {
                                 framework.logError(e);
-                                throw new RuntimeException(e);
                             }
                         }
                     }

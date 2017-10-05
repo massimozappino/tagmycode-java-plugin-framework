@@ -3,11 +3,11 @@ package com.tagmycode.plugin.operation;
 import com.tagmycode.plugin.gui.form.SnippetDialog;
 import com.tagmycode.sdk.model.Snippet;
 
-public class CreateAndEditSnippetOperation extends AbstractSnippetOperation {
+public class EditSnippetOperation extends AbstractSnippetOperation {
 
     private SnippetDialog snippetDialog;
 
-    public CreateAndEditSnippetOperation(SnippetDialog snippetDialog) {
+    public EditSnippetOperation(SnippetDialog snippetDialog) {
         super(snippetDialog.getFramework(), snippetDialog);
         this.snippetDialog = snippetDialog;
     }

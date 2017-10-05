@@ -9,7 +9,7 @@ import com.tagmycode.plugin.gui.SyntaxSnippetEditor;
 import com.tagmycode.plugin.gui.field.AbstractFieldValidation;
 import com.tagmycode.plugin.gui.field.CodeFieldValidation;
 import com.tagmycode.plugin.gui.field.TitleFieldValidation;
-import com.tagmycode.plugin.operation.CreateAndEditSnippetOperation;
+import com.tagmycode.plugin.operation.EditSnippetOperation;
 import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -42,9 +42,9 @@ public class SnippetDialog extends AbstractDialog {
     private JPanel jpanel;
     private JScrollPane scrollPane;
     private DefaultComboBoxModel<Language> defaultComboBoxModel;
-    private Snippet editableSnippet;
-    private CreateAndEditSnippetOperation createAndEditSnippetOperation;
+    private EditSnippetOperation createAndEditSnippetOperation;
     private boolean isModified = false;
+    private Snippet currentSnippet;
 
     public SnippetDialog(final Framework framework, Frame parent) {
         super(framework, parent);
@@ -54,14 +54,14 @@ public class SnippetDialog extends AbstractDialog {
         initWindow();
     }
 
-    public void setEditableSnippet(Snippet snippet) {
-        getDialog().setTitle(EDIT_SNIPPET_TITLE);
-        editableSnippet = snippet;
+    public void setSnippet(Snippet snippet) {
+        getDialog().setTitle(isStoredSnippet(snippet) ? EDIT_SNIPPET_TITLE : NEW_SNIPPET_TITLE);
+        currentSnippet = snippet;
         populateFieldsWithSnippet(snippet);
         snippetMarkedAsSaved();
     }
 
-    public void populateFieldsWithSnippet(Snippet snippet) {
+    protected void populateFieldsWithSnippet(Snippet snippet) {
         titleBox.setText(snippet.getTitle());
         descriptionTextField.setText(snippet.getDescription());
         tagsTextField.setText(snippet.getTags());
@@ -75,7 +75,7 @@ public class SnippetDialog extends AbstractDialog {
     protected void initWindow() {
         snippetMarkedAsSaved();
 
-        createAndEditSnippetOperation = new CreateAndEditSnippetOperation(this);
+        createAndEditSnippetOperation = new EditSnippetOperation(this);
         defaultComboBoxModel = new DefaultComboBoxModel<>();
         languageComboBox.setModel(defaultComboBoxModel);
         descriptionTextField.requestFocus();
@@ -84,7 +84,6 @@ public class SnippetDialog extends AbstractDialog {
         setPlaceholder("tags space separated", tagsTextField);
 
         getDialog().setSize(650, 450);
-        getDialog().setTitle(NEW_SNIPPET_TITLE);
         getDialog().setResizable(true);
         getDialog().setModal(false);
 
@@ -230,16 +229,20 @@ public class SnippetDialog extends AbstractDialog {
         snippet.setPrivate(privateSnippetCheckBox.isSelected());
         Date now = new Date();
         Date creationDate = null;
-        if (editableSnippet != null) {
-            snippet.setLocalId(editableSnippet.getLocalId());
-            snippet.setId(editableSnippet.getId());
-            creationDate = editableSnippet.getCreationDate();
+        if (isStoredSnippet(currentSnippet)) {
+            snippet.setLocalId(currentSnippet.getLocalId());
+            snippet.setId(currentSnippet.getId());
+            creationDate = currentSnippet.getCreationDate();
         }
         snippet.setCreationDate(creationDate == null ? now : creationDate);
         snippet.setUpdateDate(now);
         snippet.setDirty(true);
 
         return snippet;
+    }
+
+    private boolean isStoredSnippet(Snippet currentSnippet) {
+        return currentSnippet != null && currentSnippet.getLocalId() != 0;
     }
 
     public JComboBox getLanguageComboBox() {
@@ -294,15 +297,14 @@ public class SnippetDialog extends AbstractDialog {
 
     public void snippetMarkedAsSaved() {
         isModified = false;
-        getButtonOk().setEnabled(false);
     }
 
     public void snippetMarkedAsModified() {
         this.isModified = true;
-        getButtonOk().setEnabled(true);
     }
 
-    public CreateAndEditSnippetOperation getCreateAndEditSnippetOperation() {
+    public EditSnippetOperation getCreateAndEditSnippetOperation() {
         return createAndEditSnippetOperation;
     }
+
 }

@@ -78,21 +78,8 @@ public class Framework implements IOnErrorCallback {
         return loginDialog;
     }
 
-    public SnippetDialog showNewSnippetDialog(Snippet snippet) {
-        snippetDialog.populateFieldsWithSnippet(snippet);
-        if (snippet.getCode().length() == 0) {
-            snippetDialog.snippetMarkedAsSaved();
-        }
-        snippetDialog.display();
-        return snippetDialog;
-    }
-
-    public SnippetDialog showEditSnippetDialog(Snippet snippet) {
-        if (snippet == null) {
-            return null;
-        }
-
-        snippetDialog.setEditableSnippet(snippet);
+    public SnippetDialog showSnippetDialog(Snippet snippet) {
+        snippetDialog.setSnippet(snippet);
         snippetDialog.display();
         return snippetDialog;
     }

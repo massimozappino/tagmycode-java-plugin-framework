@@ -19,7 +19,7 @@ public class CreateAndEditSnippetOperationTest extends AbstractTestBase {
         SnippetsUpdatePollingProcess snippetsUpdatePollingProcess = mock(SnippetsUpdatePollingProcess.class);
         when(frameworkMock.getPollingProcess()).thenReturn(snippetsUpdatePollingProcess);
 
-        CreateAndEditSnippetOperation createAndEditSnippetOperation = new CreateAndEditSnippetOperation(snippetDialogMock);
+        EditSnippetOperation createAndEditSnippetOperation = new EditSnippetOperation(snippetDialogMock);
         Snippet snippet = resourceGenerate.aSnippet();
 
         createAndEditSnippetOperation.onSuccess(snippet);

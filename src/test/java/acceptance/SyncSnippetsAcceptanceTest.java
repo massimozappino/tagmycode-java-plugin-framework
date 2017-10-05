@@ -38,7 +38,7 @@ public class SyncSnippetsAcceptanceTest extends AcceptanceTestBase {
 
         framework.start();
 
-        SnippetDialog snippetDialog = framework.showEditSnippetDialog(resourceGenerate.aSnippet());
+        SnippetDialog snippetDialog = framework.showSnippetDialog(resourceGenerate.aSnippet());
         snippetDialog.getTitleBox().setText("The title");
 
         clickOnButton(snippetDialog.getButtonOk());
@@ -136,7 +136,7 @@ public class SyncSnippetsAcceptanceTest extends AcceptanceTestBase {
         framework.start();
 
         SnippetDialog snippetDialog = new SnippetDialog(framework, null);
-        snippetDialog.populateFieldsWithSnippet(resourceGenerate.aSnippet());
+        snippetDialog.setSnippet(resourceGenerate.aSnippet());
         clickOnButton(snippetDialog.getButtonOk());
 
         SnippetsCollection snippets = framework.getData().getSnippets();
@@ -168,7 +168,7 @@ public class SyncSnippetsAcceptanceTest extends AcceptanceTestBase {
 
         SnippetDialog snippetDialog = new SnippetDialog(framework, null);
 
-        snippetDialog.setEditableSnippet(originalSnippet);
+        snippetDialog.setSnippet(originalSnippet);
         snippetDialog.getTitleBox().setText("new title");
         clickOnButton(snippetDialog.getButtonOk());
 

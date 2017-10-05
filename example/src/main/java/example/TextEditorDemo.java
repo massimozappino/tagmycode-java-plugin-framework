@@ -200,13 +200,11 @@ public class TextEditorDemo extends JFrame {
 
         setContentPane(cp);
         setTitle("Text Editor Demo");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
         textArea.setEnabled(false);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_XML);
-
-
     }
 
     public static void main(String[] args) {
