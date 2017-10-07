@@ -22,6 +22,7 @@ public abstract class AbstractDialog extends AbstractGui implements IOnErrorCall
     protected abstract void initWindow();
 
     protected void defaultInitWindow() {
+        getMainComponent().setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         dialog.setContentPane(getMainComponent());
         dialog.getRootPane().setDefaultButton(getButtonOk());
 

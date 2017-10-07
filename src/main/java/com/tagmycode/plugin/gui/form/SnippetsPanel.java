@@ -279,6 +279,19 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
                 saveAsAction();
             }
         }, "save.png");
+
+        popupMenu.addSeparator();
+
+        createMenuItem(popupMenu, "Properties...", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                propertiesAction();
+            }
+        }, "properties.png");
+    }
+
+    private void propertiesAction() {
+        new PropertiesForm(framework, snippetsTable.getSelectedSnippet()).display();
     }
 
     private void cloneSnippetAction() {

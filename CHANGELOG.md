@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - snippets can be dragged directly into editor and the code are copied
 - added "save as file" feature
 - added "clone snippet" feature
+- added "snippet properties" dialog
 
 ### Fixed
 - show a dialog error if verification code is not correct

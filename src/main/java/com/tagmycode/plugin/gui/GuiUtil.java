@@ -35,6 +35,12 @@ public class GuiUtil {
         button.setBorderPainted(false);
     }
 
+    public static void makeTransparentTextField(JTextField jTextField) {
+        jTextField.setOpaque(false);
+        removeBorder(jTextField);
+        jTextField.setBackground(null);
+    }
+
     public static void removeBorder(JComponent component) {
         component.setBorder(new EmptyBorder(component.getInsets()));
     }

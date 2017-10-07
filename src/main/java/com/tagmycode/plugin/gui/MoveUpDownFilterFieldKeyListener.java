@@ -6,6 +6,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class MoveUpDownFilterFieldKeyListener implements KeyListener {
+    public static final String DIRECTION_UP = "up";
+    public static final String DIRECTION_DOWN = "down";
     private JTable jTable;
 
     public MoveUpDownFilterFieldKeyListener(JTable jTable) {
@@ -21,12 +23,12 @@ public class MoveUpDownFilterFieldKeyListener implements KeyListener {
         int code = e.getKeyCode();
         switch (code) {
             case KeyEvent.VK_UP: {
-                cycleTableSelectionRows("up");
+                cycleTableSelectionRows(DIRECTION_UP);
                 break;
             }
 
             case KeyEvent.VK_DOWN: {
-                cycleTableSelectionRows("down");
+                cycleTableSelectionRows(DIRECTION_DOWN);
                 break;
             }
         }
@@ -42,7 +44,7 @@ public class MoveUpDownFilterFieldKeyListener implements KeyListener {
             int selectedIndex = jTable.getSelectedRow();
             int newSelectionIndex = 0;
 
-            if (direction.equals("up")) {
+            if (direction.equals(DIRECTION_UP)) {
                 newSelectionIndex = size - 1;
                 if (selectedIndex > 0) {
                     newSelectionIndex = selectedIndex - 1;
