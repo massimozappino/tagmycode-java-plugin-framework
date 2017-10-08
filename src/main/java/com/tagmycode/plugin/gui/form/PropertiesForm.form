@@ -181,8 +181,6 @@
               <grid id="d20db" layout-manager="FormLayout">
                 <rowspec value="center:d:grow"/>
                 <colspec value="fill:d:grow"/>
-                <colspec value="left:4dlu:noGrow"/>
-                <colspec value="fill:max(d;4px):noGrow"/>
                 <constraints>
                   <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <forms defaultalign-horz="false"/>
@@ -198,17 +196,6 @@
                       <forms defaultalign-horz="false"/>
                     </constraints>
                     <properties/>
-                  </component>
-                  <component id="7c28e" class="javax.swing.JButton" binding="openInBrowser">
-                    <constraints>
-                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                      <forms/>
-                    </constraints>
-                    <properties>
-                      <icon value="icons/link.png"/>
-                      <text value=""/>
-                      <toolTipText value="Open snippet in browser..."/>
-                    </properties>
                   </component>
                 </children>
               </grid>

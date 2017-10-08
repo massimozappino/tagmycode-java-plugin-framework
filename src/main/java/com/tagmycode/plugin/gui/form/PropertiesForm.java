@@ -24,7 +24,6 @@ public class PropertiesForm extends AbstractDialog {
     private JTextField createdAtTextField;
     private JTextField languageTextField;
     private JCheckBox synchronizedCheckBox;
-    private JButton openInBrowser;
     private Snippet snippet;
 
     public PropertiesForm(Framework framework, Snippet snippet) {
@@ -66,7 +65,6 @@ public class PropertiesForm extends AbstractDialog {
             GuiUtil.makeTransparentTextField(field);
             field.setEditable(false);
         }
-        GuiUtil.makeTransparentButton(openInBrowser);
 
         getDialog().setSize(450, 300);
         getDialog().setResizable(true);
