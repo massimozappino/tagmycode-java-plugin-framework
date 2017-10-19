@@ -33,7 +33,6 @@ public class Framework implements IOnErrorCallback {
     private IBrowser browser;
     private MainWindow mainWindow;
     private QuickSearchDialog quickSearchDialog;
-    private SettingsForm settingsForm;
     private AboutDialog aboutDialog;
     private FrameworkConfig frameworkConfig;
     private SnippetDialog snippetDialog;
@@ -51,7 +50,6 @@ public class Framework implements IOnErrorCallback {
         this.data = new Data(storageEngine);
         quickSearchDialog = new QuickSearchDialog(this, getParentFrame());
         pollingProcess = new SnippetsUpdatePollingProcess(this);
-        settingsForm = new SettingsForm(this, getParentFrame());
         version = frameworkConfig.getVersionObject();
         aboutDialog = new AboutDialog(this, getParentFrame());
         snippetDialog = new SnippetDialog(this, getParentFrame());
@@ -85,7 +83,8 @@ public class Framework implements IOnErrorCallback {
     }
 
     public void showSettingsDialog() {
-        settingsForm.display();
+        new SettingsForm(this, getParentFrame())
+                .display();
     }
 
     public QuickSearchDialog showSearchDialog(IDocumentInsertText documentInsertText) {

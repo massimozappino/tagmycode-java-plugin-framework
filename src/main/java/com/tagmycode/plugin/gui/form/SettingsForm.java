@@ -1,5 +1,6 @@
 package com.tagmycode.plugin.gui.form;
 
+import com.tagmycode.plugin.BackgroundWorker;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.MD5Util;
 import com.tagmycode.plugin.gui.AbstractDialog;
@@ -26,7 +27,7 @@ public class SettingsForm extends AbstractDialog {
     public SettingsForm(final Framework framework, Frame parent) {
         super(framework, parent);
         this.framework = framework;
-        getDialog().setTitle("User profile");
+        getDialog().setTitle("Settings");
         defaultInitWindow();
         setBold(userName);
         addClickableLink(framework, profilePicture, "https://tagmycode.com/account");
@@ -95,17 +96,3 @@ public class SettingsForm extends AbstractDialog {
     }
 }
 
-class BackgroundWorker extends SwingWorker<Integer, String> {
-    private Runnable runnable;
-
-    public BackgroundWorker(Runnable runnable) {
-        this.runnable = runnable;
-    }
-
-    @Override
-    protected Integer doInBackground() throws Exception {
-        runnable.run();
-        return 0;
-    }
-
-}
