@@ -97,6 +97,8 @@ public abstract class AbstractDialog extends AbstractGui implements IOnErrorCall
                 CenterLocation location = new CenterLocation(parentFrame, dialog);
                 dialog.setLocation(location.getX(), location.getY());
                 dialog.setVisible(true);
+                dialog.revalidate();
+                dialog.repaint();
             }
         });
     }

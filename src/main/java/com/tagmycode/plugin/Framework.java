@@ -9,6 +9,7 @@ import com.tagmycode.plugin.gui.form.*;
 import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.TagMyCodeApi;
+import com.tagmycode.sdk.crash.CrashClient;
 import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.exception.TagMyCodeUnauthorizedException;
 import com.tagmycode.sdk.model.LanguagesCollection;
@@ -36,6 +37,7 @@ public class Framework implements IOnErrorCallback {
     private AboutDialog aboutDialog;
     private FrameworkConfig frameworkConfig;
     private SnippetDialog snippetDialog;
+    private final CrashService crashService;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) throws SQLException {
         this.frameworkConfig = frameworkConfig;
@@ -54,6 +56,7 @@ public class Framework implements IOnErrorCallback {
         aboutDialog = new AboutDialog(this, getParentFrame());
         snippetDialog = new SnippetDialog(this, getParentFrame());
         this.mainWindow = new MainWindow(this);
+        crashService = new CrashService(new CrashClient(client), data, version, secret.getConsumerId());
     }
 
     public void start() throws IOException, TagMyCodeException, SQLException {
@@ -184,6 +187,7 @@ public class Framework implements IOnErrorCallback {
 
     public void logError(Exception e) {
         LOGGER.error("TagMyCode Error", e);
+        crashService.send(e);
     }
 
     public void logoutAndAuthenticateAgain() {
@@ -208,11 +212,6 @@ public class Framework implements IOnErrorCallback {
             logError(e);
         } catch (TagMyCodeException e) {
             manageTagMyCodeExceptions(e);
-        }
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
