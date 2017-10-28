@@ -34,6 +34,6 @@ public class FileSize {
     }
 
     private static String concatUnit(String value, String unit) {
-        return value.concat(unit);
+        return value.concat(" ").concat(unit);
     }
 }

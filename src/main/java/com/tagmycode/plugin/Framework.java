@@ -177,6 +177,7 @@ public class Framework implements IOnErrorCallback {
     public void manageTagMyCodeExceptions(TagMyCodeException e) {
         logError(e);
         if (e instanceof TagMyCodeUnauthorizedException) {
+            showErrorDialog(e.getMessage());
             logoutAndAuthenticateAgain();
         } else if (e instanceof TagMyCodeGuiException) {
             showErrorDialog(e.getMessage());
