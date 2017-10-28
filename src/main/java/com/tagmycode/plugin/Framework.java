@@ -146,6 +146,7 @@ public class Framework implements IOnErrorCallback {
 
     public void resetLastSnippetsUpdate() {
         tagMyCode.setLastSnippetsUpdate(null);
+        data.setLastSnippetsUpdate(null);
     }
 
     public boolean isInitialized() {
