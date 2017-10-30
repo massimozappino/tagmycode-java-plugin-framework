@@ -1,5 +1,6 @@
 package com.tagmycode.plugin.gui.form;
 
+import com.tagmycode.plugin.SyntaxSnippetEditorFactory;
 import com.tagmycode.plugin.gui.AbstractGui;
 import com.tagmycode.plugin.gui.GuiUtil;
 import com.tagmycode.plugin.gui.SyntaxSnippetEditor;
@@ -18,10 +19,10 @@ public class SnippetView extends AbstractGui {
     private JTextArea descriptionTextArea;
     private JSplitPane splitPane;
 
-    public SnippetView() {
+    public SnippetView(SyntaxSnippetEditorFactory syntaxSnippetEditorFactory) {
         getMainComponent().setName("snippet view");
         splitPane.setResizeWeight(.85);
-        syntaxSnippetEditor = new SyntaxSnippetEditor();
+        syntaxSnippetEditor = syntaxSnippetEditorFactory.create();
         syntaxSnippetEditor.setEditable(false);
         snippetPane.add(syntaxSnippetEditor.getMainComponent());
         titleTextField.setEditable(false);

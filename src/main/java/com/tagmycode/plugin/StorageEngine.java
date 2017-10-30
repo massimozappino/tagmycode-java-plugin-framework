@@ -15,6 +15,8 @@ public class StorageEngine {
     private static final String LAST_LANGUAGE = "last_language";
     private static final String ACCOUNT = "account";
     private static final String SNIPPETS_LAST_UPDATE = "snippets_last_update";
+    private static final String EDITOR_THEME_FILE = "editor_theme_file";
+    private static final String EDITOR_FONT_SIZE = "editor_font_size";
     private final DbService dbService;
     private final SnippetsStorage snippetsStorage;
 
@@ -179,6 +181,39 @@ public class StorageEngine {
             return readProperty(SNIPPETS_LAST_UPDATE).getValue();
         } catch (SQLException e) {
             throw new TagMyCodeStorageException(e);
+        }
+    }
+
+    public void saveEditorTheme(String themeFile) throws TagMyCodeStorageException {
+        try {
+            writeProperty(EDITOR_THEME_FILE, themeFile);
+        } catch (SQLException e) {
+            throw new TagMyCodeStorageException(e);
+        }
+    }
+
+    public String loadEditorTheme() throws TagMyCodeStorageException {
+        try {
+            return readProperty(EDITOR_THEME_FILE).getValue();
+        } catch (SQLException e) {
+            throw new TagMyCodeStorageException(e);
+        }
+    }
+
+
+    public void saveEditorFontSize(int fontSize) throws TagMyCodeStorageException {
+        try {
+            writeProperty(EDITOR_FONT_SIZE, String.valueOf(fontSize));
+        } catch (SQLException e) {
+            throw new TagMyCodeStorageException(e);
+        }
+    }
+
+    public int loadEditorFontSize() {
+        try {
+            return Integer.parseInt(readProperty(EDITOR_FONT_SIZE).getValue());
+        } catch (Throwable e) {
+            return 13;
         }
     }
 

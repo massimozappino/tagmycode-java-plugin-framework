@@ -120,6 +120,27 @@ public class StorageEngineTest extends AbstractTestBase {
     }
 
     @Test
+    public void testSaveAndLoadEditorTheme() throws Exception {
+        String themeFile = "dark.xml";
+        storageEngine.saveEditorTheme(themeFile);
+        assertEquals(themeFile, storageEngine.loadEditorTheme());
+
+        String newThemeFile = "newFile.xml";
+
+        storageEngine.saveEditorTheme(newThemeFile);
+        assertEquals(newThemeFile, storageEngine.loadEditorTheme());
+    }
+
+    @Test
+    public void testSaveAndLoadEditorFontSize() throws Exception {
+        storageEngine.saveEditorFontSize(20);
+        assertEquals(20, storageEngine.loadEditorFontSize());
+
+        storageEngine.saveEditorFontSize(13);
+        assertEquals(13, storageEngine.loadEditorFontSize());
+    }
+
+    @Test
     public void clearPreferences() throws Exception {
         storageEngine.saveAccount(resourceGenerate.aUser());
         storageEngine.saveLanguageCollection(resourceGenerate.aLanguageCollection());
@@ -127,6 +148,8 @@ public class StorageEngineTest extends AbstractTestBase {
         storageEngine.savePrivateSnippetFlag(true);
         storageEngine.saveNetworkingEnabledFlag(false);
         storageEngine.saveSnippets(resourceGenerate.aSnippetCollection());
+        storageEngine.saveEditorTheme("default.xml");
+        storageEngine.saveEditorFontSize(20);
         storageEngine.recreateTables();
         assertStorageDataIsCleared(storageEngine);
     }
@@ -147,6 +170,9 @@ public class StorageEngineTest extends AbstractTestBase {
         assertEquals(new SnippetsCollection(), storageEngine.loadSnippets());
         assertFalse(storageEngine.loadPrivateSnippetFlag());
         assertTrue(storageEngine.loadNetworkingEnabledFlag());
+        assertNull(storageEngine.loadLastSnippetsUpdate());
+        assertNull(storageEngine.loadEditorTheme());
+        assertEquals(13, storageEngine.loadEditorFontSize());
     }
 
     private void assertCollectionsAreEquals(List expectedList, List actualList) throws JSONException {

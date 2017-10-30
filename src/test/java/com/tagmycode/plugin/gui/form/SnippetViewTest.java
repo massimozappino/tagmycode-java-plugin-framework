@@ -1,5 +1,6 @@
 package com.tagmycode.plugin.gui.form;
 
+import com.tagmycode.plugin.SyntaxSnippetEditorFactory;
 import com.tagmycode.sdk.model.Snippet;
 import org.fife.ui.rtextarea.RTextArea;
 import org.junit.Test;
@@ -15,7 +16,7 @@ public class SnippetViewTest extends AbstractTestBase {
     public void testConstructor() throws Exception {
         Snippet snippet = new ResourceGenerate().aSnippet();
         snippet.setCode("line1\nline2\nline3\nline4\nline5");
-        SnippetView snippetView = new SnippetView().setSnippet(snippet);
+        SnippetView snippetView = new SnippetView(new SyntaxSnippetEditorFactory("", 13)).setSnippet(snippet);
         RTextArea snippetEditorPane = snippetView.getSnippetEditorPane().getTextArea();
         assertEquals("line1\n" +
                 "line2\n" +

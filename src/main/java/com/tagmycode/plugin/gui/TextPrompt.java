@@ -15,7 +15,7 @@ import java.awt.event.FocusListener;
  * determine the visibility of the prompt.
  * <p>
  * The Font and foreground Color of the prompt will default to those properties
- * of the parent text component. You are free to change the properties after
+ * of the parent text component. You are free to applyChanges the properties after
  * class construction.
  */
 public class TextPrompt extends JLabel
@@ -50,7 +50,7 @@ public class TextPrompt extends JLabel
     }
 
     /**
-     * Convenience method to change the alpha value of the current foreground
+     * Convenience method to applyChanges the alpha value of the current foreground
      * Color to the specifice value.
      *
      * @param alpha value in the range of 0 - 1.0.
@@ -60,7 +60,7 @@ public class TextPrompt extends JLabel
     }
 
     /**
-     * Convenience method to change the alpha value of the current foreground
+     * Convenience method to applyChanges the alpha value of the current foreground
      * Color to the specifice value.
      *
      * @param alpha value in the range of 0 - 255.
@@ -78,7 +78,7 @@ public class TextPrompt extends JLabel
     }
 
     /**
-     * Convenience method to change the style of the current Font. The style
+     * Convenience method to applyChanges the style of the current Font. The style
      * values are found in the Font class. Common values might be:
      * Font.BOLD, Font.ITALIC and Font.BOLD + Font.ITALIC.
      *
@@ -135,7 +135,7 @@ public class TextPrompt extends JLabel
 
     /**
      * Check whether the prompt should be visible or not. The visibility
-     * will change on updates to the Document and on focus changes.
+     * will applyChanges on updates to the Document and on focus changes.
      */
     private void checkForPrompt() {
         //  Text has been entered, remove the prompt

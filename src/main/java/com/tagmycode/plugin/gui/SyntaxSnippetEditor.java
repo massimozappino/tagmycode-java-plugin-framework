@@ -8,11 +8,9 @@ import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
-import java.io.IOException;
 
 public class SyntaxSnippetEditor implements IAbstractGUI {
 
-    private static Theme theme;
     private final RSyntaxTextArea textArea;
     private final RTextScrollPane scrollPane;
 
@@ -23,25 +21,11 @@ public class SyntaxSnippetEditor implements IAbstractGUI {
         scrollPane.setLineNumbersEnabled(false);
         scrollPane.setIconRowHeaderEnabled(false);
         GuiUtil.removeBorder(scrollPane);
+    }
 
+    public void applyTheme(Theme theme) {
         if (theme != null) {
             theme.apply(textArea);
-        }
-    }
-
-    public static void setThemeDark() {
-        try {
-            theme = Theme.load(SyntaxSnippetEditor.class.getResourceAsStream(
-                    "/org/fife/ui/rsyntaxtextarea/themes/dark.xml"));
-        } catch (IOException ignore) {
-        }
-    }
-
-    public static void setThemeIdea() {
-        try {
-            theme = Theme.load(SyntaxSnippetEditor.class.getResourceAsStream(
-                    "/org/fife/ui/rsyntaxtextarea/themes/idea.xml"));
-        } catch (IOException ignore) {
         }
     }
 

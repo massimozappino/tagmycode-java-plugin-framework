@@ -47,10 +47,11 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     private SnippetsTableModel model;
     private boolean networkingEnabled;
     private FilterSnippetsTextField filterTextField;
-    private SnippetView snippetView = new SnippetView();
+    private SnippetView snippetView;
 
     public SnippetsPanel(final Framework framework) {
         this.framework = framework;
+        snippetView = new SnippetView(framework.getSyntaxSnippetEditorFactory());
         initSnippetsJTable();
         welcomeView = new WelcomeView(this);
 

@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## UNRELEASED
 ### Added
 - added support to handle snippets in offline mode
+- added settings dialog with editor theme and font size option
 - added title and description to snippet view
 - added log4j.properties configuration
 - log error if can't open web browser

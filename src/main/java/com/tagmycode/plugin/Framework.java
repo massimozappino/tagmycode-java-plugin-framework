@@ -38,6 +38,7 @@ public class Framework implements IOnErrorCallback {
     private FrameworkConfig frameworkConfig;
     private SnippetDialog snippetDialog;
     private final CrashService crashService;
+    private final SyntaxSnippetEditorFactory syntaxSnippetEditorFactory;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) throws SQLException {
         this.frameworkConfig = frameworkConfig;
@@ -48,8 +49,8 @@ public class Framework implements IOnErrorCallback {
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
         StorageEngine storageEngine = new StorageEngine(frameworkConfig.getDbService());
-
         this.data = new Data(storageEngine);
+        syntaxSnippetEditorFactory = new SyntaxSnippetEditorFactory(loadThemeFile(storageEngine), storageEngine.loadEditorFontSize());
         quickSearchDialog = new QuickSearchDialog(this, getParentFrame());
         pollingProcess = new SnippetsUpdatePollingProcess(this);
         version = frameworkConfig.getVersionObject();
@@ -57,6 +58,19 @@ public class Framework implements IOnErrorCallback {
         snippetDialog = new SnippetDialog(this, getParentFrame());
         this.mainWindow = new MainWindow(this);
         crashService = new CrashService(new CrashClient(client), data, version, secret.getConsumerId());
+    }
+
+    private String loadThemeFile(StorageEngine storageEngine) {
+        String themeFile = "";
+        try {
+            themeFile = storageEngine.loadEditorTheme();
+        } catch (TagMyCodeStorageException ignored) {
+        }
+        return themeFile;
+    }
+
+    public SyntaxSnippetEditorFactory getSyntaxSnippetEditorFactory() {
+        return syntaxSnippetEditorFactory;
     }
 
     public void start() throws IOException, TagMyCodeException, SQLException {

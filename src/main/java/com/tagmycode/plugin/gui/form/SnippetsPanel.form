@@ -103,9 +103,9 @@
               <component id="ea780" class="javax.swing.JButton" binding="settingsButton">
                 <constraints/>
                 <properties>
-                  <icon value="icons/profile.png"/>
+                  <icon value="icons/settings.png"/>
                   <text value=""/>
-                  <toolTipText value="User profile..."/>
+                  <toolTipText value="Settings..."/>
                 </properties>
               </component>
               <component id="13543" class="javax.swing.JToolBar$Separator">
