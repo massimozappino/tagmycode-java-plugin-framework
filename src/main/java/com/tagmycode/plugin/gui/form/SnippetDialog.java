@@ -48,7 +48,7 @@ public class SnippetDialog extends AbstractDialog {
 
     public SnippetDialog(final Framework framework, Frame parent) {
         super(framework, parent);
-        codeEditorPane = new SyntaxSnippetEditor();
+        codeEditorPane = framework.getSyntaxSnippetEditorFactory().create();
         snippetPane.add(codeEditorPane.getMainComponent());
         defaultInitWindow();
         initWindow();
