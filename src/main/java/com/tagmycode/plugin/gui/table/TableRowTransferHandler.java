@@ -2,6 +2,7 @@ package com.tagmycode.plugin.gui.table;
 
 import com.google.common.io.Files;
 import com.tagmycode.plugin.Framework;
+import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.gui.form.SnippetsPanel;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -94,8 +95,14 @@ public class TableRowTransferHandler extends TransferHandler {
                 }
 
                 File file = (File) data.get(0);
-                showDialog(framework.getData().createSnippetFromFile(file));
-                return true;
+                try {
+                    showDialog(framework.getData().createSnippetFromFile(file));
+                    return true;
+                } catch (TagMyCodeGuiException e) {
+                    framework.showErrorDialog(e.getMessage());
+                    return false;
+                }
+
 
             } catch (UnsupportedFlavorException | IOException ignored) {
             }

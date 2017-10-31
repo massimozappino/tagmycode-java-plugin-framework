@@ -1,6 +1,7 @@
 package com.tagmycode.plugin;
 
 
+import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.sdk.model.*;
 
@@ -114,16 +115,17 @@ public class Data {
         return snippet;
     }
 
-    public Snippet createSnippetFromFile(File file) throws IOException {
-        String code;
+    public Snippet createSnippetFromFile(File file) throws IOException, TagMyCodeGuiException {
         String fileName = file.getName();
         int allowedKB = 512;
         if (file.length() > allowedKB * 1024) {
-            code = String.format("File \"%s\" is larger than %dKB", fileName, allowedKB);
-        } else {
-            code = readFile(file);
+            throw new TagMyCodeGuiException(String.format("File \"%s\" is larger than %dKB", fileName, allowedKB));
         }
-        return createSnippet(fileName, code, getLanguages().findByFileName(fileName));
+        if (new TextEncoding().isBinaryFile(file)) {
+            throw new TagMyCodeGuiException(String.format("File \"%s\" seems to be a binary file", fileName));
+        }
+
+        return createSnippet(fileName, readFile(file), getLanguages().findByFileName(fileName));
     }
 
     private String readFile(File file) throws IOException {

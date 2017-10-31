@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - added "save as file" feature
 - added "clone snippet" feature
 - added "snippet properties" dialog
+- detect binary file
 
 ### Fixed
 - show a dialog error if verification code is not correct
