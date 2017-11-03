@@ -31,7 +31,7 @@ public class CrashService {
             @Override
             public void run() {
                 try {
-                    String appVersion = version.getFrameworkVersion() + " " + version.getPluginVersion();
+                    String appVersion = version.getFrameworkVersion() + " " + version.getPluginVersion() + " " + version.getPluginTitle();
                     Crash crash = Crash.create(appId, appVersion, data.getAccount(), exception);
                     crashClient.sendCrash(crash);
                 } catch (TagMyCodeException tmcException) {

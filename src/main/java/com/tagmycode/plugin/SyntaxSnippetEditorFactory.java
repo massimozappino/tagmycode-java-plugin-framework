@@ -1,6 +1,7 @@
 package com.tagmycode.plugin;
 
 import com.tagmycode.plugin.gui.SyntaxSnippetEditor;
+import com.tagmycode.plugin.gui.ThemeItem;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Theme;
 
@@ -10,10 +11,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SyntaxSnippetEditorFactory {
+    public static final int DEFAULT_FONT_SIZE = 13;
+    public static final String THEME_STRING_DARK = "monokai.xml";
     private Theme theme = null;
     private List<SyntaxSnippetEditor> editorList = new ArrayList<>();
     private int fontSize;
 
+    public ArrayList<ThemeItem> createThemeArray() {
+        final ArrayList<ThemeItem> themes = new ArrayList<>();
+        themes.add(new ThemeItem("default.xml", "Default"));
+        themes.add(new ThemeItem("idea.xml", "IntelliJ IDEA"));
+        themes.add(new ThemeItem("eclipse.xml", "Eclipse"));
+        themes.add(new ThemeItem("vs.xml", "Visual Studio"));
+        themes.add(new ThemeItem("monokai.xml", "Dark Monokai"));
+        themes.add(new ThemeItem("dark.xml", "Dark Obsidian PyCs"));
+        return themes;
+    }
 
     public SyntaxSnippetEditorFactory(String themeFile, int fontSize) {
         this.fontSize = fontSize;
@@ -42,9 +55,13 @@ public class SyntaxSnippetEditorFactory {
     }
 
     public void applyChanges(String themeFile, int fontSize) {
+        changeThemeString(themeFile);
+        changeFontSize(fontSize);
+    }
+
+    private void changeThemeString(String themeFile) {
         this.theme = loadTheme(themeFile);
         changeTheme(theme);
-        changeFontSize(fontSize);
     }
 
     private void changeTheme(Theme theme) {
@@ -68,5 +85,9 @@ public class SyntaxSnippetEditorFactory {
 
     public int getFontSize() {
         return fontSize;
+    }
+
+    public void setDefaultDarkTheme() {
+        changeThemeString(THEME_STRING_DARK);
     }
 }

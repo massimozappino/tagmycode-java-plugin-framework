@@ -213,7 +213,7 @@ public class StorageEngine {
         try {
             return Integer.parseInt(readProperty(EDITOR_FONT_SIZE).getValue());
         } catch (Throwable e) {
-            return 13;
+            return SyntaxSnippetEditorFactory.DEFAULT_FONT_SIZE;
         }
     }
 

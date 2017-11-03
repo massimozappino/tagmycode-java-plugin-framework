@@ -111,7 +111,7 @@ public class SettingsForm extends AbstractDialog {
     }
 
     private void configureThemesComboBox() {
-        ArrayList<ThemeItem> themes = createThemesArray();
+        ArrayList<ThemeItem> themes = framework.getSyntaxSnippetEditorFactory().createThemeArray();
         ThemeItem loadedTheme = loadTheme(themes);
 
         for (ThemeItem theme : themes) {
@@ -135,17 +135,6 @@ public class SettingsForm extends AbstractDialog {
             framework.logError(e);
         }
         return loadedTheme;
-    }
-
-    private ArrayList<ThemeItem> createThemesArray() {
-        ArrayList<ThemeItem> themes = new ArrayList<>();
-        themes.add(new ThemeItem("default.xml", "Default"));
-        themes.add(new ThemeItem("idea.xml", "IntelliJ IDEA"));
-        themes.add(new ThemeItem("eclipse.xml", "Eclipse"));
-        themes.add(new ThemeItem("vs.xml", "Visual Studio"));
-        themes.add(new ThemeItem("monokai.xml", "Dark Monokai"));
-        themes.add(new ThemeItem("dark.xml", "Dark Obsidian PyCs"));
-        return themes;
     }
 
     @Override
