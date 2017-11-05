@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.3.0] - (unreleased)
+## [2.3.0] - 2017-11-05
 ### Added
 - added support to handle snippets in offline mode
 - added settings dialog with editor theme and font size option
