@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.4.0] - UNRELEASED
+### Changed
+- added border to QuickSearch dialog
+
 ## [2.3.0] - 2017-11-05
 ### Added
 - added support to handle snippets in offline mode

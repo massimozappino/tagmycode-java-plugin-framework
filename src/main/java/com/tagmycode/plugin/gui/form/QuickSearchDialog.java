@@ -174,10 +174,10 @@ public class QuickSearchDialog extends AbstractDialog {
 
     @Override
     protected void initWindow() {
+        getDialog().setTitle("Quick search");
         getDialog().getRootPane().setDefaultButton(null);
         getDialog().setSize(400, 300);
         getDialog().setResizable(true);
-        getDialog().setUndecorated(true);
         hideOnFocusLost();
     }
 
