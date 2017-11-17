@@ -34,6 +34,6 @@ public class LoginOperation extends TagMyCodeAsynchronousOperation {
 
     @Override
     protected void onSuccess(Object result) {
-        loginDialog.getDialog().dispose();
+        loginDialog.dispose();
     }
 }

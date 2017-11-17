@@ -1,7 +1,10 @@
 package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Framework;
-import com.tagmycode.plugin.gui.*;
+import com.tagmycode.plugin.gui.FilterSnippetsTextField;
+import com.tagmycode.plugin.gui.IDocumentInsertText;
+import com.tagmycode.plugin.gui.MoveUpDownFilterFieldKeyListener;
+import com.tagmycode.plugin.gui.SyntaxSnippetEditor;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.plugin.gui.table.SnippetsTableModel;
 import com.tagmycode.sdk.model.Snippet;
@@ -13,7 +16,7 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
 
-public class QuickSearchDialog extends AbstractDialog {
+public class QuickSearchDialog extends Windowable {
     private final JButton buttonOk;
     private final JPanel previewPanel;
     private JButton buttonCancel;
@@ -174,10 +177,10 @@ public class QuickSearchDialog extends AbstractDialog {
 
     @Override
     protected void initWindow() {
-        getDialog().setTitle("Quick search");
-        getDialog().getRootPane().setDefaultButton(null);
-        getDialog().setSize(400, 300);
-        getDialog().setResizable(true);
+        setTitle("Quick search");
+        getRootPane().setDefaultButton(null);
+        setSize(400, 300);
+        setResizable(true);
         hideOnFocusLost();
     }
 

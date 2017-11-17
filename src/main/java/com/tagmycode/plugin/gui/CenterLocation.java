@@ -1,6 +1,5 @@
 package com.tagmycode.plugin.gui;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class CenterLocation {
@@ -8,7 +7,7 @@ public class CenterLocation {
     private int x;
     private int y;
 
-    public CenterLocation(Frame frame, JDialog dialog) {
+    public CenterLocation(Frame frame, Window window) {
         int width;
         int height;
         int offsetX = 0;
@@ -24,8 +23,8 @@ public class CenterLocation {
             offsetX = frame.getX();
             offsetY = frame.getY();
         }
-        x = offsetX + (width / 2) - (dialog.getWidth() / 2);
-        y = offsetY + (height / 2) - (dialog.getHeight() / 2);
+        x = offsetX + (width / 2) - (window.getWidth() / 2);
+        y = offsetY + (height / 2) - (window.getHeight() / 2);
     }
 
     public static void setCenterType(CenterLocationType centerType) {

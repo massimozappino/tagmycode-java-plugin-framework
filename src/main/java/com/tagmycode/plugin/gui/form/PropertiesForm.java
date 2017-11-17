@@ -2,7 +2,6 @@ package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.FileSize;
 import com.tagmycode.plugin.Framework;
-import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.gui.GuiUtil;
 import com.tagmycode.sdk.DateParser;
 import com.tagmycode.sdk.model.Snippet;
@@ -13,7 +12,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class PropertiesForm extends AbstractDialog {
+public class PropertiesForm extends Windowable {
     private JButton buttonCancel;
     private JPanel contentPane;
     private JTextField snippetTitle;
@@ -35,7 +34,7 @@ public class PropertiesForm extends AbstractDialog {
     }
 
     private void populateFields() {
-        getDialog().setTitle(snippet.getTitle());
+        setTitle(snippet.getTitle());
         snippetTitle.setText(snippet.getTitle());
         languageTextField.setText(snippet.getLanguage().getName());
         createdAtTextField.setText(dateAndTime(snippet.getCreationDate()));
@@ -66,8 +65,8 @@ public class PropertiesForm extends AbstractDialog {
             field.setEditable(false);
         }
 
-        getDialog().setSize(450, 300);
-        getDialog().setResizable(true);
+        setSize(450, 300);
+        setResizable(true);
     }
 
     @Override

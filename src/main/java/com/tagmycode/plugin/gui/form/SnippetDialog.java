@@ -4,7 +4,6 @@ package com.tagmycode.plugin.gui.form;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.GuiThread;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
-import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.gui.SyntaxSnippetEditor;
 import com.tagmycode.plugin.gui.field.AbstractFieldValidation;
 import com.tagmycode.plugin.gui.field.CodeFieldValidation;
@@ -24,7 +23,7 @@ import java.util.Date;
 
 import static com.tagmycode.plugin.gui.GuiUtil.setPlaceholder;
 
-public class SnippetDialog extends AbstractDialog {
+public class SnippetDialog extends Windowable {
     private static final String NEW_SNIPPET_TITLE = "New snippet";
     private static final String EDIT_SNIPPET_TITLE = "Edit snippet";
     private final SyntaxSnippetEditor codeEditorPane;
@@ -55,7 +54,7 @@ public class SnippetDialog extends AbstractDialog {
     }
 
     public void setSnippet(Snippet snippet) {
-        getDialog().setTitle(isStoredSnippet(snippet) ? EDIT_SNIPPET_TITLE : NEW_SNIPPET_TITLE);
+        setTitle(isStoredSnippet(snippet) ? EDIT_SNIPPET_TITLE : NEW_SNIPPET_TITLE);
         currentSnippet = snippet;
         populateFieldsWithSnippet(snippet);
         snippetMarkedAsSaved();
@@ -83,9 +82,9 @@ public class SnippetDialog extends AbstractDialog {
         setPlaceholder("Description", descriptionTextField);
         setPlaceholder("tags space separated", tagsTextField);
 
-        getDialog().setSize(650, 450);
-        getDialog().setResizable(true);
-        getDialog().setModal(false);
+        setSize(650, 450);
+        setResizable(true);
+        setModal(false);
 
         populateLanguages();
         restorePreferences();
@@ -109,7 +108,7 @@ public class SnippetDialog extends AbstractDialog {
 
     protected void showConfirmDialog() {
         String message = String.format("Do you want to save changes to \"%s\"?", titleBox.getText());
-        int reply = JOptionPane.showConfirmDialog(getDialog(), message, "Save changes?", JOptionPane.YES_NO_CANCEL_OPTION);
+        int reply = JOptionPane.showConfirmDialog(getMainComponent(), message, "Save changes?", JOptionPane.YES_NO_CANCEL_OPTION);
         switch (reply) {
             case JOptionPane.YES_OPTION:
                 onOK();

@@ -5,6 +5,7 @@ import com.tagmycode.plugin.Browser;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.FrameworkConfig;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
+import com.tagmycode.plugin.gui.GuiUtil;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.sdk.DbService;
 import com.tagmycode.sdk.SaveFilePath;
@@ -26,6 +27,8 @@ import java.sql.SQLException;
 public class MainAppExample {
     public static void main(String args[]) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, TagMyCodeException, SQLException {
         JFrame frame = new JFrame("TagMyCode Plugin Example");
+        frame.setIconImage(GuiUtil.loadImage("images/tagmycode_app.png").getImage());
+
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.setBounds(200, 200, 600, 200);
         Container contentPane = frame.getContentPane();
@@ -62,7 +65,6 @@ public class MainAppExample {
 
         framework.start();
         contentPane.add(framework.getMainFrame(), BorderLayout.CENTER);
-
 
         searchButton.addActionListener(new ActionListener() {
             @Override

@@ -4,7 +4,6 @@ import com.tagmycode.plugin.BackgroundWorker;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.MD5Util;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
-import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.gui.ThemeItem;
 import com.tagmycode.sdk.model.User;
 
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 import static com.tagmycode.plugin.gui.GuiUtil.addClickableLink;
 import static com.tagmycode.plugin.gui.GuiUtil.setBold;
 
-public class SettingsForm extends AbstractDialog {
+public class SettingsForm extends Windowable {
     protected JLabel email;
     protected JLabel userName;
     private JPanel mainPanel;
@@ -34,7 +33,7 @@ public class SettingsForm extends AbstractDialog {
     public SettingsForm(final Framework framework, Frame parent) {
         super(framework, parent);
         this.framework = framework;
-        getDialog().setTitle("Settings");
+        setTitle("Settings");
         defaultInitWindow();
         setBold(userName);
         addClickableLink(framework, profilePicture, "https://tagmycode.com/account");
@@ -53,9 +52,9 @@ public class SettingsForm extends AbstractDialog {
 
     @Override
     protected void initWindow() {
-        getDialog().getRootPane().setDefaultButton(null);
-        getDialog().setMinimumSize(new Dimension(450, 300));
-        getDialog().setResizable(true);
+        getRootPane().setDefaultButton(null);
+        setMinimumSize(new Dimension(450, 300));
+        setResizable(true);
 
         initGeneralTab();
         initAccountTab();

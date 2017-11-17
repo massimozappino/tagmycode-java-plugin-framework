@@ -8,6 +8,7 @@ import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URL;
 
 public class GuiUtil {
     public static void addClickableLink(final Framework framework, JLabel label, final String url) {
@@ -43,5 +44,10 @@ public class GuiUtil {
 
     public static void removeBorder(JComponent component) {
         component.setBorder(new EmptyBorder(component.getInsets()));
+    }
+
+    public static ImageIcon loadImage(String fileName) {
+        URL resource = GuiUtil.class.getClassLoader().getResource(fileName);
+        return new ImageIcon(resource);
     }
 }

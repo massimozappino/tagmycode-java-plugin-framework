@@ -2,7 +2,6 @@ package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.exception.TagMyCodeGuiException;
-import com.tagmycode.plugin.gui.AbstractDialog;
 import com.tagmycode.plugin.operation.LoginOperation;
 
 import javax.swing.*;
@@ -12,7 +11,7 @@ import java.awt.event.ActionListener;
 
 import static com.tagmycode.plugin.gui.GuiUtil.addClickableLink;
 
-public class LoginDialog extends AbstractDialog {
+public class LoginDialog extends Windowable {
     private JPanel jPanelVerification;
     private JButton buttonCancel;
     private JPanel contentPane;
@@ -34,9 +33,9 @@ public class LoginDialog extends AbstractDialog {
         contentPane.setBackground(background);
         addClickableLink(framework, signupLabel, "https://tagmycode.com/account/signup");
 
-        getDialog().setSize(350, 300);
-        getDialog().setResizable(false);
-        getDialog().setTitle("TagMyCode Login");
+        setSize(350, 300);
+        setResizable(false);
+        setTitle("TagMyCode Login");
 
         openLinkButton.addActionListener(new ActionListener() {
             @Override

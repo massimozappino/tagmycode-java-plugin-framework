@@ -71,7 +71,7 @@ public class SnippetDialogTest extends AcceptanceTestBase {
         assertNotNull(snippetObject.getCreationDate());
         assertNotNull(snippetObject.getUpdateDate());
 
-        assertEquals("Edit snippet", snippetDialog.getDialog().getTitle());
+        assertEquals("Edit snippet", snippetDialog.getTitle());
     }
 
     @Test
