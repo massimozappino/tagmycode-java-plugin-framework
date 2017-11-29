@@ -57,7 +57,7 @@ public class Framework implements IOnErrorCallback {
         aboutDialog = new AboutDialog(this, getParentFrame());
         snippetDialog = new SnippetDialog(this, getParentFrame());
         this.mainWindow = new MainWindow(this);
-        crashService = new CrashService(new CrashClient(client), data, version, secret.getConsumerId());
+        crashService = new CrashService(new CrashClient(client), data, tagMyCode, version, secret.getConsumerId());
     }
 
     private String loadThemeFile(StorageEngine storageEngine) {
@@ -94,6 +94,8 @@ public class Framework implements IOnErrorCallback {
     }
 
     public SnippetDialog showSnippetDialog(Snippet snippet) {
+        // TODO check if can operate
+
         snippetDialog.setSnippet(snippet);
         snippetDialog.display();
         return snippetDialog;
@@ -105,6 +107,8 @@ public class Framework implements IOnErrorCallback {
     }
 
     public QuickSearchDialog showSearchDialog(IDocumentInsertText documentInsertText) {
+        // TODO check if can operate
+
         quickSearchDialog.display();
         quickSearchDialog.setDocumentInsertText(documentInsertText);
         return quickSearchDialog;

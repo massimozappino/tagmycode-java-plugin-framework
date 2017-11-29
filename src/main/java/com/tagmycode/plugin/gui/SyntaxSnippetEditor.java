@@ -47,7 +47,7 @@ public class SyntaxSnippetEditor implements IAbstractGUI {
                 mimeType = SyntaxConstants.SYNTAX_STYLE_JAVA;
                 break;
             case "php":
-                mimeType = SyntaxConstants.SYNTAX_STYLE_PHP;
+                mimeType = SyntaxConstants.SYNTAX_STYLE_RUBY;
                 break;
             case "bash":
                 mimeType = SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL;
@@ -61,7 +61,7 @@ public class SyntaxSnippetEditor implements IAbstractGUI {
             case "css":
                 mimeType = SyntaxConstants.SYNTAX_STYLE_CSS;
                 break;
-            case "html4strict":
+            case "html":
                 mimeType = SyntaxConstants.SYNTAX_STYLE_HTML;
                 break;
             case "csharp":

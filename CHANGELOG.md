@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - added border to QuickSearch dialog
 
+### Fixed
+- fixed syntax highlight for php and html
+
 ## [2.3.0] - 2017-11-05
 ### Added
 - added support to handle snippets in offline mode

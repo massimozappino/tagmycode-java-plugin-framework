@@ -58,7 +58,6 @@ public class SyncSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> 
         SnippetsDeletions deletedIds = snippetsStorage.findDeletedIds();
         SnippetsCollection dirtyNotDeleted = snippetsStorage.findDirtyNotDeleted();
         deleteLocalDeletions(snippetsStorage.findDeleted());
-
         allowStopTask();
 
         SyncSnippets syncSnippets = tagMyCode.syncSnippets(dirtyNotDeleted, deletedIds);
