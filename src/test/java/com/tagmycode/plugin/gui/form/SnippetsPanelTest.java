@@ -14,19 +14,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.spy;
 
-public class SnippetsTabTest extends AbstractTestBase {
+public class SnippetsPanelTest extends AbstractTestBase {
 
     private boolean actual;
 
     @Test
     public void testConstructor() throws Exception {
-        SnippetsPanel snippetsTab = new SnippetsPanel(createFramework()) {
+        SnippetsPanel snippetsPanel = new SnippetsPanel(createFramework()) {
             public void initPopupMenuForJTextComponents(Container container) {
                 actual = true;
             }
         };
         assertTrue(actual);
-        assertEquals(-1, snippetsTab.selectedRow);
+        assertEquals(-1, snippetsPanel.selectedRow);
     }
 
     @Test

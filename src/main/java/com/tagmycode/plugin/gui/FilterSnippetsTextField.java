@@ -38,12 +38,11 @@ public class FilterSnippetsTextField extends JTextField {
         });
     }
 
-
     public void doFilter() {
         if (filterSnippetsOperation != null) {
             filterSnippetsOperation.stop();
         }
-        filterSnippetsOperation = new FilterSnippetsOperation(framework, snippetsTable, getText());
+        filterSnippetsOperation = new FilterSnippetsOperation(framework, snippetsTable, getText(), null);
         filterSnippetsOperation.start();
     }
 }

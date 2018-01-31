@@ -40,6 +40,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     private JButton buttonAbout;
     private JButton buttonNetworking;
     private JButton saveAsButton;
+    private JTable table1;
     private JPanel snippetListPane;
     private Framework framework;
     private JTable jTable;
