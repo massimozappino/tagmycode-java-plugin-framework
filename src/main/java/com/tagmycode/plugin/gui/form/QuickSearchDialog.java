@@ -63,7 +63,7 @@ public class QuickSearchDialog extends Windowable {
         snippetViewPanel.removeAll();
         snippetViewPanel.add(previewPanel);
 
-        filterSnippetsTextField = new FilterSnippetsTextField(framework, snippetsTable);
+        filterSnippetsTextField = new FilterSnippetsTextField(snippetsTable.getFilterSnippetsOperation());
         filterSnippetsTextField.addKeyListener(new MoveUpDownFilterFieldKeyListener(jTable));
         filterSnippetsTextField.addKeyListener(createInsertIntoDocumentKeyListener());
         filterPanel.add(filterSnippetsTextField);

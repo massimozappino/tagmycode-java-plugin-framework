@@ -1,7 +1,5 @@
 package com.tagmycode.plugin.gui;
 
-import com.tagmycode.plugin.Framework;
-import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.plugin.operation.FilterSnippetsOperation;
 
 import javax.swing.*;
@@ -10,15 +8,11 @@ import javax.swing.event.DocumentListener;
 
 public class FilterSnippetsTextField extends JTextField {
 
-    private Framework framework;
-    private SnippetsTable snippetsTable;
-    private FilterSnippetsOperation filterSnippetsOperation = null;
+    private final FilterSnippetsOperation filterSnippetsOperation;
 
-    public FilterSnippetsTextField(Framework framework, SnippetsTable snippetsTable) {
-        assert framework != null;
-        assert snippetsTable != null;
-        this.framework = framework;
-        this.snippetsTable = snippetsTable;
+
+    public FilterSnippetsTextField(FilterSnippetsOperation filterSnippetsOperation) {
+        this.filterSnippetsOperation = filterSnippetsOperation;
 
         getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -39,10 +33,8 @@ public class FilterSnippetsTextField extends JTextField {
     }
 
     public void doFilter() {
-        if (filterSnippetsOperation != null) {
-            filterSnippetsOperation.stop();
-        }
-        filterSnippetsOperation = new FilterSnippetsOperation(framework, snippetsTable, getText(), null);
+        filterSnippetsOperation.stop();
+        filterSnippetsOperation.setSearchText(getText());
         filterSnippetsOperation.start();
     }
 }

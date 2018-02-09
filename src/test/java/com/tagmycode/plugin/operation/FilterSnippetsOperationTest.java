@@ -31,8 +31,9 @@ public class FilterSnippetsOperationTest extends AbstractTestBase {
     }
 
     @Test
-    public void testSearchText() throws Exception {
-        FilterSnippetsOperation operation = new FilterSnippetsOperation(mock(Framework.class), mock(SnippetsTable.class), "", resourceGenerate.aLanguage());
+    public void testSearchText() {
+        FilterSnippetsOperation operation = new FilterSnippetsOperation(mock(SnippetsTable.class));
+        operation.setSearchText("");
         assertTrue(operation.search("hello", "hello world"));
         assertTrue(operation.search("w", "hello world"));
         assertFalse(operation.search("{ !}", "function() {}"));
@@ -41,39 +42,34 @@ public class FilterSnippetsOperationTest extends AbstractTestBase {
 
     @Test
     public void testFilterWithLanguage() {
-        Framework framework = setupMocks();
-
-        FilterSnippetsOperation operation = new FilterSnippetsOperation(framework, mock(SnippetsTable.class),
-                "", resourceGenerate.languageJava());
+        FilterSnippetsOperation operation = new FilterSnippetsOperation(createSnippetsTableMock());
+        operation.setFilterLanguage(resourceGenerate.languageJava());
 
         assertEquals("[1, 3]", operation.filterSnippets().toString());
     }
 
     @Test
     public void testFilterWithNullLanguage() {
-        Framework framework = setupMocks();
-
-        FilterSnippetsOperation operation = new FilterSnippetsOperation(framework, mock(SnippetsTable.class),
-                "", null);
+        FilterSnippetsOperation operation = new FilterSnippetsOperation(createSnippetsTableMock());
 
         assertEquals("[0, 1, 2, 3]", operation.filterSnippets().toString());
     }
 
     @Test
     public void testMixedFilters() {
-        Framework framework = setupMocks();
-
-        FilterSnippetsOperation operation = new FilterSnippetsOperation(framework, mock(SnippetsTable.class),
-                "full text", resourceGenerate.languageJava());
-
+        FilterSnippetsOperation operation = new FilterSnippetsOperation(createSnippetsTableMock());
+        operation.setSearchText("full text");
+        operation.setFilterLanguage(resourceGenerate.languageJava());
         assertEquals("[1]", operation.filterSnippets().toString());
     }
 
-    private Framework setupMocks() {
+    private SnippetsTable createSnippetsTableMock() {
         Framework framework = mock(Framework.class);
         Data data = mock(Data.class);
         doReturn(data).when(framework).getData();
         doReturn(snippets).when(data).getSnippets();
-        return framework;
+        SnippetsTable snippetsTableMock = mock(SnippetsTable.class);
+        doReturn(framework).when(snippetsTableMock).getFramework();
+        return snippetsTableMock;
     }
 }

@@ -73,7 +73,7 @@ public class Framework implements IOnErrorCallback {
         return syntaxSnippetEditorFactory;
     }
 
-    public void start() throws IOException, TagMyCodeException, SQLException {
+    public void start() throws TagMyCodeException {
         restoreData();
 
         boolean initialized = isInitialized();
@@ -326,10 +326,6 @@ public class Framework implements IOnErrorCallback {
         if (!urlOpened) {
             logError(new TagMyCodeException("Unable to open link in browser, please open it manually: " + url));
         }
-    }
-
-    public FrameworkConfig getFrameworkConfig() {
-        return frameworkConfig;
     }
 
     public SnippetsUpdatePollingProcess getPollingProcess() {

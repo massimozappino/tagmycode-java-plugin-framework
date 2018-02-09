@@ -5,6 +5,7 @@ import com.tagmycode.plugin.IconResources;
 import com.tagmycode.plugin.TableModelSnippetNotFoundException;
 import com.tagmycode.plugin.gui.AbstractSnippetsListGui;
 import com.tagmycode.plugin.gui.GuiUtil;
+import com.tagmycode.plugin.operation.FilterSnippetsOperation;
 import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
@@ -22,6 +23,7 @@ public class SnippetsTable extends AbstractSnippetsListGui {
     private JTable jTable;
     private SnippetsTableModel model;
     private ListSelectionModel cellSelectionModel;
+    private FilterSnippetsOperation filterSnippetsOperation;
 
     public SnippetsTable(Framework framework) {
         this.framework = framework;
@@ -37,6 +39,7 @@ public class SnippetsTable extends AbstractSnippetsListGui {
         scrollPane = new JScrollPane(jTable);
         GuiUtil.removeBorder(scrollPane);
 
+        filterSnippetsOperation = new FilterSnippetsOperation(this);
         cellSelectionModel = jTable.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -124,6 +127,10 @@ public class SnippetsTable extends AbstractSnippetsListGui {
 
     public Framework getFramework() {
         return framework;
+    }
+
+    public FilterSnippetsOperation getFilterSnippetsOperation() {
+        return filterSnippetsOperation;
     }
 }
 

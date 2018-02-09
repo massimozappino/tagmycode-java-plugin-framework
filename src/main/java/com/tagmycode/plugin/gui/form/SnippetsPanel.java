@@ -40,7 +40,8 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     private JButton buttonAbout;
     private JButton buttonNetworking;
     private JButton saveAsButton;
-    private JTable table1;
+    private JPanel jpanel;
+    private JPanel jscrollPane;
     private JPanel snippetListPane;
     private Framework framework;
     private JTable jTable;
@@ -49,6 +50,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     private boolean networkingEnabled;
     private FilterSnippetsTextField filterTextField;
     private SnippetView snippetView;
+    private final FilterLanguagesPanel filterLanguagesPanel;
 
     public SnippetsPanel(final Framework framework) {
         this.framework = framework;
@@ -62,6 +64,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
         initPopupMenuForJTextComponents(getMainComponent());
         configureDragAndDrop();
         reset();
+        filterLanguagesPanel = new FilterLanguagesPanel(getSnippetsTable().getFilterSnippetsOperation(), framework.getData(), jpanel);
     }
 
     private void configureDragAndDrop() {
@@ -458,7 +461,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     }
 
     public void initFilterField() {
-        filterTextField = new FilterSnippetsTextField(framework, snippetsTable);
+        filterTextField = new FilterSnippetsTextField(snippetsTable.getFilterSnippetsOperation());
         filterTextField.setMinimumSize(new Dimension(200, 25));
         filterTextField.addKeyListener(new MoveUpDownFilterFieldKeyListener(jTable));
         setPlaceholder("Filter snippets", filterTextField);
@@ -467,6 +470,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
 
     public void fireSnippetsChanged() {
         snippetsTable.fireSnippetsChanged();
+        filterLanguagesPanel.refresh();
     }
 
     public JButton getButtonNetworking() {

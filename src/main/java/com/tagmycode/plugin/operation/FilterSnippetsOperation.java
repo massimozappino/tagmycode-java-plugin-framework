@@ -13,16 +13,15 @@ import java.util.ArrayList;
 
 public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Void> {
     private final Framework framework;
-    private Language language;
-    private String filterText;
     private SnippetsTable snippetsTable;
+    private String searchText = "";
+    private Language filterLanguage = null;
 
-    public FilterSnippetsOperation(Framework framework, SnippetsTable snippetsTable, String filterText, Language language) {
-        super(framework);
+    public FilterSnippetsOperation(SnippetsTable snippetsTable) {
+        super(snippetsTable.getFramework());
         this.snippetsTable = snippetsTable;
-        this.filterText = filterText.trim().toLowerCase();
-        this.framework = framework;
-        this.language = language;
+        this.framework = snippetsTable.getFramework();
+        // TODO method to reset filters
     }
 
     @Override
@@ -47,7 +46,8 @@ public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Void
         new GuiThread().execute(new Runnable() {
             @Override
             public void run() {
-                if (filterText.length() == 0) {
+                // TODO test condition for each filter
+                if (searchText.length() == 0 && filterLanguage == null) {
                     sorter.setRowFilter(null);
                 } else {
                     sorter.setRowFilter(filter);
@@ -69,14 +69,14 @@ public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Void
     }
 
     private boolean filterLanguage(Snippet snippet) {
-        return language == null || snippet.getLanguage().equals(language);
+        return filterLanguage == null || snippet.getLanguage().equals(filterLanguage);
     }
 
     private boolean filterFullText(Snippet snippet) {
-        return search(filterText, snippet.getCode())
-                || search(filterText, snippet.getTitle())
-                || search(filterText, snippet.getDescription())
-                || search(filterText, snippet.getTags());
+        return search(searchText, snippet.getCode())
+                || search(searchText, snippet.getTitle())
+                || search(searchText, snippet.getDescription())
+                || search(searchText, snippet.getTags());
     }
 
     protected boolean search(String query, String fieldValue) {
@@ -89,6 +89,14 @@ public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Void
         }
 
         return ret;
+    }
+
+    public void setSearchText(String searchText) {
+        this.searchText = searchText.trim().toLowerCase();
+    }
+
+    public void setFilterLanguage(Language filterLanguage) {
+        this.filterLanguage = filterLanguage;
     }
 }
 
