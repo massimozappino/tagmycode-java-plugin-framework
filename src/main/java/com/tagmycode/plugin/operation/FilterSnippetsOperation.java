@@ -42,6 +42,11 @@ public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Void
         return null;
     }
 
+    public void filter() {
+        stop();
+        start();
+    }
+
     private void doFilterInGuiThread(final RowFilter<SnippetsTableModel, Integer> filter, final TableRowSorter<SnippetsTableModel> sorter) {
         new GuiThread().execute(new Runnable() {
             @Override

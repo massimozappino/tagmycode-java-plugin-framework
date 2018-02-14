@@ -33,8 +33,7 @@ public class FilterSnippetsTextField extends JTextField {
     }
 
     public void doFilter() {
-        filterSnippetsOperation.stop();
         filterSnippetsOperation.setSearchText(getText());
-        filterSnippetsOperation.start();
+        filterSnippetsOperation.filter();
     }
 }

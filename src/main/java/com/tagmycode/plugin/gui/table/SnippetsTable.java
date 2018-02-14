@@ -89,6 +89,7 @@ public class SnippetsTable extends AbstractSnippetsListGui {
 
     @Override
     public void fireSnippetsChanged() {
+        filterSnippetsOperation.filter();
         Snippet selectedSnippet = getSelectedSnippet();
         model.fireSnippetsChanged();
         if (selectedSnippet != null) {

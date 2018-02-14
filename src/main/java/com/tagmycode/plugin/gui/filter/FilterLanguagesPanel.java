@@ -80,13 +80,11 @@ public class FilterLanguagesPanel {
             language = (Language) model.getValueAt(ok, 0);
         }
         filterSnippetsOperation.setFilterLanguage(language);
-        filterSnippetsOperation.stop();
-        filterSnippetsOperation.start();
+        filterSnippetsOperation.filter();
     }
 
     public void refresh() {
-        FilterLanguages mp = filterLanguagesLoader.load();
-        model.setFilterLanguages(mp);
+        model.setFilterLanguages(filterLanguagesLoader.load());
 
         Language filterLanguage = filterSnippetsOperation.getFilterLanguage();
         model.fireTableDataChanged();
