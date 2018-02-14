@@ -98,5 +98,9 @@ public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Void
     public void setFilterLanguage(Language filterLanguage) {
         this.filterLanguage = filterLanguage;
     }
+
+    public Language getFilterLanguage() {
+        return filterLanguage;
+    }
 }
 

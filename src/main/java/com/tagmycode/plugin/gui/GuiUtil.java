@@ -50,4 +50,9 @@ public class GuiUtil {
         URL resource = GuiUtil.class.getClassLoader().getResource(fileName);
         return new ImageIcon(resource);
     }
+
+    public static void removeKeyStrokeAction(JComponent jComponent, int keyCode) {
+        InputMap inputMap = jComponent.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        inputMap.put(KeyStroke.getKeyStroke(keyCode, 0), "");
+    }
 }

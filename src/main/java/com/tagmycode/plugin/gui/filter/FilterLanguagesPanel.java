@@ -1,36 +1,29 @@
-package com.tagmycode.plugin.gui;
+package com.tagmycode.plugin.gui.filter;
 
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.GenericRawResults;
 import com.tagmycode.plugin.Data;
+import com.tagmycode.plugin.FilterLanguagesLoader;
+import com.tagmycode.plugin.filter.FilterLanguages;
+import com.tagmycode.plugin.gui.GuiUtil;
 import com.tagmycode.plugin.operation.FilterSnippetsOperation;
-import com.tagmycode.sdk.DbService;
 import com.tagmycode.sdk.model.Language;
-import com.tagmycode.sdk.model.LanguagesCollection;
-import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.SQLException;
-import java.util.*;
 
 public class FilterLanguagesPanel {
-    private JPanel jpanel;
-    private Data data;
     private FilterSnippetsOperation filterSnippetsOperation;
-    private Language selectedLanguage;
     private final LanguagesTableModel model;
     private final JTable table;
+    private FilterLanguagesLoader filterLanguagesLoader;
 
     public FilterLanguagesPanel(FilterSnippetsOperation filterSnippetsOperation, Data data, JPanel jpanel) {
         this.filterSnippetsOperation = filterSnippetsOperation;
-        jpanel.setLayout(new BoxLayout(jpanel, BoxLayout.Y_AXIS));
-        this.data = data;
-        this.jpanel = jpanel;
+        filterLanguagesLoader = new FilterLanguagesLoader(data);
         model = new LanguagesTableModel();
         table = new JTable(model) {
             @Override
@@ -62,72 +55,62 @@ public class FilterLanguagesPanel {
         table.setBackground(null);
         GuiUtil.removeBorder(jScrollPane);
         table.setTableHeader(null);
+        table.setDefaultRenderer(Object.class, new LanguageTableRenderer());
 
         ListSelectionModel cellSelectionModel = table.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        removeDefaultStrokes();
+    }
+
+    private void removeDefaultStrokes() {
+        GuiUtil.removeKeyStrokeAction(table, KeyEvent.VK_ENTER);
+        GuiUtil.removeKeyStrokeAction(table, KeyEvent.VK_TAB);
+        GuiUtil.removeKeyStrokeAction(table, KeyEvent.VK_UP);
+        GuiUtil.removeKeyStrokeAction(table, KeyEvent.VK_DOWN);
+        GuiUtil.removeKeyStrokeAction(table, KeyEvent.VK_U);
+        GuiUtil.removeKeyStrokeAction(table, KeyEvent.VK_DOWN);
     }
 
     private void filterLanguage() {
         int selectedRow = table.getSelectedRow();
-        int ok = table.convertRowIndexToModel(selectedRow);
-        Language language = (Language) model.getValueAt(ok, 0);
-        selectedLanguage = language;
+        Language language = null;
+        if (selectedRow != -1) {
+            int ok = table.convertRowIndexToModel(selectedRow);
+            language = (Language) model.getValueAt(ok, 0);
+        }
         filterSnippetsOperation.setFilterLanguage(language);
         filterSnippetsOperation.stop();
         filterSnippetsOperation.start();
     }
 
     public void refresh() {
-        HashMap<Language, Integer> mp = fetchLanguages();
-        model.setData(mp);
+        FilterLanguages mp = filterLanguagesLoader.load();
+        model.setFilterLanguages(mp);
+
+        Language filterLanguage = filterSnippetsOperation.getFilterLanguage();
         model.fireTableDataChanged();
+
+        selectLanguageOnTable(filterLanguage);
     }
 
-    private HashMap<Language, Integer> fetchLanguages() {
-        DbService dbService = data.getStorageEngine().getDbService();
-        Dao<Snippet, String> snippetDao = dbService.snippetDao();
-
-        GenericRawResults<String[]> query;
-        HashMap<Language, Integer> map = new LinkedHashMap<>();
-        try {
-            query = snippetDao.queryRaw(
-                    "select languages.code, count(*) as X from languages inner join snippets on snippets.language_id = languages.id  group by name order by X DESC");
-            LanguagesCollection languages = data.getLanguages();
-            for (String[] language : query) {
-                map.put(languages.findByCode(language[0]), Integer.valueOf(language[1]));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    private void selectLanguageOnTable(Language language) {
+        LanguagesTableModel model = (LanguagesTableModel) table.getModel();
+        int languageModelPosition = model.getLanguagePosition(language);
+        if (languageModelPosition >= 0) {
+            int viewRowIndex = table.convertRowIndexToView(languageModelPosition);
+            table.setRowSelectionInterval(viewRowIndex, viewRowIndex);
         }
-        return map;
     }
 }
 
-class LanguagesTableModel extends AbstractTableModel {
-    private ArrayList<Map.Entry<Language, Integer>> list = new ArrayList<>();
+class LanguageTableRenderer extends DefaultTableCellRenderer {
 
-    public int getColumnCount() {
-        return 2;
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        setBorder(noFocusBorder);
+        return this;
     }
 
-    public int getRowCount() {
-        return list.size();
-    }
-
-    public Object getValueAt(int r, int c) {
-        Map.Entry<Language, Integer> languageIntegerEntry = list.get(r);
-        if (c == 0) {
-            return languageIntegerEntry.getKey();
-        }
-        return languageIntegerEntry.getValue();
-    }
-
-    public void setData(HashMap<Language, Integer> data) {
-        ArrayList<Map.Entry<Language, Integer>> list = new ArrayList<>();
-        for (Object o : data.entrySet()) {
-            Map.Entry pair = (Map.Entry) o;
-            list.add(pair);
-        }
-        this.list = list;
-    }
 }

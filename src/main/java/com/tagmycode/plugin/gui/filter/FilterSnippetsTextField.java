@@ -1,4 +1,4 @@
-package com.tagmycode.plugin.gui;
+package com.tagmycode.plugin.gui.filter;
 
 import com.tagmycode.plugin.operation.FilterSnippetsOperation;
 

@@ -3,6 +3,7 @@ package com.tagmycode.plugin.gui.form;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.IconResources;
 import com.tagmycode.plugin.gui.*;
+import com.tagmycode.plugin.gui.filter.FilterSnippetsTextField;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.plugin.gui.table.SnippetsTableModel;
 import com.tagmycode.plugin.gui.table.TableRowTransferHandler;
@@ -36,11 +37,11 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     private JButton syncButton;
     private JPanel leftPane;
     private JButton settingsButton;
-    private JPanel filterPanel;
+    private JPanel filterTextPanel;
     private JButton buttonAbout;
     private JButton buttonNetworking;
     private JButton saveAsButton;
-    private JPanel jpanel;
+    private JPanel filtersPanel;
     private JPanel jscrollPane;
     private JPanel snippetListPane;
     private Framework framework;
@@ -50,7 +51,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     private boolean networkingEnabled;
     private FilterSnippetsTextField filterTextField;
     private SnippetView snippetView;
-    private final FilterLanguagesPanel filterLanguagesPanel;
+    private FiltersPanelForm filtersPanelForm;
 
     public SnippetsPanel(final Framework framework) {
         this.framework = framework;
@@ -59,12 +60,17 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
         welcomeView = new WelcomeView(this);
 
         leftPane.add(snippetsTable.getMainComponent(), BorderLayout.CENTER);
+        initFilterPanel();
         initFilterField();
-        initToolBarButtons(framework);
+        initToolBarButtons();
         initPopupMenuForJTextComponents(getMainComponent());
         configureDragAndDrop();
         reset();
-        filterLanguagesPanel = new FilterLanguagesPanel(getSnippetsTable().getFilterSnippetsOperation(), framework.getData(), jpanel);
+    }
+
+    private void initFilterPanel() {
+        filtersPanelForm = new FiltersPanelForm(getSnippetsTable().getFilterSnippetsOperation(), framework.getData());
+        filtersPanel.add(filtersPanelForm.getMainComponent());
     }
 
     private void configureDragAndDrop() {
@@ -81,7 +87,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
         });
     }
 
-    private void initToolBarButtons(final Framework framework) {
+    private void initToolBarButtons() {
         editSnippetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -465,12 +471,12 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
         filterTextField.setMinimumSize(new Dimension(200, 25));
         filterTextField.addKeyListener(new MoveUpDownFilterFieldKeyListener(jTable));
         setPlaceholder("Filter snippets", filterTextField);
-        filterPanel.add(filterTextField);
+        filterTextPanel.add(filterTextField);
     }
 
     public void fireSnippetsChanged() {
         snippetsTable.fireSnippetsChanged();
-        filterLanguagesPanel.refresh();
+        filtersPanelForm.refresh();
     }
 
     public JButton getButtonNetworking() {

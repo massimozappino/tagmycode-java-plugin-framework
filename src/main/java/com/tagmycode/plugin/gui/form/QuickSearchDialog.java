@@ -1,7 +1,7 @@
 package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Framework;
-import com.tagmycode.plugin.gui.FilterSnippetsTextField;
+import com.tagmycode.plugin.gui.filter.FilterSnippetsTextField;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.plugin.gui.MoveUpDownFilterFieldKeyListener;
 import com.tagmycode.plugin.gui.SyntaxSnippetEditor;
