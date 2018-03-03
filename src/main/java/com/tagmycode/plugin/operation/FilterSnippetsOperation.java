@@ -107,5 +107,9 @@ public class FilterSnippetsOperation extends TagMyCodeAsynchronousOperation<Void
     public Language getFilterLanguage() {
         return filterLanguage;
     }
+
+    public SnippetsTable getSnippetsTable() {
+        return snippetsTable;
+    }
 }
 

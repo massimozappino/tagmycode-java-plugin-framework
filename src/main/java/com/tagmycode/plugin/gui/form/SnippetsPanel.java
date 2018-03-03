@@ -70,7 +70,8 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
 
     private void initFilterPanel() {
         filtersPanelForm = new FiltersPanelForm(getSnippetsTable().getFilterSnippetsOperation(), framework.getData());
-        filtersPanel.add(filtersPanelForm.getMainComponent());
+        JComponent mainComponent = filtersPanelForm.getMainComponent();
+        filtersPanel.add(mainComponent);
     }
 
     private void configureDragAndDrop() {

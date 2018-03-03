@@ -155,8 +155,7 @@
             </constraints>
             <properties>
               <dividerLocation value="120"/>
-              <dividerSize value="0"/>
-              <enabled value="false"/>
+              <enabled value="true"/>
             </properties>
             <border type="none"/>
             <children>
