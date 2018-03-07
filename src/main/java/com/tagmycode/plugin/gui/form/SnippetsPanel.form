@@ -147,7 +147,7 @@
               </grid>
             </children>
           </toolbar>
-          <splitpane id="8941f">
+          <splitpane id="8941f" binding="languagesSplitPane">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
                 <preferred-size width="200" height="200"/>
@@ -156,6 +156,7 @@
             <properties>
               <dividerLocation value="120"/>
               <enabled value="true"/>
+              <oneTouchExpandable value="true"/>
             </properties>
             <border type="none"/>
             <children>

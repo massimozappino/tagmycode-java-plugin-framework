@@ -2,7 +2,10 @@ package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.IconResources;
-import com.tagmycode.plugin.gui.*;
+import com.tagmycode.plugin.gui.AbstractGui;
+import com.tagmycode.plugin.gui.ClipboardCopy;
+import com.tagmycode.plugin.gui.IOnErrorCallback;
+import com.tagmycode.plugin.gui.MoveUpDownFilterFieldKeyListener;
 import com.tagmycode.plugin.gui.filter.FilterSnippetsTextField;
 import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.plugin.gui.table.SnippetsTableModel;
@@ -42,6 +45,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     private JButton buttonNetworking;
     private JButton saveAsButton;
     private JPanel filtersPanel;
+    private JSplitPane languagesSplitPane;
     private JPanel jscrollPane;
     private JPanel snippetListPane;
     private Framework framework;

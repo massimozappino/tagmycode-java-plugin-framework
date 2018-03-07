@@ -2,76 +2,70 @@ package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Data;
 import com.tagmycode.plugin.FilterLanguagesLoader;
+import com.tagmycode.plugin.filter.FilterLanguages;
+import com.tagmycode.plugin.filter.LanguageFilterEntry;
 import com.tagmycode.plugin.gui.AbstractGui;
 import com.tagmycode.plugin.gui.GuiUtil;
-import com.tagmycode.plugin.gui.filter.LanguagesTableModel;
-import com.tagmycode.plugin.gui.table.SnippetsTable;
 import com.tagmycode.plugin.operation.FilterSnippetsOperation;
 import com.tagmycode.sdk.model.Language;
 
 import javax.swing.*;
-import javax.swing.table.TableRowSorter;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.Enumeration;
 
 public class FiltersPanelForm extends AbstractGui {
-    private JPanel languagesPanel;
-    private JSplitPane mainComponent;
-    private JPanel emptyPanel;
+    private JPanel mainComponent;
     private FilterSnippetsOperation filterSnippetsOperation;
-    private final LanguagesTableModel model;
-    private JTable table;
-    private FilterLanguagesLoader filterLanguagesLoader;
 
+    private JTree tree;
+    private FilterLanguagesLoader filterLanguagesLoader;
+    private DefaultTreeModel treeModel;
 
     public FiltersPanelForm(FilterSnippetsOperation filterSnippetsOperation, Data data) {
         this.filterSnippetsOperation = filterSnippetsOperation;
         filterLanguagesLoader = new FilterLanguagesLoader(data);
-        model = new LanguagesTableModel();
-        JScrollPane languagesScrollPane = configureTable();
-
+        JScrollPane languagesScrollPane = configureTree();
+        JPanel languagesPanel = new JPanel();
+        languagesPanel.setLayout(new BorderLayout());
         languagesPanel.add(languagesScrollPane, BorderLayout.CENTER);
-
+        mainComponent.add(languagesPanel, BorderLayout.CENTER);
         removeDefaultStrokes();
     }
 
-    private JScrollPane configureTable() {
-        table = new JTable(model) {
+    private JScrollPane configureTree() {
+        tree = new JTree();
+        DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) tree.getCellRenderer();
+        renderer.setLeafIcon(null);
+        renderer.setClosedIcon(null);
+        renderer.setOpenIcon(null);
+        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        treeModel = (DefaultTreeModel) tree.getModel();
+        tree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
             @Override
-            public void changeSelection(int rowIndex, int columnIndex,
-                                        boolean toggle, boolean extend) {
-                super.changeSelection(rowIndex, columnIndex, true, false);
-            }
-        };
-        table.getColumnModel().getColumn(1).setMaxWidth(35);
-        table.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 1) {
-                    filterLanguage();
+            public void valueChanged(TreeSelectionEvent e) {
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+                        tree.getLastSelectedPathComponent();
+
+                if (node != null) {
+                    filterLanguage(languageFromNode(node));
                 }
             }
         });
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 
-        JScrollPane languagesScrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane languagesScrollPane = new JScrollPane(tree);
         GuiUtil.removeBorder(languagesScrollPane);
-
-        TableRowSorter<LanguagesTableModel> sorter = new TableRowSorter<>(model);
-
-        table.setRowSorter(sorter);
-        table.setIntercellSpacing(new Dimension(0, 0));
-        table.setCellSelectionEnabled(false);
-        table.setRowSelectionAllowed(true);
-        table.setShowGrid(false);
-        table.setBackground(null);
-        table.setTableHeader(null);
-        table.setDefaultRenderer(Object.class, new com.tagmycode.plugin.gui.filter.LanguageTableRenderer());
-
-        ListSelectionModel cellSelectionModel = table.getSelectionModel();
-        cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return languagesScrollPane;
+    }
+
+    private Language languageFromNode(DefaultMutableTreeNode node) {
+        if (node != null && node.isLeaf() && node.getUserObject() instanceof LanguageFilterEntry) {
+            return ((LanguageFilterEntry) node.getUserObject()).getLanguage();
+        }
+        return null;
     }
 
     @Override
@@ -80,42 +74,51 @@ public class FiltersPanelForm extends AbstractGui {
     }
 
     private void removeDefaultStrokes() {
-        GuiUtil.removeKeyStrokeAction(table, KeyEvent.VK_ENTER);
-        GuiUtil.removeKeyStrokeAction(table, KeyEvent.VK_TAB);
-        GuiUtil.removeKeyStrokeAction(table, KeyEvent.VK_UP);
-        GuiUtil.removeKeyStrokeAction(table, KeyEvent.VK_DOWN);
-        GuiUtil.removeKeyStrokeAction(table, KeyEvent.VK_U);
-        GuiUtil.removeKeyStrokeAction(table, KeyEvent.VK_DOWN);
+        GuiUtil.removeKeyStrokeAction(tree, KeyEvent.VK_ENTER);
+        GuiUtil.removeKeyStrokeAction(tree, KeyEvent.VK_TAB);
+        GuiUtil.removeKeyStrokeAction(tree, KeyEvent.VK_UP);
+        GuiUtil.removeKeyStrokeAction(tree, KeyEvent.VK_DOWN);
+        GuiUtil.removeKeyStrokeAction(tree, KeyEvent.VK_U);
+        GuiUtil.removeKeyStrokeAction(tree, KeyEvent.VK_DOWN);
     }
 
-    private void filterLanguage() {
-        int selectedRow = table.getSelectedRow();
-        Language language = null;
-        if (selectedRow != -1) {
-            int ok = table.convertRowIndexToModel(selectedRow);
-            language = (Language) model.getValueAt(ok, 0);
-        }
+    private void filterLanguage(Language language) {
         filterSnippetsOperation.getSnippetsTable().getJTable().clearSelection();
-
         filterSnippetsOperation.setFilterLanguage(language);
         filterSnippetsOperation.filter();
     }
 
     public void refresh() {
-        model.setFilterLanguages(filterLanguagesLoader.load());
-
+        FilterLanguages load = filterLanguagesLoader.load();
         Language filterLanguage = filterSnippetsOperation.getFilterLanguage();
-        model.fireTableDataChanged();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) treeModel.getRoot();
+        root.setUserObject("Languages");
+        root.removeAllChildren();
 
-        selectLanguageOnTable(filterLanguage);
+        for (LanguageFilterEntry languageFilterEntry : load) {
+            root.add(new DefaultMutableTreeNode(languageFilterEntry));
+        }
+
+        treeModel.reload(root);
+        selectLanguageOnTree(filterLanguage);
     }
 
-    private void selectLanguageOnTable(Language language) {
-        LanguagesTableModel model = (LanguagesTableModel) table.getModel();
-        int languageModelPosition = model.getLanguagePosition(language);
-        if (languageModelPosition >= 0) {
-            int viewRowIndex = table.convertRowIndexToView(languageModelPosition);
-            table.setRowSelectionInterval(viewRowIndex, viewRowIndex);
+    private void selectLanguageOnTree(Language language) {
+        TreePath treePath = findPathForLanguages((DefaultMutableTreeNode) treeModel.getRoot(), language);
+        tree.setSelectionPath(treePath);
+        tree.scrollPathToVisible(treePath);
+    }
+
+    private TreePath findPathForLanguages(DefaultMutableTreeNode root, Language language) {
+        @SuppressWarnings("unchecked")
+        Enumeration<DefaultMutableTreeNode> e = root.depthFirstEnumeration();
+        while (e.hasMoreElements()) {
+            DefaultMutableTreeNode node = e.nextElement();
+            Language currentLanguage = languageFromNode(node);
+            if (currentLanguage != null && currentLanguage.equals(language)) {
+                return new TreePath(node.getPath());
+            }
         }
+        return null;
     }
 }

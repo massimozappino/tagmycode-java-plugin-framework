@@ -29,6 +29,6 @@ public class LanguageFilterEntry {
 
     @Override
     public String toString() {
-        return language.toString() + "=" + count;
+        return language.toString() + " (" + count + ")";
     }
 }
