@@ -147,37 +147,59 @@
               </grid>
             </children>
           </toolbar>
-          <splitpane id="8941f" binding="languagesSplitPane">
+          <grid id="7a78f" layout-manager="BorderLayout" hgap="0" vgap="0">
             <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                <preferred-size width="200" height="200"/>
-              </grid>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties>
-              <dividerLocation value="120"/>
-              <enabled value="true"/>
-              <oneTouchExpandable value="true"/>
-            </properties>
+            <properties/>
             <border type="none"/>
             <children>
-              <splitpane id="47a68">
-                <constraints>
-                  <splitpane position="right"/>
-                </constraints>
+              <toolbar id="5e86d" binding="leftToolbar">
+                <constraints border-constraint="West"/>
                 <properties>
-                  <dividerLocation value="333"/>
+                  <floatable value="false"/>
+                  <orientation value="1"/>
                 </properties>
                 <border type="empty"/>
+                <children/>
+              </toolbar>
+              <splitpane id="8941f" binding="languagesSplitPane">
+                <constraints border-constraint="Center"/>
+                <properties>
+                  <dividerLocation value="150"/>
+                  <enabled value="true"/>
+                  <oneTouchExpandable value="false"/>
+                </properties>
+                <border type="none"/>
                 <children>
-                  <grid id="41ead" binding="snippetViewFormPane" layout-manager="BorderLayout" hgap="0" vgap="0">
+                  <splitpane id="47a68" binding="snippetsSplitPane">
                     <constraints>
                       <splitpane position="right"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <dividerLocation value="423"/>
+                    </properties>
                     <border type="empty"/>
-                    <children/>
-                  </grid>
-                  <grid id="2e6a7" binding="leftPane" layout-manager="BorderLayout" hgap="0" vgap="0">
+                    <children>
+                      <grid id="41ead" binding="snippetViewFormPane" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints>
+                          <splitpane position="right"/>
+                        </constraints>
+                        <properties/>
+                        <border type="empty"/>
+                        <children/>
+                      </grid>
+                      <grid id="2e6a7" binding="leftPane" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints>
+                          <splitpane position="left"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children/>
+                      </grid>
+                    </children>
+                  </splitpane>
+                  <grid id="7c1af" binding="filtersPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
                     <constraints>
                       <splitpane position="left"/>
                     </constraints>
@@ -187,16 +209,8 @@
                   </grid>
                 </children>
               </splitpane>
-              <grid id="7c1af" binding="filtersPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
-                <constraints>
-                  <splitpane position="left"/>
-                </constraints>
-                <properties/>
-                <border type="none"/>
-                <children/>
-              </grid>
             </children>
-          </splitpane>
+          </grid>
         </children>
       </grid>
     </children>

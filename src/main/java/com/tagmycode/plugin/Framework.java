@@ -311,7 +311,7 @@ public class Framework implements IOnErrorCallback {
         }
     }
 
-    public void closeFramework() throws TagMyCodeStorageException, IOException {
+    public void closeFramework() throws TagMyCodeStorageException {
         // TODO wait for all pending tasks
         if (isInitialized()) {
             data.saveAll();

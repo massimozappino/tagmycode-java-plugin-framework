@@ -87,7 +87,7 @@ public class MainAppExample {
             public void windowClosing(WindowEvent event) {
                 try {
                     framework.closeFramework();
-                } catch (TagMyCodeStorageException | IOException e) {
+                } catch (TagMyCodeStorageException e) {
                     e.printStackTrace();
                 }
                 System.exit(0);

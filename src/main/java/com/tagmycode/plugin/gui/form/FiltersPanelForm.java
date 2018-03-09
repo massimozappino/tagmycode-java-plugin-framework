@@ -14,7 +14,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.Enumeration;
 
 public class FiltersPanelForm extends AbstractGui {
@@ -28,15 +27,16 @@ public class FiltersPanelForm extends AbstractGui {
     public FiltersPanelForm(FilterSnippetsOperation filterSnippetsOperation, Data data) {
         this.filterSnippetsOperation = filterSnippetsOperation;
         filterLanguagesLoader = new FilterLanguagesLoader(data);
-        JScrollPane languagesScrollPane = configureTree();
+        configureTree();
+        JScrollPane languagesScrollPane = new JScrollPane(tree);
+        GuiUtil.removeBorder(languagesScrollPane);
         JPanel languagesPanel = new JPanel();
         languagesPanel.setLayout(new BorderLayout());
         languagesPanel.add(languagesScrollPane, BorderLayout.CENTER);
         mainComponent.add(languagesPanel, BorderLayout.CENTER);
-        removeDefaultStrokes();
     }
 
-    private JScrollPane configureTree() {
+    private void configureTree() {
         tree = new JTree();
         DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) tree.getCellRenderer();
         renderer.setLeafIcon(null);
@@ -50,15 +50,13 @@ public class FiltersPanelForm extends AbstractGui {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode)
                         tree.getLastSelectedPathComponent();
 
+                Language language = null;
                 if (node != null) {
-                    filterLanguage(languageFromNode(node));
+                    language = languageFromNode(node);
                 }
+                filterLanguage(language);
             }
         });
-
-        JScrollPane languagesScrollPane = new JScrollPane(tree);
-        GuiUtil.removeBorder(languagesScrollPane);
-        return languagesScrollPane;
     }
 
     private Language languageFromNode(DefaultMutableTreeNode node) {
@@ -71,15 +69,6 @@ public class FiltersPanelForm extends AbstractGui {
     @Override
     public JComponent getMainComponent() {
         return mainComponent;
-    }
-
-    private void removeDefaultStrokes() {
-        GuiUtil.removeKeyStrokeAction(tree, KeyEvent.VK_ENTER);
-        GuiUtil.removeKeyStrokeAction(tree, KeyEvent.VK_TAB);
-        GuiUtil.removeKeyStrokeAction(tree, KeyEvent.VK_UP);
-        GuiUtil.removeKeyStrokeAction(tree, KeyEvent.VK_DOWN);
-        GuiUtil.removeKeyStrokeAction(tree, KeyEvent.VK_U);
-        GuiUtil.removeKeyStrokeAction(tree, KeyEvent.VK_DOWN);
     }
 
     private void filterLanguage(Language language) {
@@ -120,5 +109,10 @@ public class FiltersPanelForm extends AbstractGui {
             }
         }
         return null;
+    }
+
+    public void reset() {
+        selectLanguageOnTree(null);
+        filterLanguage(null);
     }
 }

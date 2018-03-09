@@ -46,6 +46,9 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     private JButton saveAsButton;
     private JPanel filtersPanel;
     private JSplitPane languagesSplitPane;
+    private JToggleButton toggleLanguagesFilter;
+    private JToolBar leftToolbar;
+    private JSplitPane snippetsSplitPane;
     private JPanel jscrollPane;
     private JPanel snippetListPane;
     private Framework framework;
@@ -56,6 +59,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     private FilterSnippetsTextField filterTextField;
     private SnippetView snippetView;
     private FiltersPanelForm filtersPanelForm;
+    private int lastDividerLocation;
 
     public SnippetsPanel(final Framework framework) {
         this.framework = framework;
@@ -93,6 +97,10 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     }
 
     private void initToolBarButtons() {
+        toggleLanguagesFilter = new JToggleButton(IconResources.createImageIcon("filter.png"), true);
+        toggleLanguagesFilter.setToolTipText("Toggle filters");
+        leftToolbar.add(toggleLanguagesFilter);
+
         editSnippetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -151,16 +159,37 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
         buttonNetworking.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        boolean newStatus = !framework.isNetworkingEnabled();
-                        setNetworkingEnabled(newStatus);
-                    }
-                }).start();
+                toggleNetworking();
+            }
+        });
+        toggleLanguagesFilter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                toggleLanguageFilter();
             }
         });
         disableButtonsForSnippet();
+    }
+
+    private void toggleLanguageFilter() {
+
+        if (languagesSplitPane.getDividerLocation() <= 1) {
+            languagesSplitPane.setDividerLocation(lastDividerLocation);
+        } else {
+            filtersPanelForm.reset();
+            lastDividerLocation = languagesSplitPane.getDividerLocation();
+            languagesSplitPane.setDividerLocation(0.0d);
+        }
+    }
+
+    private void toggleNetworking() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean newStatus = !framework.isNetworkingEnabled();
+                setNetworkingEnabled(newStatus);
+            }
+        }).start();
     }
 
     public void setNetworkIcon(boolean status) {
