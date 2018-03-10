@@ -65,7 +65,7 @@ public class PropertiesForm extends Windowable {
             field.setEditable(false);
         }
 
-        setSize(450, 300);
+        setSize(450, 350);
         setResizable(true);
     }
 
