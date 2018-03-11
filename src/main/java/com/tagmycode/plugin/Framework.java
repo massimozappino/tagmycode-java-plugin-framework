@@ -35,19 +35,19 @@ public class Framework implements IOnErrorCallback {
     private MainWindow mainWindow;
     private QuickSearchDialog quickSearchDialog;
     private AboutDialog aboutDialog;
-    private FrameworkConfig frameworkConfig;
     private SnippetDialog snippetDialog;
     private final CrashService crashService;
     private final SyntaxSnippetEditorFactory syntaxSnippetEditorFactory;
+    private UserPreferences userPreferences;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) throws SQLException {
-        this.frameworkConfig = frameworkConfig;
         this.browser = frameworkConfig.getBrowser();
         Client client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), new Wallet(frameworkConfig.getPasswordKeyChain()));
         tagMyCode = new TagMyCode(client);
         this.messageManager = frameworkConfig.getMessageManager();
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
+        userPreferences = new UserPreferences("prefs.txt");
         StorageEngine storageEngine = new StorageEngine(frameworkConfig.getDbService());
         this.data = new Data(storageEngine);
         syntaxSnippetEditorFactory = new SyntaxSnippetEditorFactory(loadThemeFile(storageEngine), storageEngine.loadEditorFontSize());
@@ -330,5 +330,9 @@ public class Framework implements IOnErrorCallback {
 
     public SnippetsUpdatePollingProcess getPollingProcess() {
         return pollingProcess;
+    }
+
+    public UserPreferences getUserPreferences() {
+        return userPreferences;
     }
 }

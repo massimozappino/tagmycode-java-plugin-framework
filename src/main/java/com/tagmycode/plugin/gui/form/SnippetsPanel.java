@@ -2,6 +2,7 @@ package com.tagmycode.plugin.gui.form;
 
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.IconResources;
+import com.tagmycode.plugin.UserPreferences;
 import com.tagmycode.plugin.gui.AbstractGui;
 import com.tagmycode.plugin.gui.ClipboardCopy;
 import com.tagmycode.plugin.gui.IOnErrorCallback;
@@ -99,6 +100,11 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     private void initToolBarButtons() {
         toggleLanguagesFilter = new JToggleButton(IconResources.createImageIcon("filter.png"), true);
         toggleLanguagesFilter.setToolTipText("Toggle filters");
+        if (!Boolean.parseBoolean(framework.getUserPreferences().get(UserPreferences.TOGGLE_FILTER_BUTTON_SELECTED))) {
+            hideLanguageFilter();
+            toggleLanguagesFilter.setSelected(false);
+        }
+
         leftToolbar.add(toggleLanguagesFilter);
 
         editSnippetButton.addActionListener(new ActionListener() {
@@ -166,20 +172,26 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
             @Override
             public void actionPerformed(ActionEvent e) {
                 toggleLanguageFilter();
+                framework.getUserPreferences().add(
+                        UserPreferences.TOGGLE_FILTER_BUTTON_SELECTED,
+                        String.valueOf(toggleLanguagesFilter.isSelected()));
             }
         });
         disableButtonsForSnippet();
     }
 
     private void toggleLanguageFilter() {
-
         if (languagesSplitPane.getDividerLocation() <= 1) {
             languagesSplitPane.setDividerLocation(lastDividerLocation);
         } else {
-            filtersPanelForm.reset();
-            lastDividerLocation = languagesSplitPane.getDividerLocation();
-            languagesSplitPane.setDividerLocation(0.0d);
+            hideLanguageFilter();
         }
+    }
+
+    private void hideLanguageFilter() {
+        filtersPanelForm.reset();
+        lastDividerLocation = languagesSplitPane.getDividerLocation();
+        languagesSplitPane.setDividerLocation(0.0d);
     }
 
     private void toggleNetworking() {
