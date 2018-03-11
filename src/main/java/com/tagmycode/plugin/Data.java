@@ -8,7 +8,9 @@ import com.tagmycode.sdk.model.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -134,8 +136,9 @@ public class Data {
     }
 
     public void saveSnippetToFile(File file, Snippet snippet) throws IOException {
-        FileOutputStream out = new FileOutputStream(file);
-        out.write(snippet.getCode().getBytes());
-        out.close();
+        try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)
+        ) {
+            out.write(snippet.getCode());
+        }
     }
 }
