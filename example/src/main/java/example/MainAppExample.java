@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class MainAppExample {
-    public static void main(String args[]) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException, TagMyCodeException, SQLException {
+    public static void main(String args[]) throws IOException, TagMyCodeException, SQLException {
         JFrame frame = new JFrame("TagMyCode Plugin Example");
         frame.setIconImage(GuiUtil.loadImage("images/tagmycode_app.png").getImage());
 
@@ -44,8 +44,9 @@ public class MainAppExample {
 
         SaveFilePath saveFilePath = new SaveFilePath("tagmycode_framework_example");
         FrameworkConfig frameworkConfig = new FrameworkConfig(
+                saveFilePath,
                 new PasswordKeyChain(saveFilePath),
-                new DbService(saveFilePath),
+                new DbService(saveFilePath.getPath()),
                 new MessageManager(),
                 new TaskFactory(),
                 new Browser(),

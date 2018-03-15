@@ -100,7 +100,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     private void initToolBarButtons() {
         toggleLanguagesFilter = new JToggleButton(IconResources.createImageIcon("filter.png"), true);
         toggleLanguagesFilter.setToolTipText("Toggle filters");
-        if (!Boolean.parseBoolean(framework.getUserPreferences().get(UserPreferences.TOGGLE_FILTER_BUTTON_SELECTED))) {
+        if (!framework.getUserPreferences().getBoolean(UserPreferences.TOGGLE_FILTER_BUTTON_SELECTED, true)) {
             hideLanguageFilter();
             toggleLanguagesFilter.setSelected(false);
         }
@@ -172,9 +172,9 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
             @Override
             public void actionPerformed(ActionEvent e) {
                 toggleLanguageFilter();
-                framework.getUserPreferences().add(
+                framework.getUserPreferences().setBoolean(
                         UserPreferences.TOGGLE_FILTER_BUTTON_SELECTED,
-                        String.valueOf(toggleLanguagesFilter.isSelected()));
+                        toggleLanguagesFilter.isSelected());
             }
         });
         disableButtonsForSnippet();

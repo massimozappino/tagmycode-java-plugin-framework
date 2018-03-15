@@ -7,6 +7,7 @@ import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.plugin.gui.IOnErrorCallback;
 import com.tagmycode.plugin.gui.form.*;
 import com.tagmycode.sdk.Client;
+import com.tagmycode.sdk.SaveFilePath;
 import com.tagmycode.sdk.TagMyCode;
 import com.tagmycode.sdk.authentication.TagMyCodeApi;
 import com.tagmycode.sdk.crash.CrashClient;
@@ -18,6 +19,7 @@ import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -41,13 +43,19 @@ public class Framework implements IOnErrorCallback {
     private UserPreferences userPreferences;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) throws SQLException {
+        SaveFilePath saveFilePath = frameworkConfig.getSaveFilePath();
         this.browser = frameworkConfig.getBrowser();
         Client client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), new Wallet(frameworkConfig.getPasswordKeyChain()));
         tagMyCode = new TagMyCode(client);
         this.messageManager = frameworkConfig.getMessageManager();
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
-        userPreferences = new UserPreferences("prefs.txt");
+        userPreferences = new UserPreferences(new File(saveFilePath.getPath("user_settings.properties")));
+        try {
+            userPreferences.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         StorageEngine storageEngine = new StorageEngine(frameworkConfig.getDbService());
         this.data = new Data(storageEngine);
         syntaxSnippetEditorFactory = new SyntaxSnippetEditorFactory(loadThemeFile(storageEngine), storageEngine.loadEditorFontSize());
@@ -317,6 +325,11 @@ public class Framework implements IOnErrorCallback {
             data.saveAll();
         }
 
+        try {
+            userPreferences.store();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         getStorageEngine().close();
         LOGGER.info("Exiting TagMyCode");
     }

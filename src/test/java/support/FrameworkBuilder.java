@@ -4,9 +4,11 @@ import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.FrameworkConfig;
 import com.tagmycode.plugin.StorageEngine;
 import com.tagmycode.sdk.DbService;
+import com.tagmycode.sdk.SaveFilePath;
 import com.tagmycode.sdk.authentication.TagMyCodeApi;
 import com.tagmycode.sdk.authentication.TagMyCodeApiDevelopment;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class FrameworkBuilder {
@@ -21,8 +23,8 @@ public class FrameworkBuilder {
         storageEngine = storageEngineBuilder.build();
     }
 
-    public Framework build() throws SQLException {
-        FrameworkConfig frameworkConfig = new FrameworkConfig(new FakePasswordKeyChain(), storageEngine.getDbService(), new FakeMessageManager(), new FakeTaskFactory(), new FakeVersion(), null);
+    public Framework build() throws SQLException, IOException {
+        FrameworkConfig frameworkConfig = new FrameworkConfig(new SaveFilePath(""), new FakePasswordKeyChain(), storageEngine.getDbService(), new FakeMessageManager(), new FakeTaskFactory(), new FakeVersion(), null);
         return new Framework(tagMyCodeApi, frameworkConfig, new FakeSecret());
     }
 

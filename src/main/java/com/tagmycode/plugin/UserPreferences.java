@@ -8,27 +8,21 @@ public class UserPreferences {
     private Properties properties;
     private File propertyFile;
 
-    public UserPreferences(String fileName) {
+    public UserPreferences(File propertyFile) {
         properties = new Properties();
-        propertyFile = new File(fileName);
-        try {
-            load(new FileInputStream(propertyFile));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.propertyFile = propertyFile;
     }
 
-    public String get(String key) {
-        return properties.getProperty(key);
+    public boolean getBoolean(String key, boolean defaultValue) {
+        String property = properties.getProperty(key);
+        if (property == null) {
+            return defaultValue;
+        }
+        return Boolean.parseBoolean(property);
     }
 
-    public void add(String key, String value) {
-        properties.setProperty(key, value);
-        try {
-            store();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void setBoolean(String key, boolean value) {
+        properties.setProperty(key, String.valueOf(value));
     }
 
     public void store() throws IOException {
@@ -36,8 +30,8 @@ public class UserPreferences {
         properties.store(out, this.getClass().toString());
     }
 
-    private void load(FileInputStream fileInputStream) throws IOException {
-        properties.load(fileInputStream);
+    public void load() throws IOException {
+        properties.load(new FileInputStream(propertyFile));
     }
 
 }
