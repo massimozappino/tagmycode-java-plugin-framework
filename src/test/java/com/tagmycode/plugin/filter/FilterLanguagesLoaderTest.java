@@ -19,6 +19,6 @@ public class FilterLanguagesLoaderTest extends FilterLanguagesBaseTest {
         dbService.snippetDao().createOrUpdate(resourceGenerate.aSnippet().setLanguage(ruby));
 
         FilterLanguages filterLanguages = new FilterLanguagesLoader(data).load();
-        assertEquals("[Java=2, Ruby=1, PHP=1]", filterLanguages.toString());
+        assertEquals("[Java (2), Ruby (1), PHP (1)]", filterLanguages.toString());
     }
 }
