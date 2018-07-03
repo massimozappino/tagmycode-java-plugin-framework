@@ -3,8 +3,8 @@ package com.tagmycode.plugin;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.tagmycode.plugin.filter.FilterLanguages;
-import com.tagmycode.plugin.filter.LanguageFilterEntry;
 import com.tagmycode.sdk.DbService;
+import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.LanguagesCollection;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -30,7 +30,12 @@ public class FilterLanguagesLoader {
                             + " INNER JOIN snippets ON snippets.language_id = languages.id"
                             + " GROUP BY name ORDER BY total DESC");
             for (String[] language : query) {
-                filterLanguages.add(languages.findByCode(language[0]), Integer.valueOf(language[1]));
+                Language foundLanguage = languages.findByCode(language[0]);
+                if (foundLanguage == null) {
+                    Framework.LOGGER.error("Language " + language[0] + " not found in Language list");
+                } else {
+                    filterLanguages.add(foundLanguage, Integer.valueOf(language[1]));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

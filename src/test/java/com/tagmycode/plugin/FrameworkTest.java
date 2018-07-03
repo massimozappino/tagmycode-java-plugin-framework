@@ -76,14 +76,14 @@ public class FrameworkTest extends AbstractTestBase {
         when(frameworkSpy.getMainWindow()).thenReturn(mainWindowMock);
         when(mainWindowMock.getSnippetsPanel()).thenReturn(mock(SnippetsPanel.class));
         setValuesForWalletAndData();
-        setAccessToken();
+        setAccessToken(framework);
 
         frameworkSpy.logout();
 
         verify(mainWindowMock, times(1)).setLoggedIn(false);
         assertDataIsCleared(frameworkSpy.getData());
         assertTrue(frameworkSpy.getTagMyCode().getClient().getOauthToken() instanceof VoidOauthToken);
-        assertEquals(null, frameworkSpy.getTagMyCode().loadOauthToken());
+        assertNull(frameworkSpy.getTagMyCode().loadOauthToken());
         assertDataIsCleared(frameworkSpy.getData());
     }
 
@@ -96,28 +96,30 @@ public class FrameworkTest extends AbstractTestBase {
     public void testIsInitializedMustBeFalseIfAccountIsNotSet() throws Exception {
         mockTagMyCodeReturningValidAccountData(framework);
         framework.getData().setAccount(null);
-        setAValidLanguageCollection();
+        setAValidLanguageCollection(framework);
         assertFalse(framework.isInitialized());
     }
 
     @Test
     public void testIsInitializedMustBeFalseIfLanguageCollectionIsNotSet() throws Exception {
-        setAValidAccountAccount();
-        setAValidLanguageCollection();
+        setAValidAccountAccount(framework);
+        setAValidLanguageCollection(framework);
         assertFalse(framework.isInitialized());
     }
 
     @Test
     public void testIsInitializedMustBeTrueWithAllData() throws Exception {
         mockTagMyCodeReturningValidAccountData(framework);
-        setAValidAccountAccount();
-        setAValidLanguageCollection();
+        setAValidAccountAccount(framework);
+        setAValidLanguageCollection(framework);
         assertTrue(framework.isInitialized());
     }
 
     @Test
     public void testSnippetsDataChanged() throws Exception {
         Framework framework = createSpyFramework();
+        setAValidAccountAccount(framework);
+        setAValidLanguageCollection(framework);
         framework.getTagMyCode().setLastSnippetsUpdate("changed GMT string");
 
         framework.saveAndTellThatSnippetsDataAreChanged();
@@ -148,9 +150,9 @@ public class FrameworkTest extends AbstractTestBase {
         framework.reset();
 
         verify(framework, times(1)).snippetsDataChanged();
-        assertEquals(null, framework.getTagMyCode().getLastSnippetsUpdate());
+        assertNull(framework.getTagMyCode().getLastSnippetsUpdate());
         assertEquals(new VoidOauthToken(), framework.getTagMyCode().getClient().getOauthToken());
-        assertEquals(null, framework.getData().getAccount());
+        assertNull(framework.getData().getAccount());
         assertAccountAndLanguageCollectionFromFrameworkAreNull();
     }
 
@@ -164,7 +166,7 @@ public class FrameworkTest extends AbstractTestBase {
     }
 
     protected void assertAccountAndLanguageCollectionFromFrameworkAreNull() throws TagMyCodeJsonException {
-        assertEquals(null, framework.getData().getAccount());
+        assertNull(framework.getData().getAccount());
         assertLanguageCollectionIsDefault();
     }
 
@@ -184,15 +186,15 @@ public class FrameworkTest extends AbstractTestBase {
         framework.getStorageEngine().saveSnippets(resourceGenerate.aSnippetCollection());
     }
 
-    protected void setAValidLanguageCollection() throws IOException, TagMyCodeJsonException, TagMyCodeStorageException {
+    protected void setAValidLanguageCollection(Framework framework) throws IOException, TagMyCodeJsonException, TagMyCodeStorageException {
         framework.setLanguageCollection(resourceGenerate.aLanguageCollection());
     }
 
-    protected void setAValidAccountAccount() throws IOException, TagMyCodeJsonException {
+    protected void setAValidAccountAccount(Framework framework) throws IOException, TagMyCodeJsonException {
         framework.getData().setAccount(resourceGenerate.aUser());
     }
 
-    private void setAccessToken() throws TagMyCodeException {
+    private void setAccessToken(Framework framework) throws TagMyCodeException {
         framework.getTagMyCode().getClient().setOauthToken(oauthToken);
     }
 

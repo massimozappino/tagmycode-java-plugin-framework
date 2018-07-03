@@ -51,7 +51,7 @@ public class SnippetsTableModel extends AbstractTableModel {
     public Snippet getSnippetAt(int rowIndex) throws TableModelSnippetNotFoundException {
         try {
             return data.getSnippets().get(rowIndex);
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             throw new TableModelSnippetNotFoundException(e);
         }
     }
