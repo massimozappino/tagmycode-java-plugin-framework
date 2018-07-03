@@ -19,6 +19,7 @@ public class AboutDialog extends Windowable {
     private JLabel frameworkBuildDateLabel;
     private JLabel frameworkVersionLabel;
     private JLabel title;
+    private JTextField userDirectoryTextField;
     private JButton buttonOK = new JButton();
 
     public AboutDialog(Framework framework, Frame parent) {
@@ -34,6 +35,8 @@ public class AboutDialog extends Windowable {
         appendTextToJLabel(pluginVersionLabel, version.getPluginVersion());
         appendTextToJLabel(frameworkVersionLabel, version.getFrameworkVersion());
         appendTextToJLabel(frameworkBuildDateLabel, version.getFrameworkBuildDate());
+        userDirectoryTextField.setText(framework.getSaveFilePath().getPath());
+        GuiUtil.makeTransparentTextField(userDirectoryTextField);
 
         defaultInitWindow();
         initWindow();
@@ -60,8 +63,7 @@ public class AboutDialog extends Windowable {
 
     @Override
     protected void initWindow() {
-        setSize(400, 300);
-        setResizable(false);
+        setSize(480, 350);
         setTitle("About TagMyCode");
         setUndecorated(true);
         hideOnFocusLost();

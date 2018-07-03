@@ -41,9 +41,10 @@ public class Framework implements IOnErrorCallback {
     private final CrashService crashService;
     private final SyntaxSnippetEditorFactory syntaxSnippetEditorFactory;
     private UserPreferences userPreferences;
+    private final SaveFilePath saveFilePath;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) throws SQLException {
-        SaveFilePath saveFilePath = frameworkConfig.getSaveFilePath();
+        saveFilePath = frameworkConfig.getSaveFilePath();
         this.browser = frameworkConfig.getBrowser();
         Client client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), new Wallet(frameworkConfig.getPasswordKeyChain()));
         tagMyCode = new TagMyCode(client);
@@ -51,11 +52,7 @@ public class Framework implements IOnErrorCallback {
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
         userPreferences = new UserPreferences(new File(saveFilePath.getPath("user_settings.properties")));
-        try {
-            userPreferences.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        userPreferences.load();
         StorageEngine storageEngine = new StorageEngine(frameworkConfig.getDbService());
         this.data = new Data(storageEngine);
         syntaxSnippetEditorFactory = new SyntaxSnippetEditorFactory(loadThemeFile(storageEngine), storageEngine.loadEditorFontSize());
@@ -347,5 +344,9 @@ public class Framework implements IOnErrorCallback {
 
     public UserPreferences getUserPreferences() {
         return userPreferences;
+    }
+
+    public SaveFilePath getSaveFilePath() {
+        return saveFilePath;
     }
 }

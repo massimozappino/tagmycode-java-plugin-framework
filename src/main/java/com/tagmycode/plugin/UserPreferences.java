@@ -30,8 +30,12 @@ public class UserPreferences {
         properties.store(out, this.getClass().toString());
     }
 
-    public void load() throws IOException {
-        properties.load(new FileInputStream(propertyFile));
+    public void load() {
+        try {
+            properties.load(new FileInputStream(propertyFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

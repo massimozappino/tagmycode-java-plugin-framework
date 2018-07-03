@@ -82,6 +82,10 @@
         <rowspec value="top:4dlu:noGrow"/>
         <rowspec value="center:max(d;4px):noGrow"/>
         <rowspec value="top:4dlu:noGrow"/>
+        <rowspec value="center:max(d;4px):noGrow"/>
+        <rowspec value="top:4dlu:noGrow"/>
+        <rowspec value="center:max(d;4px):noGrow"/>
+        <rowspec value="top:4dlu:noGrow"/>
         <rowspec value="center:d:grow"/>
         <rowspec value="top:4dlu:noGrow"/>
         <rowspec value="top:4dlu:noGrow"/>
@@ -131,7 +135,7 @@
           </component>
           <vspacer id="4cc50">
             <constraints>
-              <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
               <forms defaultalign-vert="false"/>
             </constraints>
           </vspacer>
@@ -141,6 +145,26 @@
               <forms/>
             </constraints>
             <properties/>
+          </component>
+          <component id="efda2" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <forms/>
+            </constraints>
+            <properties>
+              <text value="User directory:"/>
+            </properties>
+          </component>
+          <component id="542d8" class="javax.swing.JTextField" binding="userDirectoryTextField">
+            <constraints>
+              <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+              <forms defaultalign-horz="false"/>
+            </constraints>
+            <properties>
+              <editable value="false"/>
+            </properties>
           </component>
         </children>
       </grid>

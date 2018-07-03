@@ -61,7 +61,6 @@ public class PropertiesForm extends Windowable {
                 modifiedAtTextField, codeSizeTextField, snippetUrlTextField};
         for (JTextField field : jTextFields) {
             GuiUtil.makeTransparentTextField(field);
-            GuiUtil.makeTransparentTextField(field);
             field.setEditable(false);
         }
 
