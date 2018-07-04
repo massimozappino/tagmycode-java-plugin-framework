@@ -51,7 +51,7 @@ public class Framework implements IOnErrorCallback {
         this.messageManager = frameworkConfig.getMessageManager();
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
-        userPreferences = new UserPreferences(new File(saveFilePath.getPath("user_settings.properties")));
+        userPreferences = new UserPreferences(new File(saveFilePath.getPathWith("user_settings.properties")));
         userPreferences.load();
         StorageEngine storageEngine = new StorageEngine(frameworkConfig.getDbService());
         this.data = new Data(storageEngine);
