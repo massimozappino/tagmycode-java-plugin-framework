@@ -198,7 +198,7 @@ public class Framework implements IOnErrorCallback {
         });
     }
 
-    public void manageTagMyCodeExceptions(TagMyCodeException e) {
+    public void manageTagMyCodeExceptions(Throwable e) {
         logError(e);
         if (e instanceof TagMyCodeUnauthorizedException) {
             showErrorDialog(e.getMessage());
@@ -210,7 +210,7 @@ public class Framework implements IOnErrorCallback {
         }
     }
 
-    public void logError(Exception e) {
+    public void logError(Throwable e) {
         LOGGER.error("TagMyCode Error", e);
         crashService.send(e);
     }

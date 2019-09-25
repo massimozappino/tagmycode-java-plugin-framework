@@ -23,13 +23,13 @@ public class CrashService {
         appId = consumerId;
     }
 
-    public void send(final Exception exception) {
+    public void send(final Throwable exception) {
         ExecutorService executor = Executors.newFixedThreadPool(1);
         executor.submit(createRunnable(exception));
         executor.shutdown();
     }
 
-    private Runnable createRunnable(final Exception exception) {
+    private Runnable createRunnable(final Throwable exception) {
         return new Runnable() {
             @Override
             public void run() {
