@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class MainAppExample {
-    public static void main(String args[]) throws IOException, TagMyCodeException, SQLException {
+    public static void main(String[] args) throws IOException, TagMyCodeException, SQLException {
         JFrame frame = new JFrame("TagMyCode Plugin Example");
         frame.setIconImage(GuiUtil.loadImage("images/tagmycode_app.png").getImage());
 
