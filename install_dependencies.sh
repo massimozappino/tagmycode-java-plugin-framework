@@ -2,7 +2,8 @@
 set -e
 
 sdk_project="tagmycode-java-sdk"
-branch=$(git branch | grep \* | cut -d ' ' -f2)
+branch=${BRANCH}
+[[ -z "$BRANCH" ]] && { echo "Error: parameter BRANCH is empty" ; exit 1; }
 
 rm -fr ${sdk_project}
 
