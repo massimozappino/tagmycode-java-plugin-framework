@@ -1,8 +1,10 @@
 language: java
 
+services:
+  - xvfb
+
 before_install:
   - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
   - ./install_dependencies.sh
 
 install: mvn install
