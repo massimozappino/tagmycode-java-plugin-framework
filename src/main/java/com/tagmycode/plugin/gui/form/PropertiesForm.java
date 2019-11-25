@@ -7,7 +7,7 @@ import com.tagmycode.sdk.DateParser;
 import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -25,7 +25,7 @@ public class PropertiesForm extends Windowable {
     private JCheckBox synchronizedCheckBox;
     private Snippet snippet;
 
-    public PropertiesForm(Framework framework, Snippet snippet) {
+    PropertiesForm(Framework framework, Snippet snippet) {
         super(framework, framework.getParentFrame());
         this.snippet = snippet;
         defaultInitWindow();
@@ -40,15 +40,10 @@ public class PropertiesForm extends Windowable {
         createdAtTextField.setText(dateAndTime(snippet.getCreationDate()));
         modifiedAtTextField.setText(dateAndTime(snippet.getUpdateDate()));
         snippetUrlTextField.setText(snippet.getUrl());
-        int bytes = 0;
-        try {
-            bytes = snippet.getCode().getBytes("UTF-8").length;
-        } catch (UnsupportedEncodingException ignored) {
-        }
+        int bytes = snippet.getCode().getBytes(StandardCharsets.UTF_8).length;
         codeSizeTextField.setText(FileSize.toHumanReadable(bytes));
         privateCheckBox.setSelected(snippet.isPrivate());
         synchronizedCheckBox.setSelected(!snippet.isDirty());
-
     }
 
     private String dateAndTime(Date date) {
