@@ -100,7 +100,7 @@ public class FiltersPanelForm extends AbstractGui {
 
     private TreePath findPathForLanguages(DefaultMutableTreeNode root, Language language) {
         @SuppressWarnings("unchecked")
-        Enumeration<DefaultMutableTreeNode> e = root.depthFirstEnumeration();
+        Enumeration<DefaultMutableTreeNode> e = (Enumeration<DefaultMutableTreeNode>) (Object) root.depthFirstEnumeration();
         while (e.hasMoreElements()) {
             DefaultMutableTreeNode node = e.nextElement();
             Language currentLanguage = languageFromNode(node);
