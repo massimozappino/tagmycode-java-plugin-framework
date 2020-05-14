@@ -66,24 +66,24 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>ideauidesigner-maven-plugin</artifactId>
-                <version>1.0-beta-1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>javac2</goal>
-                        </goals>
-                    </execution>
-                </executions>
+<!--            <plugin>-->
+<!--                <groupId>org.codehaus.mojo</groupId>-->
+<!--                <artifactId>ideauidesigner-maven-plugin</artifactId>-->
+<!--                <version>1.0-beta-1</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>javac2</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
 
-                <configuration>
-                    <fork>true</fork>
-                    <debug>true</debug>
-                    <failOnError>true</failOnError>
-                </configuration>
-            </plugin>
+<!--                <configuration>-->
+<!--                    <fork>true</fork>-->
+<!--                    <debug>true</debug>-->
+<!--                    <failOnError>true</failOnError>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -192,7 +192,7 @@
         <dependency>
             <groupId>com.intellij</groupId>
             <artifactId>forms_rt</artifactId>
-            <version>5.0</version>
+            <version>7.0.3</version>
         </dependency>
         <dependency>
             <groupId>jgoodies</groupId>
