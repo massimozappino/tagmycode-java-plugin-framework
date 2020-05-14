@@ -8,7 +8,8 @@ import support.FrameworkBuilder;
 
 import javax.swing.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class FrameworkAcceptanceTest extends AcceptanceTestBase {
@@ -71,11 +72,11 @@ public class FrameworkAcceptanceTest extends AcceptanceTestBase {
         jFrame.pack();
 
         JPanel snippetViewFormPane = framework.getMainWindow().getSnippetsPanel().getSnippetViewFormPane();
-        assertEquals("welcome view", snippetViewFormPane.getComponent(0).getName());
+        waitForTrue("welcome view".equals(snippetViewFormPane.getComponent(0).getName()));
 
         framework.getMainWindow().getSnippetsPanel().getSnippetsTable().getJTable().setRowSelectionInterval(1, 1);
 
-        assertEquals("snippet view", snippetViewFormPane.getComponent(0).getName());
+        waitForTrue("snippet view".equals(snippetViewFormPane.getComponent(0).getName()));
     }
 
     @Test
