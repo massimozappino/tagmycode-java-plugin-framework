@@ -66,24 +66,7 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.codehaus.mojo</groupId>-->
-<!--                <artifactId>ideauidesigner-maven-plugin</artifactId>-->
-<!--                <version>1.0-beta-1</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>javac2</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
 
-<!--                <configuration>-->
-<!--                    <fork>true</fork>-->
-<!--                    <debug>true</debug>-->
-<!--                    <failOnError>true</failOnError>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -185,20 +168,11 @@
             <version>${tagmycode-sdk.version}</version>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
-        </dependency>
-        <dependency>
             <groupId>com.intellij</groupId>
             <artifactId>forms_rt</artifactId>
             <version>7.0.3</version>
         </dependency>
-        <dependency>
-            <groupId>jgoodies</groupId>
-            <artifactId>forms</artifactId>
-            <version>1.0.5</version>
-        </dependency>
+
         <dependency>
             <groupId>com.fifesoft</groupId>
             <artifactId>rsyntaxtextarea</artifactId>
