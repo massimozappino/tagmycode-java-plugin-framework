@@ -1,6 +1,7 @@
 package com.tagmycode.plugin.gui.table;
 
 import com.tagmycode.plugin.Data;
+import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.TableModelSnippetNotFoundException;
 import com.tagmycode.sdk.model.DefaultSnippet;
 import com.tagmycode.sdk.model.Snippet;
@@ -89,7 +90,11 @@ public class SnippetsTableModel extends AbstractTableModel {
     }
 
     public void fireSnippetsChanged() {
-        fireTableDataChanged();
+        try {
+            fireTableDataChanged();
+        } catch (NullPointerException e) {
+            Framework.LOGGER.debug(e);
+        }
     }
 
 }
