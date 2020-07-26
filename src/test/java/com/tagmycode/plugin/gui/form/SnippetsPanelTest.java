@@ -10,8 +10,7 @@ import support.AbstractTestBase;
 import javax.swing.*;
 import java.awt.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.spy;
 
 public class SnippetsPanelTest extends AbstractTestBase {
@@ -34,11 +33,11 @@ public class SnippetsPanelTest extends AbstractTestBase {
         Framework framework = createFramework();
         framework.restoreData();
 
-        SnippetsPanel snippetsTab = new SnippetsPanel(framework);
-        SnippetsTable snippetsTable = snippetsTab.getSnippetsTable();
+        SnippetsPanel snippetsPanel = new SnippetsPanel(framework);
+        SnippetsTable snippetsTable = snippetsPanel.getSnippetsTable();
 
         snippetsTable.fireSnippetsChanged();
-        JPanel snippetViewFormPanel = snippetsTab.getSnippetViewFormPane();
+        JPanel snippetViewFormPanel = snippetsPanel.getSnippetViewFormPane();
         JTable jTable = snippetsTable.getJTable();
 
         assertEquals(1, snippetViewFormPanel.getComponentCount());
@@ -54,11 +53,11 @@ public class SnippetsPanelTest extends AbstractTestBase {
 
     @Test
     public void disableEnableButtonsForSnippet() throws Exception {
-        SnippetsPanel snippetsTab = new SnippetsPanel(createFramework(createStorageEngineWithData()));
-        snippetsTab.disableButtonsForSnippet();
-        assertSnippetButtonsEnabledAre(snippetsTab, false);
-        snippetsTab.enableButtonsForSnippet();
-        assertSnippetButtonsEnabledAre(snippetsTab, true);
+        SnippetsPanel snippetsPanel = new SnippetsPanel(createFramework(createStorageEngineWithData()));
+        snippetsPanel.disableButtonsForSnippet();
+        assertSnippetButtonsEnabledAre(snippetsPanel, false);
+        snippetsPanel.enableButtonsForSnippet();
+        assertSnippetButtonsEnabledAre(snippetsPanel, true);
     }
 
     @Test
@@ -72,11 +71,11 @@ public class SnippetsPanelTest extends AbstractTestBase {
         assertEquals(expectedSnippet, framework.getData().createEmptySnippetWithLastLanguage());
     }
 
-    private void assertSnippetButtonsEnabledAre(SnippetsPanel snippetsTab, boolean flag) {
-        assertEquals(flag, snippetsTab.editSnippetButton.isEnabled());
-        assertEquals(flag, snippetsTab.deleteSnippetButton.isEnabled());
-        assertEquals(flag, snippetsTab.copyButton.isEnabled());
-        assertEquals(flag, snippetsTab.openInBrowser.isEnabled());
+    private void assertSnippetButtonsEnabledAre(SnippetsPanel snippetsPanel, boolean flag) {
+        assertEquals(flag, snippetsPanel.editSnippetButton.isEnabled());
+        assertEquals(flag, snippetsPanel.deleteSnippetButton.isEnabled());
+        assertEquals(flag, snippetsPanel.copyButton.isEnabled());
+        assertEquals(flag, snippetsPanel.openInBrowser.isEnabled());
     }
 
 }

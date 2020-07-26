@@ -30,7 +30,5 @@ public abstract class AbstractVersion {
 
     public abstract String getPluginVersion();
 
-    public String getPluginTitle() {
-        return "";
-    }
+    public abstract String getPluginTitle();
 }

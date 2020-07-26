@@ -8,4 +8,9 @@ public class FakeVersion extends AbstractVersion {
     public String getPluginVersion() {
         return "FAKE";
     }
+
+    @Override
+    public String getPluginTitle() {
+        return "Fake title";
+    }
 }

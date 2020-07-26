@@ -12,7 +12,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <tagmycode-sdk.version>1.3.0-SNAPSHOT</tagmycode-sdk.version>
+        <tagmycode-sdk.version>1.3.1</tagmycode-sdk.version>
         <buildDate>${maven.build.timestamp}</buildDate>
         <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
     </properties>

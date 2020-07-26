@@ -249,7 +249,4 @@ public class SyncSnippetsAcceptanceTest extends AcceptanceTestBase {
         framework.getMainWindow().getSnippetsPanel().setNetworkingEnabled(true);
     }
 
-    private void showFrameworkGui() throws Exception {
-        showComponentInFrame(framework.getMainWindow().getMainComponent());
-    }
 }

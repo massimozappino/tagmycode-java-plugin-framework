@@ -5,8 +5,8 @@ import java.util.Properties;
 
 public class UserPreferences {
     public static final String TOGGLE_FILTER_BUTTON_SELECTED = "toggle_filter_button_selected";
-    private Properties properties;
-    private File propertyFile;
+    private final Properties properties;
+    private final File propertyFile;
 
     public UserPreferences(File propertyFile) {
         properties = new Properties();
