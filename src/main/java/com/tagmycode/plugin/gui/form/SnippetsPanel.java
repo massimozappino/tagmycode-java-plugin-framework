@@ -19,6 +19,7 @@ import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.model.Snippet;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -78,6 +79,16 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
         initPopupMenuForJTextComponents(getMainComponent());
         configureDragAndDrop();
         reset();
+
+        disableLanguagesFilter();
+    }
+
+    private void disableLanguagesFilter() {
+        leftToolbar.setVisible(false);
+        hideLanguageFilter();
+        languagesSplitPane.setEnabled(false);
+        languagesSplitPane.setDividerSize(0);
+        filtersPanel.setVisible(false);
     }
 
     private void initFilterPanel() {
@@ -563,15 +574,15 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     private void $$$setupUI$$$() {
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout(0, 0));
-        mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), null));
+        mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         mainPanel.add(panel1, BorderLayout.CENTER);
-        panel1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), null));
+        panel1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         final JToolBar toolBar1 = new JToolBar();
         toolBar1.setFloatable(false);
         panel1.add(toolBar1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(-1, 20), null, 0, false));
-        toolBar1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), null));
+        toolBar1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         newSnippetButton = new JButton();
         newSnippetButton.setIcon(new ImageIcon(getClass().getResource("/icons/add.png")));
         newSnippetButton.setText("");
@@ -647,7 +658,7 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
         leftToolbar.setFloatable(false);
         leftToolbar.setOrientation(1);
         panel3.add(leftToolbar, BorderLayout.WEST);
-        leftToolbar.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), null));
+        leftToolbar.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         languagesSplitPane = new JSplitPane();
         languagesSplitPane.setDividerLocation(150);
         languagesSplitPane.setEnabled(true);
@@ -656,11 +667,11 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
         snippetsSplitPane = new JSplitPane();
         snippetsSplitPane.setDividerLocation(423);
         languagesSplitPane.setRightComponent(snippetsSplitPane);
-        snippetsSplitPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), null));
+        snippetsSplitPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         snippetViewFormPane = new JPanel();
         snippetViewFormPane.setLayout(new BorderLayout(0, 0));
         snippetsSplitPane.setRightComponent(snippetViewFormPane);
-        snippetViewFormPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), null));
+        snippetViewFormPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         leftPane = new JPanel();
         leftPane.setLayout(new BorderLayout(0, 0));
         snippetsSplitPane.setLeftComponent(leftPane);
@@ -675,5 +686,6 @@ public class SnippetsPanel extends AbstractGui implements IOnErrorCallback {
     public JComponent $$$getRootComponent$$$() {
         return mainPanel;
     }
+
 }
 

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-class PropertiesReader {
+public class PropertiesReader {
 
     public InputStream getInputStream(String filename) {
         // do not use Thread.currentThread().getContextClassLoader()
