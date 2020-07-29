@@ -12,14 +12,14 @@ import java.awt.event.*;
 public abstract class Windowable extends AbstractGui implements IOnErrorCallback {
 
     private Window window;
-    private WindowType.Type type;
+    private WindowType.Type windowType;
     private Frame parentFrame;
     protected Framework framework;
     private String title;
 
-    public Windowable(Framework framework, Frame parent) {
+    public Windowable(Framework framework, Frame parent, WindowType.Type windowType) {
         this.framework = framework;
-        this.type = WindowType.getDefaultType();
+        this.windowType = windowType;
         parentFrame = parent;
         if (isJDialog()) {
             window = new JDialog(parentFrame, true);
@@ -30,6 +30,9 @@ public abstract class Windowable extends AbstractGui implements IOnErrorCallback
         }
     }
 
+    public Windowable(Framework framework, Frame parent) {
+        this(framework, parent, WindowType.getDefaultType());
+    }
 
     protected abstract void initWindow();
 
@@ -80,13 +83,17 @@ public abstract class Windowable extends AbstractGui implements IOnErrorCallback
 
             @Override
             public void run() {
-                CenterLocation location = new CenterLocation(parentFrame, window);
+                CenterLocation location = new CenterLocation(parentFrame, window, CenterLocationType.CENTER_FRAME);
                 window.setLocation(location.getX(), location.getY());
                 window.setVisible(true);
                 window.revalidate();
                 window.repaint();
             }
         });
+    }
+
+    public Component getWindow() {
+        return window;
     }
 
     public void setSize(int i, int i1) {
@@ -160,7 +167,7 @@ public abstract class Windowable extends AbstractGui implements IOnErrorCallback
     }
 
     private boolean isJDialog() {
-        return type == WindowType.Type.JDIALOG;
+        return windowType == WindowType.Type.JDIALOG;
     }
 
     private JDialog getJDialog() {

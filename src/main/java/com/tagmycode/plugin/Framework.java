@@ -5,6 +5,7 @@ import com.tagmycode.plugin.exception.TagMyCodeGuiException;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.IDocumentInsertText;
 import com.tagmycode.plugin.gui.IOnErrorCallback;
+import com.tagmycode.plugin.gui.WindowType;
 import com.tagmycode.plugin.gui.form.*;
 import com.tagmycode.sdk.Client;
 import com.tagmycode.sdk.SaveFilePath;
@@ -25,6 +26,7 @@ import java.sql.SQLException;
 
 public class Framework implements IOnErrorCallback {
     public final static Logger LOGGER = Logger.getLogger(Framework.class);
+    public static final String USER_SETTINGS_PROPERTIES = "user_settings.properties";
 
     private final TagMyCode tagMyCode;
     private final Frame parentFrame;
@@ -37,13 +39,13 @@ public class Framework implements IOnErrorCallback {
     private MainWindow mainWindow;
     private QuickSearchDialog quickSearchDialog;
     private AboutDialog aboutDialog;
-    private SnippetDialog snippetDialog;
     private final CrashService crashService;
     private final SyntaxSnippetEditorFactory syntaxSnippetEditorFactory;
     private UserPreferences userPreferences;
     private final SaveFilePath saveFilePath;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) throws SQLException {
+        WindowType.setDefaultType(WindowType.Type.JDIALOG);
         saveFilePath = frameworkConfig.getSaveFilePath();
         this.browser = frameworkConfig.getBrowser();
         Client client = new Client(tagMyCodeApi, secret.getConsumerId(), secret.getConsumerSecret(), new Wallet(frameworkConfig.getPasswordKeyChain()));
@@ -51,7 +53,7 @@ public class Framework implements IOnErrorCallback {
         this.messageManager = frameworkConfig.getMessageManager();
         this.parentFrame = frameworkConfig.getParentFrame();
         this.taskFactory = frameworkConfig.getTask();
-        userPreferences = new UserPreferences(new File(saveFilePath.getPathWith("user_settings.properties")));
+        userPreferences = new UserPreferences(new File(saveFilePath.getPathWith(USER_SETTINGS_PROPERTIES)));
         userPreferences.load();
         StorageEngine storageEngine = new StorageEngine(frameworkConfig.getDbService());
         this.data = new Data(storageEngine);
@@ -60,7 +62,6 @@ public class Framework implements IOnErrorCallback {
         pollingProcess = new SnippetsUpdatePollingProcess(this);
         version = frameworkConfig.getVersionObject();
         aboutDialog = new AboutDialog(this, getParentFrame());
-        snippetDialog = new SnippetDialog(this, getParentFrame());
         this.mainWindow = new MainWindow(this);
         crashService = new CrashService(new CrashClient(client), data, tagMyCode, version, secret.getConsumerId());
     }
@@ -100,7 +101,7 @@ public class Framework implements IOnErrorCallback {
 
     public SnippetDialog showSnippetDialog(Snippet snippet) {
         // TODO check if can operate
-
+        SnippetDialog snippetDialog = new SnippetDialog(this, getParentFrame());
         snippetDialog.setSnippet(snippet);
         snippetDialog.display();
         return snippetDialog;

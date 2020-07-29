@@ -71,7 +71,22 @@ public class SnippetDialogTest extends AcceptanceTestBase {
         assertNotNull(snippetObject.getCreationDate());
         assertNotNull(snippetObject.getUpdateDate());
 
-        assertEquals("Edit snippet", snippetDialog.getTitle());
+        assertEquals("My title", snippetDialog.getTitle());
+    }
+
+    @Test
+    public void prependAsteriskOnWindowTitleIfItsModified() throws Exception {
+        SnippetDialog snippetDialog = createSnippetDialog(createFramework());
+        Snippet snippet = resourceGenerate.aSnippet().setLocalId(100).setId(0);
+        snippetDialog.setSnippet(snippet);
+
+        assertEquals("My title", snippetDialog.getTitle());
+        assertFalse(snippetDialog.isModified());
+
+        snippetDialog.getTitleBox().setText(snippetDialog.getTitleBox().getText() + " word");
+
+        assertEquals("*My title word", snippetDialog.getTitle());
+        assertTrue(snippetDialog.isModified());
     }
 
     @Test

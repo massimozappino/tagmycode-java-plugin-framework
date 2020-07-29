@@ -18,4 +18,14 @@ public class UserPreferencesTest {
         assertTrue(userPreferences.getBoolean("key", false));
     }
 
+    @Test
+    public void intValue() {
+        UserPreferences userPreferences = new UserPreferences(new File(""));
+        assertEquals(Integer.valueOf(5), userPreferences.getInteger("not_existing_key", 5));
+        assertNull(userPreferences.getInteger("not_existing_key", null));
+
+        userPreferences.setInteger("key", 5);
+        assertEquals(Integer.valueOf(5), userPreferences.getInteger("key", 1));
+    }
+
 }

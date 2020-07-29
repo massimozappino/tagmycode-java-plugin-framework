@@ -6,12 +6,15 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import com.tagmycode.plugin.Framework;
 import com.tagmycode.plugin.GuiThread;
+import com.tagmycode.plugin.UserPreferences;
 import com.tagmycode.plugin.exception.TagMyCodeStorageException;
 import com.tagmycode.plugin.gui.SyntaxSnippetEditor;
+import com.tagmycode.plugin.gui.WindowType;
 import com.tagmycode.plugin.gui.field.AbstractFieldValidation;
 import com.tagmycode.plugin.gui.field.CodeFieldValidation;
 import com.tagmycode.plugin.gui.field.TitleFieldValidation;
 import com.tagmycode.plugin.operation.EditSnippetOperation;
+import com.tagmycode.sdk.model.DefaultSnippet;
 import com.tagmycode.sdk.model.Language;
 import com.tagmycode.sdk.model.Snippet;
 
@@ -21,6 +24,8 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -29,6 +34,7 @@ import static com.tagmycode.plugin.gui.GuiUtil.setPlaceholder;
 public class SnippetDialog extends Windowable {
     private static final String NEW_SNIPPET_TITLE = "New snippet";
     private static final String EDIT_SNIPPET_TITLE = "Edit snippet";
+
     private final SyntaxSnippetEditor codeEditorPane;
 
     private JPanel contentPane;
@@ -46,21 +52,27 @@ public class SnippetDialog extends Windowable {
     private DefaultComboBoxModel<Language> defaultComboBoxModel;
     private EditSnippetOperation createAndEditSnippetOperation;
     private boolean isModified = false;
-    private Snippet currentSnippet;
+    private Snippet currentSnippet = new DefaultSnippet();
 
     public SnippetDialog(final Framework framework, Frame parent) {
-        super(framework, parent);
+        super(framework, parent, WindowType.Type.JFRAME);
         codeEditorPane = framework.getSyntaxSnippetEditorFactory().create();
         snippetPane.add(codeEditorPane.getMainComponent());
+
         defaultInitWindow();
         initWindow();
     }
 
     public void setSnippet(Snippet snippet) {
-        setTitle(isStoredSnippet(snippet) ? EDIT_SNIPPET_TITLE : NEW_SNIPPET_TITLE);
         currentSnippet = snippet;
         populateFieldsWithSnippet(snippet);
         snippetMarkedAsSaved();
+        updateWindowTitle();
+    }
+
+    protected void updateWindowTitle() {
+        String asterisk = isModified ? "*" : "";
+        setTitle(isStoredSnippet(currentSnippet) ? asterisk + titleBox.getText() : NEW_SNIPPET_TITLE);
     }
 
     protected void populateFieldsWithSnippet(Snippet snippet) {
@@ -85,12 +97,23 @@ public class SnippetDialog extends Windowable {
         setPlaceholder("Description", descriptionTextField);
         setPlaceholder("tags space separated", tagsTextField);
 
-        setSize(650, 450);
+        int width = framework.getUserPreferences().getInteger(UserPreferences.SNIPPET_DIALOG_WIDTH, 650);
+        int height = framework.getUserPreferences().getInteger(UserPreferences.SNIPPET_DIALOG_HEIGHT, 450);
+        setSize(width, height);
         setResizable(true);
         setModal(false);
 
         populateLanguages();
         restorePreferences();
+
+        getWindow().addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                Component source = (Component) e.getSource();
+                Dimension size = source.getSize();
+                framework.getUserPreferences().setInteger(UserPreferences.SNIPPET_DIALOG_WIDTH, (int) size.getWidth());
+                framework.getUserPreferences().setInteger(UserPreferences.SNIPPET_DIALOG_HEIGHT, (int) size.getHeight());
+            }
+        });
 
         new GuiThread().execute(new Runnable() {
             @Override
@@ -247,7 +270,7 @@ public class SnippetDialog extends Windowable {
         return currentSnippet != null && currentSnippet.getLocalId() != 0;
     }
 
-    public JComboBox getLanguageComboBox() {
+    public JComboBox<Language> getLanguageComboBox() {
         return languageComboBox;
     }
 
@@ -303,6 +326,7 @@ public class SnippetDialog extends Windowable {
 
     public void snippetMarkedAsModified() {
         this.isModified = true;
+        this.updateWindowTitle();
     }
 
     public EditSnippetOperation getCreateAndEditSnippetOperation() {
