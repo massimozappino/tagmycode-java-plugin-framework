@@ -4,13 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## [2.3.2] - 2020-08-31
 ### Added
 - Language filter with toggle button
 - Show preferences directory in "About" dialog
 
 ### Fixed
 - Save file in utf-8 format
+
+### Changed
+- Upgraded Guava version to 29.0-jre
 
 ## [2.3.1] - 2018-01-06
 ### Changed
