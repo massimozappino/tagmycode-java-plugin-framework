@@ -87,6 +87,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - First release with feature "Create snippet"
 
+[2.3.2]: https://github.com/massimozappino/tagmycode-java-plugin-framework/compare/v2.3.1...v2.3.2
 [2.3.1]: https://github.com/massimozappino/tagmycode-java-plugin-framework/compare/v2.3.0...v2.3.1
 [2.3.0]: https://github.com/massimozappino/tagmycode-java-plugin-framework/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/massimozappino/tagmycode-java-plugin-framework/compare/v2.1.0...v2.2.0
