@@ -15,12 +15,15 @@ import com.tagmycode.sdk.model.User;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static com.tagmycode.plugin.gui.GuiUtil.addClickableLink;
 import static com.tagmycode.plugin.gui.GuiUtil.setBold;
@@ -29,7 +32,7 @@ public class SettingsForm extends Windowable {
     protected JLabel email;
     protected JLabel userName;
     private JPanel mainPanel;
-    private Framework framework;
+    private final Framework framework;
     private JButton logoutButton;
     private JLabel profilePicture;
     private JButton closeButton;
@@ -284,7 +287,10 @@ public class SettingsForm extends Windowable {
                 resultName = currentFont.getName();
             }
         }
-        return new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
+        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
     }
 
     /**

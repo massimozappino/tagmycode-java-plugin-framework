@@ -11,7 +11,7 @@ import com.tagmycode.sdk.model.Snippet;
 import java.sql.SQLException;
 
 public class FilterLanguagesLoader {
-    private Data data;
+    private final Data data;
 
     public FilterLanguagesLoader(Data data) {
         this.data = data;
@@ -28,7 +28,7 @@ public class FilterLanguagesLoader {
             query = snippetDao.queryRaw(
                     "SELECT languages.code, count(*) AS total FROM languages"
                             + " INNER JOIN snippets ON snippets.language_id = languages.id"
-                            + " GROUP BY name ORDER BY total DESC");
+                            + " GROUP BY name ORDER BY total DESC, name ASC");
             for (String[] language : query) {
                 Language foundLanguage = languages.findByCode(language[0]);
                 if (foundLanguage == null) {

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.3.3] - 2022-04-29
+### Changed
+- Upgraded Tagmycode SDK and other libraries
+
 ## [2.3.2] - 2020-08-31
 ### Added
 - Language filter with toggle button
@@ -87,6 +91,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - First release with feature "Create snippet"
 
+[2.3.3]: https://github.com/massimozappino/tagmycode-java-plugin-framework/compare/v2.3.2...v2.3.3
 [2.3.2]: https://github.com/massimozappino/tagmycode-java-plugin-framework/compare/v2.3.1...v2.3.2
 [2.3.1]: https://github.com/massimozappino/tagmycode-java-plugin-framework/compare/v2.3.0...v2.3.1
 [2.3.0]: https://github.com/massimozappino/tagmycode-java-plugin-framework/compare/v2.2.0...v2.3.0

@@ -257,7 +257,7 @@ public class StorageEngine {
     public void close() throws TagMyCodeStorageException {
         try {
             dbService.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new TagMyCodeStorageException(e);
         }
     }

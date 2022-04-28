@@ -16,7 +16,8 @@ import com.tagmycode.sdk.exception.TagMyCodeException;
 import com.tagmycode.sdk.exception.TagMyCodeUnauthorizedException;
 import com.tagmycode.sdk.model.LanguagesCollection;
 import com.tagmycode.sdk.model.Snippet;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +26,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class Framework implements IOnErrorCallback {
-    public final static Logger LOGGER = Logger.getLogger(Framework.class);
+    public static final Logger LOGGER = LogManager.getLogger(Framework.class);
+
     public static final String USER_SETTINGS_PROPERTIES = "user_settings.properties";
 
     private final TagMyCode tagMyCode;
@@ -35,13 +37,13 @@ public class Framework implements IOnErrorCallback {
     private final SnippetsUpdatePollingProcess pollingProcess;
     private final AbstractVersion version;
     private final Data data;
-    private IBrowser browser;
-    private MainWindow mainWindow;
-    private QuickSearchDialog quickSearchDialog;
-    private AboutDialog aboutDialog;
+    private final IBrowser browser;
+    private final MainWindow mainWindow;
+    private final QuickSearchDialog quickSearchDialog;
+    private final AboutDialog aboutDialog;
     private final CrashService crashService;
     private final SyntaxSnippetEditorFactory syntaxSnippetEditorFactory;
-    private UserPreferences userPreferences;
+    private final UserPreferences userPreferences;
     private final SaveFilePath saveFilePath;
 
     public Framework(TagMyCodeApi tagMyCodeApi, FrameworkConfig frameworkConfig, AbstractSecret secret) throws SQLException {
